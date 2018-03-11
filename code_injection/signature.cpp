@@ -13,7 +13,8 @@ void ChimeraSignature::undo() {
     DWORD a;
     DWORD b;
     size_t length = this->size();
-    if(VirtualProtect(this->i_found_address, length, PAGE_READWRITE, &a) == false) return;
+    if(!VirtualProtect(this->i_found_address, length, PAGE_READWRITE, &a))
+        return;
     for(int i=0;i<length;i++) {
         this->i_found_address[i] = this->i_original_code[i];
     }
@@ -62,4 +63,10 @@ bool write_code(unsigned char *where, const unsigned char *what, size_t length) 
     auto r = write_code(where, code, length);
     delete[] code;
     return r;
+}
+
+template<typename T>
+bool write_data (uintptr_t where, T what) {
+
+
 }

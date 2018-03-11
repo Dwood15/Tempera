@@ -26,10 +26,10 @@ static void calculate_fps() noexcept {
     frames_per_tick[0]++;
 }
 
-static void change_colorargb(double val, double max, ColorARGB &color, bool invert) noexcept {
+static void change_colorargb(float val, float max, ColorARGB &color, bool invert) noexcept {
     color.alpha = 1.0;
     color.blue = 0.0;
-    double halfway = max / 2.0;
+    float halfway = max / 2.0;
     if(!invert) {
         if(val <= halfway) {
             color.green = 1.0;
@@ -56,7 +56,7 @@ static void change_colorargb(double val, double max, ColorARGB &color, bool inve
     if(color.red < 0.0) color.red = 0.0;
 }
 
-static void change_colorargb_d(double val, double base, ColorARGB &color, double max_distance) noexcept {
+static void change_colorargb_d(float val, float base, ColorARGB &color, double max_distance) noexcept {
     color.alpha = 1.0;
     color.blue = 0.0;
     double d_from_m = fabs(val - base);
@@ -203,8 +203,8 @@ ChimeraCommandError budget_command(size_t argc, const char **argv) noexcept {
 
 template <class T>
 static std::string int_to_hex(T i) {
-    char buff[2 + sizeof(i) + 1];
-    sprintf(buff, "0x%X", i);
+    char * buff = 0x0;
+    sprintf(buff, "0x%X", (unsigned int)i);
     return std::string(buff);
 }
 
@@ -212,7 +212,7 @@ ChimeraCommandError player_info_command(size_t argc, const char **argv) noexcept
     HaloPlayer player;
     console_out(std::string("Player index: ") + std::to_string(player.index()));
     auto *data = player.player_data();
-    console_out(std::string("Player data address: ") + int_to_hex(data));
+    console_out(std::string("Player data address: ") + int_to_hex<char *>(data));
     auto object_id = player.object_id();
     auto object = HaloObject(object_id);
     auto *object_data = object.object_data();
