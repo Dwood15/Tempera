@@ -130,7 +130,7 @@ float distance_squared(float x1, float y1, float x2, float y2) noexcept;
 float distance_squared(const Vector3D &a, const Vector3D &b) noexcept;
 
 /// Get the time elapsed since a counter.
-double counter_time_elapsed(const LARGE_INTEGER &before) noexcept;
+float counter_time_elapsed(const LARGE_INTEGER &before) noexcept;
 
 /// Get the time elapsed between two counters.
-double counter_time_elapsed(const LARGE_INTEGER &before, const LARGE_INTEGER &after) noexcept;
+float counter_time_elapsed(const LARGE_INTEGER &before, const LARGE_INTEGER &after) noexcept;

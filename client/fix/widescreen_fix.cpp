@@ -46,16 +46,16 @@ static void check_cursor() noexcept {
 static void set_mod(bool force) noexcept {
     auto &resolution = get_resolution();
     float aspect_ratio = static_cast<float>(resolution.width) / resolution.height;
-    float new_width_scale = aspect_ratio / (4.0 / 3.0);
+    float new_width_scale = aspect_ratio / (4.0f / 3.0f);
     auto scale_changed = width_scale != new_width_scale;
     if(scale_changed || force) {
         static float adder = 1.0;
-        static float adder_negative = -1.0;
+        static float adder_negative = -1.0f;
         width_scale = new_width_scale;
-        float p_scale = 1.0/(320.0 * new_width_scale);
-        adder = 1.0 / new_width_scale;
-        adder_negative = -(1.0 + 1.0 / 640.0) / new_width_scale;
-        menu_extra_width = ceil(640 * width_scale - 640);
+        float p_scale = 1.0f/(320.0f * new_width_scale);
+        adder = 1.0f / new_width_scale;
+        adder_negative = -(1.0f + 1.0f / 640.0f) / new_width_scale;
+        menu_extra_width = (int)ceil(640.0f * width_scale - 640);
 
         auto *hud_element_widescreen_sig_address = get_signature("hud_element_widescreen_sig").address();
         write_code_any_value(hud_element_widescreen_sig_address + 0x7, p_scale);
@@ -75,7 +75,7 @@ static void set_mod(bool force) noexcept {
         auto *console_text_fix_1_sig_address = get_signature("console_text_fix_1_sig").address();
         static int32_t console_input_offset = 8;
         write_code_any_value(console_text_fix_1_sig_address + 3, &console_input_offset);
-        console_input_offset = 320.0 - 320.0 * width_scale + 8;
+        console_input_offset = (int32_t)(320.0f - 320.0f * width_scale + 8);
         write_code_any_value(console_text_fix_1_sig_address + 0x37, static_cast<uint32_t>(ceil(320.0 + 320.0 * width_scale)));
 
         auto *console_text_fix_2_sig_address = get_signature("console_text_fix_2_sig").address();
@@ -83,14 +83,14 @@ static void set_mod(bool force) noexcept {
         write_code_any_value(console_text_fix_2_sig_address + 0x3A, static_cast<uint32_t>(ceil(320.0 + 320.0 * width_scale)));
 
         static int16_t tables[3];
-        tables[0] = floor(320 - 160 * width_scale);
+        tables[0] = (int16_t)floor(320.0f - 160.0f * width_scale);
         tables[1] = 320;
-        tables[2] = ceil(320 + 160 * width_scale);
+        tables[2] = (int16_t)ceil(320 + 160 * width_scale);
         write_code_any_value(console_text_fix_2_sig_address + 0x51 + 1, tables);
         write_code_any_value(console_text_fix_2_sig_address + 0x56 + 3, tables + 2);
 
         static float nav_scale = 320.0;
-        nav_scale = -320.0 * (width_scale - 1);
+        nav_scale = -320.0f * (width_scale - 1);
         static unsigned char instructions[] = {0xD8, 0x05, 0xFF, 0xFF, 0xFF, 0xFF, 0xDA, 0x04, 0x24, 0xD9, 0x19, 0xE9, 0xFF, 0xFF, 0xFF, 0xFF};
 
         *reinterpret_cast<float **>(instructions + 2) = &nav_scale;
@@ -112,12 +112,12 @@ static void set_mod(bool force) noexcept {
             offset_sig(get_signature("team_icon_oddball_sig"));
             offset_sig(get_signature("team_icon_background_sig"));
 
-            int16_t right_f1_offset = 0x27B - 320 + 320 * new_width_scale;
+            int16_t right_f1_offset = (int16_t)0x27B - (int16_t)320 + (int16_t)(320.0f * new_width_scale);
             write_code_any_value(get_signature("f1_halo_text_sig").address() + 7 + 5, right_f1_offset);
             write_code_any_value(get_signature("f1_server_ip_text_sig").address() + 7 + 5, right_f1_offset);
 
             destroy_offsetter(index);
-            index = create_offsetter(320.0 - 320.0 * width_scale, 0, true);
+            index = create_offsetter((short)320 - (short)(320.0f * width_scale), 0, true);
         }
 
         if(new_width_scale >= 1.0) {
@@ -156,8 +156,8 @@ static void set_mod(bool force) noexcept {
                             }
 
                             if(do_it) {
-                                bounds_left = floor(320.0 - 320.0 * width_scale);
-                                bounds_right = ceil(320.0 + 320.0 * width_scale);
+                                bounds_left = (int16_t)floor(320.0f - 320.0f * width_scale);
+                                bounds_right = (int16_t)ceil(320.0f + 320.0f * width_scale);
                             }
                         }
 
@@ -177,7 +177,7 @@ static void set_mod(bool force) noexcept {
                             tags[widget.index].y = cwbounds_right;
                             if((cwbounds_right - cwbounds_left) == 640) {
                                 cwbounds_left = -horizontal_offset;
-                                cwbounds_right = cwbounds_left + 640;
+                                cwbounds_right = cwbounds_left + (short)640;
                                 modified[widget.index] = 1;
                             }
                         }
@@ -204,7 +204,7 @@ ChimeraCommandError widescreen_fix_command(size_t argc, const char **argv) noexc
     extern bool widescreen_scope_mask_active;
     if(argc == 1) {
         int new_value = bool_value(argv[0]);
-        if(new_value == false) new_value = atol(argv[0]);
+        if(new_value == 0) new_value = atol(argv[0]);
         if(new_value < 0 || new_value > 2) {
             console_out_error("chimera_widescreen_fix: Expected a value between 0 and 2");
             return CHIMERA_COMMAND_ERROR_FAILURE;

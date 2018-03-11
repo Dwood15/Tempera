@@ -123,17 +123,17 @@ ChimeraCommandError set_resolution_command(size_t argc, const char **argv) noexc
     int height = strtol(argv[1], nullptr, 10);
     if(width < 32 && height < 32 && width > 0 && height > 0) {
         auto &resolution = get_resolution();
-        auto width_f = strtod(argv[0], nullptr);
-        auto height_f = strtod(argv[1], nullptr);
-        height = static_cast<double>(resolution.width) / width_f * height_f;
+        auto width_f = strtof(argv[0], nullptr);
+        auto height_f = strtof(argv[1], nullptr);
+        height = (int)(resolution.width / width_f * height_f);
         width = resolution.width;
         if(width < 640) {
-            height = 640.0 / width_f * height_f;
+            height = (int)(640.0f / width_f * height_f);
             width = 640;
         }
         if(height < 480) {
             height = 480;
-            width = 480.0 * width_f / height_f;
+            width = (int)(480.0 * width_f / height_f);
         }
     }
     if(width < 640 || height < 480) {

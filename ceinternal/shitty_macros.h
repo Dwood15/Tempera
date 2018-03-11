@@ -1,5 +1,5 @@
 #pragma once
-//WARNING: Intellisense shits the bed w/ nested/complex macros and typedefs. Please avoid nesting macros/typedefs.
+//WARNING: Please avoid nesting macros/typedefs, that breaks intellisense 9/10 times.
 #pragma region sanity checks
 #define STATIC_ASSERT_FAIL			"Static Assert Failure!"
 #define STAT_ASSRT(object, size)  static_assert(sizeof(object) == size, STATIC_ASSERT_FAIL)

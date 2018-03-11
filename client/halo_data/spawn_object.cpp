@@ -13,7 +13,7 @@ struct s_object_creation_disposition {
     float pos[3];
 };
 
-uint32_t spawn_object(const HaloTagID &tag_id, float x, float y, float z, uint32_t parent) noexcept {
+uint32_t spawn_object(unsigned int &tag_id, float x, float y, float z, uint32_t parent) noexcept {
 	static auto *querydo = get_signature("create_object_query_sig").address() - 6;
 	static auto *doit = get_signature("create_object_sig").address() - 24;
 	char query[1024] = {};
@@ -34,7 +34,7 @@ uint32_t spawn_object(const HaloTagID &tag_id, float x, float y, float z, uint32
 	__asm {
 		pushad
 		push parent
-		push tag_id.id
+		push tag_id
 		lea eax, dword ptr ds:[query]
 		call querydo
 		add esp, 8
