@@ -17,7 +17,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 
         }
         else {
-            core::init();
+            core::init(hinstDLL);
             initialize_client();
         }
     }
@@ -27,6 +27,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 
         }
         else {
+            core::unload();
             uninitialize_client();
         }
     }

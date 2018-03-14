@@ -41,6 +41,7 @@ struct s_players_globals_data {
 	//TODO: verify if combined_pvs_local is actually the same as regular combined_pvs - Maybe they're separate and synched via network?
 	unsigned long combined_pvs_local[MAX_PLAYERS_IN_GAME];					// 0x58 combined pvs of all local players
 }; static_assert(sizeof(s_players_globals_data) == 0x18 + (0x4 * 2 * MAX_PLAYERS_IN_GAME), STATIC_ASSERT_FAIL);
+INTELLISENSE_HACK(s_players_globals_data);
 
 struct s_player_control {
 	datum_index         unit_index;                                                                      // 0x0
@@ -82,7 +83,7 @@ struct s_weapon_datum_network_data {
 }; static_assert(sizeof(s_weapon_datum_network_data) == 0x2C, STATIC_ASSERT_FAIL);
 
 INTELLISENSE_HACK(s_weapon_datum_network_data)
-#pragma endregion 
+#pragma endregion
 
 //Doesn't get synched.
 struct s_animation_state {
@@ -144,7 +145,7 @@ struct s_object_datum_network_delta_data {
 	real_point3d position;					// 0x1C
 
 	bool valid_forward_and_up;				// 0x28
-	unsigned char __pad__unk1[3];	
+	unsigned char __pad__unk1[3];
 	real_vector3d forward;					// 0x2C
 	real_vector3d up;						// 0x38
 
@@ -195,7 +196,7 @@ struct s_halo_pc_network {
 	networked_datum				datum_role;												//0x0
 	bool						unknown_type0;											//0x4
 	bool						should_force_baseline_update;							//0x5
-	unsigned __int16			unknown_type1;											//0x6	//TODO: verify if this is padding or not 
+	unsigned __int16			unknown_type1;											//0x6	//TODO: verify if this is padding or not
 	signed long					network_time;											// 0x8
 }; static_assert(sizeof(s_halo_pc_network) == 0xC, STATIC_ASSERT_FAIL);
 
@@ -248,11 +249,11 @@ struct s_weapon_data {
 	} first_16_bytes;
 	static_assert(sizeof(s_first_16_bytes) == 0x10, STATIC_ASSERT_FAIL);
 	struct s_2nd_16_bytes {
-		real				heat;							// 0x0 
+		real				heat;							// 0x0
 		real				age;							// 0x4
 		real				illumination_fraction;			// 0x8
 		real				integrated_light_power;			// 0xC
-	} second_16_bytes; 
+	} second_16_bytes;
 	static_assert(sizeof(s_first_16_bytes) == 0x10, STATIC_ASSERT_FAIL);
 
 	struct s_3rd_16_bytes {
@@ -275,7 +276,7 @@ struct s_weapon_data {
 
 	s_magazine_state	magazines[2];					//0x84
 	INTELLISENSE_HACK(magazines);
-	
+
 	long last_trigger_fire_time;						// 0xA0
 	s_start_reload_data start_reload_update;			// 0xA4
 	long				__pad32_1;						// 0xAC need to verify this is unused
@@ -296,7 +297,7 @@ INTELLISENSE_HACK(s_weapon_datum_network_data)
 
 //STAT_ASSRT(s_weapon_data, (k_object_size_weapon - k_object_size_item));
 //static_assert(sizeof(s_weapon_data) == (), STATIC_ASSERT_FAIL);
-/* OG struct: 
+/* OG struct:
  struct s_weapon_data {
 			// FLAG(3) - _weapon_must_be_readied_bit
 			long_flags flags;						// 0x22C
@@ -391,7 +392,7 @@ struct s_object_data {
 };
 
 static_assert(sizeof(s_object_data) == object_sizes::k_object_size_object, STATIC_ASSERT_FAIL);
-#pragma endregion 
+#pragma endregion
 
 #pragma region item_datums
 struct s_object_datum {
@@ -650,7 +651,7 @@ struct s_main_globals
 	PAD8;
 	PAD32;
 
-	
+
 };
 */
 struct s_game_globals {

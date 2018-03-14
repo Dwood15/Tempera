@@ -49,7 +49,7 @@ static void sniper_fix() noexcept {
         if(open_sauce_present()) {
             auto &resolution = get_resolution();
             auto ar = static_cast<double>(resolution.width) / resolution.height;
-            center_x = 320.0 / (4.0 / 3.0) * ar;
+            center_x = (int16_t) (320.0 / (4.0 / 3.0)) * ar;
             if(ar != (4.0 / 3.0)) {
                 right_offset = 34;
             }
