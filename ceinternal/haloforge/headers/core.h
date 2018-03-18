@@ -36,7 +36,7 @@ class Core;
 #include "../game_map/map.h"
 #include "../game_map/tags.h"
 #include "math.h"
-using namespace std;
+//using namespace std;
 ////////////////////////////////////////
 // Defines
 ////////////////////////////////////////

@@ -1,51 +1,55 @@
 ﻿#pragma once
-#include "shitty_macros.h"
+
+#ifndef function_rewrite
+#define function_rewrite
+#include "ceinternal.h"
 #include "shitty_header_ports.h"
+#include "gamestate_headers/player_types.h"
 #include <cstring>
-//
-namespace complete_replacements {
 
-	void __cdecl  player_control_initialize_for_new_map() {
-		float matrix_related_flt = *(float *) 0x612188;
+//yolo coding at its finest.
+namespace spcore {
+	static uintptr game_state_globals_location_ptr = (uintptr) 0x67DD8C;
+	static uintptr game_state_globals_ptr = (uintptr) 0x67DD88;
 
-		s_player_control_globals_data *player_controls = *(s_player_control_globals_data **) 0x64C38C;
-		game_options::s_game_globals *game_globals = *(game_options::s_game_globals **) 0x6E2260;
-		s_player_control *current_player_datum = player_controls->local_players;
-		float *mtrx_rltd_flt = (float *) 0x612188;
-		float *player_look_pitch_rate = (float *) 0x68CD7C;
-		float *player_look_yaw_rate = (float *) 0x68CD78;
+	static unsigned int game_state_cpu_allocation = *game_state_globals_ptr;
+	static unsigned int game_state_location_as_int = *game_state_globals_location_ptr;
 
-		float *default_look_rates = (float *) ((int) game_globals + 0x160);
+	struct S_scripted_hud_messages {
+		char unk[0x8C];
+	};
 
+	struct s_hud_messaging_state {
+		S_scripted_hud_messages hmi[4];
+	};
 
-		//Begin of function
-		player_controls->action_flags[1] = 0;
-		player_controls->action_flags[0] = 0;
-		player_controls->__pad_unk = 0;
-		player_controls->flags = 0;
+//	struct s_hud_message_state_player {
+//		char unk[0x82];
+//		s_hud_messaging_state scripted_hud_messages[4];
+//	}; STAT_ASSRT(s_hud_message_state_player, 0x)
 
-		if (*player_look_pitch_rate == *mtrx_rltd_flt) {
-			*player_look_pitch_rate = default_look_rates[0];
-		}
+	static void **crc_checksum_buffer = (void **) 0x4D36D0;
+	static void **hud_scripted_globals = (void **) 0x6B44A8;
+	static void **hud_messaging_state = (void **) 0x677624;
 
-		if (*player_look_yaw_rate == *mtrx_rltd_flt) {
-			*player_look_yaw_rate = default_look_rates[1];
-		}
+	static s_motion_sensor *motion_sensor = *(s_motion_sensor **) 0x6B44C8;
 
-		memset(current_player_datum, 0x0, sizeof(s_player_control) * MAX_PLAYER_COUNT_LOCAL);
+	namespace initializations {
+		void __inline adjustNPatch32(uintptr_t *loc, uint32 size);
 
-		for (int i = 0; i < MAX_PLAYER_COUNT_LOCAL; i++) {
-			current_player_datum[i].unit_index.handle = -1;
-			current_player_datum[i].weapon_index = -1;
-			current_player_datum[i].grenade_index = -1;
-			current_player_datum[i].zoom_level = -1;
-			current_player_datum[i].target_object_index.handle = -1;
-			current_player_datum[i].weapon_swap_ticks = 0;
-			current_player_datum[i]._unk_fld3_32 = 0x3FBF0243;
-			current_player_datum[i]._unk_fld2_32 = 0xBFBF0243;
-			current_player_datum[i].__pad_unk0 = 0x0;
-			current_player_datum[i].__pad_unk1 = 0x0;
-		}
-		//End of Function
-	} //STAT_ASSRT(complete_replacements::player_control_initialize_for_new_map, 0x9A);
-}
+		void patch_game_state_allocat_func();
+
+		void __cdecl motion_sensor_initialize_for_new_map();
+
+		int __fastcall interface_get_tag_index(short x);
+
+		void __cdecl interface_initialize_for_new_map();
+
+		void __cdecl scripted_hud_messages_clear();
+	};
+
+	namespace player_control {
+		void __cdecl  player_control_initialize_for_new_map();
+	};
+};
+#endif

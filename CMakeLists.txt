@@ -22,58 +22,63 @@ unset(CMAKE_CL_64)
 ## Folders files
 #set(CMAKE_CXX_STANDARD 17)
 # Define Release by default.
-if(NOT CMAKE_BUILD_TYPE)
+if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Release")
 	message(STATUS "Build type not specified: Using Release by default.")
-endif(NOT CMAKE_BUILD_TYPE)
+endif (NOT CMAKE_BUILD_TYPE)
 
 add_definitions(-D_WINDOWS -D_USRDLL)
 #check for msvc -> not currently supported.
-if(MINGW)
-	if($ENV{CLION_IDE})
+if (MINGW)
+	if ($ENV{CLION_IDE})
 		#convenience function for CLion
 		return()
-	endif()
+	endif ()
 
 	message(STATUS "Mingw detected.")
 	set(COMPILER_REL_FLDR mingw)
 	set(CMAKE_CXX_FLAGS "-std=c++17\ -fpermissive")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS}\ -g\ -m32\ -masm=intel")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g -m32 -masm=intel")
-elseif(MSVC)
+elseif (MSVC)
 	message(AUTHOR_WARNING "Building Chimera with ${CMAKE_CXX_COMPILER_ID} is experimental. Use at your own risk!")
 
 	#vc++ 2017 toolset. Available from microsoft here: http://landinghub.visualstudio.com/visual-cpp-build-tools
-	if(NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.16299.0")
+	if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.16299.0")
 		message(WARNING "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION is empty! Could not find applicable windows 10 sdk. ${CMAKE_GENERATOR_TOOLSET} ${CMAKE_HOST_WIN32}")
-		#set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION 10.0.16299.0)
+		set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION 10.0.16299.0)
 		#include_directories(<somekeyword?> "C:/Program\ Files\ \(x86\)/Windows\ Kits/10/Include/10.0.16299.0")
 		#TODO: CHECK FOR AVAILABLE SDK VERSIONS IF NONE SET
-	endif()
+	endif ()
 
 	set(COMPILER_REL_FLDR msvc)
-	set(CMAKE_CXX_FLAGS /std:c++latest)
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /permissive- /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /arch:SSE2 /D\ \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\"\ /D_CRT_SECURE_NO_WARNINGS")
+	set(CMAKE_CXX_FLAGS /std:c++17)
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /arch:SSE2 /D\ \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\"\ /D_CRT_SECURE_NO_WARNINGS")
 
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ /permissive")
 	message(FATAL_ERROR "Chimera does not yet support clang, if it ever will.")
-else()
+else ()
 	message(FATAL_ERROR "Unrecognized compiler/suite: ${CMAKE_CXX_COMPILER_ID}")
-endif()
+endif ()
 
 # Output Variables
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	file(GLOB DBG_CLIENT_G ./client/debug/*.cpp)
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	file(GLOB DBG_CLIENT_G ./client/debug/budget.cpp
+		 ./client/debug/devmode.cpp
+		 ./client/debug/eep.cpp
+		 ./client/debug/wireframe.cpp
+		 )
+
 	set(OUTPUT_DIR ./bin/${COMPILER_REL_FLDR}-debug)
-elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-	if($ENV{CLION_IDE})
+elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
+	if ($ENV{CLION_IDE})
 		message(STATUS "convenience exit function for CLion building")
 		return()
-	endif()
+	endif ()
 
 	set(OUTPUT_DIR ./bin/${COMPILER_REL_FLDR}-Release)
-endif()
+endif ()
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_DIR}/ar")
@@ -101,32 +106,50 @@ set(GAMEMAP_H
 	./ceinternal/haloforge/game_map/scenario.h
 	./ceinternal/haloforge/game_map/tags.h)
 
-set(HALOFORGE_H ./ceinternal/haloforge/headers/*.h
+set(HALOFORGE_H ./ceinternal/haloforge/headers/addlog.h
+	./ceinternal/haloforge/headers/blam.h
+	./ceinternal/haloforge/headers/camera.h
+	./ceinternal/haloforge/headers/core.h
+	./ceinternal/haloforge/headers/detours.h
+	./ceinternal/haloforge/headers/halo_types.h
+	ceinternal/haloforge/headers/forgeMain.h
+	./ceinternal/haloforge/headers/math.h
+	./ceinternal/haloforge/headers/objectcontroller.h
+	./ceinternal/haloforge/headers/objects.h
+	./ceinternal/haloforge/headers/players.h
 	./ceinternal/haloforge/Direct3D/textures.h
 	./ceinternal/haloforge/Direct3D/d3d9hook.h)
 
-set(HALOFORGE_CPP ./ceinternal/haloforge/Direct3D/d3d9hook.cpp
+set(CEINTERNAL_H
+	./ceinternal/ce_base_types.h
+	./ceinternal/shitty_tag_data_defs.h
+	./ceinternal/shitty_enums.h
+	./ceinternal/gamestate_headers/player_types.h
+	./ceinternal/shitty_macros.h
+	./ceinternal/shitty_header_ports.h
+	)
+
+set(CEINTERNAL_CPP ${CEINTERNAL_H}
+	./client/client.cpp
+	./client/client_signature.cpp
+	./client/hac2.cpp
+	./client/keystone.cpp
+	./client/settings.cpp
+	./client/path.cpp
+	./client/open_sauce.cpp
+	./ceinternal/haloforge/Direct3D/d3d9hook.cpp
 	./ceinternal/haloforge/addlog.cpp
 	./ceinternal/haloforge/blam.cpp
 	./ceinternal/haloforge/camera.cpp
 	./ceinternal/haloforge/core.cpp
 	./ceinternal/haloforge/math.cpp
 	./ceinternal/haloforge/objectcontroller.cpp
-	./ceinternal/haloforge/main.cpp)
-
-set(CEINTERNAL_G ./ceinternal/ceinternal.h
-	./ceinternal/shitty_macros.h
-	./ceinternal/shitty_header_ports.h
-	./ceinternal/ceinternal.h
-	./ceinternal/ce_base_types.h
-	./ceinternal/queued_sigscanner.h
-	./ceinternal/function_rewrite.h
-	./ceinternal/shitty_tag_data_defs.h
-	${HALOFORGE_CPP}
-	${HALOFORGE_H}
-	${GAMEMAP_H})
-
-file(GLOB SHITTY_TESTS ${CEINTERNAL_G})
+	./ceinternal/haloforge/forgeMain.cpp
+	./ceinternal/function_rewrite.cpp
+	./ceinternal/ceinternal.cpp
+	./ceinternal/patching_hooking.cpp
+	./main.cpp
+	)
 
 #TODO: END PRIVATE
 
@@ -139,64 +162,111 @@ set(DTA_CLIENT_G ./client/halo_data/chat.cpp
 	./client/halo_data/spawn_object.cpp
 	./client/halo_data/script.cpp
 	./client/halo_data/table.cpp
-	./client/halo_data/tag_data.cpp)
+	./client/halo_data/tag_data.cpp
+	)
+
+set(HUD_CLIENT_G ./client/hud_mod/offset_hud_elements.cpp)
+set(MSG_CLIENT_G ./client/messaging/messaging.cpp)
+set(CMD_CLIENT_G ./client/command/command.cpp ./client/command/console.cpp)
+set(STT_CLIENT_G ./client/startup/fast_startup.cpp ./client/startup/crc32.c)
+set(TIA_CLIENT_G ./client/halo_data/tiarace/hce_tag_class_int.cpp)
+
+set(ENHANCE_CLIENT_G
+	./client/enhancements/auto_center.cpp
+	./client/enhancements/disable_buffering.cpp
+	./client/enhancements/firing_particle.cpp
+	./client/enhancements/gamepad_vertical_scale.cpp
+	./client/enhancements/mouse.cpp
+	./client/enhancements/multitexture_overlay.cpp
+	./client/enhancements/server_messages.cpp
+	./client/enhancements/show_spawn.cpp
+	./client/enhancements/skip_loading.cpp
+	./client/enhancements/throttle_fps.cpp
+	./client/enhancements/uncap_cinematic.cpp
+	./client/enhancements/zoom_blur.cpp
+	)
+
+file(GLOB INJECT_G ./code_injection/signature.cpp)
+file(GLOB MATH_G ./math/data_types.cpp)
 
 #A lot of this was just trying random crap to see what works and what won't.
 #The trick here was literally just trying things and figuring out what worked and what didn't.
 #So there's an issue with FILE GLOBS that do *.cpp, *.h - CMAKE will load them initially, but if you change one of these files,
 # MAKE doesn't know they need to be changed.
 # The solution is: run clean before rebuilding, or fix this so it refers to each file explicitly like above.
-file(GLOB LUA_INCLUDE ./client/lua/lua.hpp)
 file(GLOB CLI_OW_LUA_G ./client/lua/*.cpp)
 file(GLOB LUA_OW_LUA_H ./client/lua/*.hpp ./client/lua/*.h)
-file(GLOB TIA_CLIENT_G ./client/halo_data/tiarace/hce_tag_class_int.cpp)
-file(GLOB HAC_INJECT_G ./code_injection/hacclient/codefinder.cpp)
-file(GLOB POL_CLIENT_G ./client/interpolation/*.cpp)
-file(GLOB ENH_CLIENT_G ./client/enhancements/*.cpp)
-file(GLOB MSG_CLIENT_G ./client/messaging/messaging.cpp)
-file(GLOB CMD_CLIENT_G ./client/command/command.cpp ./client/command/console.cpp)
-file(GLOB HUD_CLIENT_G ./client/hud_mod/offset_hud_elements.cpp)
-file(GLOB STT_CLIENT_G ./client/startup/fast_startup.cpp ./client/startup/crc32.c)
-file(GLOB VIS_CLIENT_G ./client/visuals/*.cpp)
-file(GLOB HKS_CLIENT_G ./client/hooks/*.cpp)
-file(GLOB XBX_CLIENT_G ./client/xbox/*.cpp)
-file(GLOB FIX_CLIENT_G ./client/fix/*.cpp)
-file(GLOB INJECT_G ./code_injection/signature.cpp)
-file(GLOB CLIENT_G ./client/*.cpp main.cpp)
-file(GLOB MATH_G ./math/data_types.cpp)
+
+
+file(GLOB VISUALS_CLIENT_G
+	./client/visuals/anisotropic_filtering.cpp
+	./client/visuals/gametype_indicator.cpp
+	./client/visuals/letterbox.cpp
+	./client/visuals/server_ip.cpp
+	./client/visuals/vertical_field_of_view.cpp
+	)
+
+file(GLOB HOOKS_CLIENT_G
+	./client/hooks/camera.cpp
+	./client/hooks/frame.cpp
+	./client/hooks/map_load.cpp
+	./client/hooks/rcon_message.cpp
+	./client/hooks/tick.cpp
+	)
+
+file(GLOB XBOX_CLIENT_G
+	./client/xbox/hud_kill_feed.cpp
+	./client/xbox/safe_zone.cpp
+	./client/xbox/simple_score_screen.cpp
+	./client/xbox/split_screen_hud.cpp
+	)
+
+file(GLOB FIX_CLIENT_G
+	./client/fix/camo_fix.cpp
+	./client/fix/descope_fix.cpp
+	./client/fix/fov_fix.cpp
+	./client/fix/magnetism_fix.cpp
+	./client/fix/scope_fix.cpp
+	./client/fix/sniper_hud.cpp
+	./client/fix/widescreen_fix.cpp)
+
+file(GLOB HAC2_INJECT_G ./code_injection/hacclient/codefinder.cpp)
+file(GLOB INTERPOL_CLIENT_G
+	 ./client/interpolation/camera.cpp
+	 ./client/interpolation/fp.cpp
+	 ./client/interpolation/widget.cpp
+	 ./client/interpolation/particle.cpp
+	 ./client/interpolation/light.cpp
+	 ./client/interpolation/interpolation.cpp
+	 )
 
 file(GLOB DETOURS_GLOB ./detours.lib)
 
-if(MSVC)
-	set(LINKER_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /OPT:REF\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ASSEMBLYDEBUG")#\ /ALIGN:1") rip alignment on win32
+if (MSVC)
+	set(LINKER_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ASSEMBLYDEBUG")#\ /ALIGN:1") rip alignment on win32
 	set(CMAKE_SHARED_LINKER_FLAGS ${LINKER_FLAGS})
 
-elseif(NOT MSVC)
+elseif (NOT MSVC)
 	set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS_INIT} $ENV{LDFLAGS} "-lws2_32 -static-libgcc -static-libstdc++ -static -luserenv -static -static -ladvapi32")
 	#message(AUTHOR_WARNING "MSVC warning hack b/c CLion is dumb.")
 	#set(DTA_CLIENT STATIC ${DTA_CLIENT_G})
-endif()
+endif ()
 #some weirdness surrounding version.h and version.rc, so I'm gonna be leaving them out until further notice.
-add_library(${PROJECT_NAME} SHARED ${LUA_INCLUDE} ${SHITTY_TESTS}
-			${CLIENT_G}
-			${INJECT_G}
-			${MATH_G}
-			${DTA_CLIENT_G}
-			${DBG_CLIENT_G}
-			${CMD_CLIENT_G}
-			${ENH_CLIENT_G}
+add_library(${PROJECT_NAME} SHARED ${INJECT_G} ${MATH_G} ${DTA_CLIENT_G} ${DBG_CLIENT_G} ${CMD_CLIENT_G}
+			${ENHANCE_CLIENT_G}
 			${FIX_CLIENT_G}
 			${TIA_CLIENT_G}
-			${HKS_CLIENT_G}
+			${HOOKS_CLIENT_G}
 			${HUD_CLIENT_G}
-			${POL_CLIENT_G}
+			${INTERPOL_CLIENT_G}
 			${MSG_CLIENT_G}
 			${STT_CLIENT_G}
-			${VIS_CLIENT_G}
-			${XBX_CLIENT_G}
-			${HAC_INJECT_G}
+			${VISUALS_CLIENT_G}
+			${XB0X_CLIENT_G}
+			${HAC2_INJECT_G}
 			${CLI_OW_LUA_G}
 			${LUA_OW_LUA_H}
+			${CEINTERNAL_CPP}
 			)
 
 #add_library(DETOURS STATIC IMPORTED)

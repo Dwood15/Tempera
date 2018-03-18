@@ -1,6 +1,7 @@
+#pragma once
+
 #ifndef SHITTYHEADER
 #define SHITTYHEADER
-#include "shitty_macros.h"
 #include "shitty_enums.h"
 #include "ce_base_types.h"
 #pragma pack(push)
@@ -40,7 +41,7 @@ struct s_players_globals_data {
 	unsigned long combined_pvs[MAX_PLAYERS_IN_GAME];						// 0x18 combined pvs of all players in the game
 	//TODO: verify if combined_pvs_local is actually the same as regular combined_pvs - Maybe they're separate and synched via network?
 	unsigned long combined_pvs_local[MAX_PLAYERS_IN_GAME];					// 0x58 combined pvs of all local players
-}; static_assert(sizeof(s_players_globals_data) == 0x18 + (0x4 * 2 * MAX_PLAYERS_IN_GAME), STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_players_globals_data) == 0x10 + (0x4 * 2 * MAX_PLAYER_COUNT_LOCAL) + (0x4 * 2 * MAX_PLAYERS_IN_GAME), STATIC_ASSERT_FAIL);
 INTELLISENSE_HACK(s_players_globals_data);
 
 struct s_player_control {

@@ -1,7 +1,7 @@
 /*
 	Project: haloforge
 	File: addlog.h
-	Copyright © 2009 SilentK, Abyll
+	Copyright ï¿½ 2009 SilentK, Abyll
 
 	This file is part of haloforge.
 
@@ -31,7 +31,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-using namespace std;
+//using namespace std;
 
 #define LOGNAME "live_projekt.log"
 
@@ -39,17 +39,5 @@ void __cdecl DEBUG(const char* fmt, ...);
 char *GetDirectoryFile(char* filename);
 void InitAddLog(HMODULE hModule);
 void ExitAddLog();
-
-/*class CLogger
-{
-private:
-	ofstream ofile;
-	
-public:
-	CLogger(HMODULE hModule);
-	~CLogger();
-
-	AddLog(char* fmt, ...);
-};*/
 
 #endif /* ADDLOG_H */

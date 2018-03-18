@@ -1,12 +1,24 @@
 #pragma once
+#ifndef shitty_macros
+#define shitty_macros
 //WARNING: Please avoid nesting macros/typedefs, that breaks intellisense 9/10 times.
 #pragma region sanity checks
 #define STATIC_ASSERT_FAIL			"Static Assert Failure!"
 #define STAT_ASSRT(object, size)  static_assert(sizeof(object) == size, STATIC_ASSERT_FAIL)
 
+typedef float real;
+typedef int int32;
+typedef signed char sbyte;
+typedef long byte_swap_code_t;
+typedef unsigned char byte;
+typedef unsigned int *uintptr;
+typedef unsigned int uint32;
+
 STAT_ASSRT(bool, 0x1);
 STAT_ASSRT(char, 0x1);
 STAT_ASSRT(short, 0x2);
+STAT_ASSRT(__int16, 0x2);
+STAT_ASSRT(__int32, 0x4);
 STAT_ASSRT(long, 0x4);
 STAT_ASSRT(float, 0x4);
 STAT_ASSRT(long long, 0x8);
@@ -17,6 +29,9 @@ STAT_ASSRT(double, 0x8);
 #pragma region functional
 #define FLAG(bit)					( 1<<(bit) )
 #define UNK_TYPE(type) pad_##type
+#define PAD8(name) char name;
+#define PAD24(name) unsigned char name[24];
+
 #pragma endregion
 
 #pragma region maximums
@@ -24,6 +39,7 @@ STAT_ASSRT(double, 0x8);
 #define MAX_PLAYERS_IN_GAME			16
 #define MAX_ATTACHMENTS_PER_OBJECT  8
 #define MAX_MAGAZINES_PER_WEAPON	2
+#define MAX_CUSTOM_BLIPS 			16
 #pragma region models
 #define	k_maximum_regions_per_model				8
 #define	k_maximum_nodes_per_model				64
@@ -31,7 +47,6 @@ STAT_ASSRT(double, 0x8);
 #define	k_maximum_nodes_per_model_geometry_part 22
 #define	k_number_of_rows_per_node_matrix		4
 
-#define k_maximum_rendered_triangles			0x4000
 #define k_maximum_rendered_objects				256
 
 #define k_maximum_rendered_clusters				0x80
@@ -66,3 +81,4 @@ STAT_ASSRT(double, 0x8);
 
 #define PLAYERS_INITIALIZE_FOR_NEW_MAP  0x476230
 #pragma endregion
+#endif

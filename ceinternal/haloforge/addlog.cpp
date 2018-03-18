@@ -46,7 +46,7 @@ void __cdecl DEBUG(const char *fmt, ...) {
 		_vsnprintf(logbuf + strlen(logbuf), sizeof(logbuf) - strlen(logbuf), fmt, va_alist);
 			va_end (va_alist);
 
-		ofile << logbuf << endl;
+		ofile << logbuf << std::endl;
 	}
 }
 
@@ -60,7 +60,7 @@ void InitAddLog(HMODULE hModule) {
 		}
 	}
 
-	ofile.open(GetDirectoryFile((char *) LOGNAME), ios::app);
+	ofile.open(GetDirectoryFile((char *) LOGNAME), std::ios::app);
 	std::time_t time = std::time(nullptr);
 	DEBUG("*-*-*-*-*-*-*-*-*-*-*-*-*-*");
 	DEBUG("live_projekt injected");

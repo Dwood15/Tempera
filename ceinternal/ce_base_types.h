@@ -1,10 +1,10 @@
 #pragma once
+#ifndef ce_base_types
+#define ce_base_types
 #include "shitty_macros.h"
+
 #pragma region  colors
 struct argb_color;
-typedef float real;
-typedef int int32;
-typedef signed char sbyte;
 
 // 0 - 255, represents a color
 struct rgb_color {
@@ -59,10 +59,10 @@ struct real_point3d {
 
 #pragma region whole number-based structures
 struct rectangle2d {
-	short top;	//0X0
-	short left;	//0X2
+	short top;    //0X0
+	short left;    //0X2
 	short bottom; //0x4
-	short right;	//0x6
+	short right;    //0x6
 }; static_assert(sizeof(rectangle2d) == 0x8, STATIC_ASSERT_FAIL);
 #pragma endregion
 
@@ -76,7 +76,8 @@ struct datum_index {
 
 		struct {
 			t_index index;
-			t_salt  salt;
+			t_salt salt;
 		};
 	};
 }; static_assert(sizeof(datum_index) == 0x4, STATIC_ASSERT_FAIL);
+#endif

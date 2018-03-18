@@ -23,7 +23,7 @@
 #include "headers/core.h"
 #include "headers/halo_types.h"
 #include "math.h"
-
+typedef std::string string;
 ////////////////////////////////////////
 // Global Core Class Def
 ////////////////////////////////////////

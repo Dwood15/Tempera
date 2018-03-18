@@ -1,25 +1,27 @@
 #pragma once
+#ifndef shitty_enums
+#define shitty_enums
 #include "shitty_macros.h"
-#include "ce_base_types.h"
+
 //OS uses the byte_flags typedef.
 #pragma region enumerations
 #pragma region generic tag
 #pragma region byteswap shit
-typedef long byte_swap_code_t;
+
+
 namespace byteswaps {
 	enum {
 		k_byte_swap_signature = 'bysw',
 	};
 
 	// positive numbers are runs (of bytes) to leave untouched - zero is invalid
-	enum /*e_bs_code*/ : byte_swap_code_t
-	{
+	enum /*e_bs_code*/ : byte_swap_code_t {
 		_bs_code_array_end = -101, // _end_bs_array
 		_bs_code_array_start = -100, // _begin_bs_array
 
-		_bs_code_8byte = 0 - (byte_swap_code_t)sizeof(long long), // _8byte
-		_bs_code_4byte = 0 - (byte_swap_code_t)sizeof(long long), // _4byte
-		_bs_code_2byte = 0 - (byte_swap_code_t)sizeof(long long), // _2byte
+		_bs_code_8byte = 0 - (byte_swap_code_t) sizeof(long long), // _8byte
+		_bs_code_4byte = 0 - (byte_swap_code_t) sizeof(long long), // _4byte
+		_bs_code_2byte = 0 - (byte_swap_code_t) sizeof(long long), // _2byte
 
 		_bs_code_1byte = sizeof(byte), // _byte
 	};
@@ -38,8 +40,7 @@ namespace byteswaps {
 };
 #pragma endregion
 #pragma region tag related
-enum field_type : short
-{
+enum field_type : short {
 	_field_string,
 	_field_char_integer,
 	_field_short_integer,
@@ -93,10 +94,10 @@ enum {
 	// Never streamed, unless the tag is loaded with _tag_load_for_editor_bit
 	// Used by the sound tag for delay loading the actual sample data. So, eg, when tool goes to build a cache
 	// it has to use tag_data_load on the sound samples. Maybe a better name is just 'lazy_loaded'
-	_tag_data_never_streamed_bit = 0,
+			_tag_data_never_streamed_bit = 0,
 	_tag_data_is_text_data_bit,
 	// ie, 'debug data'
-	_tag_data_not_streamed_to_cache_bit,
+			_tag_data_not_streamed_to_cache_bit,
 	k_number_of_tag_data_definition_flags,
 
 	// checked in the tag reference solving code.
@@ -106,40 +107,40 @@ enum {
 	// This flag would cause a call of tag_load(group_tag, NULL, 0) to occur. However,
 	// tag_load asserts name != NULL.
 	// Flag isn't checked in H2EK's code (so more than likely deprecated)
-	_tag_reference_unknown0_bit = 0,
+			_tag_reference_unknown0_bit = 0,
 	_tag_reference_non_resolving_bit,
 	k_number_of_tag_group_tag_reference_flags,
 
 	// set when block/data/reference fields are found during initialization
-	_tag_block_has_children_bit = 0,
+			_tag_block_has_children_bit = 0,
 	k_number_of_tag_block_definition_flags,
 
 	// tag_instance of the tag group will have their file_checksum CRC'd into the resulting cache tag header's crc field
-	_tag_group_include_in_tags_checksum_bit = 0,
+			_tag_group_include_in_tags_checksum_bit = 0,
 	// only seen preferences_network_game use this
-	_tag_group_unknown1_bit,
+			_tag_group_unknown1_bit,
 	// haven't seen this used at all
-	_tag_group_unknown2_bit,
+			_tag_group_unknown2_bit,
 	// majority of tags have this set
-	_tag_group_reloadable_bit,
+			_tag_group_reloadable_bit,
 
 	// YELO ONLY! tag_group is not meant for use in runtime builds
-	_tag_group_debug_only_yelo_bit,
+			_tag_group_debug_only_yelo_bit,
 	// YELO ONLY! tag_group is non-standard (ie, official). This is applied to those defined in CheApe.map
 	// Set at startup.
-	_tag_group_non_standard_yelo_bit,
+			_tag_group_non_standard_yelo_bit,
 	// YELO ONLY! tag_group is referenced in other groups via a tag_reference or as a parent group
 	// doesn't consider tag_references which can reference ANYTHING (eg, tag_collection's field).
 	// Set at startup.
-	_tag_group_referenced_yelo_bit,
+			_tag_group_referenced_yelo_bit,
 
 	// When this is set, implies _tag_postprocess_mode_for_editor, else _for_runtime
-	_tag_load_for_editor_bit = 0,
+			_tag_load_for_editor_bit = 0,
 	// Load the tag from the file system, not from a cache/index
-	_tag_load_from_file_system_bit,
+			_tag_load_from_file_system_bit,
 	// If set: child references of the tag being loaded are not loaded themselves
 	// Else, child references are loaded from disk
-	_tag_load_non_resolving_references_bit,
+			_tag_load_non_resolving_references_bit,
 };
 #pragma endregion
 #pragma endregion
@@ -153,10 +154,18 @@ enum game_difficulty_level : short {
 	k_number_of_game_difficulty_levels
 };
 
+enum blip_type : char {
+	blip_type_local_player,        //0x0    // 1, .5, 0
+	blip_type_friendly_team,       //0x1     // 1, 1, 0
+	blip_type_enemy_team,           //0x2     // 1, 0, 0
+	blip_type_friendly_team_vehicle, //0x3   // 1, 1, 0
+	blip_type_enemy_team_vehicle,   //0x4     // 1, 0, 0
+	blip_type_objective,           //0x5     // .5, .5, 1
+	blip_type_none,               //0x6     // 0, 0, 0
+};
 
 #pragma region scenario
-enum scenario_type : short
-{
+enum scenario_type : short {
 	_scenario_type_campaign,
 	_scenario_type_multiplayer,
 	_scenario_type_main_menu,
@@ -261,7 +270,7 @@ enum object_change_color_reference : __int16 {
 
 enum object_sizes {
 	// The base object datum allocates 2 real_orientation3d and 1 real_matrix4x3 FOR EVERY model node
-	k_object_size_object = 0x1F4,
+			k_object_size_object = 0x1F4,
 	k_object_size_projectile = 0xBC + k_object_size_object,
 	k_object_size_scenery = 0x4 + k_object_size_object,
 	k_object_size_placeholder = 0x8 + k_object_size_object,
@@ -367,3 +376,4 @@ enum weapon_magazine_state : short {
 };
 #pragma endregion
 #pragma endregion
+#endif
