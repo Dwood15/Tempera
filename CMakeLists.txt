@@ -98,7 +98,6 @@ set_target_properties(LUA_LIB PROPERTIES OUTPUT_NAME "lua")
 #TODO: find out why//what flags, and fix them.
 
 #TODO: REMOVE THIS STUFF BEFORE PUBLISHING
-
 set(GAMEMAP_H
 	./ceinternal/haloforge/game_map/bsp.h
 	./ceinternal/haloforge/game_map/halo_types.h
@@ -112,7 +111,7 @@ set(HALOFORGE_H ./ceinternal/haloforge/headers/addlog.h
 	./ceinternal/haloforge/headers/core.h
 	./ceinternal/haloforge/headers/detours.h
 	./ceinternal/haloforge/headers/halo_types.h
-	ceinternal/haloforge/headers/forgeMain.h
+	./ceinternal/haloforge/headers/forgeMain.h
 	./ceinternal/haloforge/headers/math.h
 	./ceinternal/haloforge/headers/objectcontroller.h
 	./ceinternal/haloforge/headers/objects.h
@@ -130,13 +129,6 @@ set(CEINTERNAL_H
 	)
 
 set(CEINTERNAL_CPP ${CEINTERNAL_H}
-	./client/client.cpp
-	./client/client_signature.cpp
-	./client/hac2.cpp
-	./client/keystone.cpp
-	./client/settings.cpp
-	./client/path.cpp
-	./client/open_sauce.cpp
 	./ceinternal/haloforge/Direct3D/d3d9hook.cpp
 	./ceinternal/haloforge/addlog.cpp
 	./ceinternal/haloforge/blam.cpp
@@ -147,7 +139,15 @@ set(CEINTERNAL_CPP ${CEINTERNAL_H}
 	./ceinternal/haloforge/forgeMain.cpp
 	./ceinternal/function_rewrite.cpp
 	./ceinternal/ceinternal.cpp
-	./ceinternal/patching_hooking.cpp
+	)
+
+set(CHIMERA_G ./client/client.cpp
+	./client/client_signature.cpp
+	./client/hac2.cpp
+	./client/keystone.cpp
+	./client/settings.cpp
+	./client/path.cpp
+	./client/open_sauce.cpp
 	./main.cpp
 	)
 
@@ -199,36 +199,36 @@ file(GLOB LUA_OW_LUA_H ./client/lua/*.hpp ./client/lua/*.h)
 
 
 file(GLOB VISUALS_CLIENT_G
-	./client/visuals/anisotropic_filtering.cpp
-	./client/visuals/gametype_indicator.cpp
-	./client/visuals/letterbox.cpp
-	./client/visuals/server_ip.cpp
-	./client/visuals/vertical_field_of_view.cpp
-	)
+	 ./client/visuals/anisotropic_filtering.cpp
+	 ./client/visuals/gametype_indicator.cpp
+	 ./client/visuals/letterbox.cpp
+	 ./client/visuals/server_ip.cpp
+	 ./client/visuals/vertical_field_of_view.cpp
+	 )
 
 file(GLOB HOOKS_CLIENT_G
-	./client/hooks/camera.cpp
-	./client/hooks/frame.cpp
-	./client/hooks/map_load.cpp
-	./client/hooks/rcon_message.cpp
-	./client/hooks/tick.cpp
-	)
+	 ./client/hooks/camera.cpp
+	 ./client/hooks/frame.cpp
+	 ./client/hooks/map_load.cpp
+	 ./client/hooks/rcon_message.cpp
+	 ./client/hooks/tick.cpp
+	 )
 
 file(GLOB XBOX_CLIENT_G
-	./client/xbox/hud_kill_feed.cpp
-	./client/xbox/safe_zone.cpp
-	./client/xbox/simple_score_screen.cpp
-	./client/xbox/split_screen_hud.cpp
-	)
+	 ./client/xbox/hud_kill_feed.cpp
+	 ./client/xbox/safe_zone.cpp
+	 ./client/xbox/simple_score_screen.cpp
+	 ./client/xbox/split_screen_hud.cpp
+	 )
 
 file(GLOB FIX_CLIENT_G
-	./client/fix/camo_fix.cpp
-	./client/fix/descope_fix.cpp
-	./client/fix/fov_fix.cpp
-	./client/fix/magnetism_fix.cpp
-	./client/fix/scope_fix.cpp
-	./client/fix/sniper_hud.cpp
-	./client/fix/widescreen_fix.cpp)
+	 ./client/fix/camo_fix.cpp
+	 ./client/fix/descope_fix.cpp
+	 ./client/fix/fov_fix.cpp
+	 ./client/fix/magnetism_fix.cpp
+	 ./client/fix/scope_fix.cpp
+	 ./client/fix/sniper_hud.cpp
+	 ./client/fix/widescreen_fix.cpp)
 
 file(GLOB HAC2_INJECT_G ./code_injection/hacclient/codefinder.cpp)
 file(GLOB INTERPOL_CLIENT_G
@@ -253,6 +253,7 @@ elseif (NOT MSVC)
 endif ()
 #some weirdness surrounding version.h and version.rc, so I'm gonna be leaving them out until further notice.
 add_library(${PROJECT_NAME} SHARED ${INJECT_G} ${MATH_G} ${DTA_CLIENT_G} ${DBG_CLIENT_G} ${CMD_CLIENT_G}
+			${CHIMERA_G}
 			${ENHANCE_CLIENT_G}
 			${FIX_CLIENT_G}
 			${TIA_CLIENT_G}

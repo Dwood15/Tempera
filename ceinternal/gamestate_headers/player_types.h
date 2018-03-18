@@ -1,7 +1,6 @@
 #pragma once
 #ifndef TEMPERA_PLAYER_TYPES_H
 #define TEMPERA_PLAYER_TYPES_H
-
 #include "../shitty_macros.h"
 #include "../ce_base_types.h"
 #include "../shitty_enums.h"

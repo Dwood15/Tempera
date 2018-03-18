@@ -1,11 +1,14 @@
 #pragma once
+
+#include <cstring>
+#include <cstdio>
 #include "function_rewrite.h"
-#include "patching_hooking.h"
+
 namespace spcore {
 	namespace initializations {
 		void __inline adjustNPatch32(uintptr_t *loc, uint32 size) {
-			spcore::memory::patchValue<uint32>(loc[0] + 0x1, size);
-			spcore::memory::patchValue<uint32>(loc[1] + 0x1, size);
+			memory::patchValue<uint32>(loc[0] + 0x1, size);
+			memory::patchValue<uint32>(loc[1] + 0x1, size);
 		}
 
 		void patch_game_state_allocat_func() {
@@ -112,4 +115,39 @@ namespace spcore {
 		}
 		//End of Function
 	} //STAT_ASSRT(complete_replacements::player_control_initialize_for_new_map, 0x9A);
+
+	namespace memory {
+		template<typename T>
+		void patchValue<T>(uintptr_t to_patch, T replace_with) {
+			*(T *) to_patch = replace_with;
+		}
+
+		void get_mem_and_patch() {
+			//			//Relying on sizeof allows us to redefine MAX_PLAYER variables/defines
+			patchValue<int>(players_init_for_new_map_overwrite, sizeof(s_players_globals_data));
+			patchValue<int>(pub_server_patch, MAX_PLAYER_COUNT_LOCAL);  //max_player_count_local_patch
+			patchValue<int>(main_get_window_ct, 0x9090);                //We nop the greater than count so we actually get the proper window renderings.
+
+			//Byte Patches
+			patchValue<byte>(main_game_render_patch, 0xEB);                //main_game_render's jle effectively clamps us to 1, so we just do unconditional jmp
+			patchValue<byte>(precache_new_map_max_spawn_ct_cmp, 0x7C);    //75 is jne, we're gonna replace it with jl.
+			patchValue<byte>(max_players_player_new_map, MAX_PLAYER_COUNT_LOCAL);        //
+			patchValue<byte>(find_unused_player_index_spawn, MAX_PLAYER_COUNT_LOCAL);    //This patch isn't technically necessary but I'd rather have this sig documented than not.
+
+			patchValue<byte>(get_player_input_blob_clamping_patch, MAX_PLAYER_COUNT_LOCAL);
+			patchValue<byte>(player_ui_get_single_player_local_player_from_controller, MAX_PLAYER_COUNT_LOCAL);
+
+			int real_address = (int) &spcore::player_control::player_control_initialize_for_new_map;
+			int real_address_offset = (real_address) - ((int) player_control_init_new_map_hook);// + (int)4);
+
+			//Hooks
+			patchValue<uintptr_t>(((unsigned int) player_control_init_new_map_hook), (unsigned int) (real_address_offset) - 4);    //Gotta be able to loop over all the players + input devices, no?.
+
+			printf("Calculated offset: 0x%x, real address: 0x%x\n", real_address_offset, real_address);
+			printf("Calculated - 5 offset: 0x%x\n", real_address_offset - 5);
+			printf("Calculated + 5 offset: 0x%x", real_address_offset + 5);
+		}
+	};
+
+
 };
