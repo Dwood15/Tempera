@@ -8,7 +8,7 @@
 #define MOTION_SENSOR_LOCATION 0x6B44C8
 
 namespace spcore {
-	FILE *debug_out;
+	extern FILE *debug_out;
 
 	void init(HMODULE reason);
 

@@ -84,7 +84,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_DIR}/ar")
 set(CMAKE_EXECUTABLE_OUTPUT_DIRECTORY "${OUTPUT_DIR}/exe")
 
-#add_library (lualib STATIC lapi.c lcode.c lctype.c ldebug.c ldo.c ldump.c lfunc.c lgc.c llex.c lmem.c lobject.c lopcodes.c lparser.c lstate.c lstring.c ltable.c ltm.c lundump.c lvm.c lzio.c lauxlib.c lbaselib.c lbitlib.c lcorolib.c ldblib.c liolib.c lmathlib.c loslib.c lstrlib.c ltablib.c loadlib.c linit.c)
 file(GLOB LUA_C "./client/lua/lua/*.c")
 
 #add_definitions(-DLUA -D_CRT_SECURE_NO_WARNINGS)
@@ -92,8 +91,8 @@ include_directories(BEFORE ${DirectX_INCLUDE_DIRS})
 
 message(STATUS "DX include Dirs: ${DirectX_INCLUDE_DIRS}")
 
-add_library(LUA_LIB STATIC ${LUA_C})
-set_target_properties(LUA_LIB PROPERTIES OUTPUT_NAME "lua")
+#add_library(LUA_LIB STATIC ${LUA_C})
+#set_target_properties(LUA_LIB PROPERTIES OUTPUT_NAME "lua")
 #Lua needs to be linked before the linker flags are set because some of we use are _not_ compatible with building it.
 #TODO: find out why//what flags, and fix them.
 

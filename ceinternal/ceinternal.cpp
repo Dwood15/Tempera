@@ -2,6 +2,8 @@
 #include "ceinternal.h"
 
 namespace spcore {
+	FILE *debug_out;
+
 	void init(HMODULE reason) {
 		// some debug outputz
 		if (::AllocConsole() != 0) {
