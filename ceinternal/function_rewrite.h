@@ -9,11 +9,11 @@
 typedef unsigned int uintptr_t;
 //yolo coding at its finest.
 namespace spcore {
-	extern static uintptr game_state_globals_location_ptr;
-	extern static uintptr game_state_globals_ptr;
+	extern uintptr game_state_globals_location_ptr;
+	extern uintptr game_state_globals_ptr;
 
-	extern static unsigned int game_state_cpu_allocation;
-	extern static unsigned int game_state_location_as_int;
+	extern unsigned int game_state_cpu_allocation;
+	extern unsigned int game_state_location_as_int;
 
 	struct S_scripted_hud_messages {
 		char unk[0x8C];
@@ -28,11 +28,11 @@ namespace spcore {
 //		s_hud_messaging_state scripted_hud_messages[4];
 //	}; STAT_ASSRT(s_hud_message_state_player, 0x)
 
-	extern static void **crc_checksum_buffer;
-	extern static void **hud_scripted_globals;
-	extern static void **hud_messaging_state;
+	extern void **crc_checksum_buffer;
+	extern void **hud_scripted_globals;
+	extern void **hud_messaging_state;
 
-	extern static s_motion_sensor *motion_sensor;
+	extern s_motion_sensor *motion_sensor;
 
 	namespace initializations {
 		void __inline adjustNPatch32(uintptr_t *loc, uint32 size);
