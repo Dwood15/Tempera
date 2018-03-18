@@ -5,7 +5,11 @@ set(INSTALL_DRIVE D:)
 project(${PROJECT_NAME} CXX C)
 
 #until I figure out how finding modules works, this will have to do.
-
+message(STATUS "CMAKE COMPILER VERSION --- ${CMAKE_CXX_COMPILER_VERSION}")
+message(STATUS "CMAKE COMPILER VERSION --- ${CMAKE_C_COMPILER_VERSION}")
+message(STATUS "CMAKE COMPILER VERSION --- ${CMAKE_C_COMPILER}")
+message(STATUS "CMAKE COMPILER VERSION --- ${MSVC_VERSION}")
+message(STATUS "CMAKE COMPILER VERSION --- ${CMAKE_CXX_COMPILER_TARGET}")
 message(STATUS "FINDING DIRECTX")
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
@@ -28,7 +32,6 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 add_definitions(-D_WINDOWS -D_USRDLL)
-#check for msvc -> not currently supported.
 if (MINGW)
 	if ($ENV{CLION_IDE})
 		#convenience function for CLion
@@ -52,8 +55,8 @@ elseif (MSVC)
 	endif ()
 
 	set(COMPILER_REL_FLDR msvc)
-	set(CMAKE_CXX_FLAGS /std:c++17)
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /arch:SSE2 /D\ \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\"\ /D_CRT_SECURE_NO_WARNINGS")
+	set(CMAKE_CXX_FLAGS /std:c++latest)
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast\ /arch:SSE2 /D\ \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\"\ /D_CRT_SECURE_NO_WARNINGS")
 
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ /permissive")
@@ -186,7 +189,7 @@ set(ENHANCE_CLIENT_G
 	./client/enhancements/zoom_blur.cpp
 	)
 
-file(GLOB INJECT_G ./code_injection/signature.cpp)
+#file(GLOB INJECT_G ./code_injection/signature.cpp)
 file(GLOB MATH_G ./math/data_types.cpp)
 
 #A lot of this was just trying random crap to see what works and what won't.
@@ -252,21 +255,22 @@ elseif (NOT MSVC)
 	#set(DTA_CLIENT STATIC ${DTA_CLIENT_G})
 endif ()
 #some weirdness surrounding version.h and version.rc, so I'm gonna be leaving them out until further notice.
-add_library(${PROJECT_NAME} SHARED ${INJECT_G} ${MATH_G} ${DTA_CLIENT_G} ${DBG_CLIENT_G} ${CMD_CLIENT_G}
-			${CHIMERA_G}
-			${ENHANCE_CLIENT_G}
-			${FIX_CLIENT_G}
-			${TIA_CLIENT_G}
-			${HOOKS_CLIENT_G}
-			${HUD_CLIENT_G}
-			${INTERPOL_CLIENT_G}
-			${MSG_CLIENT_G}
-			${STT_CLIENT_G}
-			${VISUALS_CLIENT_G}
-			${XB0X_CLIENT_G}
-			${HAC2_INJECT_G}
-			${CLI_OW_LUA_G}
-			${LUA_OW_LUA_H}
+add_library(${PROJECT_NAME} SHARED
+#			${INJECT_G} ${MATH_G} ${DTA_CLIENT_G} ${DBG_CLIENT_G} ${CMD_CLIENT_G}
+			./main.cpp
+#			${ENHANCE_CLIENT_G}
+#			${FIX_CLIENT_G}
+#			${TIA_CLIENT_G}
+#			${HOOKS_CLIENT_G}
+#			${HUD_CLIENT_G}
+#			${INTERPOL_CLIENT_G}
+#			${MSG_CLIENT_G}
+#			${STT_CLIENT_G}
+#			${VISUALS_CLIENT_G}
+#			${XB0X_CLIENT_G}
+#			${HAC2_INJECT_G}
+#			${CLI_OW_LUA_G}
+#			${LUA_OW_LUA_H}
 			${CEINTERNAL_CPP}
 			)
 
