@@ -1,3 +1,4 @@
+#this file is currently heavily inconsistent. I'm sorry.
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 
 set(PROJECT_NAME tempera)
@@ -9,13 +10,9 @@ message(STATUS "CMAKE COMPILER VERSION --- ${CMAKE_CXX_COMPILER_VERSION}")
 message(STATUS "CMAKE COMPILER VERSION --- ${CMAKE_C_COMPILER_VERSION}")
 message(STATUS "CMAKE COMPILER VERSION --- ${CMAKE_C_COMPILER}")
 message(STATUS "CMAKE COMPILER VERSION --- ${MSVC_VERSION}")
-message(STATUS "CMAKE COMPILER VERSION --- ${CMAKE_CXX_COMPILER_TARGET}")
-message(STATUS "FINDING DIRECTX")
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${DX_PATH})
-
-#this file is currently heavily inconsistent.
 
 find_package(DirectX REQUIRED)
 
@@ -48,7 +45,7 @@ elseif (MSVC)
 
 	#vc++ 2017 toolset. Available from microsoft here: http://landinghub.visualstudio.com/visual-cpp-build-tools
 	if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.16299.0")
-		message(WARNING "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION is empty! Could not find applicable windows 10 sdk. ${CMAKE_GENERATOR_TOOLSET} ${CMAKE_HOST_WIN32}")
+		message(WARNING "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION is empty! Could not find applicable windows 10 sdk.")
 		set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION 10.0.16299.0)
 		#include_directories(<somekeyword?> "C:/Program\ Files\ \(x86\)/Windows\ Kits/10/Include/10.0.16299.0")
 		#TODO: CHECK FOR AVAILABLE SDK VERSIONS IF NONE SET
@@ -142,6 +139,7 @@ set(CEINTERNAL_CPP ${CEINTERNAL_H}
 	./ceinternal/haloforge/forgeMain.cpp
 	./ceinternal/function_rewrite.cpp
 	./ceinternal/ceinternal.cpp
+	./main.cpp
 	)
 
 set(CHIMERA_G ./client/client.cpp
@@ -251,33 +249,12 @@ if (MSVC)
 
 elseif (NOT MSVC)
 	set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS_INIT} $ENV{LDFLAGS} "-lws2_32 -static-libgcc -static-libstdc++ -static -luserenv -static -static -ladvapi32")
-	#message(AUTHOR_WARNING "MSVC warning hack b/c CLion is dumb.")
-	#set(DTA_CLIENT STATIC ${DTA_CLIENT_G})
 endif ()
 #some weirdness surrounding version.h and version.rc, so I'm gonna be leaving them out until further notice.
-add_library(${PROJECT_NAME} SHARED
-#			${INJECT_G} ${MATH_G} ${DTA_CLIENT_G} ${DBG_CLIENT_G} ${CMD_CLIENT_G}
-			./main.cpp
-#			${ENHANCE_CLIENT_G}
-#			${FIX_CLIENT_G}
-#			${TIA_CLIENT_G}
-#			${HOOKS_CLIENT_G}
-#			${HUD_CLIENT_G}
-#			${INTERPOL_CLIENT_G}
-#			${MSG_CLIENT_G}
-#			${STT_CLIENT_G}
-#			${VISUALS_CLIENT_G}
-#			${XB0X_CLIENT_G}
-#			${HAC2_INJECT_G}
-#			${CLI_OW_LUA_G}
-#			${LUA_OW_LUA_H}
-			${CEINTERNAL_CPP}
-			)
+add_library(${PROJECT_NAME} SHARED ${CEINTERNAL_CPP} )
 
-#add_library(DETOURS STATIC IMPORTED)
-message(STATUS detours_globa ${DETOURS_GLOB} DETOURS_GLOB})
-target_link_libraries(${PROJECT_NAME} LUA_LIB ${DETOURS_GLOB} ${DirectX_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${DETOURS_GLOB} ${DirectX_LIBRARIES})
 
-message(STATUS "asdf ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+message(STATUS "Outputting lib to: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
-set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_LIBRARY_OUTPUT_DIRECTORY ${HALOCE_FOLDER} PROPERTIES OUTPUT_NAME chimera)
+set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_LIBRARY_OUTPUT_DIRECTORY ${HALOCE_FOLDER} PROPERTIES OUTPUT_NAME tempera)
