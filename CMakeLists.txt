@@ -1,25 +1,27 @@
 #this file is currently heavily inconsistent. I'm sorry.
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
+unset(CMAKE_SHARED_LIBRARY_PREFIX)
+unset(CMAKE_CL_64)
+
 
 set(PROJECT_NAME tempera)
 set(INSTALL_DRIVE D:)
 project(${PROJECT_NAME} CXX C)
 
 #until I figure out how finding modules works, this will have to do.
-message(STATUS "CMAKE COMPILER VERSION --- ${CMAKE_CXX_COMPILER_VERSION}")
-message(STATUS "CMAKE COMPILER VERSION --- ${CMAKE_C_COMPILER_VERSION}")
-message(STATUS "CMAKE COMPILER VERSION --- ${CMAKE_C_COMPILER}")
-message(STATUS "CMAKE COMPILER VERSION --- ${MSVC_VERSION}")
+message(STATUS "MSVC VERSION --- ${MSVC_VERSION}")
+message(STATUS "BINARY OUT DIR --- ${PROJECT_BINARY_DIR}")
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${DX_PATH})
+find_path(HCE_PATH FindHaloCE.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${DX_PATH} ${HCE_PATH})
+
+find_package(HaloCE REQUIRED)
 find_package(DirectX REQUIRED)
 
-unset(CMAKE_SHARED_LIBRARY_PREFIX)
-
-unset(CMAKE_CL_64)
-
+include_directories(BEFORE ${DirectX_INCLUDE_DIRS})
+message(STATUS "DX include Dirs: ${DirectX_INCLUDE_DIRS}")
 ## Folders files
 #set(CMAKE_CXX_STANDARD 17)
 # Define Release by default.
@@ -69,8 +71,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 		 ./client/debug/eep.cpp
 		 ./client/debug/wireframe.cpp
 		 )
-
-	set(OUTPUT_DIR ./bin/${COMPILER_REL_FLDR}-debug)
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "./bin/${COMPILER_REL_FLDR}-debug")
 elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
 	if ($ENV{CLION_IDE})
 		message(STATUS "convenience exit function for CLion building")
@@ -80,16 +81,11 @@ elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
 	set(OUTPUT_DIR ./bin/${COMPILER_REL_FLDR}-Release)
 endif ()
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_DIR}/ar")
-set(CMAKE_EXECUTABLE_OUTPUT_DIRECTORY "${OUTPUT_DIR}/exe")
 
 file(GLOB LUA_C "./client/lua/lua/*.c")
 
 #add_definitions(-DLUA -D_CRT_SECURE_NO_WARNINGS)
-include_directories(BEFORE ${DirectX_INCLUDE_DIRS})
-
-message(STATUS "DX include Dirs: ${DirectX_INCLUDE_DIRS}")
 
 #add_library(LUA_LIB STATIC ${LUA_C})
 #set_target_properties(LUA_LIB PROPERTIES OUTPUT_NAME "lua")
@@ -250,10 +246,14 @@ elseif (NOT MSVC)
 	set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS_INIT} $ENV{LDFLAGS} "-lws2_32 -static-libgcc -static-libstdc++ -static -luserenv -static -static -ladvapi32")
 endif ()
 #some weirdness surrounding version.h and version.rc, so I'm gonna be leaving them out until further notice.
-add_library(${PROJECT_NAME} SHARED ${CEINTERNAL_CPP} )
+add_library(${PROJECT_NAME} SHARED ${CEINTERNAL_CPP})
 
 target_link_libraries(${PROJECT_NAME} ${DETOURS_GLOB} ${DirectX_LIBRARIES})
 
 message(STATUS "Outputting lib to: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
-set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_LIBRARY_OUTPUT_DIRECTORY ${HALOCE_FOLDER} PROPERTIES OUTPUT_NAME tempera)
+SET(CMAKE_PDB_OUTPUT_DIRECTORY  "${HaloCE_ROOT_DIR}/controls")
+#SET(EXECUTABLE_OUTPUT_PATH   "${HaloCE_ROOT_DIR}/controls")
+SET(LIBRARY_OUTPUT_PATH   "${HaloCE_ROOT_DIR}/controls")
+
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "tempera")

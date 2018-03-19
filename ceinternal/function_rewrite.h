@@ -23,6 +23,7 @@ namespace spcore {
 		S_scripted_hud_messages hmi[4];
 	};
 
+	//this _fucking_ struct.
 //	struct s_hud_message_state_player {
 //		char unk[0x82];
 //		s_hud_messaging_state scripted_hud_messages[4];
