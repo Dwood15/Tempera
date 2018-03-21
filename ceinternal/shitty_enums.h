@@ -1,13 +1,13 @@
 #pragma once
 #ifndef shitty_enums
 #define shitty_enums
+
 #include "shitty_macros.h"
 
 //OS uses the byte_flags typedef.
 #pragma region enumerations
 #pragma region generic tag
 #pragma region byteswap shit
-
 
 namespace byteswaps {
 	enum {
@@ -16,14 +16,14 @@ namespace byteswaps {
 
 	// positive numbers are runs (of bytes) to leave untouched - zero is invalid
 	enum /*e_bs_code*/ : byte_swap_code_t {
-		_bs_code_array_end = -101, // _end_bs_array
+		_bs_code_array_end   = -101, // _end_bs_array
 		_bs_code_array_start = -100, // _begin_bs_array
 
-		_bs_code_8byte = 0 - (byte_swap_code_t) sizeof(long long), // _8byte
-		_bs_code_4byte = 0 - (byte_swap_code_t) sizeof(long long), // _4byte
-		_bs_code_2byte = 0 - (byte_swap_code_t) sizeof(long long), // _2byte
+		_bs_code_8byte = 0 - (byte_swap_code_t) sizeof (long long), // _8byte
+		_bs_code_4byte = 0 - (byte_swap_code_t) sizeof (long long), // _4byte
+		_bs_code_2byte = 0 - (byte_swap_code_t) sizeof (long long), // _2byte
 
-		_bs_code_1byte = sizeof(byte), // _byte
+		_bs_code_1byte = sizeof (byte), // _byte
 	};
 
 	enum {
@@ -31,11 +31,11 @@ namespace byteswaps {
 
 		// these chars should all match the TAG_FIELD_MARKUP_* defines in tag_groups_structures_macros.hpp
 
-		k_tag_field_markup_character_advanced = '!',
-		k_tag_field_markup_character_help_prefix = '#',
-		k_tag_field_markup_character_read_only = '*',
+		k_tag_field_markup_character_advanced     = '!',
+		k_tag_field_markup_character_help_prefix  = '#',
+		k_tag_field_markup_character_read_only    = '*',
 		k_tag_field_markup_character_units_prefix = ':',
-		k_tag_field_markup_character_block_name = '^',
+		k_tag_field_markup_character_block_name   = '^',
 	};
 };
 #pragma endregion
@@ -90,15 +90,24 @@ enum field_type : short {
 	k_number_of_tag_field_types,
 };
 
+#pragma region sbsp
+enum collision_surface_flags : byte {
+	_collision_surface_two_sided_bit,
+	_collision_surface_invisible_bit,
+	_collision_surface_climbable_bit,
+	_collision_surface_breakable_bit
+};
+#pragma endregion
+
 enum {
 	// Never streamed, unless the tag is loaded with _tag_load_for_editor_bit
 	// Used by the sound tag for delay loading the actual sample data. So, eg, when tool goes to build a cache
 	// it has to use tag_data_load on the sound samples. Maybe a better name is just 'lazy_loaded'
 			_tag_data_never_streamed_bit = 0,
-	_tag_data_is_text_data_bit,
+			_tag_data_is_text_data_bit,
 	// ie, 'debug data'
 			_tag_data_not_streamed_to_cache_bit,
-	k_number_of_tag_data_definition_flags,
+			k_number_of_tag_data_definition_flags,
 
 	// checked in the tag reference solving code.
 	// last condition checked after an assortment of conditionals
@@ -108,12 +117,12 @@ enum {
 	// tag_load asserts name != NULL.
 	// Flag isn't checked in H2EK's code (so more than likely deprecated)
 			_tag_reference_unknown0_bit = 0,
-	_tag_reference_non_resolving_bit,
-	k_number_of_tag_group_tag_reference_flags,
+			_tag_reference_non_resolving_bit,
+			k_number_of_tag_group_tag_reference_flags,
 
 	// set when block/data/reference fields are found during initialization
 			_tag_block_has_children_bit = 0,
-	k_number_of_tag_block_definition_flags,
+			k_number_of_tag_block_definition_flags,
 
 	// tag_instance of the tag group will have their file_checksum CRC'd into the resulting cache tag header's crc field
 			_tag_group_include_in_tags_checksum_bit = 0,
@@ -181,7 +190,7 @@ enum networked_datum : int {
 };
 
 enum game_team : __int16 {
-	_game_team_none = NONE,
+	_game_team_none    = NONE,
 	_game_team_default = 0,
 	_game_team_player,
 	_game_team_human,
@@ -270,32 +279,32 @@ enum object_change_color_reference : __int16 {
 
 enum object_sizes {
 	// The base object datum allocates 2 real_orientation3d and 1 real_matrix4x3 FOR EVERY model node
-			k_object_size_object = 0x1F4,
-	k_object_size_projectile = 0xBC + k_object_size_object,
-	k_object_size_scenery = 0x4 + k_object_size_object,
-	k_object_size_placeholder = 0x8 + k_object_size_object,
-	k_object_size_sound_scenery = 0x4 + k_object_size_object,
+			k_object_size_object        = 0x1F4,
+			k_object_size_projectile    = 0xBC + k_object_size_object,
+			k_object_size_scenery       = 0x4 + k_object_size_object,
+			k_object_size_placeholder   = 0x8 + k_object_size_object,
+			k_object_size_sound_scenery = 0x4 + k_object_size_object,
 
-	k_object_size_device = 0x20 + k_object_size_object,
-	k_object_size_machine = 0x14 + k_object_size_device,
-	k_object_size_control = 0x8 + k_object_size_device,
+	k_object_size_device        = 0x20 + k_object_size_object,
+	k_object_size_machine       = 0x14 + k_object_size_device,
+	k_object_size_control       = 0x8 + k_object_size_device,
 	k_object_size_light_fixture = 0x18 + k_object_size_device,
 
-	k_object_size_item = 0x38 + k_object_size_object,
-	k_object_size_weapon = 0x114 + k_object_size_item,
+	k_object_size_item      = 0x38 + k_object_size_object,
+	k_object_size_weapon    = 0x114 + k_object_size_item,
 	k_object_size_equipment = 0x68 + k_object_size_item,
-	k_object_size_garbage = 0x18 + k_object_size_item,
+	k_object_size_garbage   = 0x18 + k_object_size_item,
 
-	k_object_size_unit = 0x2D8 + k_object_size_object,
-	k_object_size_biped = 0x84 + k_object_size_unit,
+	k_object_size_unit    = 0x2D8 + k_object_size_object,
+	k_object_size_biped   = 0x84 + k_object_size_unit,
 	k_object_size_vehicle = 0xF4 + k_object_size_unit,
 };
 
 enum object_type {
 	_object_type_object = -4,
 	_object_type_device = -3,
-	_object_type_item = -2,
-	_object_type_unit = -1,
+	_object_type_item   = -2,
+	_object_type_unit   = -1,
 
 	_object_type_biped = 0,
 	_object_type_vehicle,
@@ -311,8 +320,8 @@ enum object_type {
 	_object_type_sound_scenery,
 
 	_object_type_mask_device = FLAG(_object_type_machine) | FLAG(_object_type_control) | FLAG(_object_type_light_fixture),
-	_object_type_mask_item = FLAG(_object_type_weapon) | FLAG(_object_type_equipment) | FLAG(_object_type_garbage),
-	_object_type_mask_unit = FLAG(_object_type_biped) | FLAG(_object_type_vehicle),
+	_object_type_mask_item   = FLAG(_object_type_weapon) | FLAG(_object_type_equipment) | FLAG(_object_type_garbage),
+	_object_type_mask_unit   = FLAG(_object_type_biped) | FLAG(_object_type_vehicle),
 
 	_object_type_mask_all = FLAG(_object_type_projectile) | FLAG(_object_type_scenery) | FLAG(_object_type_placeholder) | FLAG(_object_type_sound_scenery) | _object_type_mask_device | _object_type_mask_item | _object_type_mask_unit,
 };
@@ -330,7 +339,7 @@ enum object_header_flags : unsigned char {
 
 enum attachment_type : signed char {
 	_attachment_type_invalid = NONE,
-	_attachment_type_light = 0,
+	_attachment_type_light   = 0,
 	_attachment_type_looping_sound,
 	_attachment_type_effect,
 	_attachment_type_contrail,

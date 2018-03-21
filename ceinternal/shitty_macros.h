@@ -35,7 +35,7 @@ STAT_ASSRT(double, 0x8);
 #pragma endregion
 
 #pragma region maximums
-#define MAX_PLAYER_COUNT_LOCAL		2
+#define MAX_PLAYER_COUNT_LOCAL		1
 #define MAX_PLAYERS_IN_GAME			16
 #define MAX_ATTACHMENTS_PER_OBJECT  8
 #define MAX_MAGAZINES_PER_WEAPON	2

@@ -1,9 +1,10 @@
 #pragma once
-#ifndef ce_base_types
-#define ce_base_types
 #include "shitty_macros.h"
-
+typedef short int16;
+typedef unsigned int uintptr_t;
 #pragma region  colors
+
+//TODO: Investigate why this is the way it is.
 struct argb_color;
 
 // 0 - 255, represents a color
@@ -80,4 +81,32 @@ struct datum_index {
 		};
 	};
 }; static_assert(sizeof(datum_index) == 0x4, STATIC_ASSERT_FAIL);
-#endif
+
+struct tag_reference {
+	unsigned int group_tag;
+	const char *name;
+	int name_length;
+	datum_index tag_index;
+};
+STAT_ASSRT(tag_reference, 0x10);
+//This is guaranteed to be accurate b/c of stat_assrt macro.
+#define TREF_SIZEOF sizeof(tag_reference);
+
+template<typename T>
+struct tag_block {
+	typedef T* iter;
+
+	//size -> in bytes.
+	long size;
+	union {
+		void *address;
+		T *definitions;
+	};
+
+	long constexpr Count() { return size / sizeof(T); }
+	[[maybe_unused]]
+	iter begin () { return definitions; }
+	iter end () { return definitions + Count (); }
+
+	struct tag_block_definition *definition;
+};

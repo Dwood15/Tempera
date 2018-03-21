@@ -6,7 +6,13 @@
 #include "shitty_macros.h"
 #include "shitty_header_ports.h"
 #include "gamestate_headers/player_types.h"
-typedef unsigned int uintptr_t;
+
+//Allows us to: 1) declare a ptr as potentially unused.
+//2) static -> the address _should not_ change.
+#define STATIC_PTR(type) [[maybe_unused]] static type
+//Fuck, I'm turning into Kornman.
+
+
 //yolo coding at its finest.
 namespace spcore {
 	extern uintptr game_state_globals_location_ptr;
@@ -32,6 +38,7 @@ namespace spcore {
 	extern void **crc_checksum_buffer;
 	extern void **hud_scripted_globals;
 	extern void **hud_messaging_state;
+	extern s_players_globals_data * players_globals;
 
 	extern s_motion_sensor *motion_sensor;
 
@@ -47,14 +54,18 @@ namespace spcore {
 		void __cdecl interface_initialize_for_new_map();
 
 		void __cdecl scripted_hud_messages_clear();
-	};
 
+
+	};
+	namespace rendering {
+		//This function is a good hook for debugging because it gets called every frame, _at least_.
+		__declspec(naked) int gen_render_window_count();
+	};
 	namespace player_control {
 		void __cdecl  player_control_initialize_for_new_map();
 	};
 
 	namespace memory {
-
 		//signature: "81 EC B4 00 00 00 8B 0D ?? ?? ?? ?? 53 8B D8"
 		extern uintptr_t player_spawn;
 //			//Function call

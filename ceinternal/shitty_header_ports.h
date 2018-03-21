@@ -1,9 +1,13 @@
 #pragma once
+/**
+ * <GPLv3 License>
+ */
 
-#ifndef SHITTYHEADER
-#define SHITTYHEADER
 #include "shitty_enums.h"
 #include "ce_base_types.h"
+#include "gamestate_headers/real_math.h"
+#include "gamestate_headers/objects.h"
+
 #pragma pack(push)
 #pragma pack(1)
 
@@ -23,32 +27,35 @@ sbyte player_list_index;	// 0x1F
 */
 
 #pragma region player_specific
+
+//s_players_globals_data
 struct s_players_globals_data {
-	long unused_after_initialize_unk;																// 0x0, initialized to NONE but that's all I can tell
+	long          unused_after_initialize_unk;                                                                // 0x0, initialized to NONE but that's all I can tell
 	// the player_index for each local player
-	datum_index local_player_players[MAX_PLAYER_COUNT_LOCAL];		// 0x4
+	datum_index   local_player_players[MAX_PLAYER_COUNT_LOCAL];        // 0x4
 	// the object_index of each local player's dead unit (their old body)
-	datum_index local_player_dead_units[MAX_PLAYER_COUNT_LOCAL];	// 0x8
-	__int16     local_player_count;														// 0xC
-	__int16     double_speed_ticks_remaining;												// 0xE
-	bool        are_all_dead;																// 0x10
-	bool        input_disabled;															// 0x11
-	__int16     _bsp_switch_trigger_idx;												// 0x12
-	__int16     respawn_failure;															// 0x14
-	bool        was_teleported;															// 0x16, or respawned
-	char        _unk_pad_char;
+	datum_index   local_player_dead_units[MAX_PLAYER_COUNT_LOCAL];    // 0x8
+	__int16       local_player_count;                                                        // 0xC
+	__int16       double_speed_ticks_remaining;                                                // 0xE
+	bool          are_all_dead;                                                                // 0x10
+	bool          input_disabled;                                                            // 0x11
+	__int16       _bsp_switch_trigger_idx;                                                // 0x12
+	__int16       respawn_failure;                                                            // 0x14
+	bool          was_teleported;                                                            // 0x16, or respawned
+	char          _unk_pad_char;
 	//There's 16 players in a game.
-	unsigned long combined_pvs[MAX_PLAYERS_IN_GAME];						// 0x18 combined pvs of all players in the game
+	unsigned long combined_pvs[MAX_PLAYERS_IN_GAME];                        // 0x18 combined pvs of all players in the game
 	//TODO: verify if combined_pvs_local is actually the same as regular combined_pvs - Maybe they're separate and synched via network?
-	unsigned long combined_pvs_local[MAX_PLAYERS_IN_GAME];					// 0x58 combined pvs of all local players
-}; static_assert(sizeof(s_players_globals_data) == 0x10 + (0x4 * 2 * MAX_PLAYER_COUNT_LOCAL) + (0x4 * 2 * MAX_PLAYERS_IN_GAME), STATIC_ASSERT_FAIL);
+	unsigned long combined_pvs_local[MAX_PLAYERS_IN_GAME];                    // 0x58 combined pvs of all local players
+}; static_assert (sizeof (s_players_globals_data) == 0x10 + ( 0x4 * 2 * MAX_PLAYER_COUNT_LOCAL ) + ( 0x4 * 2 * MAX_PLAYERS_IN_GAME ), STATIC_ASSERT_FAIL);
 INTELLISENSE_HACK(s_players_globals_data);
 
+//s_player_control
 struct s_player_control {
 	datum_index         unit_index;                                                                      // 0x0
 	unsigned long       control_flags;                                                                   // 0x4
-	__int16                __pad_unk0; // unknown field                                                              // 0x8
-	__int16                __pad_unk1; // unknown field                                                              // 0xA
+	__int16             __pad_unk0; // unknown field                                                              // 0x8
+	__int16             __pad_unk1; // unknown field                                                              // 0xA
 	real_euler_angles2d desired_angles;                                                    // 0xC
 	real_vector2d       throttle;                                                                  // 0x14
 	float               primary_trigger;                                                                         // 0x1C
@@ -63,7 +70,7 @@ struct s_player_control {
 	unsigned long       _unk_fld1_32;                                                                    // 0x34
 	unsigned long       _unk_fld2_32; // unknown field                                                   // 0x38
 	unsigned long       _unk_fld3_32; // unknown field                                                   // 0x3C
-};  static_assert(sizeof(s_player_control) == 0x40, STATIC_ASSERT_FAIL);
+};  static_assert (sizeof (s_player_control) == 0x40, STATIC_ASSERT_FAIL);
 
 struct s_player_control_globals_data {
 	unsigned long action_flags[2]; // see "action_test" script functions
@@ -71,17 +78,19 @@ struct s_player_control_globals_data {
 	unsigned long flags; // FLAG(0) = camera control
 
 	s_player_control local_players[MAX_PLAYER_COUNT_LOCAL]; //0x10
-}; static_assert(sizeof(s_player_control_globals_data) == (0x10 + sizeof(s_player_control)* MAX_PLAYER_COUNT_LOCAL), STATIC_ASSERT_FAIL);
+}; static_assert (sizeof (s_player_control_globals_data) == ( 0x10 + sizeof (s_player_control) * MAX_PLAYER_COUNT_LOCAL ), STATIC_ASSERT_FAIL);
 #pragma endregion
 
 #pragma region weapon specific
 struct s_weapon_datum_network_data {
-	real_point3d position;
+	real_point3d  position;
 	real_vector3d transitional_velocity;
-	int a; int b; int c; // not used in the update...probably a real_vector3d (angular_velocity?)
-	short magazine_rounds_totals[MAX_MAGAZINES_PER_WEAPON];
-	real age;
-}; static_assert(sizeof(s_weapon_datum_network_data) == 0x2C, STATIC_ASSERT_FAIL);
+	int           a;
+	int           b;
+	int           c; // not used in the update...probably a real_vector3d (angular_velocity?)
+	short         magazine_rounds_totals[MAX_MAGAZINES_PER_WEAPON];
+	real          age;
+}; static_assert (sizeof (s_weapon_datum_network_data) == 0x2C, STATIC_ASSERT_FAIL);
 
 INTELLISENSE_HACK(s_weapon_datum_network_data)
 #pragma endregion
@@ -91,40 +100,39 @@ struct s_animation_state {
 	//TODO: Double check if these are signed..
 	__int16 animation_index;
 	__int16 frame_index;
-}; static_assert(sizeof(s_animation_state) == 0x4, STATIC_ASSERT_FAIL);
+}; static_assert (sizeof (s_animation_state) == 0x4, STATIC_ASSERT_FAIL);
 
 struct s_scenario_location {
-	long leaf_index;
-	__int16 cluster_index;
+	long             leaf_index;
+	__int16          cluster_index;
 	unsigned __int16 __unk_type0;
-}; static_assert(sizeof(s_scenario_location) == 0x8, STATIC_ASSERT_FAIL);
+}; static_assert (sizeof (s_scenario_location) == 0x8, STATIC_ASSERT_FAIL);
 
 #pragma region structure data shit
 struct s_item_data {
-	unsigned long	flags;					// 0x1F4
-	__int16			detonation_countdown;	// 0x1F8
+	unsigned long       flags;                    // 0x1F4
+	__int16             detonation_countdown;    // 0x1F8
 	struct {
-		__int16 surface_index;			// 0x1FA
-		__int16 bsp_reference_index;		// 0x1FC
-	}				bsp_collision;
-	__int16			__pad0;								// 0x1FE
-	datum_index		dropped_by_unit_index;	// 0x200 set when the unit who had this item drops it
-	long			last_update_time;		// 0x204
+		__int16 surface_index;            // 0x1FA
+		__int16 bsp_reference_index;        // 0x1FC
+	}                   bsp_collision;
+	__int16             __pad0;                                // 0x1FE
+	datum_index         dropped_by_unit_index;    // 0x200 set when the unit who had this item drops it
+	long                last_update_time;        // 0x204
 	struct {
-		datum_index object_index;		// 0x208
-		real_point3d object_position;	// 0x20C
-	}							object_collision;
-	real_vector3d				__unk_type0;		// 0x218
-	real_euler_angles2d			__unk_type1;	// 0x224
-}; static_assert(sizeof(s_item_data) == (k_object_size_item - k_object_size_object), STATIC_ASSERT_FAIL);
+		datum_index  object_index;        // 0x208
+		real_point3d object_position;    // 0x20C
+	}                   object_collision;
+	real_vector3d       __unk_type0;        // 0x218
+	real_euler_angles2d __unk_type1;    // 0x224
+}; static_assert (sizeof (s_item_data) == ( k_object_size_item - k_object_size_object ), STATIC_ASSERT_FAIL);
 INTELLISENSE_HACK(s_item_data)
 
 struct s_garbage_data {
 	__int16 ticks_until_gc;
 	__int16 PAD16;
 	__int32 _unused[5];
-}; static_assert(sizeof(s_garbage_data) == (k_object_size_garbage - k_object_size_item), STATIC_ASSERT_FAIL);
-
+}; static_assert (sizeof (s_garbage_data) == ( k_object_size_garbage - k_object_size_item ), STATIC_ASSERT_FAIL);
 #pragma endregion
 
 #pragma region generic object shit
@@ -137,164 +145,160 @@ struct s_garbage_data {
 struct s_object_header_block_reference {
 	unsigned __int16 size;
 	unsigned __int16 offset;
-}; static_assert(sizeof(s_object_header_block_reference) == 0x4);
+}; static_assert (sizeof (s_object_header_block_reference) == 0x4);
 
 //should be populated during the object type's process_update_delta
 struct s_object_datum_network_delta_data {
-	bool valid_position;					// 0x18
+	bool          valid_position;                    // 0x18
 	unsigned char __pad__unk0[3];
-	real_point3d position;					// 0x1C
+	real_point3d  position;                    // 0x1C
 
-	bool valid_forward_and_up;				// 0x28
+	bool          valid_forward_and_up;                // 0x28
 	unsigned char __pad__unk1[3];
-	real_vector3d forward;					// 0x2C
-	real_vector3d up;						// 0x38
+	real_vector3d forward;                    // 0x2C
+	real_vector3d up;                        // 0x38
 
-	bool valid_transitional_velocity;		// 0x44
+	bool          valid_transitional_velocity;        // 0x44
 	unsigned char __pad__unk2[3];
-	real_vector3d transitional_velocity;	// 0x48
+	real_vector3d transitional_velocity;    // 0x48
 
-	bool valid_timestamp;					// 0x54
+	bool          valid_timestamp;                    // 0x54
 	unsigned char __pad__unk3[3];
-	signed long timestamp;						// 0x58
-}; static_assert(sizeof(s_object_datum_network_delta_data) == 0x44, STATIC_ASSERT_FAIL);
+	signed long   timestamp;                        // 0x58
+}; static_assert (sizeof (s_object_datum_network_delta_data) == 0x44, STATIC_ASSERT_FAIL);
 
 struct s_object_datum_animation_data {
-	datum_index definition_index;	// 0xCC
-	s_animation_state state;		// 0xD0
-	__int16 interpolation_frame_index;// 0xD4
-	__int16 interpolation_frame_count;// 0xD6
-}; static_assert(sizeof(s_object_datum_animation_data) == 0xC, STATIC_ASSERT_FAIL);
+	datum_index       definition_index;    // 0xCC
+	s_animation_state state;        // 0xD0
+	__int16           interpolation_frame_index;// 0xD4
+	__int16           interpolation_frame_count;// 0xD6
+}; static_assert (sizeof (s_object_datum_animation_data) == 0xC, STATIC_ASSERT_FAIL);
 
 struct s_object_datum_damage_data {
-	float maximum_health;					// 0xD8
-	float maximum_shield;					// 0xDC
-	float health;							// 0xE0, health = body
-	float shield;							// 0xE4
-	float shield_damage_current;			// 0xE8
-	float body_damage_current;				// 0xEC
-											// when this object is damaged, the 'entangled' object will also get damaged.
-											// this is an immediate link, the entangled object's parent chain or 'entangled' reference isn't walked
-	datum_index entangled_object_index;		// 0xF0
-	float shield_damage_recent;				// 0xF4
-	float body_damage_recent;				// 0xF8
-	long shield_damage_update_tick;			// 0xFC, these update ticks are set to NONE when not active
-	long body_damage_update_tick;			// 0x100
-	__int16 stun_ticks;						// 0x104, based on ftol(s_shield_damage_resistance->stun_time * 30f)
-	unsigned __int16 flags;					// 0x106
-}; static_assert(sizeof(s_object_datum_damage_data) == 0x30, STATIC_ASSERT_FAIL);
+	float            maximum_health;                    // 0xD8
+	float            maximum_shield;                    // 0xDC
+	float            health;                            // 0xE0, health = body
+	float            shield;                            // 0xE4
+	float            shield_damage_current;            // 0xE8
+	float            body_damage_current;                // 0xEC
+	// when this object is damaged, the 'entangled' object will also get damaged.
+	// this is an immediate link, the entangled object's parent chain or 'entangled' reference isn't walked
+	datum_index      entangled_object_index;        // 0xF0
+	float            shield_damage_recent;                // 0xF4
+	float            body_damage_recent;                // 0xF8
+	long             shield_damage_update_tick;            // 0xFC, these update ticks are set to NONE when not active
+	long             body_damage_update_tick;            // 0x100
+	__int16          stun_ticks;                        // 0x104, based on ftol(s_shield_damage_resistance->stun_time * 30f)
+	unsigned __int16 flags;                    // 0x106
+}; static_assert (sizeof (s_object_datum_damage_data) == 0x30, STATIC_ASSERT_FAIL);
 
 struct s_object_datum_attachments_data {
-	attachment_type attached_types[MAX_ATTACHMENTS_PER_OBJECT];	// 0x144
+	attachment_type attached_types[MAX_ATTACHMENTS_PER_OBJECT];    // 0x144
 	// game state datum_index
 	// ie, if Attachments[x]'s definition (object_attachment_block[x]) says it is a 'cont'
 	// then the datum_index is a contrail_data handle
-	datum_index attachment_indices[MAX_ATTACHMENTS_PER_OBJECT];			// 0x14C
-	datum_index first_widget_index;																// 0x16C
-}; static_assert(sizeof(s_object_datum_attachments_data) == 0x2C, STATIC_ASSERT_FAIL);
+	datum_index     attachment_indices[MAX_ATTACHMENTS_PER_OBJECT];            // 0x14C
+	datum_index     first_widget_index;                                                                // 0x16C
+}; static_assert (sizeof (s_object_datum_attachments_data) == 0x2C, STATIC_ASSERT_FAIL);
 
 struct s_halo_pc_network {
-	networked_datum				datum_role;												//0x0
-	bool						unknown_type0;											//0x4
-	bool						should_force_baseline_update;							//0x5
-	unsigned __int16			unknown_type1;											//0x6	//TODO: verify if this is padding or not
-	signed long					network_time;											// 0x8
-}; static_assert(sizeof(s_halo_pc_network) == 0xC, STATIC_ASSERT_FAIL);
+	networked_datum  datum_role;                                                //0x0
+	bool             unknown_type0;                                            //0x4
+	bool             should_force_baseline_update;                            //0x5
+	unsigned __int16 unknown_type1;                                            //0x6	//TODO: verify if this is padding or not
+	signed long      network_time;                                            // 0x8
+}; static_assert (sizeof (s_halo_pc_network) == 0xC, STATIC_ASSERT_FAIL);
 
 struct s_weapon_data {
 	struct s_trigger_state {
-		sbyte idle_time;					// 0x0 used for determining when to fire next projectile (rounds per second)
+		sbyte                idle_time;                    // 0x0 used for determining when to fire next projectile (rounds per second)
 		weapon_trigger_state state;
-		short time;
-		long			flags0;			// 0x4
-		__int16			__unk_type_i16_0;				// 0x8 firing effect related
-		__int16			__unk_type_i16_1;				// 0xA firing effect related
-		__int16			__unk_type_i16_2;				// 0xC firing effect related
-		short			rounds_since_last_tracer;
-		float			rate_of_fire;					// 0x10
-		float			ejection_port_recovery_time;	// 0x14
-		float			illumination_recovery_time;	// 0x18
-		float			__unk_type_flt_0;	// 0x1C used in the calculation of projectile error angle
-		datum_index		charging_effect_index;	// 0x20
-		sbyte			network_delay_time;			// 0x24 hardedcoded to delay fire/reload by 10 frames in networked game
-		byte			__pad_byte_0;
-		__int16			__pad_i16_0;
-	}; static_assert(sizeof(s_trigger_state) == 0x28, STATIC_ASSERT_FAIL);
+		short                time;
+		long                 flags0;            // 0x4
+		__int16              __unk_type_i16_0;                // 0x8 firing effect related
+		__int16              __unk_type_i16_1;                // 0xA firing effect related
+		__int16              __unk_type_i16_2;                // 0xC firing effect related
+		short                rounds_since_last_tracer;
+		float                rate_of_fire;                    // 0x10
+		float                ejection_port_recovery_time;    // 0x14
+		float                illumination_recovery_time;    // 0x18
+		float                __unk_type_flt_0;    // 0x1C used in the calculation of projectile error angle
+		datum_index          charging_effect_index;    // 0x20
+		sbyte                network_delay_time;            // 0x24 hardedcoded to delay fire/reload by 10 frames in networked game
+		byte                 __pad_byte_0;
+		__int16              __pad_i16_0;
+	}; static_assert (sizeof (s_trigger_state) == 0x28, STATIC_ASSERT_FAIL);
 
 	// __, unk, pad, '?'
 	//means IDK if its actually padding or there are values there. If there are, IDK their types (could be a boolean!)
 	struct s_magazine_state {
 		weapon_magazine_state state;
-		__int16 reload_time_remaining;		// 0x2 in ticks
-		__int16 reload_time;					// 0x4 in ticks
-		__int16 rounds_unloaded;				// 0x6
-		__int16 rounds_loaded;				// 0x8
-		__int16 rounds_left_to_recharge;		// 0xA number of rounds left to apply to rounds_loaded (based on tag's rounds_recharged)
-		__int16 __UNKNOWN_TYPE0;				// 0xC I just know a WORD is here, may be an _enum
-		__int16 __pad0; // ?
-	}; static_assert(sizeof(s_magazine_state) == 0x10, STATIC_ASSERT_FAIL);
+		__int16               reload_time_remaining;        // 0x2 in ticks
+		__int16               reload_time;                    // 0x4 in ticks
+		__int16               rounds_unloaded;                // 0x6
+		__int16               rounds_loaded;                // 0x8
+		__int16               rounds_left_to_recharge;        // 0xA number of rounds left to apply to rounds_loaded (based on tag's rounds_recharged)
+		__int16               __UNKNOWN_TYPE0;                // 0xC I just know a WORD is here, may be an _enum
+		__int16               __pad0; // ?
+	}; static_assert (sizeof (s_magazine_state) == 0x10, STATIC_ASSERT_FAIL);
 
 	struct s_start_reload_data {
 		__int16 starting_total_rounds[MAX_MAGAZINES_PER_WEAPON];
 		__int16 starting_loaded_rounds[MAX_MAGAZINES_PER_WEAPON];
-	}; static_assert(sizeof(s_start_reload_data) == 0x8, STATIC_ASSERT_FAIL);
+	}; static_assert (sizeof (s_start_reload_data) == 0x8, STATIC_ASSERT_FAIL);
 
 	struct s_first_16_bytes {
-		unsigned long		flags;							// 0x0
-		unsigned short		owner_unit_flags;				// 0x4
-		__int16				__pad_i16_1;					// 0x6
-		real				primary_trigger;				// 0x8
-		weapon_state		weapon_state;					// 0xC	//weap state is supposed to be the size of a byte
-		unsigned char		__pad_byte_1;					// 0xD
-		short				ready_time;						// 0xE
+		unsigned long  flags;                            // 0x0
+		unsigned short owner_unit_flags;                // 0x4
+		__int16        __pad_i16_1;                    // 0x6
+		real           primary_trigger;                // 0x8
+		weapon_state   weapon_state;                    // 0xC	//weap state is supposed to be the size of a byte
+		unsigned char  __pad_byte_1;                    // 0xD
+		short          ready_time;                        // 0xE
 	} first_16_bytes;
-	static_assert(sizeof(s_first_16_bytes) == 0x10, STATIC_ASSERT_FAIL);
+	static_assert (sizeof (s_first_16_bytes) == 0x10, STATIC_ASSERT_FAIL);
 	struct s_2nd_16_bytes {
-		real				heat;							// 0x0
-		real				age;							// 0x4
-		real				illumination_fraction;			// 0x8
-		real				integrated_light_power;			// 0xC
+		real heat;                            // 0x0
+		real age;                            // 0x4
+		real illumination_fraction;            // 0x8
+		real integrated_light_power;            // 0xC
 	} second_16_bytes;
-	static_assert(sizeof(s_first_16_bytes) == 0x10, STATIC_ASSERT_FAIL);
+	static_assert (sizeof (s_first_16_bytes) == 0x10, STATIC_ASSERT_FAIL);
 
 	struct s_3rd_16_bytes {
-		int					__unused_pad0;					// 0x0
-		datum_index			tracked_object_index;			// 0x4
-		__int64             __pad64_0;						// 0x8
+		int         __unused_pad0;                    // 0x0
+		datum_index tracked_object_index;            // 0x4
+		__int64     __pad64_0;                        // 0x8
 	} third_16_bytes;
 	STAT_ASSRT(s_3rd_16_bytes, 0x10);
 	struct next_set {
-		short				alt_shots_loaded;				// 0x0
-		__int16				__pad_i16_2;					// 0x2
+		short   alt_shots_loaded;                // 0x0
+		__int16 __pad_i16_2;                    // 0x2
 	} first_4_bytes;
 	STAT_ASSRT(next_set, 0x4);
 
-	s_trigger_state		triggers[2];					// 0x34, size == 0x50
+	s_trigger_state triggers[2];                    // 0x34, size == 0x50
 
 	//STAT_ASSRT(triggers, sizeof(s_trigger_state) * 2);
 	//INTELLISENSE_HACK(triggers);
 
 
-	s_magazine_state	magazines[2];					//0x84
+	s_magazine_state magazines[2];                    //0x84
 	INTELLISENSE_HACK(magazines);
 
-	long last_trigger_fire_time;						// 0xA0
-	s_start_reload_data start_reload_update;			// 0xA4
-	long				__pad32_1;						// 0xAC need to verify this is unused
-	bool baseline_valid;								// 0xB0
-	sbyte baseline_index;								// 0xB1
-	sbyte message_index;								// 0xB2
-	byte __pad8_4;										// 0xB3
-	s_weapon_datum_network_data update_baseline;		// 0xB4
-	bool __unk_char_type;								// 0xDC probably delta_valid
-	char  _pad_c_byte[3];									// 0xDD
-	s_weapon_datum_network_data update_delta;			// 0xE0
+	long                        last_trigger_fire_time;                        // 0xA0
+	s_start_reload_data         start_reload_update;            // 0xA4
+	long                        __pad32_1;                        // 0xAC need to verify this is unused
+	bool                        baseline_valid;                                // 0xB0
+	sbyte                       baseline_index;                                // 0xB1
+	sbyte                       message_index;                                // 0xB2
+	byte                        __pad8_4;                                        // 0xB3
+	s_weapon_datum_network_data update_baseline;        // 0xB4
+	bool                        __unk_char_type;                                // 0xDC probably delta_valid
+	char                        _pad_c_byte[3];                                    // 0xDD
+	s_weapon_datum_network_data update_delta;            // 0xE0
 }; ///This stupid structure EFFFFFFFFFFFFFF
-
-INTELLISENSE_HACK(s_weapon_data)
-INTELLISENSE_HACK(char[k_object_size_weapon - k_object_size_item])
-INTELLISENSE_HACK(char[3])
-INTELLISENSE_HACK(s_weapon_datum_network_data)
+//s_weapon_data)
 
 //STAT_ASSRT(s_weapon_data, (k_object_size_weapon - k_object_size_item));
 //static_assert(sizeof(s_weapon_data) == (), STATIC_ASSERT_FAIL);
@@ -331,127 +335,134 @@ INTELLISENSE_HACK(s_weapon_datum_network_data)
 			PAD24;									// 0x311
 			s_weapon_datum_network_data update_delta;		// 0x314
 		}; static_assert(sizeof(s_weapon_data) == (Enums::k_object_size_weapon - Enums::k_object_size_item), STATIC_ASSERT_FAIL);
- *
- *
  */
 
+
+//s_object_data is also in forge's definitions. \\TODO: Rework and look at again.
 struct s_object_data {
-	datum_index				definition_index;											// 0x0
-	s_halo_pc_network		network_data;												// 0x4
-	unsigned long			flags;														// 0x10 TODO: Document.
-	signed long				object_marker_id;											// 0x14
-	s_object_datum_network_delta_data network_delta;									// 0x18 // Added in HaloPC
-	real_point3d			position;													// 0x5C
-	real_vector3d			transitional_velocity;										// 0x68
-	real_vector3d			forward;													// 0x74
-	real_vector3d			up;															// 0x80
-	real_vector3d			angular_velocity;											// 0x8C
-	s_scenario_location		location;													// 0x98
-	real_point3d			center;														// 0xA0
-	float					radius;														// 0xBC
-	float					scale;														// 0xB0
-	__int16					type;														// 0xB4
-	__int16					__pad0;
-	game_team				owner_team;													// 0xB8
-	__int16					name_list_index;															// 0xBA
+	datum_index                       definition_index;                                            // 0x0
+	s_halo_pc_network                 network_data;                                                // 0x4
+	unsigned long                     flags;                                                        // 0x10 TODO: Document.
+	signed long                       object_marker_id;                                            // 0x14
+	s_object_datum_network_delta_data network_delta;                                    // 0x18 // Added in HaloPC
+	real_point3d                      position;                                                    // 0x5C
+	real_vector3d                     transitional_velocity;                                        // 0x68
+	real_vector3d                     forward;                                                    // 0x74
+	real_vector3d                     up;                                                            // 0x80
+	real_vector3d                     angular_velocity;                                            // 0x8C
+	s_scenario_location               location;                                                    // 0x98
+	real_point3d                      center;                                                        // 0xA0
+	float                             radius;                                                        // 0xBC
+	float                             scale;                                                        // 0xB0
+	__int16                           type;                                                        // 0xB4
+	__int16                           __pad0;
+	game_team                         owner_team;                                                    // 0xB8
+	__int16                           name_list_index;                                                            // 0xBA
 	// ticks spent not at_rest. only biped updates this
-	__int16					moving_time;																// 0xBC
-	__int16					region_permutation;														// 0xBE, variant id
-	datum_index				player_index;														// 0xC0
+	__int16                           moving_time;                                                                // 0xBC
+	__int16                           region_permutation;                                                        // 0xBE, variant id
+	datum_index                       player_index;                                                        // 0xC0
 	// If this were a projectile, this might be the handle to the weapon which spawned it
-	datum_index				owner_object_index;													// 0xC4
-	unsigned long			__pad1;																			// 0xC8 unused
-	s_object_datum_animation_data animation;										// 0xCC
-	s_object_datum_damage_data    damage;											// 0xD8
-	unsigned long			__pad2;													// 0x108 unused
-	datum_index				cluster_partition_index;								// 0x10C
-	datum_index				garbage_collection_object_index_rltd;					// 0x110, object_index, garbage collection related
-	datum_index				next_object_index;										// 0x114
-	datum_index				first_object_index;										// 0x118
-	datum_index				parent_object_index;									// 0x11C
-	signed char				parent_node_index;														// 0x120
-	char					unused_byte_unk;																// 0x121 idk if this is an sbyte or bool here
-	bool					force_shield_update;														// 0x122
-	signed char				valid_outgoing_functions;											// 0x123, 1<<function_index
-	float					incoming_function_values[k_number_of_incoming_object_functions];	// 0x124
-	float					outgoing_function_values[k_number_of_outgoing_object_functions];	// 0x134
+	datum_index                       owner_object_index;                                                    // 0xC4
+	unsigned long                     __pad1;                                                                            // 0xC8 unused
+	s_object_datum_animation_data     animation;                                        // 0xCC
+	s_object_datum_damage_data        damage;                                            // 0xD8
+	unsigned long                     __pad2;                                                    // 0x108 unused
+	datum_index                       cluster_partition_index;                                // 0x10C
+	datum_index                       garbage_collection_object_index_rltd;                    // 0x110, object_index, garbage collection related
+	datum_index                       next_object_index;                                        // 0x114
+	datum_index                       first_object_index;                                        // 0x118
+	datum_index                       parent_object_index;                                    // 0x11C
+	signed char                       parent_node_index;                                                        // 0x120
+	char                              unused_byte_unk;                                                                // 0x121 idk if this is an sbyte or bool here
+	bool                              force_shield_update;                                                        // 0x122
+	signed char                       valid_outgoing_functions;                                            // 0x123, 1<<function_index
+	float                             incoming_function_values[k_number_of_incoming_object_functions];    // 0x124
+	float                             outgoing_function_values[k_number_of_outgoing_object_functions];    // 0x134
 
-	s_object_datum_attachments_data attachments;									// 0x144
-	datum_index						cached_render_state_index;											// 0x170
-	unsigned __int16					regions_destroyed_flags;												// 0x174 once a region is destroyed, its bit index is set
-	signed __int16					shader_permutation;														// 0x176, shader's bitmap block index
-	unsigned char					region_vitality[k_maximum_regions_per_model];						// 0x178
-	signed char						region_permutation_indices[k_maximum_regions_per_model];			// 0x180
+	s_object_datum_attachments_data attachments;                                    // 0x144
+	datum_index                     cached_render_state_index;                                            // 0x170
+	unsigned __int16                regions_destroyed_flags;                                                // 0x174 once a region is destroyed, its bit index is set
+	signed __int16                  shader_permutation;                                                        // 0x176, shader's bitmap block index
+	unsigned char                   region_vitality[k_maximum_regions_per_model];                        // 0x178
+	signed char                     region_permutation_indices[k_maximum_regions_per_model];            // 0x180
 
-	real_rgb_color change_colors[k_number_of_object_change_colors];			// 0x188
-	real_rgb_color change_colors2[k_number_of_object_change_colors];			// 0x1B8
+	real_rgb_color change_colors[k_number_of_object_change_colors];            // 0x188
+	real_rgb_color change_colors2[k_number_of_object_change_colors];            // 0x1B8
 
 	// one of these are for interpolating
-	s_object_header_block_reference node_orientations;								// 0x1E8 real_orientation3d[node_count]
-	s_object_header_block_reference node_orientations2;								// 0x1EC real_orientation3d[node_count]
-	s_object_header_block_reference node_matrix_block;								// 0x1F0 real_matrix4x3[node_count]
+	s_object_header_block_reference node_orientations;                                // 0x1E8 real_orientation3d[node_count]
+	s_object_header_block_reference node_orientations2;                                // 0x1EC real_orientation3d[node_count]
+	s_object_header_block_reference node_matrix_block;                                // 0x1F0 real_matrix4x3[node_count]
 };
 
-static_assert(sizeof(s_object_data) == object_sizes::k_object_size_object, STATIC_ASSERT_FAIL);
+static_assert (sizeof (s_object_data) == object_sizes::k_object_size_object, STATIC_ASSERT_FAIL);
 #pragma endregion
 
 #pragma region item_datums
 struct s_object_datum {
-	enum { k_object_types_mask = object_type::_object_type_object };
+	enum {
+		k_object_types_mask = object_type::_object_type_object
+	};
 	s_object_data object;
 };
 
-static_assert(sizeof(s_object_datum) == object_sizes::k_object_size_object, STATIC_ASSERT_FAIL);
+static_assert (sizeof (s_object_datum) == object_sizes::k_object_size_object, STATIC_ASSERT_FAIL);
 
 struct s_item_datum {
-	enum { k_object_types_mask = object_type::_object_type_mask_item };
+	enum {
+		k_object_types_mask = object_type::_object_type_mask_item
+	};
 
 	s_object_data object;
-	s_item_data item;
-}; static_assert(sizeof(s_item_datum) == object_sizes::k_object_size_item, STATIC_ASSERT_FAIL);
+	s_item_data   item;
+}; static_assert (sizeof (s_item_datum) == object_sizes::k_object_size_item, STATIC_ASSERT_FAIL);
 
-struct s_garbage_datum : s_item_datum
-{
-	enum { k_object_types_mask = FLAG(_object_type_garbage) };
+struct s_garbage_datum : s_item_datum {
+	enum {
+		k_object_types_mask = FLAG(_object_type_garbage)
+	};
 
 	s_garbage_data garbage;
-}; static_assert(sizeof(s_garbage_datum) == k_object_size_garbage, STATIC_ASSERT_FAIL);
+}; static_assert (sizeof (s_garbage_datum) == k_object_size_garbage, STATIC_ASSERT_FAIL);
 
-struct s_weapon_datum : s_item_datum
-{
-	enum { k_object_types_mask = FLAG(_object_type_weapon) };
-
+struct s_weapon_datum : s_item_datum {
+	enum {
+		k_object_types_mask = FLAG(_object_type_weapon)
+	};
 	s_weapon_data weapon;
 }; //static_assert(sizeof(s_weapon_datum) == k_object_size_weapon, STATIC_ASSERT_FAIL);
 //HOLY MOLEY
 INTELLISENSE_HACK(s_weapon_datum);
 INTELLISENSE_HACK(k_object_size_weapon);
 struct s_object_header_datum {
-	datum_index::t_salt header_salt;	//0x0
-	object_header_flags flags;			//0x2
-	signed char         object_type;			//0x4
-	unsigned __int16    cluster_index;		//0x6
-	unsigned __int16    data_size;			//0x8
+	datum_index::t_salt header_salt;    //0x0
+	object_header_flags flags;            //0x2
+	signed char         object_type;            //0x4
+	unsigned __int16    cluster_index;        //0x6
+	unsigned __int16    data_size;            //0x8
 
 	union magic {
-		void* address;
+		void *address;
 
-		s_object_data* _object;
+		s_object_data *_object;
 		// Note: since 's_object_data' is the base of all object datums, we can do this:
 		// Implicitly treat 'address' as an specific object type ptr
 		// in situations where we're programming for something more specific (eg, unit types only)
 
-		struct s_item_datum*      _item;
-		struct s_weapon_datum*    _weapon;
-		struct s_equipment_datum* _equipment;
+		struct s_item_datum      *_item;
+		struct s_weapon_datum    *_weapon;
+		struct s_equipment_datum *_equipment;
 
-		struct s_unit_datum*    _unit;
-		struct s_biped_datum*   _biped;
-		struct s_vehicle_datum* _vehicle;
-	}; static_assert(sizeof(magic) == 0x4, STATIC_ASSERT_FAIL);
+		struct s_unit_datum    *_unit;
+		struct s_biped_datum   *_biped;
+		struct s_vehicle_datum *_vehicle;
+	}; static_assert (sizeof (magic) == 0x4, STATIC_ASSERT_FAIL);
 
 }; //static_assert(sizeof(s_object_header_datum) == 0xC, STATIC_ASSERT_FAIL);
 #pragma endregion
+
+
 /*
 struct s_render_camera
 {
@@ -528,50 +539,50 @@ struct s_render_globals
 }; static_assert(sizeof(s_render_globals) == 0x9D298);
 //s_render_globals* RenderGlobals(); // defined in the implementing extension's code
 */
-struct s_structure_render_globals
-{
-	bool render_bsp;
-	char pad[3];						//0x4
-	int dynamic_triangle_buffer_index;  //0x1C
-	char __UNKNOWN_TYPE;				//0x20
-	char pad1[3];
+
+
+struct s_structure_render_globals {
+	bool          render_bsp;
+	char          pad[3];                        //0x4
+	int           dynamic_triangle_buffer_index;  //0x1C
+	char          __UNKNOWN_TYPE;                //0x20
+	char          pad1[3];
 	real_vector3d __guessed_type;
 }; //static_assert(sizeof(s_structure_render_globals) == 0x18);
 //s_structure_render_globals* StructureRenderGlobals(); // defined in the implementing extension's code
 #pragma region game state related
 namespace game_options {
 	struct s_game_options {
-		int unk_type; // never see this referenced or explicitly set. due to memset, this will always be set to zero
-		short unk_2; // never see this referenced besides in game_options_new code where it's set to 0, even after a memset call. highly likely to be an enum field, albeit unused
+		int                   unk_type; // never see this referenced or explicitly set. due to memset, this will always be set to zero
+		short                 unk_2; // never see this referenced besides in game_options_new code where it's set to 0, even after a memset call. highly likely to be an enum field, albeit unused
 		game_difficulty_level difficulty_level;
-		int game_random_seed;
+		int                   game_random_seed;
 		// not always the actual path, sometimes just the name, go figure
-		char map_name[255 + 1];
+		char                  map_name[255 + 1];
 	}; STAT_ASSRT(s_game_options, 0x10C);
 
-	struct s_game_globals
-	{
-		bool map_loaded;
-		bool active;
-		bool players_are_double_speed;
-		bool map_loading_in_progress;
-		real map_loading_precentage;
+	struct s_game_globals {
+		bool           map_loaded;
+		bool           active;
+		bool           players_are_double_speed;
+		bool           map_loading_in_progress;
+		real           map_loading_precentage;
 		s_game_options options;
 	}; STAT_ASSRT(s_game_globals, 0x114);
 };
 
-struct tag_reference {
-	unsigned int group_tag;
-	const char *name;
-	int name_length;
-	datum_index tag_index;
+
+struct sbsp::sbsp_tag {
+	static int                                         group_tag = (int) 'sbsp';
+	tag_reference                                      lightmap_bitm;
+	real_bounds                                        vehicle_heights; //floor, ceil
+	int32                                              __pad00[5];
+	obj::sbsp::s_object_lighting                       default_lighting;
+	int32                                              __pad01;
+	tag_block<obj::sbsp::structure_collision_material> collision_materials;
+	tag_block<obj::sbsp::collision_bsp
 };
 
-struct tag_block {
-	int count;
-	void *address;
-	const struct tag_block_definition *definition;
-};
 /*
 struct s_main_globals
 {
@@ -656,35 +667,35 @@ struct s_main_globals
 };
 */
 struct s_game_globals {
-			enum { k_group_tag = 'matg' };
+	enum {
+		k_group_tag = 'matg'
+	};
 
-			long language;
+	long language;
 
-			byte bytePad[244];
+	byte bytePad[244];
 
-			tag_reference sounds;
-			tag_reference camera;
+	tag_reference sounds;
+	tag_reference camera;
 
-			tag_block game_globals_player_control; // s_game_globals_player_control
+	tag_block game_globals_player_control; // s_game_globals_player_control
 
-			tag_block difficulty_info; //, s_game_globals_difficulty_information);
-			tag_block grenades;  //s_game_globals_grenade);
+	tag_block difficulty_info; //, s_game_globals_difficulty_information);
+	tag_block grenades;  //s_game_globals_grenade);
 
-			tag_block game_globals_rasterizer_data; // s_game_globals_rasterizer_data
-			tag_block game_globals_interface_tag_references; // s_game_globals_interface_tag_references
+	tag_block game_globals_rasterizer_data; // s_game_globals_rasterizer_data
+	tag_block game_globals_interface_tag_references; // s_game_globals_interface_tag_references
 
-			tag_block weapons_list; // s_game_globals_tag_reference;
-			tag_block cheat_powerups; // s_game_globals_tag_reference);
-			tag_block multiplayer_info; // s_game_globals_multiplayer_information);
-			tag_block player_info; // s_game_globals_player_information);
-			tag_block player_representation; // s_game_globals_player_representation);
-			tag_block falling_damage; // s_game_globals_falling_damage);
-			tag_block materials; //material_definition
-			tag_block playlist_members;
-			tag_block playlist_autogenerate_choice;
-		};
+	tag_block weapons_list; // s_game_globals_tag_reference;
+	tag_block cheat_powerups; // s_game_globals_tag_reference);
+	tag_block multiplayer_info; // s_game_globals_multiplayer_information);
+	tag_block player_info; // s_game_globals_player_information);
+	tag_block player_representation; // s_game_globals_player_representation);
+	tag_block falling_damage; // s_game_globals_falling_damage);
+	tag_block materials; //material_definition
+	tag_block playlist_members;
+	tag_block playlist_autogenerate_choice;
+};
 
 #pragma endregion
-
 #pragma pack(pop)
-#endif
