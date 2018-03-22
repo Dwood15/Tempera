@@ -111,6 +111,6 @@ int __stdcall hkMain() {
 //			}
 //		}
 
-		Sleep(30);
+		Sleep(90);
 	}
 }

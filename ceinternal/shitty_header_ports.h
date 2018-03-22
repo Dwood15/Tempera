@@ -572,16 +572,6 @@ namespace game_options {
 };
 
 
-struct sbsp::sbsp_tag {
-	static int                                         group_tag = (int) 'sbsp';
-	tag_reference                                      lightmap_bitm;
-	real_bounds                                        vehicle_heights; //floor, ceil
-	int32                                              __pad00[5];
-	obj::sbsp::s_object_lighting                       default_lighting;
-	int32                                              __pad01;
-	tag_block<obj::sbsp::structure_collision_material> collision_materials;
-	tag_block<obj::sbsp::collision_bsp
-};
 
 /*
 struct s_main_globals
@@ -666,36 +656,36 @@ struct s_main_globals
 
 };
 */
-struct s_game_globals {
-	enum {
-		k_group_tag = 'matg'
-	};
-
-	long language;
-
-	byte bytePad[244];
-
-	tag_reference sounds;
-	tag_reference camera;
-
-	tag_block game_globals_player_control; // s_game_globals_player_control
-
-	tag_block difficulty_info; //, s_game_globals_difficulty_information);
-	tag_block grenades;  //s_game_globals_grenade);
-
-	tag_block game_globals_rasterizer_data; // s_game_globals_rasterizer_data
-	tag_block game_globals_interface_tag_references; // s_game_globals_interface_tag_references
-
-	tag_block weapons_list; // s_game_globals_tag_reference;
-	tag_block cheat_powerups; // s_game_globals_tag_reference);
-	tag_block multiplayer_info; // s_game_globals_multiplayer_information);
-	tag_block player_info; // s_game_globals_player_information);
-	tag_block player_representation; // s_game_globals_player_representation);
-	tag_block falling_damage; // s_game_globals_falling_damage);
-	tag_block materials; //material_definition
-	tag_block playlist_members;
-	tag_block playlist_autogenerate_choice;
-};
+//struct s_game_globals {
+//	enum {
+//		k_group_tag = 'matg'
+//	};
+//
+//	long language;
+//
+//	byte bytePad[244];
+//
+//	tag_reference sounds;
+//	tag_reference camera;
+//
+//	tag_block<s_player_control_globals_data> game_globals_player_control; //
+//
+//	tag_block<> difficulty_info; //, s_game_globals_difficulty_information);
+//	tag_block grenades;  //s_game_globals_grenade);
+//
+//	tag_block game_globals_rasterizer_data; // s_game_globals_rasterizer_data
+//	tag_block game_globals_interface_tag_references; // s_game_globals_interface_tag_references
+//
+//	tag_block weapons_list; // s_game_globals_tag_reference;
+//	tag_block cheat_powerups; // s_game_globals_tag_reference);
+//	tag_block multiplayer_info; // s_game_globals_multiplayer_information);
+//	tag_block player_info; // s_game_globals_player_information);
+//	tag_block player_representation; // s_game_globals_player_representation);
+//	tag_block falling_damage; // s_game_globals_falling_damage);
+//	tag_block materials; //material_definition
+//	tag_block playlist_members;
+//	tag_block playlist_autogenerate_choice;
+//};
 
 #pragma endregion
 #pragma pack(pop)

@@ -6,6 +6,8 @@
 #include "int_math.h"
 #include "real_math.h"
 
+#pragma pack(push)
+#pragma pack(1)
 namespace obj {
 	namespace sbsp {
 		struct light_color_direction {
@@ -20,10 +22,9 @@ namespace obj {
 			}; STAT_ASSRT(bsp3d_node, 0xC);
 
 			struct collision_leaf {
-				short		  flags;
-				short      reference_count;
-				long       first_reference;
-				long       bsp2d_reference;
+				short flags;
+				short reference_count;
+				long  first_reference;
 			}; STAT_ASSRT(collision_leaf, 0x8);
 
 			struct bsp2d_reference {
@@ -75,15 +76,15 @@ namespace obj {
 		};
 
 		struct s_object_lighting {
-			real_rgb_color ambient_color;
-			short          distant_light_count;
-			short;
+			real_rgb_color        ambient_color;
+			short                 distant_light_count;
+			short                 pad;
 			light_color_direction distant_light[2];
 
 			//////////////////////////////////////////////////////////////////////////
 			// not tag based - used by the game state
-			short point_light_count;
-			short;
+			short       point_light_count;
+			short       pad00;
 			datum_index point_light_indices[2]; // light_data
 			//////////////////////////////////////////////////////////////////////////
 
@@ -96,7 +97,7 @@ namespace obj {
 			tag_reference shader; // 'shdr'
 			short         runtime_pad16;
 			short         runtime_shader_material_type; // Enums::material_type or NONE if shdr is null
-		}; STAT_ASSRT(structure_collision_material, 0x4);
+		}; STAT_ASSRT(structure_collision_material, 0x14);
 
 		struct structure_node {
 			sbsp_stri unk_node_info;
@@ -116,10 +117,18 @@ namespace obj {
 			long index;
 		};
 
-		struct structure_surface {
-			surface_indice;
+		struct sbsp_tag {
+			static inline int                                  group_tag = (int) 'sbsp';
+			tag_reference                                      lightmap_bitm;
+			real_bounds                                        vehicle_heights; //floor, ceil
+			int32                                              __pad00[5];
+			obj::sbsp::s_object_lighting                       default_lighting;
+			int32                                              __pad01;
+			tag_block<obj::sbsp::structure_collision_material> collision_materials;
+			//TODO: Structure bsp tag block ! tag_block<obj::sbsp
 		};
 
 	};
 };
 
+#pragma pack(pop)

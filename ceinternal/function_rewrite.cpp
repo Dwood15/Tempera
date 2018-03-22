@@ -90,7 +90,7 @@ namespace spcore {
 	};
 
 	namespace rendering {
-		__cdecl int get_render_window_count () {
+		int __cdecl get_render_window_count () {
 			auto player_count = players_global_data->local_player_count;
 			if ( player_count > MAX_PLAYER_COUNT_LOCAL || player_count < 1 ) {
 				player_count = 1;
@@ -199,7 +199,7 @@ namespace spcore {
 #pragma endregion
 
 		template<typename T>
-		void constexpr patchValue<T> (uintptr_t to_patch, T replace_with) {
+		constexpr void patchValue<T> (uintptr_t to_patch, T replace_with) {
 			*(T *) to_patch = replace_with;
 		}
 
@@ -233,13 +233,15 @@ namespace spcore {
 			//I can't find the xbox equivalent of this function, so this may not be necessary?
 			MPP_B(0X497930 + 0x2, check_render_splitscreen_clamp);
 
+			//Yep, this one's the real deal...
+			MPP_B(0x4CBBFC + 0x3, create_local_players_clamp);
+
 			//-- address is to the func(x) itself, not to to the patch
 //			constexpr uintptr_t render_weapon_hud_loc = 0x4B53E0
 //			MPP_B(render_weapon_hud_loc);
 
 			int real_address        = (int) &spcore::player_control::player_control_initialize_for_new_map;
 			int real_address_offset = ( real_address ) - ((int) player_control_init_new_map_hook );// + (int)4);
-
 
 			//Hooks
 			patchValue<uintptr_t> (((unsigned int) player_control_init_new_map_hook ), (unsigned int) ( real_address_offset ) - 4);    //Gotta be able to loop over all the players + input devices, no?.

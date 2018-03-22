@@ -1,5 +1,6 @@
 #pragma once
 #include "shitty_macros.h"
+#include "gamestate_headers/real_math.h"
 typedef short int16;
 typedef unsigned int uintptr_t;
 #pragma region  colors
@@ -52,10 +53,6 @@ struct real_vector3d {
 	real z;
 }; static_assert(sizeof(real_vector3d) == 0xC, STATIC_ASSERT_FAIL);
 
-struct real_point3d {
-	real_vector2d xy;
-	float z;
-}; static_assert(sizeof(real_point3d) == 0xC, STATIC_ASSERT_FAIL);
 #pragma endregion
 
 #pragma region whole number-based structures

@@ -19,13 +19,8 @@
     along with haloforge.  If not, see <http://www.gnu.org/licenses/>.
 
 	No addresses needed
-
-
 */ 
-
-#ifndef ADDLOG_H
-#define ADDLOG_H
-
+#pragma once
 #include <windows.h>
 #include <time.h>
 #include <iostream>
@@ -35,9 +30,9 @@
 
 #define LOGNAME "live_projekt.log"
 
-void __cdecl DEBUG(const char* fmt, ...);
+constexpr void __cdecl DEBUG(const char* fmt, ...);
 char *GetDirectoryFile(char* filename);
 void InitAddLog(HMODULE hModule);
 void ExitAddLog();
 
-#endif /* ADDLOG_H */
+/* ADDLOG_H */

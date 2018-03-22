@@ -59,7 +59,7 @@ namespace spcore {
 	};
 	namespace rendering {
 		//This function is a good hook for debugging because it gets called every frame, _at least_.
-		__declspec(naked) int gen_render_window_count();
+		//__declspec(naked) int gen_render_window_count();
 	};
 	namespace player_control {
 		void __cdecl  player_control_initialize_for_new_map();
@@ -100,7 +100,7 @@ namespace spcore {
 		void get_mem_and_patch();
 
 		template<typename T>
-		void patchValue(uintptr_t to_patch, T replace_with);
+		constexpr void patchValue(uintptr_t to_patch, T replace_with);
 	};
 
 
