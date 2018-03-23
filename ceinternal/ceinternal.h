@@ -10,8 +10,8 @@
 namespace spcore {
 	extern FILE *debug_out;
 
-	void constexpr initCEI(HMODULE reason);
+	const void initCEI(HMODULE reason);
 
-	void constexpr unload();
+	const void unload();
 };
 #endif

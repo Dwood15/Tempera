@@ -3,6 +3,8 @@
 #include "gamestate_headers/real_math.h"
 typedef short int16;
 typedef unsigned int uintptr_t;
+typedef char tag_string[32];
+typedef const char* cstring;
 #pragma region  colors
 
 //TODO: Investigate why this is the way it is.

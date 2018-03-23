@@ -2,13 +2,54 @@
 /**
  * <GPLv3 License>
  */
+#include "../shitty_enums.h"
 #include "../ce_base_types.h"
 #include "int_math.h"
 #include "real_math.h"
+#include <sal.h>
 
 #pragma pack(push)
 #pragma pack(1)
 namespace obj {
+	namespace Memory {
+		struct s_memory_pool_block {
+			typedef void **reference_t;
+
+			long                 head;         // 'head'
+			long               size;         // size of the block, exclusive of this header, within the pool
+			reference_t         reference;      // the pointer referencing the block allocation
+			s_memory_pool_block *next;      // linked list: the pool block that follows this one
+			s_memory_pool_block *prev;      // linked list: the pool block the comes before this one
+			long                 tail;         // 'tail'
+		};
+
+		struct s_memory_pool {
+			long                 signature;      // 'head'
+			::tag_string          name;         // debug code name for the allocation
+			void                *base_address;   // next address to allocate a block at
+			long               size;         // total size of the pool
+			long               free_size;      // total size left in the pool thats not owned by anything
+			s_memory_pool_block *first;      // pointer to the first pool item
+			s_memory_pool_block *last;      // pointer to the last pool item
+
+			inline void Initialize (::cstring name, long pool_size);
+
+			inline void Defragment ();
+
+			inline bool AllocateBlock (_Inout_ s_memory_pool_block::reference_t reference, long size);
+
+			inline bool ReallocateBlock (_Inout_ s_memory_pool_block::reference_t reference, long new_size);
+
+			inline bool FreeBlock (_Inout_ s_memory_pool_block::reference_t reference);
+		};
+	};
+
+	struct s_objects_pool_data {
+		Memory::s_memory_pool header;
+
+		byte data[k_object_memory_pool_allocation_size];
+	};
+
 	namespace sbsp {
 		struct light_color_direction {
 			real_rgb_color color;

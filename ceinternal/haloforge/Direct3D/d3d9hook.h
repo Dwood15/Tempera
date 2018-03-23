@@ -1,7 +1,7 @@
 /*
 	Project: haloforge
 	File: d3d9hook.h
-	Copyright © 2009 SilentK, Abyll
+	Copyright ï¿½ 2009 SilentK, Abyll
 
 	This file is part of haloforge.
 
@@ -181,6 +181,7 @@ public:
 	void FillRGBA(ID3DXLine* pLine, float x, float y, float width, float height, D3DCOLOR color);
 	void DrawMouse(IDirect3DDevice9* pDevice, IDirect3DTexture9* pCursorTexture, ID3DXSprite* pCursorSprite);
 	void myDrawText(IDirect3DDevice9* pDevice, ID3DXFont* Font, bool shadow, long x, long y, long width, D3DCOLOR color, D3DCOLOR shadowcolor, const char* cFmt, ...);
+	void myDrawPlane(IDirect3DDevice9*pDevice);
 	DWORD __stdcall hkD3DHook(void* lpVoid);
 };
 

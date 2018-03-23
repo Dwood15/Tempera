@@ -19,7 +19,7 @@
     along with haloforge.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <fstream>
 #include "../headers/detours.h"
@@ -42,8 +42,18 @@ long CD3D::GenerateShader(IDirect3DDevice9 *pDevice, IDirect3DPixelShader9 **pSh
 	ID3DXBuffer *pShaderBuf = NULL;
 	sprintf(szShader, "ps.1.1\ndef c0, %f, %f, %f, %f\nmov r0,c0", r, g, b, 1.0f);
 	D3DXAssembleShader(szShader, sizeof(szShader), NULL, NULL, 0, &pShaderBuf, NULL);
-	if (FAILED(pDevice->CreatePixelShader((const DWORD *) pShaderBuf->GetBufferPointer(), pShader)))return E_FAIL;
+	if (FAILED(pDevice->CreatePixelShader((const DWORD *) pShaderBuf->GetBufferPointer(), pShader)))
+		return E_FAIL;
 	return S_OK;
+}
+
+struct tri_vert {
+	float x, y, z;
+	D3DCOLOR colour;
+};
+
+void CD3D::myDrawPlane(IDirect3DDevice9*pDevice ) {
+
 }
 
 void CD3D::myDrawText(IDirect3DDevice9 *pDevice, ID3DXFont *pFont, bool shadow, long x, long y, long width, D3DCOLOR color, D3DCOLOR shadowcolor, const char *cFmt, ...) {

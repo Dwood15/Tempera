@@ -36,7 +36,7 @@ char *GetDirectoryFile (char *filename) {
 
 static volatile bool debug_write_locked = false;
 
-constexpr void __cdecl DEBUG (const char *fmt, ...) {
+const void __cdecl DEBUG (const char *fmt, ...) {
 	bool everyother = true;
 	while(debug_write_locked) {
 		//Toggle the bool and set it at the same time.

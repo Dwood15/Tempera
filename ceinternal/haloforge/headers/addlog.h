@@ -30,7 +30,7 @@
 
 #define LOGNAME "live_projekt.log"
 
-constexpr void __cdecl DEBUG(const char* fmt, ...);
+const void __cdecl DEBUG(const char* fmt, ...);
 char *GetDirectoryFile(char* filename);
 void InitAddLog(HMODULE hModule);
 void ExitAddLog();

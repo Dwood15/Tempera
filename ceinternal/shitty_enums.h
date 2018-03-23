@@ -19,11 +19,11 @@ namespace byteswaps {
 		_bs_code_array_end   = -101, // _end_bs_array
 		_bs_code_array_start = -100, // _begin_bs_array
 
-		_bs_code_8byte = 0 - (byte_swap_code_t) sizeof (long long), // _8byte
-		_bs_code_4byte = 0 - (byte_swap_code_t) sizeof (long long), // _4byte
-		_bs_code_2byte = 0 - (byte_swap_code_t) sizeof (long long), // _2byte
+		_bs_code_8byte = 0 - (byte_swap_code_t)sizeof(long long), // _8byte
+		_bs_code_4byte = 0 - (byte_swap_code_t)sizeof(long long), // _4byte
+		_bs_code_2byte = 0 - (byte_swap_code_t)sizeof(long long), // _2byte
 
-		_bs_code_1byte = sizeof (byte), // _byte
+		_bs_code_1byte = sizeof(byte), // _byte
 	};
 
 	enum {
@@ -98,6 +98,32 @@ enum collision_surface_flags : byte {
 	_collision_surface_breakable_bit
 };
 #pragma endregion
+
+namespace obj {
+	enum {
+		// Stock game state allocation size for the object memory pool
+		// When running in editor tools, this and the max number of objects is increased by 5x
+				k_object_memory_pool_allocation_size = 0x200000,
+	};
+
+	enum object_header_flags : byte {
+		_object_header_active_bit,
+		_object_header_visible_bit,
+		_object_header_newly_created_bit, // true until after the first call to the
+		_object_header_being_deleted_bit,
+		_object_header_child_bit, // attached to another object (at a marker/node)
+		_object_header_connected_to_map_bit,
+		_object_header_automatic_deactivation_bit,
+		_object_header_unk7_bit,
+	};
+
+	enum objects_find_flags : unsigned long {
+		_objects_find_collideable_bit,
+		_objects_find_noncollideable_bit,
+	};
+
+};
+
 
 enum {
 	// Never streamed, unless the tag is loaded with _tag_load_for_editor_bit
@@ -277,13 +303,14 @@ enum object_change_color_reference : __int16 {
 	k_number_of_object_change_color_references,
 };
 
+//TODO: STATIC ASSERT USAGE + CONSTEXPR
 enum object_sizes {
 	// The base object datum allocates 2 real_orientation3d and 1 real_matrix4x3 FOR EVERY model node
-			k_object_size_object        = 0x1F4,
-			k_object_size_projectile    = 0xBC + k_object_size_object,
-			k_object_size_scenery       = 0x4 + k_object_size_object,
-			k_object_size_placeholder   = 0x8 + k_object_size_object,
-			k_object_size_sound_scenery = 0x4 + k_object_size_object,
+	k_object_size_object        = 0x1F4,
+	k_object_size_projectile    = 0xBC + k_object_size_object,
+	k_object_size_scenery       = 0x4 + k_object_size_object,
+	k_object_size_placeholder   = 0x8 + k_object_size_object,
+	k_object_size_sound_scenery = 0x4 + k_object_size_object,
 
 	k_object_size_device        = 0x20 + k_object_size_object,
 	k_object_size_machine       = 0x14 + k_object_size_device,

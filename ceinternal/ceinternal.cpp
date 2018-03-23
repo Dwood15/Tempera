@@ -4,7 +4,7 @@
 namespace spcore {
 	FILE *debug_out;
 
-	void constexpr initCEI(HMODULE reason) {
+	const void initCEI(HMODULE reason) {
 		// some debug outputz
 		if (::AllocConsole() != 0) {
 			freopen_s(&debug_out, "CONOUT$", "w", stdout);
@@ -18,10 +18,8 @@ namespace spcore {
 		DisableThreadLibraryCalls(reason);
 		CreateThread(0, 0, (LPTHREAD_START_ROUTINE) hkMain, 0, 0, 0);
 		printf("Created LPTHREAD\n");//init_for_new_map_overwrite);
-
-		return;
 	}
 
-	void constexpr unload() {
+	const void unload() {
 	}
 };

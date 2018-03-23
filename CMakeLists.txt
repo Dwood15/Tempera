@@ -19,7 +19,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${DX_PATH} ${HCE_PATH})
 
 find_package(HaloCE REQUIRED)
 find_package(DirectX REQUIRED)
-
+#TODO: ADD JSON SERIALIZATION
+#https://github.com/nlohmann/json#serialization--deserialization
 include_directories(BEFORE ${DirectX_INCLUDE_DIRS})
 message(STATUS "DX include Dirs: ${DirectX_INCLUDE_DIRS}")
 ## Folders files
