@@ -36,12 +36,12 @@ char *GetDirectoryFile (char *filename) {
 
 static volatile bool debug_write_locked = false;
 
+static bool everyother = true;
 const void __cdecl DEBUG (const char *fmt, ...) {
-	bool everyother = true;
 	while(debug_write_locked) {
 		//Toggle the bool and set it at the same time.
 		//Stupid, but clean. :)
-		if(everyother = !everyother) {
+		if((everyother = (!everyother))) {
 			printf ("Waiting on write lock\n");
 		}
 		Sleep(90);
@@ -58,6 +58,7 @@ const void __cdecl DEBUG (const char *fmt, ...) {
 
 		ofile << logbuf << std::endl;
 	}
+	debug_write_locked = false;
 }
 
 void InitAddLog (HMODULE hModule) {

@@ -1,3 +1,7 @@
+/*
+ * Insert GPLv3 license
+ */
+
 #pragma once
 #include "shitty_macros.h"
 #include "gamestate_headers/real_math.h"

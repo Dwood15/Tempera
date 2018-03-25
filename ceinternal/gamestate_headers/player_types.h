@@ -1,9 +1,11 @@
+/*
+ * Insert GPLv3 license
+ */
 #pragma once
-#ifndef TEMPERA_PLAYER_TYPES_H
-#define TEMPERA_PLAYER_TYPES_H
 #include "../shitty_macros.h"
 #include "../ce_base_types.h"
 #include "../shitty_enums.h"
+
 
 struct s_custom_blip {
 	sbyte x;
@@ -41,6 +43,7 @@ struct s_local_player {
 	datum_index nearby_object_indexes[MAX_CUSTOM_BLIPS];
 }; //STAT_ASSRT(s_local_player, 0x568);
 
+#define MOTION_SENSOR_LOCATION 0x6B44C8
 struct s_motion_sensor {
 	short unk_padding;
 	s_local_player local_players[MAX_PLAYER_COUNT_LOCAL];
@@ -48,8 +51,6 @@ struct s_motion_sensor {
 	struct {
 		__int32 unk_type; // game time related
 		__int16 current_object_blip_index;
-		//Open Sauce has this as 2 bytes of pad, but that is incorrect. There's 2 bytes on the front of the pointer. :)
+		//Open Sauce has this as 2 bytes of pad, but that. There's 2 bytes on the front of the pointer. :)
 	} update_data;
 }; //STAT_ASSRT(s_motion_sensor, 0x8 + (0x568 * MAX_PLAYER_COUNT_LOCAL));
-
-#endif //TEMPERA_PLAYER_TYPES_H

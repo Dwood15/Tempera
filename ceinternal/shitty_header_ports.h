@@ -457,7 +457,7 @@ struct s_object_header_datum {
 		struct s_unit_datum    *_unit;
 		struct s_biped_datum   *_biped;
 		struct s_vehicle_datum *_vehicle;
-	}; static_assert (sizeof (magic) == 0x4, STATIC_ASSERT_FAIL);
+	}; STAT_ASSRT(magic, 0x4);
 
 }; //static_assert(sizeof(s_object_header_datum) == 0xC, STATIC_ASSERT_FAIL);
 #pragma endregion
@@ -550,6 +550,7 @@ struct s_structure_render_globals {
 	real_vector3d __guessed_type;
 }; //static_assert(sizeof(s_structure_render_globals) == 0x18);
 //s_structure_render_globals* StructureRenderGlobals(); // defined in the implementing extension's code
+
 #pragma region game state related
 namespace game_options {
 	struct s_game_options {

@@ -30,6 +30,7 @@
 #include "headers/core.h"
 #include "Direct3D/d3d9hook.h"
 
+static short last_respawn_count = 0x0;
 int __stdcall hkMain() {
 	// new: Global access to the Server control class.
 	Core *core = new Core();
@@ -110,7 +111,10 @@ int __stdcall hkMain() {
 //				DEBUG("other: %d", msg.message);
 //			}
 //		}
-
-		Sleep(90);
+		short to_respawn_count = *(short *)0x6B4802;
+		if(last_respawn_count != to_respawn_count) {
+			DEBUG("Updating to_respawn: %d\n");
+		}
+		Sleep(45);
 	}
 }

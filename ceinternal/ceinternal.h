@@ -1,11 +1,9 @@
 #pragma once
-#ifndef ceinternal
-#define ceinternal
+#define WIN32_LEAN_AND_MEAN
+#include "exceptions/exception_handler.h"
 #include "function_rewrite.h"
 #include "haloforge/headers/addlog.h"
 #include "haloforge/headers/forgeMain.h"
-
-#define MOTION_SENSOR_LOCATION 0x6B44C8
 
 namespace spcore {
 	extern FILE *debug_out;
@@ -14,4 +12,3 @@ namespace spcore {
 
 	const void unload();
 };
-#endif
