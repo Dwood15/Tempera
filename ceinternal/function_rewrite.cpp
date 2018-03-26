@@ -235,6 +235,11 @@ namespace spcore {
 			GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, get_render_window_count_hook_5);
 		}
 
+		void __inline patchSetLocalPlayer() {
+			MPP_B(0x477BEF, "First cmp of requested_player_index with 1");
+			MPP_B(0x477C10, "2nd cmp of requested_player_index with 1");
+		}
+
 #pragma endregion
 
 		void __inline mem_patch_p1() {
@@ -326,6 +331,7 @@ namespace spcore {
 			initializations::interface_initialize_patches();
 
 			insertRenderWindowCountHooks();
+			patchSetLocalPlayer();
 		}
 	};
 };
