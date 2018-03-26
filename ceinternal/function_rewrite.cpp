@@ -9,6 +9,7 @@
  * @param value == address to_patch
  */
 #define MPP_B(value, ...) patchValue<byte>(value, MAX_PLAYER_COUNT_LOCAL);
+#define MPP_ARB(value, arb, ...) patchValue<byte>(value, arb);
 
 namespace spcore {
 	static unsigned int          game_state_cpu_allocation  = *game_state_globals_ptr;
@@ -217,6 +218,7 @@ namespace spcore {
 			patchValue<byte>(get_render_window_ct_patch_3, MAX_PLAYER_COUNT_LOCAL);
 			patchValue<byte>(get_render_window_ct_patch_4, MAX_PLAYER_COUNT_LOCAL);
 			patchValue<byte>(get_render_window_ct_patch_5, MAX_PLAYER_COUNT_LOCAL);
+			//patchValue<short>(0x4CBBC8, (short)-1);
 		}
 
 		void __inline insertRenderWindowCountHooks() {
@@ -244,7 +246,7 @@ namespace spcore {
 			constexpr uintptr_t precache_new_map_max_spawn_ct_cmp = 0x45B8D4;
 
 			//, "90 39 1C B1 74 0A 46 83 FE .01 7C F5 5E 5B 59 C3");
-			constexpr uintptr_t max_players_player_new_map = 0x4764E6;
+			constexpr uintptr_t max_players_player_new_map = 0x4764E8;
 
 			//, "46 83 FE .04 7C F1 8B C7 5F 5E C3 5F 8B C6 5E C3");
 			constexpr uintptr_t find_unused_player_index_spawn = 0x476333;
@@ -284,6 +286,7 @@ namespace spcore {
 			MPP_B(0x4476EF + 0x2, first_person_camera_update_clamp_patch);
 			MPP_B(0x446760 + 0x3, director_choose_camera_game_clamp);
 			MPP_B(0x446760 + 0x3, director_choose_camera_game_clamp);
+			MPP_ARB(0x49F897, 0x0, player_spawn_count_hack_fuck_off);
 
 			//I can't find the xbox equivalent of this function, so this may not be necessary?
 			MPP_B(0X497930 + 0x2, check_render_splitscreen_clamp);

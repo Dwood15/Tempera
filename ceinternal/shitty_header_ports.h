@@ -12,19 +12,6 @@
 #pragma pack(1)
 
 //struct s_hud_messaging { char unk[1160]; }; //1160 bytes  0x64E970
-/*
-struct s_network_game_player {
-wchar_t name[12];			// 0x0
-int16 primary_color_index;	// 0x18
-int16 icon_index;			// 0x1A
-sbyte machine_index;		// 0x1C
-sbyte controller_index;		// 0x1D
-// These values will be the same on the client as they are on the server, so
-// we can use them safely for player operations in multiplayer code
-sbyte team_index;			// 0x1E
-sbyte player_list_index;	// 0x1F
-}; static_assert( sizeof(s_network_game_player) == 0x20 );
-*/
 
 #pragma region player_specific
 
@@ -130,7 +117,7 @@ INTELLISENSE_HACK(s_item_data)
 
 struct s_garbage_data {
 	__int16 ticks_until_gc;
-	__int16 PAD16;
+	PAD16;
 	__int32 _unused[5];
 }; static_assert (sizeof (s_garbage_data) == ( k_object_size_garbage - k_object_size_item ), STATIC_ASSERT_FAIL);
 #pragma endregion

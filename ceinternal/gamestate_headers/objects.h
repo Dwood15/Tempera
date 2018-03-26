@@ -7,7 +7,7 @@
 #include "int_math.h"
 #include "real_math.h"
 #include <sal.h>
-
+typedef bool reBoolGivenShort(short);
 #pragma pack(push)
 #pragma pack(1)
 namespace obj {
@@ -42,6 +42,8 @@ namespace obj {
 
 			inline bool FreeBlock (_Inout_ s_memory_pool_block::reference_t reference);
 		};
+
+
 	};
 
 	struct s_objects_pool_data {

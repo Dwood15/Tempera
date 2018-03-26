@@ -167,7 +167,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 	if (temp_nearest != NULL) {
 		if(core->ObjectControl->nearest_h != temp_nearest) {
-			core->ConsoleText(hGreen, "Setting object to nearest!");
+			//core->ConsoleText(hGreen, "Setting object to nearest!");
 			core->ObjectControl->nearest_h = temp_nearest;
 		}
 	}

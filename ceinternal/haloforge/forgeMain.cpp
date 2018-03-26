@@ -29,64 +29,81 @@
 #include "headers/addlog.h"
 #include "headers/core.h"
 #include "Direct3D/d3d9hook.h"
+#include "../shitty_header_ports.h"
 
 static short last_respawn_count = 0x0;
+
+typedef int  retIntGivenVoid(void);
+
+static void dumpPlayerGlobalsData() {
+	static s_players_globals_data*players_global_data = *(s_players_globals_data**)0x815918;
+
+	printf("unused_after_initialize_unk %d\n", players_global_data->unused_after_initialize_unk);
+	printf("local_player_count: %d\n", players_global_data->local_player_count);
+	printf("double speed tix remaining: %d\n", players_global_data->double_speed_ticks_remaining);
+	printf("Are all dead?: %d\n", players_global_data->are_all_dead);
+	printf("Input disabled: %d\n", players_global_data->input_disabled);
+	printf("BSP switch trigger: %d\n", players_global_data->_bsp_switch_trigger_idx);
+}
+
 int __stdcall hkMain() {
 	// new: Global access to the Server control class.
-	Core *core = new Core();
+	Core*core = new Core();
 	SetCore(core);
 	CD3D cd3d;
 	cd3d.hkD3DHook(NULL);
 
-	while (1) {
-		// Modified to toggle the builtin flycam, also loading your last camera's location.
+	retIntGivenVoid*find_unused_local_player_index = (retIntGivenVoid*)0x4762f0;
 
-		if (GetAsyncKeyState(VK_F1) & 1) {
-			core->ToggleFlycam();
+	while(1) {
+		if( GetAsyncKeyState(VK_F1) & 1 ) {
+			int unused_plyr_idx = find_unused_local_player_index();
+			core->ConsoleText(hGreen, "Unused Player Index: %d", unused_plyr_idx);
+			dumpPlayerGlobalsData();
 		}
 		// Object control: for now, just F2 to lock onto an object.
-		if (GetAsyncKeyState(VK_SHIFT) & 1) {    // for choosing the 'selected' object: aka the one closest to where we're aiming. Nearest is already set from the D3Dhook
-			core->ConsoleText(hRed, "Setting selected!");
+		if( GetAsyncKeyState(VK_SHIFT) & 1 ) {    // for choosing the 'selected' object: aka the one closest to where we're aiming. Nearest is already set from the D3Dhook
+//			core->ConsoleText(hRed, "Setting selected!");
 			continue;
-			core->ObjectControl->selected_h = core->ObjectControl->nearest_h;
+//			core->ObjectControl->selected_h = core->ObjectControl->nearest_h;
 		}
-		if (GetAsyncKeyState(VK_F5) & 1) {
+		if( GetAsyncKeyState(VK_F5) & 1 ) {
 			core->ObjectControl->LogInfo();
 		}
-		if (GetAsyncKeyState(VK_F4) & 1) {
-			core->ConsoleCMD((char *) "debug_camera_save");
+		if( GetAsyncKeyState(VK_F4) & 1 ) {
+			core->ConsoleCMD((char*)"debug_camera_save");
 		}
-		if (!core->ObjectControl->holding && (GetAsyncKeyState(VK_LBUTTON) & 0x8000)) { // XY plane
+		if( !core->ObjectControl->holding && ( GetAsyncKeyState(VK_LBUTTON) & 0x8000 )) { // XY plane
 			//left mouse button
 			continue;
 			core->ObjectControl->MoveObjXY();
 
-		} else if ((GetAsyncKeyState(VK_RBUTTON) & 0x8000)) {    // STRAIGHT in front of camera plane.
+		} else if(( GetAsyncKeyState(VK_RBUTTON) & 0x8000 )) {    // STRAIGHT in front of camera plane.
 			continue;
 			//Right mouse button
 			//server->ObjectControl->holding = true;
 //			core->ConsoleText(hBlue, "Got set holding = true");
 //			core->ObjectControl->MoveObjFront();
-		} else if (!(GetAsyncKeyState(VK_RBUTTON))) {
-			if (core->ObjectControl->holding) {
+		} else if( !( GetAsyncKeyState(VK_RBUTTON))) {
+			if( core->ObjectControl->holding ) {
 //				core->ConsoleText(hBlue, "Got set holding = false");
 //				core->ObjectControl->holding = false;
 			}
 		}
-		if (!(GetAsyncKeyState(VK_RBUTTON))) {
-			if (GetAsyncKeyState(VK_F6) & 1) { // Change the object's sector
-				if (core->ObjectControl->selected_h == NULL) {
+		if( !( GetAsyncKeyState(VK_RBUTTON))) {
+			if( GetAsyncKeyState(VK_F6) & 1 ) { // Change the object's sector
+				if( core->ObjectControl->selected_h == NULL ) {
 					core->ConsoleText(hBlue, "Could not select an object; Player sector: %d", core->GetPlayer(0)->Sector);
 				} else {
 					core->ConsoleText(hBlue, "Obj sector: %d, Player sector: %d", core->ObjectControl->selected_h->sector, core->GetPlayer(0)->Sector);
-					core->ObjectControl->selected_h->sector = (short) core->GetPlayer((short) 0)->Sector;
+					core->ObjectControl->selected_h->sector = (short)core->GetPlayer((short)0)->Sector;
 				}
 				//DEBUG("player sector: %d", core->GetPlayer(0)->Sector);
 			}
 			// Now then, object MOVE away/towards.
-			if (GetAsyncKeyState(VK_UP)) {
+			if( GetAsyncKeyState(VK_UP)) {
 				core->ObjectControl->HoldDistance += 0.03f;
-			} else if (GetAsyncKeyState(VK_DOWN)) {
+			} else if( GetAsyncKeyState(VK_DOWN)) {
 				core->ObjectControl->HoldDistance -= 0.03f;
 			}
 		}
@@ -111,8 +128,8 @@ int __stdcall hkMain() {
 //				DEBUG("other: %d", msg.message);
 //			}
 //		}
-		short to_respawn_count = *(short *)0x6B4802;
-		if(last_respawn_count != to_respawn_count) {
+		short to_respawn_count = *(short*)0x6B4802;
+		if( last_respawn_count != to_respawn_count ) {
 			DEBUG("Updating to_respawn: %d\n");
 		}
 		Sleep(45);
