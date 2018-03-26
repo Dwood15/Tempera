@@ -75,11 +75,7 @@ else ()
 endif ()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	file(GLOB DBG_CLIENT_G ./client/debug/budget.cpp
-		 ./client/debug/devmode.cpp
-		 ./client/debug/eep.cpp
-		 ./client/debug/wireframe.cpp
-		 )
+#DO DEBUG STUFF HERE
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "./bin/${COMPILER_REL_FLDR}-debug")
 elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
 	if ($ENV{CLION_IDE})
@@ -150,98 +146,6 @@ set(CEINTERNAL_CPP ${CEINTERNAL_H} ${HALOFORGE_CPP}
 	./ceinternal/exceptions/exception_handler.cpp
 	./main.cpp
 	)
-
-#CHIMERA
-set(CHIMERA_G ./client/client.cpp
-	./client/client_signature.cpp
-	./client/hac2.cpp
-	./client/keystone.cpp
-	./client/settings.cpp
-	./client/path.cpp
-	./client/open_sauce.cpp
-	./main.cpp
-	)
-
-set(DTA_CLIENT_G ./client/halo_data/chat.cpp
-	./client/halo_data/resolution.cpp
-	./client/halo_data/global.cpp
-	./client/halo_data/keyboard.cpp
-	./client/halo_data/map.cpp
-	./client/halo_data/server.cpp
-	./client/halo_data/spawn_object.cpp
-	./client/halo_data/script.cpp
-	./client/halo_data/table.cpp
-	./client/halo_data/tag_data.cpp
-	)
-
-set(HUD_CLIENT_G ./client/hud_mod/offset_hud_elements.cpp)
-set(MSG_CLIENT_G ./client/messaging/messaging.cpp)
-set(CMD_CLIENT_G ./client/command/command.cpp ./client/command/console.cpp)
-set(STT_CLIENT_G ./client/startup/fast_startup.cpp ./client/startup/crc32.c)
-set(TIA_CLIENT_G ./client/halo_data/tiarace/hce_tag_class_int.cpp)
-
-set(ENHANCE_CLIENT_G
-	./client/enhancements/auto_center.cpp
-	./client/enhancements/disable_buffering.cpp
-	./client/enhancements/firing_particle.cpp
-	./client/enhancements/gamepad_vertical_scale.cpp
-	./client/enhancements/mouse.cpp
-	./client/enhancements/multitexture_overlay.cpp
-	./client/enhancements/server_messages.cpp
-	./client/enhancements/show_spawn.cpp
-	./client/enhancements/skip_loading.cpp
-	./client/enhancements/throttle_fps.cpp
-	./client/enhancements/uncap_cinematic.cpp
-	./client/enhancements/zoom_blur.cpp
-	)
-
-#CHIMERA
-file(GLOB MATH_G ./math/data_types.cpp)
-file(GLOB CLI_OW_LUA_G ./client/lua/*.cpp)
-file(GLOB LUA_OW_LUA_H ./client/lua/*.hpp ./client/lua/*.h)
-
-file(GLOB VISUALS_CLIENT_G
-	 ./client/visuals/anisotropic_filtering.cpp
-	 ./client/visuals/gametype_indicator.cpp
-	 ./client/visuals/letterbox.cpp
-	 ./client/visuals/server_ip.cpp
-	 ./client/visuals/vertical_field_of_view.cpp
-	 )
-
-file(GLOB HOOKS_CLIENT_G
-	 ./client/hooks/camera.cpp
-	 ./client/hooks/frame.cpp
-	 ./client/hooks/map_load.cpp
-	 ./client/hooks/rcon_message.cpp
-	 ./client/hooks/tick.cpp
-	 )
-
-file(GLOB XBOX_CLIENT_G
-	 ./client/xbox/hud_kill_feed.cpp
-	 ./client/xbox/safe_zone.cpp
-	 ./client/xbox/simple_score_screen.cpp
-	 ./client/xbox/split_screen_hud.cpp
-	 )
-
-file(GLOB FIX_CLIENT_G
-	 ./client/fix/camo_fix.cpp
-	 ./client/fix/descope_fix.cpp
-	 ./client/fix/fov_fix.cpp
-	 ./client/fix/magnetism_fix.cpp
-	 ./client/fix/scope_fix.cpp
-	 ./client/fix/sniper_hud.cpp
-	 ./client/fix/widescreen_fix.cpp
-	 )
-
-file(GLOB HAC2_INJECT_G ./code_injection/hacclient/codefinder.cpp)
-file(GLOB INTERPOL_CLIENT_G
-	 ./client/interpolation/camera.cpp
-	 ./client/interpolation/fp.cpp
-	 ./client/interpolation/widget.cpp
-	 ./client/interpolation/particle.cpp
-	 ./client/interpolation/light.cpp
-	 ./client/interpolation/interpolation.cpp
-	 )
 
 #EXTERNAL LIBS
 file(GLOB DETOURS_GLOB ./libs/detours.lib)

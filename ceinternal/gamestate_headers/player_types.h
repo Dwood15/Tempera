@@ -43,7 +43,6 @@ struct s_local_player {
 	datum_index nearby_object_indexes[MAX_CUSTOM_BLIPS];
 }; STAT_ASSRT(s_local_player, 0x568);
 
-#define MOTION_SENSOR_LOCATION 0x6B44C8
 struct s_motion_sensor {
 	s_local_player local_players[MAX_PLAYER_COUNT_LOCAL];
 
