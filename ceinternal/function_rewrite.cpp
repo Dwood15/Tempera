@@ -37,51 +37,63 @@ namespace spcore {
 	static void**hud_scripted_globals = (void**)0x6B44A8;
 	static void**hud_messaging_state  = (void**)0x677624;
 
-	static s_motion_sensor*motion_sensor = *(s_motion_sensor**)0x6B44C8;
+	//static s_motion_sensor*motion_sensor = ;
 
 	namespace initializations {
+
+		//40000db0
 		void __inline adjustNPatch32(uintptr_t*loc, uint32 size) {
-			memory::patchValue<uint32>(loc[0] + 0x1, size);
-			memory::patchValue<uint32>(loc[1] + 0x1, size);
+			memory::patchValue<uint32>(loc[0], size);
+			memory::patchValue<uint32>(loc[1], size);
 		}
 
-		void patch_game_state_allocat_func() {
-			uintptr_t hud_scripted_globals_sizeofs[]          = { 0x4AC7A7, 0x4AC7AF };
-			uintptr_t hud_messaging_globals_sizeofs[]         = { 0x4AC7DC, 0x4AC7E6 };
-			uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B };
-			uintptr_t weapon_hud_globals_sizeofs[]            = { 0x4AC848, 0x4AC850 };
-			uintptr_t hud_interface_related_globals_sizeofs[] = { 0x4AC87D, 0x4AC885 };
-			uintptr_t motion_sensor_sizeofs[]                 = { 0x4AC8B2, 0x4AC8BC };
+		void __inline interface_initialize_patches() {
+			constexpr uintptr_t size_of_fp_weapons = 0x1EA0 * MAX_PLAYER_COUNT_LOCAL;
 
-			adjustNPatch32(hud_scripted_globals_sizeofs, 0x4);
-			adjustNPatch32(hud_messaging_globals_sizeofs, 0x488);
-			adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
-			adjustNPatch32(weapon_hud_globals_sizeofs, 0x7C);
-			adjustNPatch32(hud_interface_related_globals_sizeofs, 0x30);
-			adjustNPatch32(motion_sensor_sizeofs, 0x570);
+			uintptr_t fp_weap_initialize[] = { 0x497122, 0x49712F };
+
+			adjustNPatch32(fp_weap_initialize, size_of_fp_weapons);
+
+			//uintptr_t hud_scripted_globals_sizeofs[]          = { 0x4AC7A7, 0x4AC7AF };
+			uintptr_t hud_messaging_globals_sizeofs[] = { 0x4AC7DD, 0x4AC7EA };
+			uintptr_t hud_messaging_state             = 0x4AC936;
+//			static_assert(sizeof(s_hud_messaging_state)  == 0x122, "stat_assrt_fail: s hud msging state");
+			//memset , or rather, rep stosd assumes full integer (0x4) size in this case. thus, we
+			memory::patchValue<uintptr_t>(hud_messaging_state, sizeof(s_hud_messaging_state) / 4);
+			uintptr_t motion_sensor_sizeofs[]         = { 0x4AC8B3, 0x4AC8BC + 0x4 };
+
+//			Need to confirm these...
+//			uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
+//			uintptr_t weapon_hud_globals_sizeofs[]            = { 0x4AC848, 0x4AC850 + 0x4 };
+//			uintptr_t hud_interface_related_globals_sizeofs[] = { 0x4AC87D, 0x4AC885 + 0x4 };
+
+
+			//adjustNPatch32(hud_scripted_globals_sizeofs, 0x4);
+			//0x488 og size.
+			adjustNPatch32(hud_messaging_globals_sizeofs, sizeof(s_hud_messaging_state));
+//			adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
+//			adjustNPatch32(weapon_hud_globals_sizeofs, 0x7C);
+//			adjustNPatch32(hud_interface_related_globals_sizeofs, 0x30);
+			adjustNPatch32(motion_sensor_sizeofs, sizeof(s_motion_sensor));
 		}
 
-		void __cdecl motion_sensor_initialize_for_new_map() {
-			s_motion_sensor*motion_snsor_location = motion_sensor;
-			memset(motion_sensor, 0, sizeof(s_motion_sensor));
-			//auto * local_players = motion_snsor_location->local_players; // edx
-			for( int i = 0; i < MAX_PLAYER_COUNT_LOCAL; i++ ) {
-				for( int j = 0; j < k_number_of_game_teams; j++ ) {
-					for( int k = 0; k < MAX_CUSTOM_BLIPS; k++ ) {
-						motion_snsor_location->local_players[i].nearby_team_objects[j].object_blips[k].type = blip_type_none;
-					}
-				}
-			}
-		}
+//		void __cdecl motion_sensor_initialize_for_new_map() {
+//			s_motion_sensor * motion_snsor_location = (s_motion_sensor*)0x6B44C8;
+//			printf("Address @ motion sensor location: 0x08%x", *motion_snsor_location);
+//			s_motion_sensor *motion_sensor = (s_motion_sensor*)0x6B44C8;
+//			memset(motion_sensor, 0, sizeof(s_motion_sensor));
+//			//auto * local_players = motion_snsor_location->local_players; // edx
+//			for( int i = 0; i < MAX_PLAYER_COUNT_LOCAL; i++ ) {
+//				for( int j = 0; j < k_number_of_game_teams; j++ ) {
+//					for( int k = 0; k < MAX_CUSTOM_BLIPS; k++ ) {
+//						motion_snsor_location->local_players[i].nearby_team_objects[j].object_blips[k].type = blip_type_none;
+//					}
+//				}
+//			}
+//		}
 
 		int __fastcall interface_get_tag_index(short x) {
 			return -1;
-		}
-
-		void __cdecl interface_initialize_for_new_map() {
-			//I have no clue the actual contents of these structures yet, so we're guessing!
-			*hud_scripted_globals        = 0x0;
-			*(char*)hud_scripted_globals = 0x1;
 		}
 
 		void __cdecl scripted_hud_messages_clear() {
@@ -170,41 +182,31 @@ namespace spcore {
 	namespace memory {
 //		uintptr_t player_spawn = 0x47A9E0; Valid, just not using it yet.
 
-		void __inline patchHudMessagingUpdate() {
-
-			uintptr_t hud_messaging_update_jmp = 0x4B195A;
-
-			#pragma message("TODO: remove need for the hud_messaging_update_jmp noping.")
-			memory::patchValue<uint32>(hud_messaging_update_jmp, 0x90909090);
-		}
 
 		//Get_window_count patch locations
 #pragma region
 
 		void __inline patchRenderPlayerFrameClamp() {
-			{
-				constexpr uintptr_t render_player_frame_jg_patch = 0x50F5EB;
-				patchValue<short>(render_player_frame_jg_patch, (short)0x9090);
-				constexpr uintptr_t render_player_frame_cmp_patch = 0x50F5F0;
-				nopBytes(render_player_frame_cmp_patch, 0xA);
-			}
+			constexpr uintptr_t render_player_frame_jg_patch = 0x50F5EB;
+			patchValue<short>(render_player_frame_jg_patch, (short)0x9090);
+			constexpr uintptr_t render_player_frame_cmp_patch = 0x50F5F0;
+			nopBytes(render_player_frame_cmp_patch, 0xA);
 		}
 
 		void __inline patchRenderWindowCompares() {
-			patchRenderPlayerFrameClamp();
 			//TODO: CONFIRM FIXES FOR THE CMP'S IMMEDIATELY FOLLOWING THESE CALLS.
 			//interface_render
-			constexpr uintptr_t get_render_window_ct_patch_1   = 0x497584;
-			constexpr uintptr_t get_render_window_ct_patch_2   = 0x4975CB;
+			constexpr uintptr_t get_render_window_ct_patch_1 = 0x497584;
+			constexpr uintptr_t get_render_window_ct_patch_2 = 0x4975CB;
 
 			//Check_render_splitscreen
-			constexpr uintptr_t get_render_window_ct_patch_3   = 0x49792B;
+			constexpr uintptr_t get_render_window_ct_patch_3 = 0x49792B;
 
 			//rasterizer_detail_objects_begin
-			constexpr uintptr_t get_render_window_ct_patch_4   = 0x51EB05;
+			constexpr uintptr_t get_render_window_ct_patch_4 = 0x51EB05;
 
 			//rasterizer_detail_objects_rebuild_vertices
-			constexpr uintptr_t get_render_window_ct_patch_5   = 0x51EE05;
+			constexpr uintptr_t get_render_window_ct_patch_5 = 0x51EE05;
 
 			//_rasterizer_detail_objects_draw51EF90
 			//THIS ONE IS THE SAME AS XBOX BETA ALMOST.
@@ -229,11 +231,11 @@ namespace spcore {
 			GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, get_render_window_count_hook_3);
 			GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, get_render_window_count_hook_4);
 			GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, get_render_window_count_hook_5);
-
 		}
+
 #pragma endregion
 
-		inline void mem_patch_p1() {
+		void __inline mem_patch_p1() {
 			//			//Function call
 // 			signature: "8B 35 20 59 81 00 57 8B FA B9 .26 00 00 00 F3 AB 83 CF FF"
 			constexpr uintptr_t players_init_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
@@ -250,7 +252,7 @@ namespace spcore {
 			//"66 8B 41 0C 66 3D 01 00 7C EA .7F E8 0F BF C0 C3"
 			constexpr uintptr_t main_get_window_ct = 0x4CC5BA;
 
-			//"E8 4E 9A 01 00 .E8 69 7D 01 00 8B 15 44 C8 68 00"
+			//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
 			constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
 
 			//, "74 15 66 83 F9 .01 7D 0F 8B 15 18 59 81 00");
@@ -272,7 +274,7 @@ namespace spcore {
 			patchValue<byte>(main_game_render_patch, 0xEB);                //main_game_render's jle effectively clamps us to 1, so we just do unconditional jmp
 			patchValue<byte>(precache_new_map_max_spawn_ct_cmp, 0x7C);    //75 is jne, we're gonna replace it with jl.
 
-//patch bytes region
+			//patch bytes region
 			MPP_B(max_players_player_new_map);
 			MPP_B(find_unused_player_index_spawn);    //This patch MAY NOT be technically necessary but I'd rather have it documented than not.
 			MPP_B(get_player_input_blob_clamping_patch);
@@ -288,10 +290,13 @@ namespace spcore {
 
 			//Yep, this one's the real deal...
 			MPP_B(0x4CBBFC + 0x3, create_local_players_clamp);
+			MPP_B(0x4A04B0 + 0x1, coop_game_initialize);
+			MPP_B(0x4A0076, local_player_initialize_spawn_ct);
+			MPP_B(0x4A007E, local_player_initialize_window_ct);
 
 			//-- address is to the func(x) itself, not to to the patch
-//			constexpr uintptr_t render_weapon_hud_loc = 0x4B53E0
-//			MPP_B(render_weapon_hud_loc);
+			//constexpr uintptr_t render_weapon_hud_loc = 0x4B53E0
+			//MPP_B(render_weapon_hud_loc);
 
 			int real_address        = (int)&spcore::player_control::player_control_initialize_for_new_map;
 			int real_address_offset = ( real_address ) - ((int)player_control_init_new_map_hook );// + (int)4);
@@ -299,6 +304,11 @@ namespace spcore {
 			//Hooks
 			patchValue<uintptr_t>(((unsigned int)player_control_init_new_map_hook ), (unsigned int)( real_address_offset ) - 4);    //Gotta be able to loop over all the players + input devices, no?.
 
+			//Nothing wrong's with the hook, just the function itself.
+//			real_address        = (int)&initializations::motion_sensor_initialize_for_new_map;
+//			real_address_offset = ( real_address ) - ((int)0x4AC98E);																					// + (int)4);
+//
+//			patchValue<uintptr_t>(((unsigned int)0x4AC98E ), (unsigned int)( real_address_offset ) - 4);    								//Gotta be able to loop over all the players + input devices, no?.
 		}
 
 		void get_mem_and_patch() {
@@ -306,9 +316,12 @@ namespace spcore {
 			mem_patch_p1();
 
 			printf("Ran the OG get_mem_and_patches");
-
-			patchHudMessagingUpdate();
+			MPP_B(0x4B196A + 0x2, hud_messaging_update_clamp);
+			MPP_B(0x4B2787 + 0x3, hud_update_nav_point_local_player_clamp);
+			patchRenderPlayerFrameClamp();
 			patchRenderWindowCompares();
+			initializations::interface_initialize_patches();
+
 			insertRenderWindowCountHooks();
 		}
 	};

@@ -189,7 +189,7 @@ enum game_difficulty_level : short {
 	k_number_of_game_difficulty_levels
 };
 
-enum blip_type : char {
+enum blip_type : signed char {
 	blip_type_local_player,        //0x0    // 1, .5, 0
 	blip_type_friendly_team,       //0x1     // 1, 1, 0
 	blip_type_enemy_team,           //0x2     // 1, 0, 0
@@ -228,7 +228,7 @@ enum game_team : __int16 {
 	_game_team_unused8,
 	_game_team_unused9,
 
-	k_number_of_game_teams
+	k_number_of_game_teams = 10
 };
 #pragma endregion
 #pragma region objects

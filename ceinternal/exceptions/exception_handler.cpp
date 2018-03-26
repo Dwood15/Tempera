@@ -1,7 +1,6 @@
 /*
  * Insert GPLv3 license
  */
-
 #pragma once
 
 #include "exception_handler.h"
@@ -10,21 +9,17 @@
 #if defined(_MSC_VER)
 static volatile DWORD ExceptionCount = 0;
 
-void DUMP_INT_REGISTERS(PCONTEXT context) {
-	DEBUG("Edi 0x%X", context->Edi);
-	DEBUG("Esi 0x%X", context->Esi);
-	DEBUG("Ebx 0x%X", context->Ebx);
-	DEBUG("Edx 0x%X", context->Edx);
-	DEBUG("Ecx 0x%X", context->Ecx);
-	DEBUG("Eax 0x%X", context->Eax);
+const void DUMP_INT_REGISTERS(PCONTEXT context) {
+	DEBUG("\tEdi 0x%08X  Esi 0x%08X  Ebx 0x%08X  Edx 0x%08X  Ecx 0x%08X  Eax 0x%08X", context->Edi, context->Esi, context->Ebx, context->Edx, context->Ecx, context->Eax);
+}
+
+const void DUMP_STK_REGISTERS(PCONTEXT context) {
+	DEBUG("\tEbp 0x%08X Eip 0x%08X Esp 0x%08X", context->Ebp, context->Eip, context->Esp);
 }
 
 const void DUMP_REGISTERS(PCONTEXT context) {
-	switch(context->ContextFlags) {
-		case CONTEXT_INTEGER: DUMP_INT_REGISTERS(context);
-		case CONTEXT_EXTENDED_REGISTERS: DUMP_INT_REGISTERS(context);
-		default: DUMP_INT_REGISTERS(context);
-	}
+	DUMP_INT_REGISTERS(context);
+	DUMP_STK_REGISTERS(context);
 }
 
 const char*seDescription(const DWORD &code) {
@@ -55,24 +50,24 @@ const char*seDescription(const DWORD &code) {
 
 LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS*ExceptionInfo) {
 	ExceptionCount++;
-	//Yes, this is shitty, I KNOW.
-	Sleep(ExceptionCount * 2);
+	//Yes, this is shitty, I know.
+	Sleep(ExceptionCount * 4);
 	#define eirecord ExceptionInfo->ExceptionRecord
 
 	auto eCode = eirecord->ExceptionCode;
 	DEBUG("Error Code: 0x%X :: Type: %s @ 0x%X\n", eCode, seDescription(eCode), eirecord->ExceptionAddress);
 	auto info = eirecord->ExceptionRecord;
 	if( info != 0x0 ) {
-		DEBUG("Got a nested Exception! Err Code: 0x%X", info->ExceptionCode);
+		DEBUG("Got a nested Exception! Err Code: 0x%X\n", info->ExceptionCode);
 	}
 
-	DUMP_REGISTERS(ExceptionInfo->ContextRecord);
-
 	if( ExceptionCount < MAX_EXCEPTIONS_TO_LOG ) {
-		if( ExceptionCount > MAX_EXCEPTIONS_TO_LOG * 2 ) {
-			printf("Above the exception count max, should be failing right about... now.");
-			return FAIL_FAST_GENERATE_EXCEPTION_ADDRESS;
-		}
+		DUMP_REGISTERS(ExceptionInfo->ContextRecord);
+		printf("Exception Getting handled!!!");
+	} else if( ExceptionCount > MAX_EXCEPTIONS_TO_LOG * 2 ) {
+
+		printf("Above the exception count max, should be failing right about... now.");
+		return FAIL_FAST_GENERATE_EXCEPTION_ADDRESS;
 	}
 
 	return EXCEPTION_CONTINUE_EXECUTION;

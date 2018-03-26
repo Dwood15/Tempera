@@ -230,7 +230,8 @@ file(GLOB FIX_CLIENT_G
 	 ./client/fix/magnetism_fix.cpp
 	 ./client/fix/scope_fix.cpp
 	 ./client/fix/sniper_hud.cpp
-	 ./client/fix/widescreen_fix.cpp)
+	 ./client/fix/widescreen_fix.cpp
+	 )
 
 file(GLOB HAC2_INJECT_G ./code_injection/hacclient/codefinder.cpp)
 file(GLOB INTERPOL_CLIENT_G
@@ -247,7 +248,7 @@ file(GLOB DETOURS_GLOB ./libs/detours.lib)
 file(GLOB CAPSTONE_STATIC_GLOB ./libs/capstone_static.lib)
 
 if (MSVC)
-	set(LINKER_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ASSEMBLYDEBUG\ /ALIGN:1") #rip alignment on win32
+	set(LINKER_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ASSEMBLYDEBUG\ ") #rip alignment on win32
 	set(CMAKE_SHARED_LINKER_FLAGS ${LINKER_FLAGS})
 
 elseif (NOT MSVC)

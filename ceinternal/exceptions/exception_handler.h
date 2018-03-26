@@ -16,7 +16,7 @@
 
 static void*h;
 
-void DUMP_INT_REGISTERS(PCONTEXT context);
+const void DUMP_INT_REGISTERS(PCONTEXT context);
 
 const char*seDescription(const DWORD &code);
 

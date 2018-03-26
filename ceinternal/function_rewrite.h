@@ -25,31 +25,33 @@ namespace spcore {
 	extern unsigned int game_state_cpu_allocation;
 	extern unsigned int game_state_location_as_int;
 
-	struct S_scripted_hud_messages {
-		char unk[0x8C];
+	struct s_player_hud_messages {
+		byte unk[0x460];
 	};
+	STAT_ASSRT(s_player_hud_messages, 0x460);
 
-	struct s_hud_messaging_state {
-		S_scripted_hud_messages hmi[4];
-	};
+	struct s_hud_messaging_state { ;
+		s_player_hud_messages hmi[MAX_PLAYER_COUNT_LOCAL];
+		byte unknown[0x28];
+	};   STAT_ASSRT(s_hud_messaging_state, 0x28 + (0x460 * MAX_PLAYER_COUNT_LOCAL));
 
-	//this _fucking_ struct.
+//this _fucking_ struct.
 //	struct s_hud_message_state_player {
 //		char unk[0x82];
 //		s_hud_messaging_state scripted_hud_messages[4];
 //	}; STAT_ASSRT(s_hud_message_state_player, 0x)
 
-	extern void **crc_checksum_buffer;
-	extern void **hud_scripted_globals;
-	extern void **hud_messaging_state;
-	extern s_players_globals_data * players_globals;
+	extern void                  **crc_checksum_buffer;
+	extern void                  **hud_scripted_globals;
+	extern void                  **hud_messaging_state;
+	extern s_players_globals_data*players_globals;
 
-	extern s_motion_sensor *motion_sensor;
+	extern s_motion_sensor*motion_sensor;
 
 	namespace initializations {
-		void __inline adjustNPatch32(uintptr_t *loc, uint32 size);
+		void __inline adjustNPatch32(uintptr_t*loc, uint32 size);
 
-		void patch_game_state_allocat_func();
+		void __inline patch_game_state_allocat_func();
 
 		void __cdecl motion_sensor_initialize_for_new_map();
 
@@ -58,7 +60,6 @@ namespace spcore {
 		void __cdecl interface_initialize_for_new_map();
 
 		void __cdecl scripted_hud_messages_clear();
-
 
 	};
 	namespace rendering {
@@ -110,7 +111,6 @@ namespace spcore {
 		template<typename T>
 		constexpr void patchValue(uintptr_t to_patch, T replace_with);
 	};
-
 
 };
 #endif
