@@ -23,6 +23,7 @@
 #ifndef TAGS_H
 #define TAGS_H
 
+#include "../../shitty_macros.h"
 #include "halo_types.h"
 #include "map.h"
 

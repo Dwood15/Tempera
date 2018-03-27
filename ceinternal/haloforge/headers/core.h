@@ -123,7 +123,7 @@ template <typename T> struct data_header
 	short last_index;
 	ident next;			// the next <thing> to be initialized
 	T* first;			// Pointer to the first <thing> class instance
-};
+}; STAT_ASSRT(data_header<void>, 0x38);
 struct lruv_cache
 {
 	char name[32];

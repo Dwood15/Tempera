@@ -1,3 +1,6 @@
+/**
+ * GPLv3
+ */
 #pragma once
 #ifndef shitty_macros
 #define shitty_macros
@@ -68,7 +71,7 @@ STAT_ASSRT(double, 0x8);
 
 #pragma region maximums
 #ifndef MAX_PLAYER_COUNT_LOCAL
-#define MAX_PLAYER_COUNT_LOCAL      2
+#define MAX_PLAYER_COUNT_LOCAL      1
 #endif
 #ifndef MAX_PLAYERS_IN_GAME
 #define MAX_PLAYERS_IN_GAME         16
