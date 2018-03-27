@@ -71,6 +71,9 @@ int __stdcall hkMain() {
 			DEBUG("Updating to_respawn: %d\n");
 		}
 
+		Sleep(45);
+		continue;
+
 		if( GetAsyncKeyState(VK_F1) & 1 ) {
 			dumpPlayerGlobalsData();
 
@@ -147,7 +150,6 @@ int __stdcall hkMain() {
 			core->ObjectControl->holding = false;
 		}
 
-		Sleep(45);
 
 //		TODO: Get this working properly.
 // 	MSG msg;

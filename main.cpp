@@ -16,13 +16,11 @@ static inline void init(HMODULE reason) {
 	InitAddLog(reason);
 	loaded = true;
 	spcore::initCEI(reason);
-	//initialize_client();
 }
 
 static inline void detach() {
 	loaded = false;
 	spcore::unload();
-//    uninitialize_client();
 	ExitAddLog();
 	RemoveVectoredExceptionHandler(h);
 }

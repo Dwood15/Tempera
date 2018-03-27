@@ -9,7 +9,7 @@ namespace spcore {
 		if (::AllocConsole() != 0) {
 			freopen_s(&debug_out, "CONOUT$", "w", stdout);
 		}
-		printf("init_for_new_map_overwrite addr: 0x%x\n", 0xBEEF);//init_for_new_map_overwrite);
+//		printf("init_for_new_map_overwrite addr: 0x%x\n", 0xBEEF);//init_for_new_map_overwrite);
 
 		DWORD old;
 		VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);

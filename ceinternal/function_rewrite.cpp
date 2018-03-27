@@ -61,7 +61,7 @@ namespace spcore {
 //			static_assert(sizeof(s_hud_messaging_state)  == 0x122, "stat_assrt_fail: s hud msging state");
 			//memset , or rather, rep stosd assumes full integer (0x4) size in this case. thus, we
 			memory::patchValue<uintptr_t>(hud_messaging_state, sizeof(s_hud_messaging_state) / 4);
-			uintptr_t motion_sensor_sizeofs[]         = { 0x4AC8B3, 0x4AC8BC + 0x4 };
+			uintptr_t motion_sensor_sizeofs[] = { 0x4AC8B3, 0x4AC8BC + 0x4 };
 
 //			Need to confirm these...
 //			uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
@@ -181,12 +181,9 @@ namespace spcore {
 	}
 
 	namespace memory {
-//		uintptr_t player_spawn = 0x47A9E0; Valid, just not using it yet.
-
-
+//		uintptr_t player_spawn = 0x47A9E0; Valid, just not using it...
 		//Get_window_count patch locations
 #pragma region
-
 		void __inline patchRenderPlayerFrameClamp() {
 			constexpr uintptr_t render_player_frame_jg_patch = 0x50F5EB;
 			patchValue<short>(render_player_frame_jg_patch, (short)0x9090);
@@ -222,17 +219,12 @@ namespace spcore {
 		}
 
 		void __inline insertRenderWindowCountHooks() {
-			constexpr uintptr_t get_render_window_count_hook_1 = 0x49757D;
-			constexpr uintptr_t get_render_window_count_hook_2 = 0x4975C4;
-			constexpr uintptr_t get_render_window_count_hook_3 = 0x49792B;
-			constexpr uintptr_t get_render_window_count_hook_4 = 0x51EB00;
-			constexpr uintptr_t get_render_window_count_hook_5 = 0x51EE00;
-
-			GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, get_render_window_count_hook_1);
-			GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, get_render_window_count_hook_2);
-			GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, get_render_window_count_hook_3);
-			GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, get_render_window_count_hook_4);
-			GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, get_render_window_count_hook_5);
+			//TODO: Descriptions. lol.
+			int render_window_count_hook_location_1 = GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, 0x49757D);
+			int render_window_count_hook_location_2 = GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, 0x4975C4);
+			int render_window_count_hook_location_3 = GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, 0x49792B);
+			int render_window_count_hook_location_4 = GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, 0x51EB00);
+			int render_window_count_hook_location_5 = GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, 0x51EE00);
 		}
 
 		void __inline patchSetLocalPlayer() {
@@ -243,49 +235,43 @@ namespace spcore {
 #pragma endregion
 
 		void __inline mem_patch_p1() {
-			//			//Function call
+			//Function call
 // 			signature: "8B 35 20 59 81 00 57 8B FA B9 .26 00 00 00 F3 AB 83 CF FF"
-			constexpr uintptr_t players_init_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
+			constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
+			//Relying on sizeof allows us to redefine MAX_PLAYER variables/defines
+			patchValue<int>(players_initialize_for_new_map_overwrite, sizeof(s_players_globals_data));
 
 			//"E8 64 85 FE FF 66 83 3D 9C 4A 62 00 01 .75 3C A1 1C FE 6A 00"
 			constexpr uintptr_t precache_new_map_max_spawn_ct_cmp = 0x45B8D4;
+			patchValue<byte>(precache_new_map_max_spawn_ct_cmp, 0x7C);    //75 is jne, we're gonna replace it with jl.
 
-			//, "90 39 1C B1 74 0A 46 83 FE .01 7C F5 5E 5B 59 C3");
-			constexpr uintptr_t max_players_player_new_map = 0x4764E8;
-
-			//, "46 83 FE .04 7C F1 8B C7 5F 5E C3 5F 8B C6 5E C3");
-			constexpr uintptr_t find_unused_player_index_spawn = 0x476333;
-
-			//"66 8B 41 0C 66 3D 01 00 7C EA .7F E8 0F BF C0 C3"
-			constexpr uintptr_t main_get_window_ct = 0x4CC5BA;
-
-			//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
-			constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
-
-			//, "74 15 66 83 F9 .01 7D 0F 8B 15 18 59 81 00");
-			constexpr uintptr_t get_player_input_blob_clamping_patch                     = 0x473C86;
-			constexpr uintptr_t player_ui_get_single_player_local_player_from_controller = 0x498470;
+			//0x476200
+			static_assert(sizeof(s_player_control_globals_data) < (unsigned int)0xFF);
+			MPP_ARB(0x476200, (byte)sizeof(s_player_control_globals_data), players_initialize_sizeof_a_patch);
+			MPP_ARB(0x47620A, sizeof(s_player_control_globals_data));
 
 			//"33 C0 83 F9 FF 74 05 B8 .01 00 00 00 66 89 46 0C");
 			constexpr uintptr_t pub_server_patch = 0x477115;
-
-			//"FF FF FF 7D 05 89 75 F4 EB 0D .7E 05 89 75 F4 EB");
-			constexpr uintptr_t main_game_render_patch = 0x4CC61A;
-
-			//Relying on sizeof allows us to redefine MAX_PLAYER variables/defines
-			patchValue<int>(players_init_for_new_map_overwrite, sizeof(s_players_globals_data));
 			patchValue<int>(pub_server_patch, MAX_PLAYER_COUNT_LOCAL);  //max_player_count_local_patch
+
+			//"66 8B 41 0C 66 3D 01 00 7C EA .7F E8 0F BF C0 C3"
+			constexpr uintptr_t main_get_window_ct = 0x4CC5BA;
 			patchValue<short>(main_get_window_ct, (short)0x9090);                //We nop the greater than count so we actually get the proper window renderings.
 
-			//Byte Patches
+			//"FF FF FF 7D 05 89 75 F4 EB 0D .7E 05 89 75 F4 EB"
+			constexpr uintptr_t main_game_render_patch = 0x4CC61A;
 			patchValue<byte>(main_game_render_patch, 0xEB);                //main_game_render's jle effectively clamps us to 1, so we just do unconditional jmp
-			patchValue<byte>(precache_new_map_max_spawn_ct_cmp, 0x7C);    //75 is jne, we're gonna replace it with jl.
 
 			//patch bytes region
-			MPP_B(max_players_player_new_map);
-			MPP_B(find_unused_player_index_spawn);    //This patch MAY NOT be technically necessary but I'd rather have it documented than not.
-			MPP_B(get_player_input_blob_clamping_patch);
-			MPP_B(player_ui_get_single_player_local_player_from_controller);
+			//"90 39 1C B1 74 0A 46 83 FE .01 7C F5 5E 5B 59 C3"
+			MPP_B(0x4764E8, max_players_player_new_map);
+
+			//"46 83 FE .04 7C F1 8B C7 5F 5E C3 5F 8B C6 5E C3"
+			MPP_B(0x476333, find_unused_player_index_spawn);    //This patch MAY NOT be technically necessary but I'd rather have it documented than not.
+
+			//, "74 15 66 83 F9 .01 7D 0F 8B 15 18 59 81 00");
+			MPP_B(0x473C86, get_player_input_blob_clamping_patch);
+			MPP_B(0x498470, player_ui_get_single_player_local_player_from_controller);
 
 			//Still deciding if I like this macro and it's format or not.
 			MPP_B(0x4476EF + 0x2, first_person_camera_update_clamp_patch);
@@ -306,13 +292,15 @@ namespace spcore {
 			//constexpr uintptr_t render_weapon_hud_loc = 0x4B53E0
 			//MPP_B(render_weapon_hud_loc);
 
-			int real_address        = (int)&spcore::player_control::player_control_initialize_for_new_map;
-			int real_address_offset = ( real_address ) - ((int)player_control_init_new_map_hook );// + (int)4);
+			//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
+			constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
+			int                 real_address                     = (int)&spcore::player_control::player_control_initialize_for_new_map;
+			int                 real_address_offset              = ( real_address ) - ((int)player_control_init_new_map_hook );// + (int)4);
 			printf("Calculated - 4 offset: 0x%x\n", real_address_offset - 4);
 			//Hooks
 			patchValue<uintptr_t>(((unsigned int)player_control_init_new_map_hook ), (unsigned int)( real_address_offset ) - 4);    //Gotta be able to loop over all the players + input devices, no?.
 
-			//Nothing wrong's with the hook, just the function itself.
+			//Nothing wrong's with the hook, just the function.
 //			real_address        = (int)&initializations::motion_sensor_initialize_for_new_map;
 //			real_address_offset = ( real_address ) - ((int)0x4AC98E);																					// + (int)4);
 //

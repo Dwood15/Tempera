@@ -12,6 +12,19 @@ typedef bool reBoolGivenShort(short);
 #pragma pack(1)
 namespace obj {
 	namespace Memory {
+		struct s_header_data {
+			uint32     allocation_crc;
+			char       level[256];
+			tag_string version;
+			short      player_spawn_count;
+			short      game_difficulty;
+			uint32     cache_crc;
+
+			//Also known as YELO//Open Saucey territory.
+			sbyte               _unused[32];
+
+		}; STAT_ASSRT(s_header_data, 0x14C);
+
 		struct s_memory_pool_block {
 			typedef void **reference_t;
 

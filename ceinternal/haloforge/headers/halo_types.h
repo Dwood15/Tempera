@@ -1,7 +1,7 @@
 /*
 	Project: haloforge
 	File: halo_types.h
-	Copyright © 2009 SilentK, Abyll
+	Copyright ï¿½ 2009 SilentK, Abyll
 
 	This file is part of haloforge.
 
