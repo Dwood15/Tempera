@@ -32,6 +32,11 @@
 #include "../shitty_header_ports.h"
 
 static short last_respawn_count = 0x0;
+static short last_spawn_count   = 0x0;
+
+static short*to_respawn_count = (short*)0x6B4802;
+static short*spawn_count      = (short*)0x624A9C;
+bool        *at_main_menu     = (bool*)0x6B4051;
 
 typedef int retIntGivenVoid(void);
 
@@ -43,15 +48,17 @@ static void dumpPlayerGlobalsData() {
 	int                          unused_plyr_idx                 = find_unused_local_player_index();
 	static s_players_globals_data*players_global_data            = *(s_players_globals_data**)0x815918;
 
-	core->ConsoleText(hGreen, "Unused Player Index: %d", unused_plyr_idx);
+	if( !*at_main_menu ) {
+		core->ConsoleText(hGreen, "First unused player Idx: %d", unused_plyr_idx);
+		printf("unused_after_initialize_unk %d\n", players_global_data->unused_after_initialize_unk);
+		printf("local_player_count: %d\n", players_global_data->local_player_count);
+		printf("double speed tix remaining: %d\n", players_global_data->double_speed_ticks_remaining);
+		printf("Are all dead?: %d\n", players_global_data->are_all_dead);
+		printf("Input disabled: %d\n", players_global_data->input_disabled);
+		printf("BSP switch trigger: %d\n", players_global_data->_bsp_switch_trigger_idx);
+	}
 
-	printf("unused_after_initialize_unk %d\n", players_global_data->unused_after_initialize_unk);
-	printf("local_player_count: %d\n", players_global_data->local_player_count);
-	printf("double speed tix remaining: %d\n", players_global_data->double_speed_ticks_remaining);
-	printf("Are all dead?: %d\n", players_global_data->are_all_dead);
-	printf("Input disabled: %d\n", players_global_data->input_disabled);
-	printf("BSP switch trigger: %d\n", players_global_data->_bsp_switch_trigger_idx);
-
+	DEBUG("First unused player Idx: %d", unused_plyr_idx);
 	DEBUG("unused_after_initialize_unk %d\n", players_global_data->unused_after_initialize_unk);
 	DEBUG("local_player_count: %d\n", players_global_data->local_player_count);
 	DEBUG("double speed tix remaining: %d\n", players_global_data->double_speed_ticks_remaining);
@@ -65,32 +72,49 @@ int __stdcall hkMain() {
 	SetCore(core);
 	cd3d.hkD3DHook(NULL);
 
+	Sleep(120);
+	PrintHelp();
+
 	while(1) {
-		short to_respawn_count = *(short*)0x6B4802;
-		if( last_respawn_count != to_respawn_count ) {
-			DEBUG("Updating to_respawn: %d\n");
+		Sleep(30);
+
+		if( last_respawn_count != *to_respawn_count ) {
+			DEBUG("Number of people to respawn from: %d to: %d\n", last_respawn_count, *to_respawn_count);
+			last_respawn_count = *to_respawn_count;
 		}
 
-		Sleep(45);
-		continue;
+		if( last_spawn_count != *spawn_count ) {
+			DEBUG("Updated number players to spawn from: %d to: %d\n", last_spawn_count, *spawn_count);
+			last_spawn_count = *spawn_count;
+		}
 
 		if( GetAsyncKeyState(VK_F1) & 1 ) {
+			if( *at_main_menu ) {
+				*(short*)0x624A9C = (short)0x2;
+				core->ConsoleText(hGreen, "Set Number players to spawn in next map: 2!");
+			}
+		} else if( GetAsyncKeyState(VK_F2) & 1 ) {
 			dumpPlayerGlobalsData();
 
-		} else if( GetAsyncKeyState(VK_F5) & 1 ) {
+		} else if( GetAsyncKeyState(VK_F11) & 1 ) {
+			PrintHelp();
+			continue;
+		}
+
+		if( *at_main_menu ) {
+			continue;
+		}
+
+		if( GetAsyncKeyState(VK_F5) & 1 ) {
 
 			core->ObjectControl->LogInfo();
-
-		} else if( GetAsyncKeyState(VK_F4) & 1 ) {
-
-			core->ConsoleCMD((char*)"debug_camera_save");
 
 		} else if( GetAsyncKeyState(VK_F6) & 1 ) { // Change the object's sector
 
 			if( core->ObjectControl->selected_h == NULL || (int)core->ObjectControl->selected_h == -1 ) {
 
-				core->ConsoleText(hBlue, "Could not select an object; Player sector: %d\n\tSend live_projekt log to Dwood + relevant details.", core->GetPlayer(0)->Sector);
-				DEBUG("player sector: %d", core->GetPlayer(0)->Sector);
+				core->ConsoleText(hRed, "Could not select an object; Player sector: %d\n\tSend log to Dwood.", core->GetPlayer(0)->Sector);
+				DEBUG("Unable to select object, player sector: %d", core->GetPlayer(0)->Sector);
 
 			} else {
 
@@ -98,16 +122,14 @@ int __stdcall hkMain() {
 				core->ObjectControl->selected_h->sector = (short)core->GetPlayer((short)0)->Sector;
 
 			}
-		} else
-
-		if( GetAsyncKeyState(VK_UP)) {
+		} else if( GetAsyncKeyState(VK_UP)) {
 			// Object MOVE away.
-			core->ObjectControl->HoldDistance += 0.03f;
+			core->ObjectControl->HoldDistance += 0.06f;
 
 		} else if( GetAsyncKeyState(VK_DOWN)) {
 			// Object MOVE closer
-			if( core->ObjectControl->HoldDistance > 0.0f) {
-				core->ObjectControl->HoldDistance -= 0.03f;
+			if( core->ObjectControl->HoldDistance > 0.07f ) {
+				core->ObjectControl->HoldDistance -= 0.06f;
 			}
 
 		} else if( GetAsyncKeyState(VK_SHIFT) & 1 ) {
@@ -116,40 +138,39 @@ int __stdcall hkMain() {
 			// for choosing the 'selected' object: aka the one closest to where we're aiming. Nearest is already set from the D3Dhook
 			if((int)core->ObjectControl->selected_h != -1 ) {
 
-				core->ConsoleText(hGreen, "Removing selection! - Press Shift again to reselect.");
 				core->ObjectControl->selected_h = (object_header*)-1;
+				core->ConsoleText(hGreen, "Removed selection. SHIFT to select.");
 
 			} else {
 
-				core->ConsoleText(hGreen, "Setting selected! - Press Shift again to deselect.");
+				core->ConsoleText(hGreen, "Added single selection. SHIFT to deselect.");
 				core->ObjectControl->selected_h = core->ObjectControl->nearest_h;
 
 			}
 		} else if( !core->ObjectControl->holding && ( GetAsyncKeyState(VK_LBUTTON) & 0x8000 )) { // XY plane
 			//left mouse button
 			if((int)core->ObjectControl->selected_h != -1 ) {
-
 				core->ObjectControl->MoveObjXY();
 
 			}
-			continue;
 		} else if(( GetAsyncKeyState(VK_RBUTTON) & 0x8000 )) {    // STRAIGHT in front of camera plane.
 			//Right mouse button
-			if( !core->ObjectControl->holding ) {
+			if( core->ObjectControl->selected_h != NULL &&  core->ObjectControl->selected_h != (object_header*)-1 && core->ObjectControl->selected_h )
 
-				core->ObjectControl->holding = true;
-				core->ConsoleText(hBlue, "Got set holding = true");
-
-			}
-
-			core->ObjectControl->MoveObjFront();
-			continue;
-
-		} else if( !( GetAsyncKeyState(VK_RBUTTON)) && core->ObjectControl->holding ) {
-			core->ConsoleText(hBlue, "Got set holding = false");
-			core->ObjectControl->holding = false;
+				if( core->ObjectControl->holding ) {
+					core->ObjectControl->MoveObjFront();
+				} else {
+					core->ObjectControl->holding = true;
+					core->ConsoleText(hBlue, "Got set holding = true");
+				}
 		}
+		else if( !( GetAsyncKeyState(VK_RBUTTON)) && core->ObjectControl->holding ) {
+		core->ConsoleText(hBlue, "Got set holding = false");
+		core->ObjectControl->holding = false;
+	}
+}
 
+}
 
 //		TODO: Get this working properly.
 // 	MSG msg;
@@ -173,5 +194,4 @@ int __stdcall hkMain() {
 //				DEBUG("other: %d", msg.message);
 //			}
 //		}
-	}
-}
+

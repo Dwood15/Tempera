@@ -28,8 +28,9 @@
 #include <fstream>
 //using namespace std;
 
-#define LOGNAME "live_projekt.log"
+#define LOGNAME "tempera_dbg_log.log"
 
+void PrintHelp();
 const void __cdecl DEBUG(const char* fmt, ...);
 char *GetDirectoryFile(char* filename);
 void InitAddLog(HMODULE hModule);

@@ -9,8 +9,16 @@
 #include <Windows.h>
 #include <dbghelp.h>
 
+
+
+#include "../memory_map/memorymap.h"
+
+#ifndef clion_not_be_dumb
+	#pragma message("eyo there poppet")
+#endif
+
 #define MAX_EXCEPTIONS_TO_LOG 5
-//Call the exception handler first.
+
 //Try to let the game handle the exception first...
 #define CALL_FIRST 0
 

@@ -79,7 +79,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "./bin/${COMPILER_REL_FLDR}-debug")
 elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
 	if ($ENV{CLION_IDE})
-		message(STATUS "convenience exit function for CLion building")
+		message(STATUS "convenience hack for making CLion less annoying.")
 		return()
 	endif ()
 	set(OUTPUT_DIR ./bin/${COMPILER_REL_FLDR}-Release)
@@ -117,9 +117,10 @@ set(HALOFORGE_H ./ceinternal/haloforge/headers/addlog.h
 	./ceinternal/haloforge/headers/players.h
 	./ceinternal/haloforge/Direct3D/textures.h
 	./ceinternal/haloforge/Direct3D/d3d9hook.h
+	./ceinternal/haloforge/headers/forgeMain.h
 	)
 
-set(CEINTERNAL_H
+set(CEINTERNAL_H ${HALOFORGE_H}
 	./ceinternal/ce_base_types.h
 	./ceinternal/shitty_tag_data_defs.h
 	./ceinternal/shitty_enums.h
@@ -127,6 +128,7 @@ set(CEINTERNAL_H
 	./ceinternal/shitty_macros.h
 	./ceinternal/shitty_header_ports.h
 	./ceinternal/exceptions/exception_handler.h
+	./ceinternal/memory_map/memorymap.h
 	)
 
 set(HALOFORGE_CPP

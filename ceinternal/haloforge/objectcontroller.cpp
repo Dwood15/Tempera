@@ -49,10 +49,10 @@ void ObjectController::MoveObjXY() {
 
 void ObjectController::MoveObjFront() {
 	if( selected_h == NULL ) {
-		core->ConsoleText(hRed, "Didn't grab anything - selected_h is null");
+		core->ConsoleText(hRed, "Didn't grab anything: nothing has been selected!");
 		return;
 	} else if( selected_h->address == NULL ) {
-		core->ConsoleText(hRed, "Didn't grab anything - selected_h->address is null");
+		core->ConsoleText(hRed, "Didn't grab anything: last selected object's address is null");
 		return;
 	}
 
@@ -70,8 +70,9 @@ void ObjectController::MoveObjFront() {
 }
 
 void ObjectController::LogInfo() {
-	if( selected_h == NULL || selected_h->address == NULL )
+	if( selected_h == NULL || selected_h->address == NULL ) {
 		return;
-	DEBUG("\n%s", core->GetObjectName(selected_h->address));
+	}
+	core->ConsoleText(hBlue, "Selected object name: %s", core->GetObjectName(selected_h->address));
 	core->MyCamera->ScreenPos(selected_h->address->World, true);
 }
