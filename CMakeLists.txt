@@ -41,49 +41,49 @@ include_directories(BEFORE ${DirectX_INCLUDE_DIRS})
 message(STATUS "DX include Dirs: ${DirectX_INCLUDE_DIRS}")
 
 # Defines Release by default.
-if (NOT CMAKE_BUILD_TYPE)
+if(NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Release")
 	message(STATUS "Build type not specified: Using Release by default.")
-endif (NOT CMAKE_BUILD_TYPE)
+endif(NOT CMAKE_BUILD_TYPE)
 
 add_definitions(-D_WINDOWS -D_USRDLL)
-if (MINGW)
-	if ($ENV{CLION_IDE})
+if(MINGW)
+	if($ENV{CLION_IDE})
 		#convenience function for CLion.
 		return()
-	endif ()
+	endif()
 
 	message(STATUS "Mingw detected.")
 	set(COMPILER_REL_FLDR mingw)
 	set(CMAKE_CXX_FLAGS "-std=c++17\ -fpermissive")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS}\ -g\ -m32\ -masm=intel")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g -m32 -masm=intel")
-elseif (MSVC)
+elseif(MSVC)
 	#vc++ 2017 toolset. Available from microsoft here: http://landinghub.visualstudio.com/visual-cpp-build-tools
-	if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.16299.0")
+	if(NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.16299.0")
 		#message(WARNING "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION is empty! Could not find applicable windows 10 sdk.")
 		set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION 10.0.16299.0)
 		#TODO: CHECK FOR AVAILABLE SDK VERSIONS IF NONE SET
-	endif ()
+	endif()
 
 	set(COMPILER_REL_FLDR msvc)
 	set(CMAKE_C_FLAGS '')
 	set(CMAKE_CXX_FLAGS /std:c++latest\ /MTd\ )
 	set(CMAKE_CXX_FLAGS_DEBUG "/MTd\ /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast\ /std:c++latest\ /arch:SSE2 /D\ \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\"\ /D_CRT_SECURE_NO_WARNINGS")
-else ()
+else()
 	message(FATAL_ERROR "Unrecognized compiler/suite: ${CMAKE_CXX_COMPILER_ID}")
-endif ()
+endif()
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-#DO DEBUG STUFF HERE
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	#DO DEBUG STUFF HERE
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "./bin/${COMPILER_REL_FLDR}-debug")
-elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
-	if ($ENV{CLION_IDE})
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+	if($ENV{CLION_IDE})
 		message(STATUS "convenience hack for making CLion less annoying.")
 		return()
-	endif ()
+	endif()
 	set(OUTPUT_DIR ./bin/${COMPILER_REL_FLDR}-Release)
-endif ()
+endif()
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_DIR}/ar")
 
@@ -97,55 +97,65 @@ file(GLOB LUA_C "./client/lua/lua/*.c")
 
 #TODO: REMOVE THIS STUFF BEFORE PUBLISHING
 set(GAMEMAP_H
-	./ceinternal/haloforge/game_map/bsp.h
-	./ceinternal/haloforge/game_map/halo_types.h
-	./ceinternal/haloforge/game_map/map.h
-	./ceinternal/haloforge/game_map/scenario.h
-	./ceinternal/haloforge/game_map/tags.h
+	./gamestate/objects.h
+	./headers/colors.h
+	tags/bsp.h
+	./gamestate/halo_types.h
+	tags/map.h
+	tags/tags.h
 	)
 
-set(HALOFORGE_H ./ceinternal/haloforge/headers/addlog.h
-	./ceinternal/haloforge/headers/blam.h
-	./ceinternal/haloforge/headers/camera.h
-	./ceinternal/haloforge/headers/core.h
-	./ceinternal/haloforge/headers/detours.h
-	./ceinternal/haloforge/headers/halo_types.h
-	./ceinternal/haloforge/headers/forgeMain.h
-	./ceinternal/haloforge/headers/math.h
-	./ceinternal/haloforge/headers/objectcontroller.h
-	./ceinternal/haloforge/headers/objects.h
-	./ceinternal/haloforge/headers/players.h
-	./ceinternal/haloforge/Direct3D/textures.h
-	./ceinternal/haloforge/Direct3D/d3d9hook.h
-	./ceinternal/haloforge/headers/forgeMain.h
+set(TAGS_H
+	tags/scenario.h
+	tags/map.h
+	tags/bsp.h
+	tags/tags.h
+	)
+
+set(HALOFORGE_H
+	${TAGS_H} ${GAMEMAP_H}
+	./haloforge/headers/addlog.h
+	./haloforge/headers/blam.h
+	./haloforge/headers/camera.h
+	./haloforge/headers/core.h
+	./haloforge/headers/detours.h
+	./haloforge/headers/forge.h
+	./haloforge/headers/math.h
+	./haloforge/headers/objectcontroller.h
+	./haloforge/headers/objects.h
+	./haloforge/headers/players.h
+	./Direct3D/textures.h
+	./Direct3D/d3d9hook.h
+	haloforge/headers/forge.h
 	)
 
 set(CEINTERNAL_H ${HALOFORGE_H}
-	./ceinternal/ce_base_types.h
-	./ceinternal/shitty_tag_data_defs.h
-	./ceinternal/shitty_enums.h
-	./ceinternal/gamestate_headers/player_types.h
-	./ceinternal/shitty_macros.h
-	./ceinternal/shitty_header_ports.h
-	./ceinternal/exceptions/exception_handler.h
-	./ceinternal/memory_map/memorymap.h
+	./headers/real_math.h
+	./headers/int_math.h
+	./ce_base_types.h
+	./headers/shitty_tag_data_defs.h
+	./headers/shitty_enums.h
+	./gamestate/player_types.h
+	./headers/shitty_macros.h
+	./headers/shitty_header_ports.h
+	./exceptions/exception_handler.h
+	./memory_map/memorymap.h
 	)
 
 set(HALOFORGE_CPP
-	./ceinternal/haloforge/Direct3D/d3d9hook.cpp
-	./ceinternal/haloforge/addlog.cpp
-	./ceinternal/haloforge/blam.cpp
-	./ceinternal/haloforge/camera.cpp
-	./ceinternal/haloforge/core.cpp
-	./ceinternal/haloforge/math.cpp
-	./ceinternal/haloforge/objectcontroller.cpp
-	./ceinternal/haloforge/forgeMain.cpp
+	./Direct3D/d3d9hook.cpp
+	./haloforge/addlog.cpp
+	./haloforge/blam.cpp
+	./haloforge/camera.cpp
+	./haloforge/core.cpp
+	./haloforge/math.cpp
+	./haloforge/objectcontroller.cpp
+	./forge.cpp
 	)
 
 set(CEINTERNAL_CPP ${CEINTERNAL_H} ${HALOFORGE_CPP}
-	./ceinternal/function_rewrite.cpp
-	./ceinternal/ceinternal.cpp
-	./ceinternal/exceptions/exception_handler.cpp
+	./function_rewrite.cpp
+	./exceptions/exception_handler.cpp
 	./main.cpp
 	)
 
@@ -153,13 +163,13 @@ set(CEINTERNAL_CPP ${CEINTERNAL_H} ${HALOFORGE_CPP}
 file(GLOB DETOURS_GLOB ./libs/detours.lib)
 file(GLOB CAPSTONE_STATIC_GLOB ./libs/capstone_static.lib)
 
-if (MSVC)
+if(MSVC)
 	set(LINKER_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ASSEMBLYDEBUG\ ") #rip alignment on win32
 	set(CMAKE_SHARED_LINKER_FLAGS ${LINKER_FLAGS})
 
-elseif (NOT MSVC)
+elseif(NOT MSVC)
 	set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS_INIT} $ENV{LDFLAGS} "-lws2_32 -static-libgcc -static-libstdc++ -static -luserenv -static -static -ladvapi32")
-endif ()
+endif()
 #some weirdness surrounding version.h and version.rc, so I'm gonna be leaving them out until further notice.
 add_library(${PROJECT_NAME} SHARED ${CEINTERNAL_CPP})
 
@@ -167,8 +177,8 @@ target_link_libraries(${PROJECT_NAME} ${DETOURS_GLOB} ${CAPSTONE_STATIC_GLOB} ${
 
 message(STATUS "Outputting lib to: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
-SET(CMAKE_PDB_OUTPUT_DIRECTORY  "${HaloCE_ROOT_DIR}/controls")
+set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}/controls")
 #SET(EXECUTABLE_OUTPUT_PATH   "${HaloCE_ROOT_DIR}/controls")
-SET(LIBRARY_OUTPUT_PATH   "${HaloCE_ROOT_DIR}/controls")
+set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}/controls")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "tempera")
