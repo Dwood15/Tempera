@@ -2,6 +2,7 @@
 	Project: haloforge
 	File: camera.h
 	Copyright � 2009 SilentK, Abyll
+	Copyright � 2018 Dwood
 
 	This file is part of haloforge.
 
@@ -25,6 +26,7 @@
 #include <windows.h>
 #include "math.h"
 #include "addlog.h"
+#include "../../headers/colors.h"
 
 #define CAMERA_ADDRESS 0x6474E4
 //0x006AC4DC;

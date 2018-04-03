@@ -1,6 +1,22 @@
-#/*
-# * Insert GPLv3 license
-# */
+#Project: Tempera
+#File: CMakeLists.txt
+#Copyright � 2018 dwood
+#
+#this file is part of Tempera.
+#
+#Tempera is free software: you can redistribute it and/or modify
+#it under the terms of the gnu general public license as published by
+#the free software foundation, either version 3 of the license, or
+#(at your option) any later version.
+#
+#Tempera is distributed in the hope that it will be useful,
+#but without any warranty; without even the implied warranty of
+#merchantability or fitness for a particular purpose. See the
+#gnu general public license for more details.
+#
+#You should have received a copy of the gnu general public license
+#along with haloforge.  if not, see <http://www.gnu.org/licenses/>.
+
 
 #this file is currently heavily inconsistent. I'm sorry.
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
@@ -120,7 +136,6 @@ set(HALOFORGE_H
 	./haloforge/headers/core.h
 	./haloforge/headers/detours.h
 	./haloforge/headers/forge.h
-	./haloforge/headers/math.h
 	./haloforge/headers/objectcontroller.h
 	./haloforge/headers/objects.h
 	./haloforge/headers/players.h

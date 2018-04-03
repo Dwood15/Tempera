@@ -26,7 +26,7 @@
 // Generic Halo Types
 ////////////////////////////////////////
 #include <d3dx9math.h>
-#include "../haloforge/headers/math.h"
+#include "../headers/colors.h"
 
 #define INVALID -1
 struct bone

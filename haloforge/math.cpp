@@ -21,7 +21,7 @@
 */
 
 #include <math.h>
-#include "headers/math.h"
+#include "../headers/colors.h"
 
 HaloColor::HaloColor(float alpha, float red, float green, float blue): a(alpha), r(red), g(green), b(blue)
 {
