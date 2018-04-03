@@ -171,6 +171,7 @@ set(HALOFORGE_CPP
 set(CEINTERNAL_CPP ${CEINTERNAL_H} ${HALOFORGE_CPP}
 	./function_rewrite.cpp
 	./exceptions/exception_handler.cpp
+	memory_map/memorymap.h
 	./main.cpp
 	)
 
