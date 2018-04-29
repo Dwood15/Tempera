@@ -2,22 +2,36 @@
  *	Project: Tempera
  *	File: main.cpp
  *	Copyright � 2009 SilentK, Abyll
- *	Copyright � 2018 Dwood
+ *	Copyright � 2009 Kornman00 (Sean Cooper)
+ *	Copyright � 2018 Dwood15 (Dason Woodhouse)
  *
- * This file is part of Tempera.
+ *  This file is part of Tempera.
  *
- *  Tempera is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * Tempera is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *  Tempera is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * Tempera is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details. *
  *
- *  You should have received a copy of the GNU General Public License
- *  along with Tempera.  If not, see <http://www.gnu.org/licenses/>.
+ *  Tempera is under jurisdiction of Microsft Content usage guidelines.
+ * It contains no Microsoft code, and is in no way affiliated with
+ * Microsfot, Bungie, Gearbox, Saber Interactive, 343 Industries, or
+ * any other entity for whom has been granted license to use or otherwise
+ * redistribute the Halo Intellectual properties.
+ *
+ *  This project contains code that has been published and licensed
+ * under the GNU General Public License, V3. haloforge and Open Sauce.
+ * As such, this project (Tempera) is also licensed as Free Software,
+ * under the same GPLv3 license. It is expected that all publications
+ * or usages of this codebase will similarly abide by the terms of
+ * the GPLv3.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Tempera. If not, see <http://www.gnu.org/licenses/>.
  **/
 
 #pragma once
