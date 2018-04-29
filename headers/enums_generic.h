@@ -2,7 +2,7 @@
 #ifndef shitty_enums
 #define shitty_enums
 
-#include "shitty_macros.h"
+#include "macros_generic.h"
 
 //OS uses the byte_flags typedef.
 #pragma region enumerations

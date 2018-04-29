@@ -1,25 +1,24 @@
-/*
-	Project: haloforge
-	File: camera.h
-	Copyright � 2009 SilentK, Abyll
-	Copyright � 2018 Dwood
-
-	This file is part of haloforge.
-
-    haloforge is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    haloforge is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with haloforge.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+/**
+ *	Project: haloforge
+ *	File: camera.h
+ *	Copyright � 2009 SilentK, Abyll
+ *	Copyright � 2018 Dwood
+ *
+ *	This file is part of haloforge.
+ *
+ *  haloforge is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  haloforge is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with haloforge. If not, see <http://www.gnu.org/licenses/>.
+ **/
 
 #pragma once
 
@@ -73,12 +72,12 @@ struct _camera {
 };
 
 class CMyCamera {
- public:
+public:
 	CMyCamera();
 
 	~CMyCamera();
 
-	_camera* GetCameraStaticAddress();
+	_camera *GetCameraStaticAddress();
 
 	D3DXVECTOR3 vEye;
 	D3DXVECTOR3 vLookAt;
@@ -92,7 +91,7 @@ class CMyCamera {
 	D3DXVECTOR3 vWorld;
 
 	float aspect;
-	_camera* Camera;
+	_camera *Camera;
 
 	void CreateViewMatrix(vect3 fEye, vect3 vLookAt, vect3 fUp);
 

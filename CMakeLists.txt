@@ -119,7 +119,7 @@ set(GAMEMAP_H
 	./gamestate/halo_types.h
 	tags/map.h
 	tags/tags.h
-	)
+	gamestate/scenario.h)
 
 set(TAGS_H
 	tags/scenario.h
@@ -142,20 +142,18 @@ set(HALOFORGE_H
 	./Direct3D/textures.h
 	./Direct3D/d3d9hook.h
 	haloforge/headers/forge.h
-	)
+	headers/weapons.h)
 
 set(CEINTERNAL_H ${HALOFORGE_H}
 	./headers/real_math.h
 	./headers/int_math.h
 	./ce_base_types.h
-	./headers/shitty_tag_data_defs.h
-	./headers/shitty_enums.h
+	headers/enums_generic.h
 	./gamestate/player_types.h
-	./headers/shitty_macros.h
-	./headers/shitty_header_ports.h
+	headers/macros_generic.h
 	./exceptions/exception_handler.h
 	./memory_map/memorymap.h
-	)
+	headers/animations.h gamestate/sbsp.h gamestate/networking.h gamestate/game_globals.h gamestate/render.h gamestate/tags_generic.h)
 
 set(HALOFORGE_CPP
 	./Direct3D/d3d9hook.cpp

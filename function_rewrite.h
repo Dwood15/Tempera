@@ -21,8 +21,7 @@
 */
 #pragma once
 
-#include "headers/shitty_macros.h"
-#include "headers/shitty_header_ports.h"
+#include "headers/macros_generic.h"
 #include "gamestate/player_types.h"
 
 //Allows us to: 1) declare a ptr as potentially unused.

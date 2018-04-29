@@ -3,6 +3,7 @@
 #include <cstring>
 #include <cstdio>
 #include "function_rewrite.h"
+#include "gamestate/game_globals.h"
 
 /**
  * @brief MPP == MAX PLAYER PATCH _B == BYTE
@@ -147,7 +148,6 @@ namespace spcore {
 		float                        *player_look_yaw_rate   = (float*)0x68CD78;
 
 		float*default_look_rates = (float*)((int)game_globals + 0x160 );
-
 
 		//Begin of function
 		player_controls->action_flags[1] = 0;

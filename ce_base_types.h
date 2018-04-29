@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "headers/shitty_macros.h"
+#include "headers/macros_generic.h"
 #include "headers/real_math.h"
 
 typedef short        int16;

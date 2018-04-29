@@ -1,13 +1,30 @@
-/*
- * Insert GPLv3 license
- */
+/**
+ *	Project: Tempera
+ *	File: main.cpp
+ *	Copyright � 2018 Dwood
+ *
+ *	This file is part of Tempera.
+ *
+ * Tempera is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Tempera is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Tempera. If not, see <http://www.gnu.org/licenses/>.
+ **/
 #pragma once
 #pragma pack(push)
 #pragma pack(1)
 
-#include "../headers/shitty_macros.h"
+#include "../headers/macros_generic.h"
 #include "../ce_base_types.h"
-#include "../headers/shitty_enums.h"
+#include "../headers/enums_generic.h"
 
 STAT_ASSRT(sbyte, 1);
 
@@ -53,7 +70,7 @@ struct s_motion_sensor {
 		sbyte   padB;
 		//Open Sauce has this as 2 bytes of pad, but that. There's 2 bytes on the front of the pointer. :)
 	}              update_data;
-}; STAT_ASSRT(s_motion_sensor, 0x8 + ( 0x568 * MAX_PLAYER_COUNT_LOCAL ));
+}; STAT_ASSRT(s_motion_sensor, 0x8 + (0x568 * MAX_PLAYER_COUNT_LOCAL));
 
 
 struct s_network_game_player {
@@ -76,6 +93,61 @@ struct s_game_engine_state_message {
 	datum_index target_player;
 	long        target_time; // timer used to fade in the target player name
 };
+
+//s_players_globals_data
+struct s_players_globals_data {
+	long          unused_after_initialize_unk;                                                                // 0x0, initialized to NONE but that's all I can tell
+	// the player_index for each local player
+	datum_index   local_player_players[MAX_PLAYER_COUNT_LOCAL];        // 0x4
+	// the object_index of each local player's dead unit (their old body)
+	datum_index   local_player_dead_units[MAX_PLAYER_COUNT_LOCAL];    // 0x8
+	__int16       local_player_count;                                                        // 0xC
+	__int16       double_speed_ticks_remaining;                                                // 0xE
+	bool          are_all_dead;                                                                // 0x10
+	bool          input_disabled;                                                            // 0x11
+	__int16       _bsp_switch_trigger_idx;                                                // 0x12
+	__int16       respawn_failure;                                                            // 0x14
+	bool          was_teleported;                                                            // 0x16, or respawned
+	char          _unk_pad_char;
+	//There's 16 players in a game.
+	unsigned long combined_pvs[MAX_PLAYERS_IN_GAME];                        // 0x18 combined pvs of all players in the game
+	//TODO: verify if combined_pvs_local is actually the same as regular combined_pvs - Maybe they're separate and synched via network?
+	unsigned long combined_pvs_local[MAX_PLAYERS_IN_GAME];                    // 0x58 combined pvs of all local players
+}; static_assert(sizeof(s_players_globals_data) == 0x10 + (0x4 * 2 * MAX_PLAYER_COUNT_LOCAL) + (0x4 * 2 * MAX_PLAYERS_IN_GAME), STATIC_ASSERT_FAIL);
+INTELLISENSE_HACK(s_players_globals_data);
+
+//s_player_control
+struct s_player_control {
+	datum_index         unit_index;                                                                      // 0x0
+	unsigned long       control_flags;                                                                   // 0x4
+	__int16             __pad_unk0; // unknown field                                                              // 0x8
+	__int16             __pad_unk1; // unknown field                                                              // 0xA
+	real_euler_angles2d desired_angles;                                                    // 0xC
+	real_vector2d       throttle;                                                                  // 0x14
+	float               primary_trigger;                                                                         // 0x1C
+	__int16             weapon_index;                                                                          // 0x20
+	__int16             grenade_index;                                                                         // 0x22
+	__int16             zoom_level;                                                                            // 0x24
+	signed char         weapon_swap_ticks;                        // unknown field                         // 0x26
+	unsigned char       __cpad_unk;                             // unknown field                         // 0x27
+	datum_index         target_object_index;                                                             // 0x28
+	float               autoaim_level;                                                                           // 0x2C
+	unsigned long       _unk_fld0_32; // unknown field                                                   // 0x30
+	unsigned long       _unk_fld1_32;                                                                    // 0x34
+	unsigned long       _unk_fld2_32; // unknown field                                                   // 0x38
+	unsigned long       _unk_fld3_32; // unknown field                                                   // 0x3C
+};  static_assert(sizeof(s_player_control) == 0x40, STATIC_ASSERT_FAIL);
+
+struct s_player_control_globals_data {
+	unsigned long action_flags[2]; // see "action_test" script functions
+	unsigned long __pad_unk; // TODO: document the fields in the first 12 bytes of this struct
+	unsigned long flags; // FLAG(0) = camera control
+
+	//TODO: Find out what functions access what is immediately after this array when max local count = 1, then modify those.
+	//TODO: Find out what functions access this array, and modify them to loop over this array, based on number of local players. :)
+	s_player_control local_players[MAX_PLAYER_COUNT_LOCAL]; //0x10
+}; static_assert(sizeof(s_player_control_globals_data) == (0x10 + sizeof(s_player_control) * MAX_PLAYER_COUNT_LOCAL), STATIC_ASSERT_FAIL);
+
 
 /*
 struct s_player_datum {

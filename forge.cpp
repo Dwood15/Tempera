@@ -28,32 +28,32 @@
 #include "haloforge/headers/addlog.h"
 #include "haloforge/headers/core.h"
 #include "Direct3D/d3d9hook.h"
-#include "headers/shitty_header_ports.h"
+#include "gamestate/player_types.h"
 
 static short last_respawn_count       = 0x0;
 static short last_spawn_count         = 0x0;
 static short last_render_window_count = 0x0;
 
 //Live-updating number of players game should spawn.
-static short* to_respawn_count = (short*)0x6B4802;
+static short *to_respawn_count = (short *) 0x6B4802;
 
 //Number of players to spawn - set on map initialization/unloading.
-static short* spawn_count         = (short*)0x624A9C;
+static short *spawn_count         = (short *) 0x624A9C;
 ///num windows to render. Fills with black for invalid.    f
-static short* render_window_count = (short*)0x6B4098;
-bool        * at_main_menu        = (bool*)0x6B4051;
+static short *render_window_count = (short *) 0x6B4098;
+bool         *at_main_menu        = (bool *) 0x6B4051;
 
 typedef int retIntGivenVoid(void);
 
-static Core* core;
+static Core *core;
 static CD3D cd3d;
 
 static void dumpPlayerGlobalsData() {
-	retIntGivenVoid* find_unused_local_player_index = (retIntGivenVoid*)0x4762f0;
-	int unused_plyr_idx = find_unused_local_player_index( );
-	static s_players_globals_data* players_global_data = *(s_players_globals_data**)0x815918;
+	retIntGivenVoid *find_unused_local_player_index = (retIntGivenVoid *) 0x4762f0;
+	int unused_plyr_idx = find_unused_local_player_index();
+	static s_players_globals_data *players_global_data = *(s_players_globals_data **) 0x815918;
 
-	if( !*at_main_menu ) {
+	if (!*at_main_menu) {
 		core->ConsoleText(hGreen, "First unused player Idx: %d", unused_plyr_idx);
 		printf("unused_after_initialize_unk %d\n", players_global_data->unused_after_initialize_unk);
 		printf("local_player_count: %d\n", players_global_data->local_player_count);
@@ -73,59 +73,59 @@ static void dumpPlayerGlobalsData() {
 }
 
 static void updateGlobals() {
-	if( last_respawn_count != *to_respawn_count ) {
+	if (last_respawn_count != *to_respawn_count) {
 		DEBUG("Number of people to respawn from: %d to: %d\n", last_respawn_count, *to_respawn_count);
 		last_respawn_count = *to_respawn_count;
 	}
 
-	if( last_spawn_count != *spawn_count ) {
+	if (last_spawn_count != *spawn_count) {
 		DEBUG("Number of people to respawn from: %d to: %d\n", last_spawn_count, *spawn_count);
 		last_spawn_count = *spawn_count;
 	}
 
-	if( last_render_window_count != *render_window_count ) {
+	if (last_render_window_count != *render_window_count) {
 		DEBUG("Updated number players to spawn from: %d to: %d\n", last_render_window_count, *render_window_count);
 		last_render_window_count = *render_window_count;
 	}
 }
 
 int __stdcall hkMain() {
-	core = new Core( );
+	core = new Core();
 	SetCore(core);
 	cd3d.hkD3DHook(NULL);
 
 	Sleep(120);
-	PrintHelp( );
+	PrintHelp();
 
-	while(1) {
+	while (1) {
 		Sleep(30);
-		updateGlobals( );
+		updateGlobals();
 
-		if( GetAsyncKeyState(VK_F1) & 1 ) {
-			if( *at_main_menu ) {
-				*(short*)0x624A9C = (short)0x2;
+		if (GetAsyncKeyState(VK_F1) & 1) {
+			if (*at_main_menu) {
+				*(short *) 0x624A9C = (short) 0x2;
 				core->ConsoleText(hGreen, "Set Number players to spawn in next map: 2!");
 			}
-		} else if( GetAsyncKeyState(VK_F2) & 1 ) {
-			dumpPlayerGlobalsData( );
+		} else if (GetAsyncKeyState(VK_F2) & 1) {
+			dumpPlayerGlobalsData();
 
-		} else if( GetAsyncKeyState(VK_F11) & 1 ) {
-			PrintHelp( );
+		} else if (GetAsyncKeyState(VK_F11) & 1) {
+			PrintHelp();
 			continue;
 		}
 
-		if( *at_main_menu ) {
+		if (*at_main_menu) {
 			Sleep(45);
 			continue;
 		}
 
-		if( GetAsyncKeyState(VK_F5) & 1 ) {
+		if (GetAsyncKeyState(VK_F5) & 1) {
 
-			core->ObjectControl->LogInfo( );
+			core->ObjectControl->LogInfo();
 
-		} else if( GetAsyncKeyState(VK_F6) & 1 ) { // Change the object's sector
+		} else if (GetAsyncKeyState(VK_F6) & 1) { // Change the object's sector
 
-			if( core->ObjectControl->selected_h == NULL || (int)core->ObjectControl->selected_h == -1 ) {
+			if (core->ObjectControl->selected_h == NULL || (int) core->ObjectControl->selected_h == -1) {
 
 				core->ConsoleText(hRed, "Could not select an object; Player sector: %d\n\tSend log to Dwood.", core->GetPlayer(0)->Sector);
 				DEBUG("Unable to select object, player sector: %d", core->GetPlayer(0)->Sector);
@@ -133,26 +133,26 @@ int __stdcall hkMain() {
 			} else {
 
 				core->ConsoleText(hBlue, "Obj sector: %d, Player sector: %d", core->ObjectControl->selected_h->sector, core->GetPlayer(0)->Sector);
-				core->ObjectControl->selected_h->sector = (short)core->GetPlayer((short)0)->Sector;
+				core->ObjectControl->selected_h->sector = (short) core->GetPlayer((short) 0)->Sector;
 
 			}
-		} else if( GetAsyncKeyState(VK_UP)) {
+		} else if (GetAsyncKeyState(VK_UP)) {
 			// Object MOVE away.
 			core->ObjectControl->HoldDistance += 0.06f;
 
-		} else if( GetAsyncKeyState(VK_DOWN)) {
+		} else if (GetAsyncKeyState(VK_DOWN)) {
 			// Object MOVE closer
-			if( core->ObjectControl->HoldDistance > 0.07f ) {
+			if (core->ObjectControl->HoldDistance > 0.07f) {
 				core->ObjectControl->HoldDistance -= 0.06f;
 			}
 
-		} else if( GetAsyncKeyState(VK_SHIFT) & 1 ) {
+		} else if (GetAsyncKeyState(VK_SHIFT) & 1) {
 
 			// Object control: for now, SHIFT to lock onto an object.
 			// for choosing the 'selected' object: aka the one closest to where we're aiming. Nearest is already set from the D3Dhook
-			if((int)core->ObjectControl->selected_h != -1 ) {
+			if ((int) core->ObjectControl->selected_h != -1) {
 
-				core->ObjectControl->selected_h = (object_header*)-1;
+				core->ObjectControl->selected_h = (object_header *) -1;
 				core->ConsoleText(hGreen, "Removed selection. SHIFT to select.");
 
 			} else {
@@ -161,23 +161,23 @@ int __stdcall hkMain() {
 				core->ObjectControl->selected_h = core->ObjectControl->nearest_h;
 
 			}
-		} else if( !core->ObjectControl->holding && ( GetAsyncKeyState(VK_LBUTTON) & 0x8000 )) { // XY plane
+		} else if (!core->ObjectControl->holding && (GetAsyncKeyState(VK_LBUTTON) & 0x8000)) { // XY plane
 			//left mouse button
-			if((int)core->ObjectControl->selected_h != -1 ) {
-				core->ObjectControl->MoveObjXY( );
+			if ((int) core->ObjectControl->selected_h != -1) {
+				core->ObjectControl->MoveObjXY();
 
 			}
-		} else if(( GetAsyncKeyState(VK_RBUTTON) & 0x8000 )) {    // STRAIGHT in front of camera plane.
+		} else if ((GetAsyncKeyState(VK_RBUTTON) & 0x8000)) {    // STRAIGHT in front of camera plane.
 			//Right mouse button
-			if( core->ObjectControl->selected_h != NULL && core->ObjectControl->selected_h != (object_header*)-1 && core->ObjectControl->selected_h )
+			if (core->ObjectControl->selected_h != NULL && core->ObjectControl->selected_h != (object_header *) -1 && core->ObjectControl->selected_h)
 
-				if( core->ObjectControl->holding ) {
-					core->ObjectControl->MoveObjFront( );
+				if (core->ObjectControl->holding) {
+					core->ObjectControl->MoveObjFront();
 				} else {
 					core->ObjectControl->holding = true;
 					core->ConsoleText(hBlue, "Got set holding = true");
 				}
-		} else if( !( GetAsyncKeyState(VK_RBUTTON)) && core->ObjectControl->holding ) {
+		} else if (!(GetAsyncKeyState(VK_RBUTTON)) && core->ObjectControl->holding) {
 			core->ConsoleText(hBlue, "Got set holding = false");
 			core->ObjectControl->holding = false;
 		}
