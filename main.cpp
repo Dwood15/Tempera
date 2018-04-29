@@ -17,18 +17,17 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details. *
  *
- *  Tempera is under jurisdiction of Microsft Content usage guidelines.
- * It contains no Microsoft code, and is in no way affiliated with
- * Microsfot, Bungie, Gearbox, Saber Interactive, 343 Industries, or
- * any other entity for whom has been granted license to use or otherwise
+ *  Tempera is not under jurisdiction of Microsft Content usage
+ * guidelines. It contains no Microsoft code, and is not created nor
+ * affiliated with Microsoft, Bungie, Gearbox, 343 Industries, or
+ * other entity for whom has been granted license to use or otherwise
  * redistribute the Halo Intellectual properties.
  *
  *  This project contains code that has been published and licensed
- * under the GNU General Public License, V3. haloforge and Open Sauce.
+ * under the GNU General Public License, v3: haloforge and Open Sauce.
  * As such, this project (Tempera) is also licensed as Free Software,
  * under the same GPLv3 license. It is expected that all publications
- * or usages of this codebase will similarly abide by the terms of
- * the GPLv3.
+ * or usages of this codebase will abide by the terms of the GPLv3.
  *
  * You should have received a copy of the GNU General Public License
  * along with Tempera. If not, see <http://www.gnu.org/licenses/>.
