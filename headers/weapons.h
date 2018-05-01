@@ -3,6 +3,7 @@
 #include "../ce_base_types.h"
 #include "real_math.h"
 #include "../gamestate/objects.h"
+#include "../haloforge/headers/objects.h"
 
 struct s_weapon_datum_network_data {
 	real_point3d  position;
@@ -149,3 +150,24 @@ struct s_weapon_datum : s_item_datum {
 	};
 	s_weapon_data weapon;
 }; //static_assert(sizeof(s_weapon_datum) == k_object_size_weapon, STATIC_ASSERT_FAIL);
+
+
+struct weapon_data {
+	object_data _object;
+	char Unknown5[72];
+	long attacking;            // some sort of bitfield: 0x10 when used in a melee, 0x02 when shooting (at least for plasma, i think the 2 is for automatic.)
+	char Unknown1[8];
+	float heat;
+	float age_of_battery;    // (1.0 - battery left) not sure why it's like that.
+	char Unknown6[36];
+	short toggle1;
+	short toggle2;            // these 2 seem to toggle something on the weapon. From 3,0 it switches to 2,1 and then back. (At least for plasma rifle, and I noticed that the fire effect alternates to each tip of the 'claw' of the rifle)
+	char Unknown7[70];
+	short Reloading;        // 1=reloading
+	short reload_time;        // countdown until reload is complete.
+	short reserve_ammo;
+	short current_ammo;
+	char Unknown8[78];
+	short reload_ammo;        // matches reserve_ammo after a reload or when you switch weapons, but not after collecting ammo.
+	char Unknown9[518];
+};

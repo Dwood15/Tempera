@@ -108,7 +108,6 @@ struct s_main_globals
 
 
 */
-
 	// struct s_game_globals_tag {
 	// enum {
 	// 	k_group_tag = 'matg'
@@ -139,5 +138,4 @@ struct s_main_globals
 	// tag_block playlist_members;
 	// tag_block playlist_autogenerate_choice;
 	// }; */
-
 };

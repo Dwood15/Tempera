@@ -24,10 +24,11 @@
  * redistribute the Halo Intellectual properties.
  *
  *  This project contains code that has been published and licensed
- * under the GNU General Public License, v3: haloforge and Open Sauce.
- * As such, this project (Tempera) is also licensed as Free Software,
- * under the same GPLv3 license. It is expected that all publications
- * or usages of this codebase will abide by the terms of the GPLv3.
+ * under the GNU General Public License, from multiple groups, notably:
+ * haloforge and Open Sauce.
+ *
+ * It is expected that all usages of the code contained herein will
+ * abide by the terms of the GPLv3.
  *
  * You should have received a copy of the GNU General Public License
  * along with Tempera. If not, see <http://www.gnu.org/licenses/>.
@@ -47,33 +48,33 @@ static inline void init(HMODULE reason) {
 	h = AddVectoredExceptionHandler(CALL_FIRST, CEInternalExceptionHandler);
 	InitAddLog(reason);
 	// some debug outputz
-	if( ::AllocConsole( ) != 0 ) {
+	if (::AllocConsole() != 0) {
 		freopen_s(&debug_out, "CONOUT$", "w", stdout);
 	}
-//		printf("init_for_new_map_overwrite addr: 0x%x\n", 0xBEEF);//init_for_new_map_overwrite);
+	//		printf("init_for_new_map_overwrite addr: 0x%x\n", 0xBEEF);//init_for_new_map_overwrite);
 
 	DWORD old;
-	VirtualProtect((void*)0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);
-	spcore::memory::get_mem_and_patch( );
+	VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);
+	spcore::memory::get_mem_and_patch();
 
 	DisableThreadLibraryCalls(reason);
-	CreateThread(0, 0, (LPTHREAD_START_ROUTINE)hkMain, 0, 0, 0);
+	CreateThread(0, 0, (LPTHREAD_START_ROUTINE) hkMain, 0, 0, 0);
 	printf("Created LPTHREAD\n");
 
 }
 
 static inline void detach() {
-	ExitAddLog( );
+	ExitAddLog();
 	RemoveVectoredExceptionHandler(h);
 }
 
 extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
-	if( fdwReason == DLL_PROCESS_ATTACH && !loaded ) {
+	if (fdwReason == DLL_PROCESS_ATTACH && !loaded) {
 		init(hinstDLL);
 		loaded = true;
 
-	} else if( fdwReason == DLL_PROCESS_DETACH && loaded ) {
-		detach( );
+	} else if (fdwReason == DLL_PROCESS_DETACH && loaded) {
+		detach();
 		loaded = false;
 	}
 	return true;

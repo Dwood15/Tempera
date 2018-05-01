@@ -119,7 +119,7 @@ set(GAMEMAP_H
 	./gamestate/halo_types.h
 	tags/map.h
 	tags/tags.h
-	gamestate/scenario.h)
+	gamestate/scenario.h enums/ControlTypes.h gamestate/controls.h)
 
 set(TAGS_H
 	tags/scenario.h
@@ -170,7 +170,7 @@ set(CEINTERNAL_CPP ${CEINTERNAL_H} ${HALOFORGE_CPP}
 	./function_rewrite.cpp
 	./exceptions/exception_handler.cpp
 	./main.cpp
-	)
+	gamestate/controls.cpp)
 
 #EXTERNAL LIBS
 file(GLOB DETOURS_GLOB ./libs/detours.lib)

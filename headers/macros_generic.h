@@ -44,7 +44,7 @@ STAT_ASSRT(double, 0x8);
 #define UNKNOWN(num) Unknown##num
 
 /// Add an anonymous 8-bit (1 byte) field to a structure.
-//#define PAD8 unsigned char : 8;
+#define PAD8 unsigned char : 8;
 /// Add an anonymous 16-bit (2 byte) field to a structure.
 #define PAD16 unsigned short : 16;
 /// Add an anonymous 24-bit field to a structure.

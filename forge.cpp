@@ -49,27 +49,36 @@ static Core *core;
 static CD3D cd3d;
 
 static void dumpPlayerGlobalsData() {
-	retIntGivenVoid *find_unused_local_player_index = (retIntGivenVoid *) 0x4762f0;
-	int unused_plyr_idx = find_unused_local_player_index();
-	static s_players_globals_data *players_global_data = *(s_players_globals_data **) 0x815918;
+
+	const char *first_unused      = "First unused player Idx: %d";
+	const char *unused_after_init = "unused_after_initialize_unk %d\\n";
+	const char *local_plyr_cnt    = "local_player_count: %d\n";
+	const char *dbl_spd_tx        = "double speed tix remaining: %d\n";
+	const char *all_ded           = "Are all dead?: %d\n";
+	const char *inp_dis           = "Input disabled: %d\n";
+	const char *bsp_trig          = "BSP switch trigger: %d\n";
+
+	retIntGivenVoid               *find_unused_local_player_index = (retIntGivenVoid *) 0x4762f0;
+	int                           unused_plyr_idx                 = find_unused_local_player_index();
+	static s_players_globals_data *players_global_data            = *(s_players_globals_data **) 0x815918;
 
 	if (!*at_main_menu) {
-		core->ConsoleText(hGreen, "First unused player Idx: %d", unused_plyr_idx);
-		printf("unused_after_initialize_unk %d\n", players_global_data->unused_after_initialize_unk);
-		printf("local_player_count: %d\n", players_global_data->local_player_count);
-		printf("double speed tix remaining: %d\n", players_global_data->double_speed_ticks_remaining);
-		printf("Are all dead?: %d\n", players_global_data->are_all_dead);
-		printf("Input disabled: %d\n", players_global_data->input_disabled);
-		printf("BSP switch trigger: %d\n", players_global_data->_bsp_switch_trigger_idx);
+		core->ConsoleText(hGreen, first_unused, unused_plyr_idx);
+		printf(unused_after_init, players_global_data->unused_after_initialize_unk);
+		printf(local_plyr_cnt, players_global_data->local_player_count);
+		printf(dbl_spd_tx, players_global_data->double_speed_ticks_remaining);
+		printf(all_ded, players_global_data->are_all_dead);
+		printf(inp_dis, players_global_data->input_disabled);
+		printf(bsp_trig, players_global_data->_bsp_switch_trigger_idx);
 	}
 
-	DEBUG("First unused player Idx: %d", unused_plyr_idx);
-	DEBUG("unused_after_initialize_unk %d\n", players_global_data->unused_after_initialize_unk);
-	DEBUG("local_player_count: %d\n", players_global_data->local_player_count);
-	DEBUG("double speed tix remaining: %d\n", players_global_data->double_speed_ticks_remaining);
-	DEBUG("Are all dead?: %d\n", players_global_data->are_all_dead);
-	DEBUG("Input disabled: %d\n", players_global_data->input_disabled);
-	DEBUG("BSP switch trigger: %d\n", players_global_data->_bsp_switch_trigger_idx);
+	DEBUG(first_unused, unused_plyr_idx);
+	DEBUG(unused_after_init, players_global_data->unused_after_initialize_unk);
+	DEBUG(local_plyr_cnt, players_global_data->local_player_count);
+	DEBUG(dbl_spd_tx, players_global_data->double_speed_ticks_remaining);
+	DEBUG(all_ded, players_global_data->are_all_dead);
+	DEBUG(inp_dis, players_global_data->input_disabled);
+	DEBUG(bsp_trig, players_global_data->_bsp_switch_trigger_idx);
 }
 
 static void updateGlobals() {
@@ -185,7 +194,7 @@ int __stdcall hkMain() {
 
 }
 
-//		TODO: Get this working properly.
+//		TODO: Scrolling to set selected item's distance from player.
 // 	MSG msg;
 //		if(PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
 //		{

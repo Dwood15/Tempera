@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../headers/macros_generic.h"
+
 /*
 	Project: haloforge
 	File: objectcontroller.cpp

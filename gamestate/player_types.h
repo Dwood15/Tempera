@@ -25,6 +25,7 @@
 #include "../headers/macros_generic.h"
 #include "../ce_base_types.h"
 #include "../headers/enums_generic.h"
+#include "../headers/colors.h"
 
 STAT_ASSRT(sbyte, 1);
 
@@ -120,18 +121,18 @@ INTELLISENSE_HACK(s_players_globals_data);
 struct s_player_control {
 	datum_index         unit_index;                                                                      // 0x0
 	unsigned long       control_flags;                                                                   // 0x4
-	__int16             __pad_unk0; // unknown field                                                              // 0x8
-	__int16             __pad_unk1; // unknown field                                                              // 0xA
-	real_euler_angles2d desired_angles;                                                    // 0xC
-	real_vector2d       throttle;                                                                  // 0x14
-	float               primary_trigger;                                                                         // 0x1C
-	__int16             weapon_index;                                                                          // 0x20
-	__int16             grenade_index;                                                                         // 0x22
-	__int16             zoom_level;                                                                            // 0x24
-	signed char         weapon_swap_ticks;                        // unknown field                         // 0x26
+	__int16             __pad_unk0; // unknown field                                                     // 0x8
+	__int16             __pad_unk1; // unknown field                                                     // 0xA
+	real_euler_angles2d desired_angles;                                                    				  // 0xC
+	real_vector2d       throttle;                                                                		  // 0x14
+	float               primary_trigger;                                                                 // 0x1C
+	__int16             weapon_index;                                                                    // 0x20
+	__int16             grenade_index;                                                                   // 0x22
+	__int16             zoom_level;                                                                      // 0x24
+	signed char         weapon_swap_ticks;                      // unknown field                         // 0x26
 	unsigned char       __cpad_unk;                             // unknown field                         // 0x27
 	datum_index         target_object_index;                                                             // 0x28
-	float               autoaim_level;                                                                           // 0x2C
+	float               autoaim_level;                                                                   // 0x2C
 	unsigned long       _unk_fld0_32; // unknown field                                                   // 0x30
 	unsigned long       _unk_fld1_32;                                                                    // 0x34
 	unsigned long       _unk_fld2_32; // unknown field                                                   // 0x38
@@ -149,19 +150,19 @@ struct s_player_control_globals_data {
 }; static_assert(sizeof(s_player_control_globals_data) == (0x10 + sizeof(s_player_control) * MAX_PLAYER_COUNT_LOCAL), STATIC_ASSERT_FAIL);
 
 
-/*
-struct s_player_datum {
-	short salt;
 
-	int16                  local_player_index;                     // 0x2
-	wchar_t                display_name[12];                        //player_name_len + 1 // 0x4
-	int32                  unused_unkA;                           // 0x1C
-	union {                                    // 0x20
-		long       team_index;
-		argb_color color;
-	};
-	s_player_action_result nearest_object_action_result;// 0x24
-	long                   respawn_ticks_remain;                     // 0x2C
+// struct s_player_datum {
+// 	short salt;
+//
+// 	int16                  local_player_index;                     // 0x2
+// 	wchar_t                display_name[12];                        //player_name_len + 1 // 0x4
+// 	int32                  unused_unkA;                           // 0x1C
+// 	union {                                    // 0x20
+// 		long       team_index;
+// 		argb_color color;
+// 	};
+	//s_player_action_result nearest_object_action_result;// 0x24
+	// long                   respawn_ticks_remain;                     // 0x2C
 	/*---------------
 	int32                  unknown_typeA;                        // 0x30 respawn time growth related
 	datum_index            slave_unit_index;                  // 0x34
@@ -228,6 +229,6 @@ struct s_player_datum {
 		}    server;
 	};
 };  STAT_ASSRT(s_player_datum, 0x200); // 0x160 in Stubbs
-*/
+
 
 #pragma pack(pop)
