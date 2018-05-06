@@ -54,17 +54,23 @@ public:
 
 	void DecreaseHoldDistance(unsigned int numSteps = 1);
 
-	bool IsNearest(object_header* objh);
+	bool IsNearest(object_header *objh);
 
-	void SetNearest(object_header* objh);
+	void SetNearest(object_header *objh);
 
-	bool IsSelected(object_header* objh);
+	bool IsSelected(object_header *objh);
 
 	bool IsHoldingObject();
 
 	bool CanHoldObject();
 
 	void DropHeldObject();
+
+	bool HasNearest();
+
+	bool NearestIsValid();
+
+	bool CanSelectObject();
 
 	void RemoveSelection();
 

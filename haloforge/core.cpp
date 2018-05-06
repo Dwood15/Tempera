@@ -187,7 +187,7 @@ const char *Core::GetObjectName(short object_index) {
 
 //Returns an object name by object structure
 const char *Core::GetObjectName(object_data *obj) {
-	short  metaind = obj->meta.index;
+	short  metaind = obj->Meta.index;
 	char   *name   = TagIndexHeader->FirstTag[metaind].TName->Name;
 	string str     = name;
 

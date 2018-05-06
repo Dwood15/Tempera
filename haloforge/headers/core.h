@@ -249,7 +249,6 @@ struct _core_2 {
 	data_header<void> *Unknown2;
 	data_header<void> *ClusterLightReference;
 	data_header<void> *LightClusterReference;
-
 };
 
 struct _core_3 {

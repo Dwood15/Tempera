@@ -163,8 +163,12 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 		D3DCOLOR color = tGreen;
 
+		ObjName = core->GetObjectName(i);
+
+
 		if (obj->IsPlayer()) {
 			color = tLightBlue;
+
 		}
 
 		if (core->ObjectControl->IsSelected(objh)) {
@@ -174,8 +178,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 			color = tBlue;
 		}
 
-		ObjName = core->GetObjectName(i);
-		d3d.myDrawText(pDevice, d3d.Font, true, (int) screenpos.x, (int) screenpos.y, 2000, 2000, color, tBlack, ObjName);
+		d3d.myDrawText(pDevice, d3d.Font, true, (int) screenpos.x, (int) screenpos.y, 1000, 1000, color, tBlack, ObjName);
 	}
 
 	core->ObjectControl->SetNearest(temp_nearest);

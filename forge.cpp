@@ -119,29 +119,34 @@ int __stdcall forgeMain() {
 		} else if (!(GetAsyncKeyState(VK_RBUTTON))) {
 			core->ObjectControl->DropHeldObject();
 		}
+
+		//		TODO: Scrolling to set selected item's distance from player.
+		// 	MSG msg;
+		//Isn't doing anything?
+		// LPMSG msg = NULL;
+		// if (PeekMessage(msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_NOREMOVE)) {
+		// 	if (msg->message == WM_MOUSEWHEEL) {
+		// 		short zDelta = GET_WHEEL_DELTA_WPARAM(msg->wParam);
+		// 		/*
+		// 		The return value is the high-order word representing the wheel-delta value.
+		// 		It indicates the distance that the wheel is rotated, expressed in multiples
+		// 		or divisions of WHEEL_DELTA, which is 120.
+		//
+		// 		A positive value == the wheel was rotated away from the user;.
+		// 		A negative value indicates that the wheel was rotated toward the user.
+		// 		*/
+		// 		if (zDelta < 0) {
+		// 			core->ObjectControl->DecreaseHoldDistance(zDelta);
+		// 		} else {
+		// 			core->ObjectControl->IncreaseHoldDistance(zDelta);
+		// 		}
+		// 		Print(false, "MouseWheel dist: %d", zDelta);
+		// 	} else {
+		// 		Print(true, "other: %d", msg->message);
+		// 	}
+		}
+
 	}
 }
 
-//		TODO: Scrolling to set selected item's distance from player.
-// 	MSG msg;
-//		if(PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
-//		{
-//			if(msg.message == WM_MOUSEWHEEL)
-//			{
-//				short zDelta = GET_WHEEL_DELTA_WPARAM(msg.wParam);
-//				/*
-//				The return value is the high-order word representing the wheel-delta value.
-//				It indicates the distance that the wheel is rotated, expressed in multiples
-//				or divisions of WHEEL_DELTA, which is 120. A positive value indicates that
-//				the wheel was rotated forward, away from the user; a negative value indicates
-//				that the wheel was rotated backward, toward the user.
-//				*/
-//				core->ObjectControl->HoldDistance += zDelta;
-//				DEBUG("dist: %d", zDelta);
-//			}
-//			else
-//			{
-//				DEBUG("other: %d", msg.message);
-//			}
-//		}
 

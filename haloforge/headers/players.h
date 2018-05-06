@@ -94,7 +94,6 @@ struct player {
 		Print(toConsole, "unk 2: %x\n", unk2);
 		Print(toConsole, "unk 3: %x\n", unk3);
 		Print(toConsole, "unk 16: %x\n", &Unknown16);
-
 		Print(toConsole, "*** End Player Data Dump! ***\n");
 	}
 };

@@ -108,6 +108,18 @@ bool ObjectController::CanHoldObject() {
 	return (HasSelection() && SelectionIsValid());
 }
 
+bool ObjectController::HasNearest() {
+	return ( nearest_h != NULL && (int) nearest_h != -1);
+}
+
+bool ObjectController::NearestIsValid() {
+	return ( nearest_h->address != NULL && (int) nearest_h->address != -1);
+}
+
+bool ObjectController::CanSelectObject() {
+	return (HasNearest() && NearestIsValid());
+}
+
 void ObjectController::RemoveSelection() {
 	core->ObjectControl->selected_h = (object_header *) -1;
 	core->ConsoleText(hGreen, "Removed selection.");
@@ -160,7 +172,8 @@ bool ObjectController::IsSelected(object_header *objh) {
 }
 
 void ObjectController::SetSelectedObject() {
-	if (!CanHoldObject()) {
+	if (!CanSelectObject()) {
+		core->ConsoleText(hRed, "Unable to update single selection.");
 		return;
 	}
 	core->ConsoleText(hGreen, "Added single selection.");

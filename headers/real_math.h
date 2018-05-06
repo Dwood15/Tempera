@@ -28,8 +28,7 @@ struct real_point2d {
 	real y;
 }; REAL_ASSRT(real_point2d, 0x2);
 
-struct real_point3d {
-	real_point2d xy;
+struct real_point3d : public real_point2d {
 	real z;
 }; REAL_ASSRT(real_point3d, 0x3);
 

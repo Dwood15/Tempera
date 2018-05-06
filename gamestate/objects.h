@@ -185,30 +185,30 @@ struct s_object_data {
 	float                             radius;                                                        // 0xBC
 	float                             scale;                                                        // 0xB0
 	__int16                           type;                                                        // 0xB4
-	__int16                           __pad0;
-	game_team                         owner_team;                                                    // 0xB8
-	__int16                           name_list_index;                                                            // 0xBA
+	PAD16;
+	game_team   owner_team;                                                    // 0xB8
+	__int16     name_list_index;                                                            // 0xBA
 	// ticks spent not at_rest. only biped updates this
-	__int16                           moving_time;                                                                // 0xBC
-	__int16                           region_permutation;                                                        // 0xBE, variant id
-	datum_index                       player_index;                                                        // 0xC0
+	__int16     moving_time;                                                                // 0xBC
+	__int16     region_permutation;                                                        // 0xBE, variant id
+	datum_index player_index;                                                        // 0xC0
 	// If this were a projectile, this might be the handle to the weapon which spawned it
-	datum_index                       owner_object_index;                                                    // 0xC4
-	unsigned long                     __pad1;                                                                            // 0xC8 unused
-	s_object_datum_animation_data     animation;                                        // 0xCC
-	s_object_datum_damage_data        damage;                                            // 0xD8
-	unsigned long                     __pad2;                                                    // 0x108 unused
-	datum_index                       cluster_partition_index;                                // 0x10C
-	datum_index                       garbage_collection_object_index_rltd;                    // 0x110, object_index, garbage collection related
-	datum_index                       next_object_index;                                        // 0x114
-	datum_index                       first_object_index;                                        // 0x118
-	datum_index                       parent_object_index;                                    // 0x11C
-	signed char                       parent_node_index;                                                        // 0x120
-	char                              unused_byte_unk;                                                                // 0x121 idk if this is an sbyte or bool here
-	bool                              force_shield_update;                                                        // 0x122
-	signed char                       valid_outgoing_functions;                                            // 0x123, 1<<function_index
-	float                             incoming_function_values[k_number_of_incoming_object_functions];    // 0x124
-	float                             outgoing_function_values[k_number_of_outgoing_object_functions];    // 0x134
+	datum_index owner_object_index;                                                    // 0xC4
+	PAD32;                                                                          // 0xC8 unused
+	s_object_datum_animation_data animation;                                        // 0xCC
+	s_object_datum_damage_data    damage;                                            // 0xD8
+	PAD32;                                                 // 0x108 unused
+	datum_index cluster_partition_index;                                // 0x10C
+	datum_index garbage_collection_object_index_rltd;                    // 0x110, object_index, garbage collection related
+	datum_index next_object_index;                                        // 0x114
+	datum_index first_object_index;                                        // 0x118
+	datum_index parent_object_index;                                    // 0x11C
+	signed char parent_node_index;                                                        // 0x120
+	char        unused_byte_unk;                                                                // 0x121 idk if this is an sbyte or bool here
+	bool        force_shield_update;                                                        // 0x122
+	signed char valid_outgoing_functions;                                            // 0x123, 1<<function_index
+	float       incoming_function_values[k_number_of_incoming_object_functions];    // 0x124
+	float       outgoing_function_values[k_number_of_outgoing_object_functions];    // 0x134
 
 	s_object_datum_attachments_data attachments;                                    // 0x144
 	datum_index                     cached_render_state_index;                                            // 0x170
