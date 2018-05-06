@@ -144,7 +144,7 @@ int __stdcall forgeMain() {
 		// 	} else {
 		// 		Print(true, "other: %d", msg->message);
 		// 	}
-		}
+		// }
 
 	}
 }
