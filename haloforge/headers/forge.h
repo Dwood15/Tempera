@@ -20,10 +20,11 @@
 
 */
 #pragma once
+
+#include "../../gamestate/player_types.h"
+
 #define WIN32_LEAN_AND_MEAN
-#ifndef _MAIN_H
-#define _MAIN_H
 
-int __stdcall hkMain();
+int __stdcall forgeMain();
 
-#endif /* _MAIN_H */
+

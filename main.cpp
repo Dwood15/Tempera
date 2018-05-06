@@ -2,7 +2,7 @@
  *	Project: Tempera
  *	File: main.cpp
  *	Copyright � 2009 SilentK, Abyll
- *	Copyright � 2009 Kornman00 (Sean Cooper)
+ *	Copyright � 2015 Kornman00 (Sean Cooper)
  *	Copyright � 2018 Dwood15 (Dason Woodhouse)
  *
  *  This file is part of Tempera.
@@ -58,7 +58,7 @@ static inline void init(HMODULE reason) {
 	spcore::memory::get_mem_and_patch();
 
 	DisableThreadLibraryCalls(reason);
-	CreateThread(0, 0, (LPTHREAD_START_ROUTINE) hkMain, 0, 0, 0);
+	CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
 	printf("Created LPTHREAD\n");
 
 }

@@ -26,6 +26,7 @@
 #include <windows.h>
 #include <d3dx9math.h>
 #include "../ce_base_types.h"
+#include "../haloforge/headers/addlog.h"
 
 //TODO: Investigate why this is the way it is.
 struct argb_color;
@@ -60,15 +61,42 @@ struct real_argb_color {
 };
 STAT_ASSRT(real_argb_color, 0x10);
 
-//-------------------------
-//-------------------------
-//-------------------------
-//-------------------------
-
-
 //#define vect float
-#define vect2 D3DXVECTOR2
-#define vect3 D3DXVECTOR3
+struct vect2 : public D3DXVECTOR2 {
+	using D3DXVECTOR2::D3DXVECTOR2;
+
+	void DumpData(bool toConsole, const char *Preceding = nullptr) {
+		if (Preceding) {
+			Print(toConsole, "%s\tx: %.3f, y: %.3f\n", Preceding, this->x, this->y);
+			return;
+		}
+
+		Print(toConsole, "\tx: %.3f, y: %.3f\n", this->x, this->y);
+	}
+};
+
+STAT_ASSRT(vect2, sizeof(D3DXVECTOR2));
+
+// #define vect3 D3DXVECTOR3
+
+struct vect3 : public D3DXVECTOR3 {
+	using D3DXVECTOR3::D3DXVECTOR3;
+	// vect3() : D3DXVECTOR3() {}
+	//
+	// vect3(float x, float y, float z) : D3DXVECTOR3(x, y, z) {}
+
+	void DumpData(bool toConsole, const char *Preceding = nullptr) {
+		if (Preceding) {
+			Print(toConsole, "%s\tx: %.3f, y: %.3f z: %.3f\n", Preceding, this->x, this->y, this->z);
+			return;
+		}
+
+		Print(toConsole, "\tx: %.3f, y: %.3f z: %.3f\n", this->x, this->y, this->z);
+	}
+
+};
+
+STAT_ASSRT(vect3, sizeof(D3DXVECTOR3));
 
 //-------------------------
 struct HaloColor {
@@ -85,7 +113,7 @@ struct HaloColor {
 #define hRed HaloColor(1,1,0,0)
 
 class CMath {
- public:
+public:
 
 	float Get2dDistance(float x, float y);
 

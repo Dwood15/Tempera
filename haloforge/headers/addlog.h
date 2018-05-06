@@ -26,14 +26,12 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-//using namespace std;
 
 #define LOGNAME "tempera_dbg_log.log"
 
 void PrintHelp();
 const void __cdecl DEBUG(const char* fmt, ...);
+const void __cdecl Print(bool toConsole, const char *fmt, ...);
 char *GetDirectoryFile(char* filename);
 void InitAddLog(HMODULE hModule);
 void ExitAddLog();
-
-/* ADDLOG_H */

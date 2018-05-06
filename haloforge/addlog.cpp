@@ -25,7 +25,7 @@
 std::ofstream ofile;
 char          dlldir[320];
 
-char*GetDirectoryFile(char*filename) {
+char *GetDirectoryFile(char *filename) {
 	static char path[320];
 	strcpy(path, dlldir);
 	strcat(path, filename);
@@ -34,57 +34,81 @@ char*GetDirectoryFile(char*filename) {
 
 static volatile bool debug_write_locked = false;
 
-const void __cdecl DEBUG(const char*fmt, ...) {
-	while(debug_write_locked) {
+const void __cdecl DBGPrnt(const char *fmt, va_list va_alist) {
+	if (!ofile || !fmt) {
+		return;
+	}
+
+	if (debug_write_locked) {
 		Sleep(90);
-		//Too impatient for this shit. :)
-		if( debug_write_locked ) {
+		//Too impatient for this.
+		if (debug_write_locked) {
 			return;
 		}
 	}
 
 	debug_write_locked = true;
-	if( ofile && fmt ) {
-		va_list va_alist;
-		char    logbuf[256] = { 0 };
 
-				va_start (va_alist, fmt);
-		_vsnprintf(logbuf + strlen(logbuf), sizeof(logbuf) - strlen(logbuf), fmt, va_alist);
-				va_end (va_alist);
+	char logbuf[256] = {0};
+	_vsnprintf(logbuf + strlen(logbuf), sizeof(logbuf) - strlen(logbuf), fmt, va_alist);
+	ofile << logbuf << std::endl;
 
-		ofile << logbuf << std::endl;
-	}
 	debug_write_locked = false;
 }
 
+const void __cdecl DEBUG(const char *fmt, ...) {
+	va_list va_alist;
+
+		va_start (va_alist, fmt);
+	DBGPrnt(fmt, va_alist);
+		va_end (va_alist);
+
+}
+
+const void __cdecl Print(bool toConsole, const char *fmt, ...) {
+	if (!fmt) {
+		return;
+	}
+
+	va_list va_alist;
+
+		va_start(va_alist, fmt);
+	if (toConsole) {
+		vprintf(fmt, va_alist);
+	}
+
+	DBGPrnt(fmt, va_alist);
+
+		va_end(va_alist);
+}
+
 void PrintHelp() {
-	const char*f1     = "F1    -> (ui only!)Set # players to spawn in next map to 2.\n";
-	const char*f2     = "F2    -> Dumps Player Globals data to log. Prints to window when not in ui.map\n";
-	const char*shift  = "SHIFT -> Select\\Deselect highlighted object.\n";
-	const char*f5     = "F5    -> Log object data that player is holding to file.\n";
-	const char*akUP   = "AK_UP -> Moves held object away incrementally.\n";
-	const char*akDOWN = "AK_DN -> Moves held object toward, incrementally.\n\t ->Arrow keys are for use with RMBTN\n";
-	const char*lmBTN  = "LMBTN -> Hold Object - Hard to describe.\n";
-	const char*rmBTN  = "RMBTN -> Hold Object - Same as LMBTN.\n\t ->Use these in map if you have selected an object.\n";
-	const char*f11    = "F11   -> This Help Text.\n";
+	const char *f1     = "F1    -> (ui only!)Set # players to spawn in next map to 2.\n";
+	const char *f2     = "F2    -> Dumps Player Globals data to log. Prints to window when not in ui.map\n";
+	const char *shift  = "SHIFT -> Select\\Deselect highlighted object.\n";
+	const char *f5     = "F5    -> Log object data that player is holding to file.\n";
+	const char *akUP   = "AK_UP -> Moves held object away incrementally.\n";
+	const char *akDOWN = "AK_DN -> Moves held object toward, incrementally.\n\t ->Arrow keys are for use with RMBTN\n";
+	const char *lmBTN  = "LMBTN -> Hold Object - Hard to describe.\n";
+	const char *rmBTN  = "RMBTN -> Hold Object - Same as LMBTN.\n\t ->Use these in map if you have selected an object.\n";
+	const char *f11    = "F11   -> This Help Text.\n";
 
 	printf("\n\n/******************************************************\\\n");
-	printf("  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n",
-			 shift, f1, f2, f5, akUP, akDOWN, lmBTN, rmBTN, f11);
+	printf("  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n", shift, f1, f2, f5, akUP, akDOWN, lmBTN, rmBTN, f11);
 	printf("\\*****************************************************/\n");
 }
 
 void InitAddLog(HMODULE hModule) {
 	GetModuleFileNameA(hModule, dlldir, 512);
 
-	for( int i = (int)strlen(dlldir); i > 0; i-- ) {
-		if( dlldir[i] == '\\' ) {
+	for (int i = (int) strlen(dlldir); i > 0; i--) {
+		if (dlldir[i] == '\\') {
 			dlldir[i + 1] = 0;
 			break;
 		}
 	}
 
-	ofile.open(GetDirectoryFile((char*)LOGNAME), std::ios::app);
+	ofile.open(GetDirectoryFile((char *) LOGNAME), std::ios::app);
 	std::time_t time = std::time(nullptr);
 	DEBUG("*-*-*-*-*-*-*-*-*-*-*-*-*-*");
 	DEBUG("Tempera Injected, live_projekt initialized");

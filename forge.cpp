@@ -43,43 +43,8 @@ static short *spawn_count         = (short *) 0x624A9C;
 static short *render_window_count = (short *) 0x6B4098;
 bool         *at_main_menu        = (bool *) 0x6B4051;
 
-typedef int retIntGivenVoid(void);
-
 static Core *core;
 static CD3D cd3d;
-
-static void dumpPlayerGlobalsData() {
-
-	const char *first_unused      = "First unused player Idx: %d";
-	const char *unused_after_init = "unused_after_initialize_unk %d\\n";
-	const char *local_plyr_cnt    = "local_player_count: %d\n";
-	const char *dbl_spd_tx        = "double speed tix remaining: %d\n";
-	const char *all_ded           = "Are all dead?: %d\n";
-	const char *inp_dis           = "Input disabled: %d\n";
-	const char *bsp_trig          = "BSP switch trigger: %d\n";
-
-	retIntGivenVoid               *find_unused_local_player_index = (retIntGivenVoid *) 0x4762f0;
-	int                           unused_plyr_idx                 = find_unused_local_player_index();
-	static s_players_globals_data *players_global_data            = *(s_players_globals_data **) 0x815918;
-
-	if (!*at_main_menu) {
-		core->ConsoleText(hGreen, first_unused, unused_plyr_idx);
-		printf(unused_after_init, players_global_data->unused_after_initialize_unk);
-		printf(local_plyr_cnt, players_global_data->local_player_count);
-		printf(dbl_spd_tx, players_global_data->double_speed_ticks_remaining);
-		printf(all_ded, players_global_data->are_all_dead);
-		printf(inp_dis, players_global_data->input_disabled);
-		printf(bsp_trig, players_global_data->_bsp_switch_trigger_idx);
-	}
-
-	DEBUG(first_unused, unused_plyr_idx);
-	DEBUG(unused_after_init, players_global_data->unused_after_initialize_unk);
-	DEBUG(local_plyr_cnt, players_global_data->local_player_count);
-	DEBUG(dbl_spd_tx, players_global_data->double_speed_ticks_remaining);
-	DEBUG(all_ded, players_global_data->are_all_dead);
-	DEBUG(inp_dis, players_global_data->input_disabled);
-	DEBUG(bsp_trig, players_global_data->_bsp_switch_trigger_idx);
-}
 
 static void updateGlobals() {
 	if (last_respawn_count != *to_respawn_count) {
@@ -98,7 +63,7 @@ static void updateGlobals() {
 	}
 }
 
-int __stdcall hkMain() {
+int __stdcall forgeMain() {
 	core = new Core();
 	SetCore(core);
 	cd3d.hkD3DHook(NULL);
@@ -110,14 +75,13 @@ int __stdcall hkMain() {
 		Sleep(30);
 		updateGlobals();
 
-		if (GetAsyncKeyState(VK_F1) & 1) {
-			if (*at_main_menu) {
-				*(short *) 0x624A9C = (short) 0x2;
-				core->ConsoleText(hGreen, "Set Number players to spawn in next map: 2!");
-			}
-		} else if (GetAsyncKeyState(VK_F2) & 1) {
-			dumpPlayerGlobalsData();
+		if (*at_main_menu && (GetAsyncKeyState(VK_F1) & 1)) {
+			*(short *) 0x624A9C = (short) 0x2;
+			core->ConsoleText(hGreen, "Number players to spawn in next sp map: 2!");
+		}
 
+		if (GetAsyncKeyState(VK_F2) & 1) {
+			players_global_data->DumpData(!*at_main_menu, core);
 		} else if (GetAsyncKeyState(VK_F11) & 1) {
 			PrintHelp();
 			continue;
@@ -129,69 +93,33 @@ int __stdcall hkMain() {
 		}
 
 		if (GetAsyncKeyState(VK_F5) & 1) {
-
 			core->ObjectControl->LogInfo();
+		}
 
-		} else if (GetAsyncKeyState(VK_F6) & 1) { // Change the object's sector
+		if (GetAsyncKeyState(VK_F7) & 1) {
+			core->TryLogPlayer(0, true);
+			core->TryLogPlayer(1, true);
 
-			if (core->ObjectControl->selected_h == NULL || (int) core->ObjectControl->selected_h == -1) {
-
-				core->ConsoleText(hRed, "Could not select an object; Player sector: %d\n\tSend log to Dwood.", core->GetPlayer(0)->Sector);
-				DEBUG("Unable to select object, player sector: %d", core->GetPlayer(0)->Sector);
-
-			} else {
-
-				core->ConsoleText(hBlue, "Obj sector: %d, Player sector: %d", core->ObjectControl->selected_h->sector, core->GetPlayer(0)->Sector);
-				core->ObjectControl->selected_h->sector = (short) core->GetPlayer((short) 0)->Sector;
-
-			}
 		} else if (GetAsyncKeyState(VK_UP)) {
-			// Object MOVE away.
-			core->ObjectControl->HoldDistance += 0.06f;
+			core->ObjectControl->IncreaseHoldDistance();         // Object MOVE away.
 
 		} else if (GetAsyncKeyState(VK_DOWN)) {
-			// Object MOVE closer
-			if (core->ObjectControl->HoldDistance > 0.07f) {
-				core->ObjectControl->HoldDistance -= 0.06f;
-			}
+			core->ObjectControl->DecreaseHoldDistance();         // Object MOVE closer
 
 		} else if (GetAsyncKeyState(VK_SHIFT) & 1) {
+			// SHIFT to lock on object.
+			core->ObjectControl->UpdateSelection();
 
-			// Object control: for now, SHIFT to lock onto an object.
-			// for choosing the 'selected' object: aka the one closest to where we're aiming. Nearest is already set from the D3Dhook
-			if ((int) core->ObjectControl->selected_h != -1) {
-
-				core->ObjectControl->selected_h = (object_header *) -1;
-				core->ConsoleText(hGreen, "Removed selection. SHIFT to select.");
-
-			} else {
-
-				core->ConsoleText(hGreen, "Added single selection. SHIFT to deselect.");
-				core->ObjectControl->selected_h = core->ObjectControl->nearest_h;
-
-			}
-		} else if (!core->ObjectControl->holding && (GetAsyncKeyState(VK_LBUTTON) & 0x8000)) { // XY plane
+		} else if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) { // XY plane
 			//left mouse button
-			if ((int) core->ObjectControl->selected_h != -1) {
-				core->ObjectControl->MoveObjXY();
-
-			}
+			core->ObjectControl->MoveObjXY();
 		} else if ((GetAsyncKeyState(VK_RBUTTON) & 0x8000)) {    // STRAIGHT in front of camera plane.
 			//Right mouse button
-			if (core->ObjectControl->selected_h != NULL && core->ObjectControl->selected_h != (object_header *) -1 && core->ObjectControl->selected_h)
-
-				if (core->ObjectControl->holding) {
-					core->ObjectControl->MoveObjFront();
-				} else {
-					core->ObjectControl->holding = true;
-					core->ConsoleText(hBlue, "Got set holding = true");
-				}
-		} else if (!(GetAsyncKeyState(VK_RBUTTON)) && core->ObjectControl->holding) {
-			core->ConsoleText(hBlue, "Got set holding = false");
-			core->ObjectControl->holding = false;
+			core->ObjectControl->UpdateHeldObject();
+		} else if (!(GetAsyncKeyState(VK_RBUTTON))) {
+			core->ObjectControl->DropHeldObject();
 		}
 	}
-
 }
 
 //		TODO: Scrolling to set selected item's distance from player.

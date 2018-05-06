@@ -20,6 +20,7 @@
 
 */
 #define WIN32_LEAN_AND_MEAN
+
 #include <Windows.h>
 #include <fstream>
 #include "../haloforge/headers/detours.h"
@@ -38,7 +39,7 @@ CD3D::~CD3D() {
 }
 
 long CD3D::GenerateShader(IDirect3DDevice9 *pDevice, IDirect3DPixelShader9 **pShader, float r, float g, float b) {
-	char szShader[256];
+	char        szShader[256];
 	ID3DXBuffer *pShaderBuf = NULL;
 	sprintf(szShader, "ps.1.1\ndef c0, %f, %f, %f, %f\nmov r0,c0", r, g, b, 1.0f);
 	D3DXAssembleShader(szShader, sizeof(szShader), NULL, NULL, 0, &pShaderBuf, NULL);
@@ -48,29 +49,29 @@ long CD3D::GenerateShader(IDirect3DDevice9 *pDevice, IDirect3DPixelShader9 **pSh
 }
 
 struct tri_vert {
-	float x, y, z;
+	float    x, y, z;
 	D3DCOLOR colour;
 };
 
-void CD3D::myDrawPlane(IDirect3DDevice9*pDevice ) {
+void CD3D::myDrawPlane(IDirect3DDevice9 *pDevice) {
 
 }
 
-void CD3D::myDrawText(IDirect3DDevice9 *pDevice, ID3DXFont *pFont, bool shadow, long x, long y, long width, D3DCOLOR color, D3DCOLOR shadowcolor, const char *cFmt, ...) {
+void CD3D::myDrawText(IDirect3DDevice9 *pDevice, ID3DXFont *pFont, bool shadow, long x, long y, long width, long height, D3DCOLOR color, D3DCOLOR shadowcolor, const char *cFmt, ...) {
 	va_list mvalist;
-	char cBuffer[256] = {0};
+	char    cBuffer[256] = {0};
 
-	RECT Rect1 = {x + 1, y, x + 2000, y + 2000};
-	RECT Rect2 = {x - 1, y, x + 2000, y + 2000};
-	RECT Rect3 = {x, y + 1, x + 2000, y + 2000};
-	RECT Rect4 = {x, y - 1, x + 2000, y + 2000};
-	RECT Rect5 = {x, y, x + 2000, y + 2000};
+	RECT Rect1 = {x + 1, y, x + width, y + height};
+	RECT Rect2 = {x - 1, y, x + width, y + height};
+	RECT Rect3 = {x, y + 1, x + width, y + height};
+	RECT Rect4 = {x, y - 1, x + width, y + height};
+	RECT Rect5 = {x, y, x + width, y + height};
 
 		va_start(mvalist, cFmt);
 	_vsnprintf(cBuffer, sizeof(cBuffer), cFmt, mvalist);
 		va_end(mvalist);
 
-	if (shadow == true) {
+	if (shadow) {
 		pFont->DrawText(NULL, cBuffer, -1, &Rect1, 0, shadowcolor);
 		pFont->DrawText(NULL, cBuffer, -1, &Rect2, 0, shadowcolor);
 		pFont->DrawText(NULL, cBuffer, -1, &Rect3, 0, shadowcolor);
@@ -85,25 +86,24 @@ void CD3D::FillRGBA(ID3DXLine *pLine, float x, float y, float width, float heigh
 	pLine->SetWidth(width);
 	pLine->SetAntialias(0);
 	pLine->SetGLLines(1);
-	vLine[0][0] = x + width / 2;
-	vLine[0][1] = y;
-	vLine[1][0] = x + width / 2;
-	vLine[1][1] = y + height;
+	vLine[0].x = x + width / 2;
+	vLine[0].y = y;
+	vLine[1].x = x + width / 2;
+	vLine[1].y = y + height;
 	pLine->Begin();
 	pLine->Draw(vLine, 2, color);
 	pLine->End();
 }
 
 void CD3D::DrawMouse(IDirect3DDevice9 *pDevice, IDirect3DTexture9 *pCursorTexture, ID3DXSprite *pCursorSprite) {
-	POINT pPoint;
-	float x, y;
+	POINT    pPoint;
 	D3DCOLOR dColor = NULL;
 	GetCursorPos(&pPoint);
-	x = (float) pPoint.x;
-	y = (float) pPoint.y;
 	D3DXVECTOR3 Pos1;
-	Pos1[0] = x;
-	Pos1[1] = y;
+	// Pos1[0] = x;
+	// Pos1[1] = y;
+	Pos1.x = (float) pPoint.x;
+	Pos1.y = (float) pPoint.y;
 	Pos1.z = 0.0f;
 	pCursorSprite->Begin(D3DXSPRITE_ALPHABLEND);
 	pCursorSprite->Draw(pCursorTexture, NULL, NULL, &Pos1, 0xFFFFFFFF);
@@ -114,63 +114,71 @@ typedef long (__stdcall *pEndScene)(IDirect3DDevice9 *pDevice);
 
 pEndScene oEndScene;
 
+bool isOffScreen(vect3 screenpos) {
+	return ((screenpos.x < (-FOV_XBOUND)) || screenpos.x > (1 + FOV_XBOUND) || (screenpos.y < (-FOV_YBOUND)) || screenpos.y > (1 + FOV_YBOUND) || screenpos.z > OBJECT_CLIP);
+}
+
 void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 	Core *core = GetCore();
 
-	object_data *obj = NULL;
-	object_header *objh = NULL;
+	object_data   *obj          = NULL;
+	object_header *objh         = NULL;
 	object_header *temp_nearest = NULL;
 	//CObjectArray* objA;
 	//vect ObjCoord;
-	const char *ObjName;
-	vect3 screenpos;
+	const char    *ObjName;
+	vect3         screenpos;
 
 	// for choosing the 'selected' object: (or the one closest to where we're aiming.
-	float closest = .35f; // it needs to be at least within 30 degrees
+	float closest_angle = .35f; // it needs to be at least within 30 degrees
 	float tx;
 	float ty;
 
 	for (unsigned short i = 0; i < core->core_1->Object->max; i++) {
 		objh = core->GetObjectHeader(i);
-		obj = core->GetGenericObject(i);
+		obj  = core->GetGenericObject(i);
 		if (obj == NULL) {
 			continue;
 		}
 
 		screenpos = core->MyCamera->ScreenPos(obj->World);
-		ObjName = core->GetObjectName(i);
+
+		// Offscreen check
+		if (isOffScreen(screenpos)) {
+			continue;
+		}
 
 		tx = screenpos.x * 2 - 1;
 		ty = screenpos.y * 2 - 1;
 		tx = sqrt(tx * tx + ty * ty);
-		if (tx < closest) {
-			closest = tx;
-			temp_nearest = objh;
-		}
-		// Offscreen check
-		//Parens b/c it un-confuses CLion lol
-		if ((screenpos.x < (-FOV_XBOUND)) || screenpos.x > (1 + FOV_XBOUND) || (screenpos.y < (-FOV_YBOUND)) || screenpos.y > (1 + FOV_YBOUND) ||
-			screenpos.z > OBJECT_CLIP) {
-			continue;
+
+		//screenpos.z is also known as dist_to_obj
+		if (tx < closest_angle) {
+			closest_angle = tx;
+			temp_nearest  = objh;
 		}
 
 		screenpos.x *= d3d.pViewport.Width;
 		screenpos.y *= d3d.pViewport.Height;
 
 		D3DCOLOR color = tGreen;
-		if (objh == core->ObjectControl->selected_h)
+
+		if (obj->IsPlayer()) {
+			color = tLightBlue;
+		}
+
+		if (core->ObjectControl->IsSelected(objh)) {
 			color = tOrange;
-		else if (objh == core->ObjectControl->nearest_h)
+
+		} else if (core->ObjectControl->IsNearest(objh)) {
 			color = tBlue;
-		d3d.myDrawText(pDevice, d3d.Font, true, (int) screenpos.x, (int) screenpos.y, 2000, color, tBlack, ObjName);
+		}
+
+		ObjName = core->GetObjectName(i);
+		d3d.myDrawText(pDevice, d3d.Font, true, (int) screenpos.x, (int) screenpos.y, 2000, 2000, color, tBlack, ObjName);
 	}
 
-	if (temp_nearest != NULL) {
-		if(core->ObjectControl->nearest_h != temp_nearest) {
-			//core->ConsoleText(hGreen, "Setting object to nearest!");
-			core->ObjectControl->nearest_h = temp_nearest;
-		}
-	}
+	core->ObjectControl->SetNearest(temp_nearest);
 }
 
 long __stdcall hkEndScene(IDirect3DDevice9 *pDevice) {
@@ -188,8 +196,6 @@ long __stdcall hkEndScene(IDirect3DDevice9 *pDevice) {
 typedef long (__stdcall *pReset)(IDirect3DDevice9 *pDevice, D3DPRESENT_PARAMETERS *pPresentationParameters);
 
 pReset oReset;
-
-// Note: Xfire also hooks Reset, which means the game will crash if device is lost and reset while xfire is open
 
 long __stdcall hkReset(IDirect3DDevice9 *pDevice, D3DPRESENT_PARAMETERS *pPresentationParameters) {
 
@@ -242,8 +248,8 @@ DWORD __stdcall CD3D::hkD3DHook(void *lpVoid) {
 	//0x3C471C0
 	//0x3C49F5C
 	//0x6B840C
-	void *pDevicePointer = (void *) 0x6B840C; // Halo full version device pointer ( static )
-	DWORD dwOldProtect = NULL;
+	void             *pDevicePointer = (void *) 0x6B840C; // Halo full version device pointer ( static )
+	DWORD            dwOldProtect    = NULL;
 	IDirect3DDevice9 *pGameDevice;
 
 	VirtualProtect((void *) pDevicePointer, 4, PAGE_EXECUTE_READWRITE, &dwOldProtect);
@@ -252,10 +258,10 @@ DWORD __stdcall CD3D::hkD3DHook(void *lpVoid) {
 
 	DWORD *pHaloDevice = (DWORD *) pGameDevice;
 	pHaloDevice = (DWORD *) pHaloDevice[0];
-	vD3D9 = (vTable_D3D9 *) pHaloDevice; // Assign device table to our vTable structure
+	vD3D9       = (vTable_D3D9 *) pHaloDevice; // Assign device table to our vTable structure
 
 	oEndScene = (pEndScene) DetourFunction((PBYTE) vD3D9->EndScene, (PBYTE) hkEndScene);
-	oReset = (pReset) DetourFunction((PBYTE) vD3D9->Reset, (PBYTE) hkReset);
+	oReset    = (pReset) DetourFunction((PBYTE) vD3D9->Reset, (PBYTE) hkReset);
 	//oDrawIndexedPrimitive = (pDrawIndexedPrimitive)DetourFunction((PBYTE)vD3D9->DrawIndexedPrimitive, (PBYTE)hkDrawIndexedPrimitive);
 	//oSetStreamSource = (pSetStreamSource)DetourFunction((PBYTE)vD3D9->SetStreamSource, (PBYTE)hkSetStreamSource);
 

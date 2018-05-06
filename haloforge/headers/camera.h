@@ -73,7 +73,7 @@ struct _camera {
 
 class CMyCamera {
 public:
-	CMyCamera();
+	CMyCamera(_camera *cam = (_camera *) CAMERA_ADDRESS);
 
 	~CMyCamera();
 
@@ -90,7 +90,7 @@ public:
 	D3DXVECTOR3 vScreen;
 	D3DXVECTOR3 vWorld;
 
-	float aspect;
+	float   aspect;
 	_camera *Camera;
 
 	void CreateViewMatrix(vect3 fEye, vect3 vLookAt, vect3 fUp);

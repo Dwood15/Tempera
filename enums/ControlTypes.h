@@ -25,8 +25,8 @@ namespace enums {
 		_ControlType,
 	};
 
-	enum GamepadButton // k_maximum_gamepad_buttons
-	{
+	// k_maximum_gamepad_buttons
+	enum GamepadButton {
 		_GamepadButton1,
 		_GamepadButton2,
 		_GamepadButton3,
@@ -87,8 +87,8 @@ namespace enums {
 		_GamepadAxisDirection,
 	};
 
-	enum GamepadDpadDirection // TODO: transition to pov_direction (input_windows) and remove
-	{
+	// TODO: transition to pov_direction (input_windows) and remove
+	enum GamepadDpadDirection {
 		_GamepadDpadDirectionNone = -1,
 		_GamepadDpadDirectionNorth,
 		_GamepadDpadDirectionNorthEast,
@@ -101,8 +101,8 @@ namespace enums {
 		_GamepadDpadDirection,
 	};
 
-	enum MouseButton // TODO: transition to mouse_button (input_windows) and remove
-	{
+	// TODO: transition to mouse_button (input_windows) and remove
+	enum MouseButton {
 		// Left
 			_MouseButton1,
 		// Middle
@@ -119,8 +119,8 @@ namespace enums {
 			_MouseButton,
 	};
 
-	enum MouseAxis // TODO: transition to mouse_axes (input_windows) and remove
-	{
+	// TODO: transition to mouse_axes (input_windows) and remove
+	enum MouseAxis {
 		_MouseAxisX,
 		_MouseAxisY,
 		_MouseAxisWheel,
@@ -136,8 +136,8 @@ namespace enums {
 		_MouseAxisDirection,
 	};
 
-	enum PlayerControl // TODO: transition to control_buttons (input_windows) and remove
-	{
+	// TODO: transition to control_buttons (input_windows) and remove
+	enum PlayerControl {
 		_PlayerControlJump,
 		_PlayerControlSwitchGrenade,
 		_PlayerControlAction,
@@ -237,7 +237,7 @@ namespace enums {
 		k_number_of_mouse_axes, // NUMBER_OF_MOUSE_AXES
 	};
 
-	enum key_code : _enum {
+	enum key_code : short {
 		_key_code_invalid = NONE,
 
 		_key_code_escape        = 0x0,
