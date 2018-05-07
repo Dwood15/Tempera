@@ -13,13 +13,14 @@ This project may cause your game to crash, files to corrupt, or, if luck does no
 ### Tempera is: 
   - A mishmash of code from Kornman00 an TheFieryScythe's Open Sauce project, as well as SilentK and abyll's haloforge project.
   - Between major refactorings and feature updates.
+  - In Pre-Alpha
 
 ### Tempera is in need of:
   -  Feedback and help. No need for halo-specific modding experience. Just C++ and C knowledge. 
   
 ### Tempera is not: 
   - Stable. (I'm not even willing to consider this alpha phase yet)
-  - Good for your health. The codebase will make you use a number of swears cursing my name.
+  - Good for your health. The codebase will make you use a number of swears, probably cursing my name.
   
 ### Building Tempera Requires:
   - capstone_static.lib, - On-the-fly decompilation and debugging for Exception handling (not yet implemented) (bundled in repository)
@@ -40,19 +41,18 @@ Various files and items in this codebase can be attributed as follows:
   
 At one point, I was using Chimera as a base for Tempera. All of Halogen002's code has been removed, and Tempera is now a completely separate codebase.
 
-At first I attempted to credit specific files to their creators, Tempera has grown to the point where maintaining proper attribution is basically impossible.
+See Chimera here: https://github.com/Halogen002/Chimera
 
-While Kornman's structures are used as the basis for ~95% of the code, I often fail to credit them. For the origin source code to 
-Open Sauce, please see: https://bitbucket.org/KornnerStudios/opensauce-release/wiki/Home.
+Tempera has grown and evolved to the point that maintaining attribution is impractical. All attributions in individual files will be removed in the near future in favor of a more generic notice.
 
-SilentK and Abyll's haloforge project was, as far as I remember, kept in private. Initially intended as a mod for halo PC, v1.08
-in 2008-2009, I received access to the source, and was able to update it to 1.10 while at the same time, fixing some bugs with forge.
-Out of respect for SilentK and Abyll's efforts, I have not released the code until now. 
+SilentK and Abyll's haloforge project was mostly kept private. Intended for halo PC v1.08 in 2008-2009, I have updated it to Custom Edition, v1.10. Expect major changes between pushes.
 
-Tempera's repository may be the only publicly released code from their original live_projekt. 
+Tempera's repository may be the only publicly released code from the original live_projekt.
 
 Theoretically, Tempera should compile with MinGW thanks to CMake. In either case, the Windows 10 SDK and a separate DirectX sdk is required. Any DirectX sdk from 2007 to 2010 should be compatible. 
 
 ## License Notice
 
-All code within this repository is licensed under the GNU General Public License, Version 3, and comes with no warranty, express or implied.
+All code within this repository is under the GNU General Public License, Version 3, and comes with no warranty, express or implied.
+
+This codebase isn't even covered under the Microsoft Content Usage guidelines.

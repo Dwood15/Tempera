@@ -35,17 +35,17 @@ bool         *at_main_menu        = (bool *) 0x6B4051;
 
 static void updateGlobals() {
 	if (last_respawn_count != *to_respawn_count) {
-		DEBUG("Number of people to respawn from: %d to: %d\n", last_respawn_count, *to_respawn_count);
+		Print(true, "Number of people to respawn from: %d to: %d\n", last_respawn_count, *to_respawn_count);
 		last_respawn_count = *to_respawn_count;
 	}
 
 	if (last_spawn_count != *spawn_count) {
-		DEBUG("Number of people to respawn from: %d to: %d\n", last_spawn_count, *spawn_count);
+		Print(true, "Number of people to respawn from: %d to: %d\n", last_spawn_count, *spawn_count);
 		last_spawn_count = *spawn_count;
 	}
 
 	if (last_render_window_count != *render_window_count) {
-		DEBUG("Updated number players to spawn from: %d to: %d\n", last_render_window_count, *render_window_count);
+		Print(true, "Updated number players to spawn from: %d to: %d\n", last_render_window_count, *render_window_count);
 		last_render_window_count = *render_window_count;
 	}
 }

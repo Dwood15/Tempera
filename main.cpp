@@ -46,7 +46,7 @@ static bool loaded = false;
 
 static void *orig_DirectInput8Create;
 
-//Used in order to proxy the Dinput8 Library.
+//Used in order to proxy direct input.
 __declspec(naked) void WINAPI Tempera_DirectInput8Create() {
 	__asm { jmp orig_DirectInput8Create };
 }
