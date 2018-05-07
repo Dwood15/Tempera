@@ -50,11 +50,13 @@ static void updateGlobals() {
 	}
 }
 
+//TODO: Launch thread later on in the load cycle
 int __stdcall forgeMain() {
+	Sleep(1000);
 	core = new Core();
 	SetCore(core);
 	cd3d.hkD3DHook(NULL);
-
+	core->ConsoleText(hGreen, "Tempera initialized.");
 	PrintHelp();
 
 	while (1) {

@@ -76,9 +76,6 @@ static inline void *init(HMODULE *reason) {
 	VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);
 	spcore::memory::get_mem_and_patch();
 
-	DisableThreadLibraryCalls(*reason);
-	Print(true, "Created LPTHREAD\n");
-
 	return orig_DirectInput8Create;
 }
 
@@ -95,8 +92,13 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 			return false;
 		}
 		//Rip forge mode, lol. Gonna have to figure something else out now.
-		//CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
+
+		DisableThreadLibraryCalls(hinstDLL);
+		CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
+
+		Print(true, "Created LPTHREAD\n");
 		loaded = true;
+
 
 	} else if (fdwReason == DLL_PROCESS_DETACH && loaded) {
 		detach(hinstDLL);
