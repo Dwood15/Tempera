@@ -1,23 +1,13 @@
 /*
-	Project: haloforge
-	File: main.cpp
+	Project: tempera
+	File: forge.cpp
 	Copyright � 2009 SilentK, Abyll
  	Copyright 	 2018 Dwood
 
-	This file is part of haloforge.
+	This file is part of tempera.
 
-    haloforge is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    haloforge is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with haloforge.  If not, see <http://www.gnu.org/licenses/>.
+   You should have received a copy of the GNU General Public License
+   along with tempera.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <Windows.h>
@@ -43,7 +33,6 @@ static short *spawn_count         = (short *) 0x624A9C;
 static short *render_window_count = (short *) 0x6B4098;
 bool         *at_main_menu        = (bool *) 0x6B4051;
 
-
 static void updateGlobals() {
 	if (last_respawn_count != *to_respawn_count) {
 		DEBUG("Number of people to respawn from: %d to: %d\n", last_respawn_count, *to_respawn_count);
@@ -66,7 +55,6 @@ int __stdcall forgeMain() {
 	SetCore(core);
 	cd3d.hkD3DHook(NULL);
 
-	Sleep(120);
 	PrintHelp();
 
 	while (1) {
@@ -94,10 +82,37 @@ int __stdcall forgeMain() {
 			core->ObjectControl->LogInfo();
 		}
 
-		if (GetAsyncKeyState(VK_F7) & 1) {
-			core->TryLogPlayer(0, true);
-			core->TryLogPlayer(1, true);
+		if ((core->IsPlayerSpawned(1)) && GetAsyncKeyState(VK_F7) & 1) {
+			ident plyr_datum = core->GetPlayerObjectIdent(1);
 
+			if (plyr_datum.index > -1) {
+				//object_header * objh = core->GetObjectHeader(plyr_datum.index);
+				object_data *objd = core->GetGenericObject(plyr_datum.index);
+
+				Print(true, "\n\t\t***~~~*** Player 2 Data Dump ***~~~***\n");
+				objd->DumpData(true);
+				Print(true, "\n\t\t***~~~*** END Player 2 Data Dump ***~~~***\n");
+
+				objd->Velocity.x += .15;
+				objd->Velocity.y  = 0;
+
+				core->ConsoleText(hBlue, "Increased Player 2 velocity! %.3f", objd->Velocity.x);
+			}
+		} else if (core->IsPlayerSpawned(0) && GetAsyncKeyState(VK_F8) & 1) {
+			ident plyr_datum = core->GetPlayerObjectIdent(0);
+			if (plyr_datum.index > -1) {
+				//object_header * objh = core->GetObjectHeader(plyr_datum.index);
+				object_data *objd = core->GetGenericObject(plyr_datum.index);
+
+				Print(true, "\n\t***~~~*** Player 1 Data Dump ***~~~***\n");
+				objd->DumpData(true);
+				Print(true, "\n\t***~~~*** END Player 1 Data Dump ***~~~***\n");
+
+				objd->Velocity.x += .15;
+				objd->Velocity.y  = 0;
+
+				core->ConsoleText(hBlue, "Increased Player 1 velocity! %.3f", objd->Velocity.x);
+			}
 		} else if (GetAsyncKeyState(VK_UP)) {
 			core->ObjectControl->IncreaseHoldDistance();         // Object MOVE away.
 

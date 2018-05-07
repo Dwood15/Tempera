@@ -119,7 +119,7 @@ set(GAMEMAP_H
 	./gamestate/halo_types.h
 	tags/map.h
 	tags/tags.h
-	gamestate/scenario.h enums/ControlTypes.h gamestate/controls.h)
+	gamestate/scenario.h enums/ControlTypes.h gamestate/controls.h dinput/dinput.h)
 
 set(TAGS_H
 	tags/scenario.h
@@ -152,7 +152,6 @@ set(CEINTERNAL_H ${HALOFORGE_H}
 	./gamestate/player_types.h
 	headers/macros_generic.h
 	./exceptions/exception_handler.h
-	./memory_map/memorymap.h
 	headers/animations.h gamestate/sbsp.h gamestate/networking.h gamestate/game_globals.h gamestate/render.h gamestate/tags_generic.h)
 
 set(HALOFORGE_CPP
@@ -177,7 +176,9 @@ file(GLOB DETOURS_GLOB ./libs/detours.lib)
 file(GLOB CAPSTONE_STATIC_GLOB ./libs/capstone_static.lib)
 
 if(MSVC)
-	set(LINKER_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ASSEMBLYDEBUG\ ") #rip alignment on win32
+	set(BASE_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ ")
+
+	set(LINKER_FLAGS "${BASE_FLAGS} /ASSEMBLYDEBUG\ /DEF:\"${CMAKE_CURRENT_SOURCE_DIR}/Tempera.def\"") #rip alignment on win32
 	set(CMAKE_SHARED_LINKER_FLAGS ${LINKER_FLAGS})
 
 elseif(NOT MSVC)
@@ -190,8 +191,8 @@ target_link_libraries(${PROJECT_NAME} ${DETOURS_GLOB} ${CAPSTONE_STATIC_GLOB} ${
 
 message(STATUS "Outputting lib to: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
-set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}/controls")
-#SET(EXECUTABLE_OUTPUT_PATH   "${HaloCE_ROOT_DIR}/controls")
-set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}/controls")
+set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
+#SET(EXECUTABLE_OUTPUT_PATH   "${HaloCE_ROOT_DIR}")
+set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")
 
-set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "tempera")
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "dinput8")

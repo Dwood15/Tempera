@@ -1,23 +1,13 @@
 /*
-	Project: haloforge
+	Project: tempera
 	File: core.cpp
 	Copyright � 2009 SilentK, Abyll
+ 	Copyright 	 2018 Dwood
 
-	This file is part of haloforge.
+	This file is part of tempera.
 
-    haloforge is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    haloforge is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with haloforge.  If not, see <http://www.gnu.org/licenses/>.
-
+   You should have received a copy of the GNU General Public License
+   along with tempera.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "headers/core.h"
@@ -58,7 +48,7 @@ Core::Core() {
 	core_2 = (_core_2 *) 0x7FBE70; //0x007FBA30; //00 00 00 00 08 8C 02 40 00 00 00 00 00 00 00 00 add [eax], al -PC is the same
 
 	//PC ONLY ???
-	core_3 = (_core_3 *) 0x0087A76C; //08 00 69 08 5C F9 2B 40 04 2E 2F 40 3C 84 2F 40 or [eax], al -PC address
+	core_3 = (_core_3 *) 0x87A76C; //08 00 69 08 5C F9 2B 40 04 2E 2F 40 3C 84 2F 40 or [eax], al -PC address
 
 	//110 HCE 0x81B800
 	core_4 = (_core_4 *) 0x81B800; //0x0081B3C0; //C8 D8 38 40 38 37 3D 40 00 81 3C 40 38 B7 3C 40 enter 38d8, 40 -PC is same
@@ -70,7 +60,7 @@ Core::Core() {
 	core_6 = (_core_6 *) 0x653BE4; //0x00653B1C; //EC 66 05 40 BC 67 25 40 24 67 25 40 00 00 00 00 in al, dx -PC same
 
 	//heyo:
-	core_7 = (_core_7 *) 0x0071D0E8; //18 CF 29 40 00 00 00 00 00 5F 3F 07 00 00 00 00 sbb bh, cl -'Nothing Found' is still PC address
+	core_7 = (_core_7 *) 0x71D0E8; //18 CF 29 40 00 00 00 00 00 5F 3F 07 00 00 00 00 sbb bh, cl -'Nothing Found' is still PC address
 
 	// Initialize all the core structures
 	// Currently only Halo PC 1.08 compatible addresses
@@ -154,7 +144,10 @@ ident Core::GetPlayerObjectIdent(short player_index) {
 ////////////////////////////////////////
 // Object Methods
 
-// Returns the address of a players biped object structure, by object index
+/**
+ * @param player_index 0-15 index of player to try to get.
+ * @returns the address of a players biped object structure
+ */
 biped_data *Core::GetBiped(short player_index) {
 	short object_index = GetPlayerObjectIdent(player_index).index;
 

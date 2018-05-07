@@ -44,37 +44,62 @@
 
 static bool loaded = false;
 
-static inline void init(HMODULE reason) {
+static void *orig_DirectInput8Create;
+
+//Used in order to proxy the Dinput8 Library.
+__declspec(naked) void WINAPI Tempera_DirectInput8Create() {
+	__asm { jmp orig_DirectInput8Create };
+}
+
+static inline void *init(HMODULE *reason) {
 	h = AddVectoredExceptionHandler(CALL_FIRST, CEInternalExceptionHandler);
-	InitAddLog(reason);
+
+	char path[MAX_PATH];
+	GetSystemDirectory(path, sizeof(path));
+	strcat(path, "\\dinput8.dll");
+
+	*reason = LoadLibraryA(path);
+
+	if (!*reason) return false;
+
+	orig_DirectInput8Create = GetProcAddress(*reason, "DirectInput8Create");
+
+	InitAddLog(*reason);
 	// some debug outputz
 	if (::AllocConsole() != 0) {
 		freopen_s(&debug_out, "CONOUT$", "w", stdout);
 	}
-	//		printf("init_for_new_map_overwrite addr: 0x%x\n", 0xBEEF);//init_for_new_map_overwrite);
+
+	//printf("init_for_new_map_overwrite addr: 0x%x\n", 0xBEEF);//init_for_new_map_overwrite);
 
 	DWORD old;
 	VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);
 	spcore::memory::get_mem_and_patch();
 
-	DisableThreadLibraryCalls(reason);
-	CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
-	printf("Created LPTHREAD\n");
+	DisableThreadLibraryCalls(*reason);
+	Print(true, "Created LPTHREAD\n");
 
+	return orig_DirectInput8Create;
 }
 
-static inline void detach() {
+static inline void detach(HMODULE reason) {
 	ExitAddLog();
 	RemoveVectoredExceptionHandler(h);
+	FreeLibrary(reason);
 }
 
 extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
 	if (fdwReason == DLL_PROCESS_ATTACH && !loaded) {
-		init(hinstDLL);
+		if (!init(&hinstDLL)) {
+			Print(true, "Failed to Initialize properly, I guess. Exiting");
+			return false;
+		}
+		//Rip forge mode, lol. Gonna have to figure something else out now.
+		//CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
 		loaded = true;
 
 	} else if (fdwReason == DLL_PROCESS_DETACH && loaded) {
-		detach();
+		detach(hinstDLL);
 		loaded = false;
 	}
 	return true;

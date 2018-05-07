@@ -1,6 +1,13 @@
 /*
- * Insert GPLv3 license
- */
+	Project: tempera
+	File: exception_handler.h
+ 	Copyright 	 2018 Dwood
+
+	This file is part of tempera.
+
+   You should have received a copy of the GNU General Public License
+   along with tempera.  If not, see <http://www.gnu.org/licenses/>.
+*/
 #pragma once
 
 #include "../ceinternal.h"
@@ -8,12 +15,6 @@
 #include <vector>
 #include <Windows.h>
 #include <dbghelp.h>
-
-#include "../memory_map/memorymap.h"
-
-#ifndef clion_not_be_dumb
-#pragma message("eyo there poppet")
-#endif
 
 #define MAX_EXCEPTIONS_TO_LOG 5
 
@@ -28,7 +29,7 @@ const char *seDescription(const DWORD &code);
 
 const void DUMP_REGISTERS(PCONTEXT context);
 
-const void setPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, bool setExecuteBit);
+const void SetPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, bool setExecuteBit);
 
 LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo);
 

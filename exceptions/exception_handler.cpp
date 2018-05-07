@@ -1,11 +1,19 @@
 /*
- * Insert GPLv3 license
- */
+	Project: tempera
+	File: forge.cpp
+ 	Copyright 	 2018 Dwood
+
+	This file is part of tempera.
+
+   You should have received a copy of the GNU General Public License
+   along with tempera.  If not, see <http://www.gnu.org/licenses/>.
+*/
 #pragma once
 
 #include "exception_handler.h"
 #include "../ceinternal.h"
 
+//Not sure we need to guarantee we're in MSVC any more...
 #if defined(_MSC_VER)
 static volatile DWORD ExceptionCount = 0;
 
@@ -68,22 +76,25 @@ const char *seDescription(const DWORD &code) {
 			return "UNKNOWN EXCEPTION";
 	}
 }
-//See: https://msdn.microsoft.com/en-us/library/windows/desktop/aa366549(v=vs.85).aspx
+
 /**
+ * Set a Page Guard to monitor reads/writes/execution bits of various sections of halo's code.
+ * For more information, see: https://msdn.microsoft.com/en-us/library/windows/desktop/aa366549(v=vs.85).aspx
  * @param startAddr - The beginning address to monitor
  * @param length 	  - The size of the region (in bytes) to monitor.
  * @param callback	- function to call upon resolution of the pageGuard. struct _EXCEPTION_POINTERS *ExceptionInfo is expected for sole argument.
  * @param setExecuteBit - Whether to use PAGE_EXECUTE_READWRITE, or PAGE_READWRITE.
  */
-const void setPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, bool setExecuteBit = true) {
+const void SetPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, bool setExecuteBit = true) {
 	DEBUG("PageGuard should be getting set now, lol not implemented yet.");
 }
 
 LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo) {
 	ExceptionCount++;
-	//Yes, this is shitty, I know.
+	//Yes, this is bad practice, I know.
 	Sleep(ExceptionCount * 4);
-#define eirecord ExceptionInfo->ExceptionRecord
+
+	auto eirecord = ExceptionInfo->ExceptionRecord;
 
 	auto eCode = eirecord->ExceptionCode;
 	DEBUG("Error Code: 0x%X :: Type: %s @ 0x%X\n", eCode, seDescription(eCode), eirecord->ExceptionAddress);

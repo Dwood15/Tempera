@@ -85,11 +85,11 @@ void ObjectController::MoveObjFront() {
 }
 
 void ObjectController::IncreaseHoldDistance(unsigned int numSteps) {
-	SetHoldDistance(HoldDistance + (0.06f * numSteps));
+	SetHoldDistance(HoldDistance + (StepSize * numSteps));
 }
 
 void ObjectController::DecreaseHoldDistance(unsigned int numSteps) {
-	SetHoldDistance(HoldDistance - (0.06f * numSteps));
+	SetHoldDistance(HoldDistance - (StepSize * numSteps));
 }
 
 bool ObjectController::IsHoldingObject() {

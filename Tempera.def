@@ -1,0 +1,4 @@
+LIBRARY	"Tempera"
+
+EXPORTS
+	DirectInput8Create=Tempera_DirectInput8Create

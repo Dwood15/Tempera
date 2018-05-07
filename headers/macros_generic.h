@@ -29,6 +29,8 @@ STAT_ASSRT(double, 0x8);
 #pragma endregion
 #define INTELLISENSE_HACK(item) //int a[sizeof(item)] = 0;
 
+#define INVALID -1
+
 #pragma region functional
 #define FLAG(bit)               ( 1<<(bit) )
 #define UNK_TYPE(type) pad_##type
