@@ -43,8 +43,6 @@ static short *spawn_count         = (short *) 0x624A9C;
 static short *render_window_count = (short *) 0x6B4098;
 bool         *at_main_menu        = (bool *) 0x6B4051;
 
-static Core *core;
-static CD3D cd3d;
 
 static void updateGlobals() {
 	if (last_respawn_count != *to_respawn_count) {

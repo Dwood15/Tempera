@@ -37,6 +37,7 @@ class Core;
 #include "../../tags/map.h"
 #include "../../tags/tags.h"
 #include "math.h"
+#include "../../Direct3D/d3d9hook.h"
 //using namespace std;
 ////////////////////////////////////////
 // Defines
@@ -56,6 +57,9 @@ struct _core_4;
 struct _core_5;
 struct _core_6;
 struct _core_7;
+
+static Core *core;
+static CD3D cd3d;
 
 void SetCore(Core *core);
 
