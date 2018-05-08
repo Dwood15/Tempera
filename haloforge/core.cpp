@@ -19,10 +19,15 @@ typedef std::string string;
 typedef void (*pConsoleCMD)(char *command);
 
 pConsoleCMD oConsoleCMD;
+
+typedef void (*pConsoleText)(const char *pString, const HaloColor *fColor);
+
+pConsoleText oConsoleText;
+
 ////////////////////////////////////////
 // Global Core Class Def
 ////////////////////////////////////////
-Core        *gCore;
+Core *gCore;
 
 // Gets the global Core class address
 Core *GetCore() {
@@ -273,10 +278,6 @@ void Core::ConsoleCMD(char *command) {
 	memcpy((void *) CONSOLE_HOOK_ADDRESS, (void *) bConsoleOrig, 8);
 	VirtualProtect((void *) CONSOLE_HOOK_ADDRESS, 8, dwOldProtect, &dwOldProtect);
 }
-
-typedef void (*pConsoleText)(const char *pString, const HaloColor *fColor);
-
-pConsoleText oConsoleText;
 
 // Hooked console output function
 void hkConsoleText(const char *cFmt, HaloColor *fColor) {

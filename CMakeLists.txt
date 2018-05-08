@@ -15,7 +15,7 @@
 #gnu general public license for more details.
 #
 #You should have received a copy of the gnu general public license
-#along with haloforge.  if not, see <http://www.gnu.org/licenses/>.
+#along with Tempera.  if not, see <http://www.gnu.org/licenses/>.
 
 
 #this file is currently heavily inconsistent. I'm sorry.
