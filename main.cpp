@@ -41,6 +41,7 @@
 #include <vector>
 #include <Windows.h>
 #include <dbghelp.h>
+#include <mysql.h>
 
 static bool loaded = false;
 
@@ -49,6 +50,23 @@ static void *orig_DirectInput8Create;
 //Used in order to proxy direct input.
 __declspec(naked) void WINAPI Tempera_DirectInput8Create() {
 	__asm { jmp orig_DirectInput8Create };
+}
+
+static inline MYSQL *ConnectToSqlDB(const char *host, const char *usr, const char *pwd) {
+	MYSQL *con = mysql_init(NULL);
+
+	if (!con) {
+		Print(true, "Failed to init mysql connection.");
+		return NULL;
+	}
+
+	if (mysql_real_connect(con, host, usr, pwd, NULL, 3309, NULL, 0) == NULL) {
+		Print(true, "Failed to connect. Error: %s", mysql_error(con));
+		mysql_close(con);
+		return NULL;
+	}
+
+	return con;
 }
 
 static inline void *init(HMODULE *reason) {
@@ -92,13 +110,17 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 			return false;
 		}
 		//Rip forge mode, lol. Gonna have to figure something else out now.
-
 		DisableThreadLibraryCalls(hinstDLL);
 		CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
-
 		Print(true, "Created LPTHREAD\n");
-		loaded = true;
 
+		//auto sqlCon = ConnectToSqlDB("localhost" );
+		// if (sqlCon != NULL) {
+		// 	Print(true, "Successfully Connected to Database!");
+		// 	mysql_close(sqlCon);
+		// }
+
+		loaded = true;
 
 	} else if (fdwReason == DLL_PROCESS_DETACH && loaded) {
 		detach(hinstDLL);

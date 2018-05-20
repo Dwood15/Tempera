@@ -120,17 +120,6 @@ namespace spcore {
 		}
 	};
 
-	namespace rendering {
-		int __cdecl get_render_window_count() {
-			auto player_count = players_global_data->local_player_count;
-			if (player_count > MAX_PLAYER_COUNT_LOCAL || player_count < 1) {
-				player_count = 1;
-			}
-
-			return (int) player_count;
-		}
-	};
-
 	void __inline nopBytes(uintptr_t location, unsigned short numNops) {
 		for (unsigned short i = 0; i < numNops; i++) {
 			memory::patchValue<byte>(location + i, 0x90);
@@ -219,21 +208,31 @@ namespace spcore {
 			//patchValue<short>(0x4CBBC8, (short)-1);
 		}
 
-		void __inline insertRenderWindowCountHooks() {
-			//TODO: Descriptions. lol.
-			int render_window_count_hook_location_1 = GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, 0x49757D);
-			int render_window_count_hook_location_2 = GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, 0x4975C4);
-			int render_window_count_hook_location_3 = GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, 0x49792B);
-			int render_window_count_hook_location_4 = GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, 0x51EB00);
-			int render_window_count_hook_location_5 = GET_OFFSET_FROM_FUNC(&rendering::get_render_window_count, 0x51EE00);
-		}
-
 		void __inline patchSetLocalPlayer() {
 			MPP_B(0x477BEF, "First cmp of requested_player_index with 1");
 			MPP_B(0x477C10, "2nd cmp of requested_player_index with 1");
 		}
 
 #pragma endregion
+
+
+
+		void __inline patch_functions() {
+			//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
+			constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
+			//printf("Calculated - 4 offset: 0x%x\n", real_address_offset - 4);
+			//Hooks
+			auto addr = calc_addr_offset(player_control_init_new_map_hook, (int)&spcore::player_control::player_control_initialize_for_new_map);
+			patchValue<uintptr_t>(player_control_init_new_map_hook, addr); //Gotta be able to loop over all the players + input devices, no?.
+
+			//Nothing wrong's with the hook, just the function.
+			//			real_address        = (int)&initializations::motion_sensor_initialize_for_new_map;
+			//			real_address_offset = ( real_address ) - ((int)0x4AC98E);																					// + (int)4);
+			//
+			//			patchValue<uintptr_t>(((unsigned int)0x4AC98E ), (unsigned int)( real_address_offset ) - 4);    								//Gotta be able to loop over all the players + input devices, no?.
+
+
+		}
 
 		void __inline mem_patch_p1() {
 			//Function call
@@ -293,19 +292,8 @@ namespace spcore {
 			//constexpr uintptr_t render_weapon_hud_loc = 0x4B53E0
 			//MPP_B(render_weapon_hud_loc);
 
-			//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
-			constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
-			int                 real_address                     = (int) &spcore::player_control::player_control_initialize_for_new_map;
-			int                 real_address_offset              = (real_address) - ((int) player_control_init_new_map_hook);// + (int)4);
-			printf("Calculated - 4 offset: 0x%x\n", real_address_offset - 4);
-			//Hooks
-			patchValue<uintptr_t>(((unsigned int) player_control_init_new_map_hook), (unsigned int) (real_address_offset) - 4);    //Gotta be able to loop over all the players + input devices, no?.
 
-			//Nothing wrong's with the hook, just the function.
-			//			real_address        = (int)&initializations::motion_sensor_initialize_for_new_map;
-			//			real_address_offset = ( real_address ) - ((int)0x4AC98E);																					// + (int)4);
-			//
-			//			patchValue<uintptr_t>(((unsigned int)0x4AC98E ), (unsigned int)( real_address_offset ) - 4);    								//Gotta be able to loop over all the players + input devices, no?.
+
 		}
 
 		void get_mem_and_patch() {
