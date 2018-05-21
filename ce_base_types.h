@@ -79,11 +79,10 @@ struct datum_index {
 		};
 	};
 
-	operator int() { return handle; }
+	//operator int() { return handle; }
 
-	datum_index operator =(const int &rhs) {
-		handle = rhs;
-		return *this;
+	datum_index(int rhs) {
+		this->handle = rhs;
 	}
 
 };

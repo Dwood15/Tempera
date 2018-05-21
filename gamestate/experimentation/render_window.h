@@ -75,7 +75,7 @@ namespace render {
 	/**
 	 * 0x49757D - interface_draw_screen
 	 * - E8 FE 4F 03 00
-	 *
+	 *network
 	 * 0x49792B - see above
     * - E8 50 4C 03 00
 	 *

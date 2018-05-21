@@ -119,6 +119,7 @@ set(GAMEMAP_H
 	tags/map.h
 	tags/tags.h
 	gamestate/scenario.h
+	gamestate/game_input.h
 	enums/ControlTypes.h
 	gamestate/controls.h
 	dinput/dinput.h

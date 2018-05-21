@@ -36,7 +36,7 @@ namespace gamepads {
 namespace players {
 	datum_index __fastcall local_player_get_player_index(short local_player_index = 0) {
 		if ( local_player_index < 0) {
-			return -1;
+			return datum_index(-1);
 		}
 
 		if (local_player_index > MAX_PLAYER_COUNT_LOCAL) {
@@ -48,7 +48,6 @@ namespace players {
 		}
 
 		return players_global_data->local_player_players[local_player_index];
-
 	}
 
 
