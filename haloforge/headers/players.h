@@ -38,7 +38,7 @@ struct player {
 	char    MachineIndex;
 	BYTE    ControllerIndex;
 	char    Team2;
-	char    PlayerIndex;   //Should be 0-16
+	char    PlayerIndex;   //Should be 0-16F
 	long    Unknown7;
 	float   SpeedModifier;
 	BYTE    Unknown8[42];   //This is multiplayer-related stuff.

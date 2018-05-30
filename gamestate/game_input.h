@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../ceinternal.h"
+#include "../enums/ControlTypes.h"
 
 
 //I don't understand how this works and I'm lazy so I'm just going to straight copy it in for now.
@@ -197,21 +198,21 @@ namespace players {
 
 	struct ControlStates {
 		// key states (how long its been pressed until 0xFF, 0 if not pressed)
-		byte Keys[Enums::k_number_of_keys];
+		byte Keys[enums::k_number_of_keys];
 
 		PAD(0, sizeof(byte) * 383);
 
-		int32 MouseAxis[Enums::_MouseAxis];
-		byte  MouseButton[Enums::_MouseButton];
+		int32 MouseAxis[enums::_MouseAxis];
+		byte  MouseButton[enums::_MouseButton];
 
 		PAD(1, sizeof(byte) * 4680);
 
-		byte             GamepadButton[Enums::_GamepadButton];
-		GamepadAxisState GamepadAxis[Enums::_GamepadAxis];
+		byte             GamepadButton[enums::_GamepadButton];
+		GamepadAxisState GamepadAxis[enums::_GamepadAxis];
 
 		PAD(2, sizeof(byte) * 56);
 
-		int32 GamepadDpad[Enums::_GamepadDpad];
+		int32 GamepadDpad[enums::_GamepadDpad];
 	};
 
 	struct PositionState {

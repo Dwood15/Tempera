@@ -6,8 +6,7 @@
 #define shitty_macros
 //WARNING: Please avoid nesting macros/typedefs, that breaks intellisense 9/10 times.
 #pragma region sanity checks
-#define STATIC_ASSERT_FAIL         "Static Assert Failure!"
-#define STAT_ASSRT(object, size)  static_assert(sizeof(object) == size, STATIC_ASSERT_FAIL)
+#define STAT_ASSRT(object, size)  static_assert(sizeof(object) == size)
 
 typedef float         real;
 typedef int           int32;

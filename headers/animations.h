@@ -13,4 +13,4 @@ struct s_animation_state {
 	// Leap Airborne = 40, Leap Melee = 41, Unused AFAICT = 42, Berserk = 43)
 	__int16 animation_index;
 	__int16 frame_index;
-}; static_assert(sizeof(s_animation_state) == 0x4, STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_animation_state) == 0x4);

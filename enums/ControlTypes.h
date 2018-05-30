@@ -371,7 +371,7 @@ namespace enums {
 			byte                      state;         // how long its been pressed until 0xFF, 0 if not pressed
 			enums::key_code           key_code;
 		};
-		static_assert(sizeof(s_buffered_key) == 0x4, STATIC_ASSERT_FAIL);
+		static_assert(sizeof(s_buffered_key) == 0x4);
 	};
 
 	namespace blam {
@@ -489,5 +489,5 @@ namespace flags {
 		k_number_of_unit_control_flags // NUMBER_OF_UNIT_CONTROL_FLAGS
 
 	};
-	// static_assert( k_number_of_unit_control_flags_yelo <= BIT_COUNT(), STATIC_ASSERT_FAIL);
+	// static_assert( k_number_of_unit_control_flags_yelo <= BIT_COUNT());
 };

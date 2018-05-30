@@ -177,7 +177,7 @@ struct s_player_control {
 	unsigned long       _unk_fld1_32;                                                                    // 0x34
 	unsigned long       _unk_fld2_32;                                                                    // 0x38
 	unsigned long       _unk_fld3_32;                                                                    // 0x3C
-};  static_assert(sizeof(s_player_control) == 0x40, STATIC_ASSERT_FAIL);
+};  static_assert(sizeof(s_player_control) == 0x40);
 
 struct s_player_control_globals_data {
 	unsigned long action_flags[2]; // see "action_test" script functions

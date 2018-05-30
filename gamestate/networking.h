@@ -22,5 +22,5 @@ struct s_halo_pc_network {
 	bool should_force_baseline_update;                   //0x5  or 0x9
 	unsigned __int16 : 16;                              //0x6	or 0xA //TODO: verify if this is padding or not
 	signed long network_time;                           // 0x8 or 0xC
-}; static_assert(sizeof(s_halo_pc_network) == 0xC, STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_halo_pc_network) == 0xC);
 

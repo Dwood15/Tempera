@@ -6,12 +6,9 @@
 
 namespace render {
 	using ::players_global_data;
-	uintptr_t game_engine_definition   = 0x68CD24;
-	uintptr_t game_engine_globals_mode = 0x815EB0; // some enum like >= 2 && <= 3
-	uintptr_t cinematic_globals        = 0x68C83C; // and cinematic globals in progress
 
 	int main_get_window_count_override() {
-		//Todo: check if cinematic is playing.
+		//Todo: remember to  check if cinematic is playing.
 		auto player_count = players_global_data->local_player_count;
 		if (player_count > MAX_PLAYER_COUNT_LOCAL || player_count < 1) {
 			player_count = 1;

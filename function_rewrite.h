@@ -18,7 +18,7 @@
 //2) static -> the address _should not_ change.
 #define STATIC_PTR(type) [[maybe_unused]] static type
 
-const unsigned int calc_addr_offset(const uintptr_t dest, int real_address) {
+static const unsigned int calc_addr_offset(const uintptr_t dest, int real_address) {
 	int real_address_offset = (real_address) - ((int) dest) - 4;
 	return static_cast<unsigned int>(real_address_offset);
 }

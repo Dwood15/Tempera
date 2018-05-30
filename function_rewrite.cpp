@@ -307,7 +307,7 @@ namespace spcore {
 			patchRenderWindowCompares();
 			initializations::interface_initialize_patches();
 
-			insertRenderWindowCountHooks();
+			// insertRenderWindowCountHooks();
 			patchSetLocalPlayer();
 		}
 	};

@@ -49,6 +49,4 @@ namespace players {
 
 		return players_global_data->local_player_players[local_player_index];
 	}
-
-
 };

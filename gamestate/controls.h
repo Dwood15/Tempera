@@ -63,4 +63,4 @@ struct s_unit_control_data {
 	real_vector3d facing_vector;
 	real_vector3d aiming_vector;
 	real_vector3d looking_vector;
-}; static_assert(sizeof(s_unit_control_data) == 0x40, STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_unit_control_data) == 0x40);

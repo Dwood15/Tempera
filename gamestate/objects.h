@@ -38,7 +38,7 @@ struct s_garbage_data {
 	__int16 ticks_until_gc;
 	PAD16;
 	__int32 _unused[5];
-}; static_assert(sizeof(s_garbage_data) == (k_object_size_garbage - k_object_size_item), STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_garbage_data) == (k_object_size_garbage - k_object_size_item));
 
 struct s_item_data {
 	unsigned long       flags;                    // 0x1F4
@@ -56,7 +56,7 @@ struct s_item_data {
 	}                   object_collision;
 	real_vector3d       __unk_type0;        // 0x218
 	real_euler_angles2d __unk_type1;    // 0x224
-}; static_assert(sizeof(s_item_data) == (k_object_size_item - k_object_size_object), STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_item_data) == (k_object_size_item - k_object_size_object));
 INTELLISENSE_HACK(s_item_data)
 
 namespace obj {
@@ -132,14 +132,14 @@ struct s_object_datum_network_delta_data {
 	bool          valid_timestamp;                    // 0x54
 	unsigned char __pad__unk3[3];
 	signed long   timestamp;                        // 0x58
-}; static_assert(sizeof(s_object_datum_network_delta_data) == 0x44, STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_object_datum_network_delta_data) == 0x44);
 
 struct s_object_datum_animation_data {
 	datum_index       definition_index;    // 0xCC
 	s_animation_state state;        // 0xD0
 	__int16           interpolation_frame_index;// 0xD4
 	__int16           interpolation_frame_count;// 0xD6
-}; static_assert(sizeof(s_object_datum_animation_data) == 0xC, STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_object_datum_animation_data) == 0xC);
 
 struct s_object_datum_damage_data {
 	float            maximum_health;                    // 0xD8
@@ -157,7 +157,7 @@ struct s_object_datum_damage_data {
 	long             body_damage_update_tick;            // 0x100
 	__int16          stun_ticks;                        // 0x104, based on ftol(s_shield_damage_resistance->stun_time * 30f)
 	unsigned __int16 flags;                    // 0x106
-}; static_assert(sizeof(s_object_datum_damage_data) == 0x30, STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_object_datum_damage_data) == 0x30);
 
 struct s_object_datum_attachments_data {
 	attachment_type attached_types[MAX_ATTACHMENTS_PER_OBJECT];    // 0x144
@@ -166,7 +166,7 @@ struct s_object_datum_attachments_data {
 	// then the datum_index is a contrail_data handle
 	datum_index     attachment_indices[MAX_ATTACHMENTS_PER_OBJECT];            // 0x14C
 	datum_index     first_widget_index;                                                                // 0x16C
-}; static_assert(sizeof(s_object_datum_attachments_data) == 0x2C, STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_object_datum_attachments_data) == 0x2C);
 
 //s_object_data is also in forge's definitions. \\TODO: Rework and look at again.
 struct s_object_data {
@@ -225,7 +225,7 @@ struct s_object_data {
 	s_object_header_block_reference node_orientations2;                                // 0x1EC real_orientation3d[node_count]
 	s_object_header_block_reference node_matrix_block;                                // 0x1F0 real_matrix4x3[node_count]
 };
-static_assert(sizeof(s_object_data) == object_sizes::k_object_size_object, STATIC_ASSERT_FAIL);
+static_assert(sizeof(s_object_data) == object_sizes::k_object_size_object);
 
 
 struct s_object_datum {
@@ -234,7 +234,7 @@ struct s_object_datum {
 	};
 	s_object_data object;
 };
-static_assert(sizeof(s_object_datum) == object_sizes::k_object_size_object, STATIC_ASSERT_FAIL);
+static_assert(sizeof(s_object_datum) == object_sizes::k_object_size_object);
 
 
 struct s_item_datum {
@@ -244,7 +244,7 @@ struct s_item_datum {
 
 	s_object_data object;
 	s_item_data   item;
-}; static_assert(sizeof(s_item_datum) == object_sizes::k_object_size_item, STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_item_datum) == object_sizes::k_object_size_item);
 
 struct s_garbage_datum : s_item_datum {
 	enum {
@@ -252,7 +252,7 @@ struct s_garbage_datum : s_item_datum {
 	};
 
 	s_garbage_data garbage;
-}; static_assert(sizeof(s_garbage_datum) == k_object_size_garbage, STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_garbage_datum) == k_object_size_garbage);
 
 struct s_object_header_datum {
 	datum_index::t_salt header_salt;    //0x0
@@ -278,6 +278,6 @@ struct s_object_header_datum {
 		struct s_vehicle_datum *_vehicle;
 	}; STAT_ASSRT(magic, 0x4);
 
-}; //static_assert(sizeof(s_object_header_datum) == 0xC, STATIC_ASSERT_FAIL);
+}; //static_assert(sizeof(s_object_header_datum) == 0xC);
 
 #pragma pack(pop)

@@ -131,7 +131,7 @@ struct object_data {
 	}
 };
 
-static_assert(sizeof(object_data) == object_sizes::k_object_size_object, STATIC_ASSERT_FAIL);
+static_assert(sizeof(object_data) == object_sizes::k_object_size_object);
 
 struct biped_data {
 	object_data _object;               // 0x0000

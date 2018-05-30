@@ -13,45 +13,46 @@ struct s_weapon_datum_network_data {
 	int           c; // not used in the update...probably a real_vector3d (angular_velocity?)
 	short         magazine_rounds_totals[MAX_MAGAZINES_PER_WEAPON];
 	real          age;
-}; static_assert(sizeof(s_weapon_datum_network_data) == 0x2C, STATIC_ASSERT_FAIL);
+}; static_assert(sizeof(s_weapon_datum_network_data) == 0x2C);
+
+struct s_trigger_state {
+	sbyte                idle_time;                    // 0x0 used for determining when to fire next projectile (rounds per second)
+	weapon_trigger_state state;
+	short                time;
+	long                 flags0;            // 0x4
+	__int16              __unk_type_i16_0;                // 0x8 firing effect related
+	__int16              __unk_type_i16_1;                // 0xA firing effect related
+	__int16              __unk_type_i16_2;                // 0xC firing effect related
+	short                rounds_since_last_tracer;
+	float                rate_of_fire;                    // 0x10
+	float                ejection_port_recovery_time;    // 0x14
+	float                illumination_recovery_time;    // 0x18
+	float                __unk_type_flt_0;    // 0x1C used in the calculation of projectile error angle
+	datum_index          charging_effect_index;    // 0x20
+	sbyte                network_delay_time;            // 0x24 hardedcoded to delay fire/reload by 10 frames in networked game
+	byte                 __pad_byte_0;
+	__int16              __pad_i16_0;
+};
+static_assert(sizeof(s_trigger_state) == 0x28);
+
+// __, unk, pad, '?'
+//means IDK if its actually padding or there are values there. If there are, IDK their types (could be a boolean!)
+struct s_magazine_state {
+	weapon_magazine_state state;
+	__int16               reload_time_remaining;        // 0x2 in ticks
+	__int16               reload_time;                    // 0x4 in ticks
+	__int16               rounds_unloaded;                // 0x6
+	__int16               rounds_loaded;                // 0x8
+	__int16               rounds_left_to_recharge;        // 0xA number of rounds left to apply to rounds_loaded (based on tag's rounds_recharged)
+	__int16               __UNKNOWN_TYPE0;                // 0xC I just know a WORD is here, may be an _enum
+	__int16               __pad0; // ?
+}; static_assert(sizeof(s_magazine_state) == 0x10);
 
 struct s_weapon_data {
-	struct s_trigger_state {
-		sbyte                idle_time;                    // 0x0 used for determining when to fire next projectile (rounds per second)
-		weapon_trigger_state state;
-		short                time;
-		long                 flags0;            // 0x4
-		__int16              __unk_type_i16_0;                // 0x8 firing effect related
-		__int16              __unk_type_i16_1;                // 0xA firing effect related
-		__int16              __unk_type_i16_2;                // 0xC firing effect related
-		short                rounds_since_last_tracer;
-		float                rate_of_fire;                    // 0x10
-		float                ejection_port_recovery_time;    // 0x14
-		float                illumination_recovery_time;    // 0x18
-		float                __unk_type_flt_0;    // 0x1C used in the calculation of projectile error angle
-		datum_index          charging_effect_index;    // 0x20
-		sbyte                network_delay_time;            // 0x24 hardedcoded to delay fire/reload by 10 frames in networked game
-		byte                 __pad_byte_0;
-		__int16              __pad_i16_0;
-	}; static_assert(sizeof(s_trigger_state) == 0x28, STATIC_ASSERT_FAIL);
-
-	// __, unk, pad, '?'
-	//means IDK if its actually padding or there are values there. If there are, IDK their types (could be a boolean!)
-	struct s_magazine_state {
-		weapon_magazine_state state;
-		__int16               reload_time_remaining;        // 0x2 in ticks
-		__int16               reload_time;                    // 0x4 in ticks
-		__int16               rounds_unloaded;                // 0x6
-		__int16               rounds_loaded;                // 0x8
-		__int16               rounds_left_to_recharge;        // 0xA number of rounds left to apply to rounds_loaded (based on tag's rounds_recharged)
-		__int16               __UNKNOWN_TYPE0;                // 0xC I just know a WORD is here, may be an _enum
-		__int16               __pad0; // ?
-	}; static_assert(sizeof(s_magazine_state) == 0x10, STATIC_ASSERT_FAIL);
-
 	struct s_start_reload_data {
 		__int16 starting_total_rounds[MAX_MAGAZINES_PER_WEAPON];
 		__int16 starting_loaded_rounds[MAX_MAGAZINES_PER_WEAPON];
-	}; static_assert(sizeof(s_start_reload_data) == 0x8, STATIC_ASSERT_FAIL);
+	}; static_assert(sizeof(s_start_reload_data) == 0x8);
 
 	struct s_first_16_bytes {
 		unsigned long  flags;                            // 0x0
@@ -62,25 +63,35 @@ struct s_weapon_data {
 		unsigned char  __pad_byte_1;                    // 0xD
 		short          ready_time;                        // 0xE
 	} first_16_bytes;
-	static_assert(sizeof(s_first_16_bytes) == 0x10, STATIC_ASSERT_FAIL);
+
+	static_assert(sizeof(s_first_16_bytes) == 0x10);
 	struct s_2nd_16_bytes {
 		real heat;                            // 0x0
 		real age;                            // 0x4
 		real illumination_fraction;            // 0x8
 		real integrated_light_power;            // 0xC
-	} second_16_bytes;
-	static_assert(sizeof(s_first_16_bytes) == 0x10, STATIC_ASSERT_FAIL);
+	}
+	second_16_bytes;
+
+	static_assert(sizeof(s_2nd_16_bytes) == 0x10);
 
 	struct s_3rd_16_bytes {
 		int         __unused_pad0;                    // 0x0
 		datum_index tracked_object_index;            // 0x4
 		__int64     __pad64_0;                        // 0x8
-	} third_16_bytes;
+	}
+
+	third_16_bytes;
+
 	STAT_ASSRT(s_3rd_16_bytes, 0x10);
+
 	struct next_set {
 		short   alt_shots_loaded;                // 0x0
 		__int16 __pad_i16_2;                    // 0x2
-	} first_4_bytes;
+	}
+
+	first_4_bytes;
+
 	STAT_ASSRT(next_set, 0x4);
 
 	s_trigger_state triggers[2];                    // 0x34, size == 0x50
@@ -108,7 +119,7 @@ struct s_weapon_data {
 INTELLISENSE_HACK(s_weapon_datum_network_data)
 
 //STAT_ASSRT(s_weapon_data, (k_object_size_weapon - k_object_size_item));
-//static_assert(sizeof(s_weapon_data) == (), STATIC_ASSERT_FAIL);
+//static_assert(sizeof(s_weapon_data) == ());
 /* OG struct:
  struct s_weapon_data {
 			// FLAG(3) - _weapon_must_be_readied_bit
@@ -141,7 +152,7 @@ INTELLISENSE_HACK(s_weapon_datum_network_data)
 			UNKNOWN_TYPE(bool);						// 0x310 probably delta_valid
 			PAD24;									// 0x311
 			s_weapon_datum_network_data update_delta;		// 0x314
-		}; static_assert(sizeof(s_weapon_data) == (Enums::k_object_size_weapon - Enums::k_object_size_item), STATIC_ASSERT_FAIL);
+		}; static_assert(sizeof(s_weapon_data) == (Enums::k_object_size_weapon - Enums::k_object_size_item));
  */
 
 struct s_weapon_datum : s_item_datum {
@@ -149,7 +160,7 @@ struct s_weapon_datum : s_item_datum {
 		k_object_types_mask = FLAG(_object_type_weapon)
 	};
 	s_weapon_data weapon;
-}; //static_assert(sizeof(s_weapon_datum) == k_object_size_weapon, STATIC_ASSERT_FAIL);
+}; //static_assert(sizeof(s_weapon_datum) == k_object_size_weapon);
 
 
 struct weapon_data {
