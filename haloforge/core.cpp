@@ -305,7 +305,7 @@ void Core::ConsoleText(HaloColor fColor, const char *cFmt, ...) {
 
 		va_start(mvalist, cFmt);
 	_vsnprintf(cBuffer, sizeof(cBuffer), cFmt, mvalist);
-	DEBUG(cFmt, mvalist);
+	//DEBUG(cFmt, mvalist);
 		va_end(mvalist);
 
 	hkConsoleText(cBuffer, &fColor);

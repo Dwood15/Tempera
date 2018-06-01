@@ -169,10 +169,65 @@ namespace spcore {
 		//End of Function
 	}
 
+	void __cdecl hud_update_nav_points() {
+		signed int player_idx = 0;
+		auto player_datum = players_globals->local_player_players[player_idx].index;
+
+		if (player_datum < 0) {
+			return;
+		}
+
+		do {
+			//TODO: Add function pointer for hud_update_nav_points
+			//Unfortunately, this is one of those bullshit cases where the game engine does its own calling convention.
+			//According to ida:
+			//	void __usercall hud_update_nav_point_local_player(__int16 player_idx@<di>)
+			//hud_update_unit_local_player(player_datum);
+			if (player_idx >= 4 ) {
+				player_datum = -1;
+			}
+		} while ( player_datum > 0 );
+	}
+
+
+	void __cdecl hud_update_unit() {
+		signed int player_idx = 0;
+		auto player_datum = players_globals->local_player_players[player_idx].index;
+
+		if (player_datum < 0) {
+			return;
+		}
+
+		do {
+			//TODO: Add function pointer for hud_update_unit_local_player
+			//Unfortunately, this is one of those bullshit cases where the game engine does its own calling convention.
+			//According to ida:
+			//	void __usercall hud_update_unit_local_player(__int16 player_idx@<di>)
+			//hud_update_unit_local_player(player_datum);
+			if (player_idx >= 4 ) {
+				player_datum = -1;
+			}
+		} while ( player_datum > 0 );
+	}
+
+
 	namespace memory {
+		void __inline patchHudCompares() {
+			constexpr uintptr_t hud_update_weapon_local_player_clamp = 0x4B4D75;
+			patchValue<short>(hud_update_weapon_local_player_clamp, (short) MAX_PLAYER_COUNT_LOCAL);
+
+			constexpr uintptr_t hud_update_unit_local_player_clamp = 0x4B3565;
+			patchValue<byte>(hud_update_unit_local_player_clamp, (byte) MAX_PLAYER_COUNT_LOCAL);
+
+			constexpr uintptr_t hud_update_unit_local_player_clampB = 0x4B36D4;
+			patchValue<byte>(hud_update_unit_local_player_clampB, (byte) MAX_PLAYER_COUNT_LOCAL);
+
+			//TODO: Write the patch for hud_update_unit
+
+		}
+
 		//		uintptr_t player_spawn = 0x47A9E0; Valid, just not using it...
 		//Get_window_count patch locations
-#pragma region
 
 		void __inline patchRenderPlayerFrameClamp() {
 			constexpr uintptr_t render_player_frame_jg_patch = 0x50F5EB;

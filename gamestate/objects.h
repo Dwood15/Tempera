@@ -29,8 +29,6 @@
 #include "networking.h"
 #include <sal.h>
 
-typedef bool reBoolGivenShort(short);
-
 #pragma pack(push)
 #pragma pack(1)
 

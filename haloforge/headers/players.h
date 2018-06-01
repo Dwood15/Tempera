@@ -1,15 +1,3 @@
-/*
-	Project: tempera
-	File: players.h
-	Copyright � 2009 SilentK, Abyll
- 	Copyright 	 2018 Dwood
-
-	This file is part of tempera.
-
-   You should have received a copy of the GNU General Public License
-   along with tempera.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #pragma once
 
 #include <windows.h>
@@ -118,3 +106,4 @@ struct machine // Struct is from haloceded; i'm not sure if it's the same in oth
 	char    CDhash[32];         // a solid block array, so it's not necessarily a cstring i think, but there's still usually just 0's afterwards anyways.
 	BYTE    Unknown5[44];         // zeros..
 }; // Size: 0xFE
+

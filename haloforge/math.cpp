@@ -13,6 +13,7 @@
 #include <math.h>
 #include "../headers/colors.h"
 
+//HaloColor::HaloColor constexpr(float alpha, float red, float green, float blue) : a(alpha), r(red), g(green), b(blue) { }
 HaloColor::HaloColor(float alpha, float red, float green, float blue) : a(alpha), r(red), g(green), b(blue) {
 }
 

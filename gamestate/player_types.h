@@ -122,7 +122,6 @@ struct s_players_globals_data {
 	unsigned long combined_pvs_local[MAX_PLAYERS_IN_GAME];                    // 0x58 combined pvs of all local players
 
 	void DumpData(bool toConsole = false, Core *core = nullptr) {
-
 		const char *first_unused      = "First unused player Idx: %d";
 		const char *unused_after_init = "unused_after_initialize_unk %d\\n";
 		const char *local_plyr_cnt    = "local_player_count: %d\n";
@@ -131,18 +130,13 @@ struct s_players_globals_data {
 		const char *inp_dis           = "Input disabled: %d\n";
 		const char *bsp_trig          = "BSP switch trigger: %d\n";
 
+		DEBUG("Beginning to dump Data");
 		auto plyrCt          = this->local_player_count;
-		int  unused_plyr_idx = find_unused_local_player_index();
+		Sleep(30);
+		DEBUG("Dumping Data");
 
-		if (toConsole) {
-			core->ConsoleText(hGreen, first_unused, unused_plyr_idx);
-			printf(unused_after_init, this->unused_after_initialize_unk);
-			printf(local_plyr_cnt, plyrCt);
-			printf(dbl_spd_tx, this->double_speed_ticks_remaining);
-			printf(all_ded, this->are_all_dead);
-			printf(inp_dis, this->input_disabled);
-			printf(bsp_trig, this->_bsp_switch_trigger_idx);
-		}
+		int  unused_plyr_idx = find_unused_local_player_index();
+		Sleep(30);
 
 		DEBUG(first_unused, unused_plyr_idx);
 		DEBUG(unused_after_init, this->unused_after_initialize_unk);
@@ -151,6 +145,18 @@ struct s_players_globals_data {
 		DEBUG(all_ded, this->are_all_dead);
 		DEBUG(inp_dis, this->input_disabled);
 		DEBUG(bsp_trig, this->_bsp_switch_trigger_idx);
+
+		if (toConsole) {
+			if(core != nullptr) {
+				core->ConsoleText(hGreen, first_unused, unused_plyr_idx);
+			}
+			printf(unused_after_init, this->unused_after_initialize_unk);
+			printf(local_plyr_cnt, plyrCt);
+			printf(dbl_spd_tx, this->double_speed_ticks_remaining);
+			printf(all_ded, this->are_all_dead);
+			printf(inp_dis, this->input_disabled);
+			printf(bsp_trig, this->_bsp_switch_trigger_idx);
+		}
 	}
 };
 
@@ -177,7 +183,9 @@ struct s_player_control {
 	unsigned long       _unk_fld1_32;                                                                    // 0x34
 	unsigned long       _unk_fld2_32;                                                                    // 0x38
 	unsigned long       _unk_fld3_32;                                                                    // 0x3C
-};  static_assert(sizeof(s_player_control) == 0x40);
+};
+
+static_assert(sizeof(s_player_control) == 0x40);
 
 struct s_player_control_globals_data {
 	unsigned long action_flags[2]; // see "action_test" script functions

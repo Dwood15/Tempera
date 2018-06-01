@@ -105,12 +105,13 @@ struct HaloColor {
 	float g;
 	float b;
 
+	//HaloColor constexpr(float a, float r, float g, float b);
 	HaloColor(float a, float r, float g, float b);
 };
 
-#define hGreen HaloColor(1,0,1,0)
-#define hBlue HaloColor(1,0,0,1)
-#define hRed HaloColor(1,1,0,0)
+const auto hGreen = HaloColor(1,0,1,0);
+const auto hBlue  = HaloColor(1,0,0,1);
+const auto hRed   = HaloColor(1,1,0,0);
 
 class CMath {
 public:

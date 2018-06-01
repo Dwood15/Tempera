@@ -69,7 +69,9 @@ int __stdcall forgeMain() {
 		}
 
 		if (GetAsyncKeyState(VK_F2) & 1) {
-			players_global_data->DumpData(!*at_main_menu, core);
+			if(core) {
+				players_global_data->DumpData(true, core);
+			}
 		} else if (GetAsyncKeyState(VK_F11) & 1) {
 			PrintHelp();
 			continue;
@@ -95,10 +97,13 @@ int __stdcall forgeMain() {
 				objd->DumpData(true);
 				Print(true, "\n\t\t***~~~*** END Player 2 Data Dump ***~~~***\n");
 
-				objd->Velocity.x += .15;
-				objd->Velocity.y  = 0;
+				//objd->Velocity.x += .15;
+				//objd->Velocity.y  = 0;
 
-				core->ConsoleText(hBlue, "Increased Player 2 velocity! %.3f", objd->Velocity.x);
+				++objd->Animation.state.animation_index;
+
+				Print(true, "Player 2 animation state: %d", objd->Animation.state.animation_index);
+				// core->ConsoleText(hBlue, );
 			}
 		} else if (core->IsPlayerSpawned(0) && GetAsyncKeyState(VK_F8) & 1) {
 			ident plyr_datum = core->GetPlayerObjectIdent(0);
