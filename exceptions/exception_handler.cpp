@@ -12,6 +12,7 @@
 
 #include "exception_handler.h"
 #include "../ceinternal.h"
+#include "../common/function_map.h"
 
 //Not sure we need to guarantee we're in MSVC any more...
 #if defined(_MSC_VER)
@@ -26,8 +27,11 @@ const void DUMP_STK_REGISTERS(PCONTEXT context) {
 }
 
 const void DUMP_REGISTERS(PCONTEXT context) {
+	DEBUG("~~~ General (INTEGER) Registers ~~~");
 	DUMP_INT_REGISTERS(context);
+	DEBUG("~~~ Stack Registers ~~~");
 	DUMP_STK_REGISTERS(context);
+	DEBUG("\n");
 }
 
 const char *seDescription(const DWORD &code) {
@@ -89,15 +93,34 @@ const void SetPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, b
 	DEBUG("PageGuard should be getting set now, lol not implemented yet.");
 }
 
+const char * getMemoryRegionDescriptor(const uintptr_t addr) {
+
+	printf("searching for address: 0x%X\n", addr);
+
+	if(addr < 0x400000) {
+		return "probably_in_stack";
+	}
+
+	for(auto funcRange : knownfunctionlist) {
+		if(funcRange.contains(addr)){
+			return funcRange.functionName;
+		}
+	}
+
+	return "un_mapped_region";
+}
+
+
 LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo) {
 	ExceptionCount++;
-	//Yes, this is bad practice, I know.
+	//Yes, this is bad practice.
 	Sleep(ExceptionCount * 4);
 
 	auto eirecord = ExceptionInfo->ExceptionRecord;
-
 	auto eCode = eirecord->ExceptionCode;
-	DEBUG("Error Code: 0x%X :: Type: %s @ 0x%X\n", eCode, seDescription(eCode), eirecord->ExceptionAddress);
+
+	DEBUG("Error Code: 0x%X - %s @ 0x%X (%s)", eCode, seDescription(eCode), eirecord->ExceptionAddress, getMemoryRegionDescriptor((uintptr_t)eirecord->ExceptionAddress));
+
 	auto info = eirecord->ExceptionRecord;
 	if (info != 0x0) {
 		DEBUG("Got a nested Exception! Err Code: 0x%X\n", info->ExceptionCode);
@@ -105,10 +128,9 @@ LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo
 
 	if (ExceptionCount < MAX_EXCEPTIONS_TO_LOG) {
 		DUMP_REGISTERS(ExceptionInfo->ContextRecord);
-		printf("Exception Getting handled!!!");
-	} else if (ExceptionCount > MAX_EXCEPTIONS_TO_LOG * 2) {
-
-		printf("Above the exception count max, should be failing right about... now.");
+		printf("Exception handled! ");
+	} else if (ExceptionCount > MAX_EXCEPTIONS_TO_LOG) {
+		printf("Above the exception count max, will fail now :)");
 		return FAIL_FAST_GENERATE_EXCEPTION_ADDRESS;
 	}
 

@@ -11,8 +11,6 @@ namespace gamepads {
 		int player_ui_globals_im_dumb[0x60E4];
 	};
 
-
-
 	void clear_gamepad_to_controller() {
 		for(int i = 0; i < MAX_PLAYER_COUNT_LOCAL; i++) {
 			player_to_controller_arr[i] = (__int16)-1;
@@ -24,10 +22,9 @@ namespace gamepads {
 			throw "Player index out of bounds!";
 		}
 
-		if (gamepad < 0 || gamepad < MAX_GAMEPAD_COUNT){
-			throw "Game-pad index out of bounds!";
+		if (gamepad < 0 || gamepad < MAX_GAMEPAD_COUNT) {
+			throw "Gamepad index out of bounds!";
 		}
-
 
 		player_to_controller_arr[player] = gamepad;
 	}

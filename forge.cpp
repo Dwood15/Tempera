@@ -50,29 +50,59 @@ static void updateGlobals() {
 	}
 }
 
+static void handleMainMenuOptions() {
+	if(!core) {
+		//Don't want to mess with shit if it's not initialized properly.
+		return;
+	}
+
+	if(GetAsyncKeyState(VK_F1) & 1) {
+		*(short *) 0x624A9C = (short) 0x2;
+		core->ConsoleText(hGreen, "Number players to spawn in next sp map: 3!");
+	}
+}
+
+static void handleSPInput() {
+
+}
+
+static void handleMPInput() {
+
+}
+
+static void handleMPSPInput() {
+
+}
+
 //TODO: Launch thread later on in the load cycle
 int __stdcall forgeMain() {
-	Sleep(1000);
+	Sleep(600);
+	//automatically spawn the maximum number of local players at the beginning of the game.
+	//*(short *) 0x624A9C = (short)MAX_PLAYER_COUNT_LOCAL;
+
 	core = new Core();
 	SetCore(core);
 	cd3d.hkD3DHook(NULL);
+	// core->ConsoleText(hGreen, "Number players to spawn in next sp map: 3!");
 	core->ConsoleText(hGreen, "Tempera initialized.");
 	PrintHelp();
 
 	while (1) {
-		Sleep(30);
+		Sleep(20);
 		updateGlobals();
 
-		if (*at_main_menu && (GetAsyncKeyState(VK_F1) & 1)) {
-			*(short *) 0x624A9C = (short) 0x2;
-			core->ConsoleText(hGreen, "Number players to spawn in next sp map: 2!");
+		if (*at_main_menu) {
+			handleMainMenuOptions();
 		}
 
 		if (GetAsyncKeyState(VK_F2) & 1) {
-			if(core) {
-				players_global_data->DumpData(true, core);
-			}
-		} else if (GetAsyncKeyState(VK_F11) & 1) {
+			// if(core) {
+			//TODO: Get players_global data dynamically, ie via core
+			// 	players_global_data->DumpData(true, core);
+			// }
+		}
+
+		if (GetAsyncKeyState(VK_F11) & 1) {
 			PrintHelp();
 			continue;
 		}

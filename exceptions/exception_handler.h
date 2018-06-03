@@ -1,8 +1,4 @@
 /*
-	Project: tempera
-	File: exception_handler.h
- 	Copyright 	 2018 Dwood
-
 	This file is part of tempera.
 
    You should have received a copy of the GNU General Public License
@@ -16,7 +12,7 @@
 #include <Windows.h>
 #include <dbghelp.h>
 
-#define MAX_EXCEPTIONS_TO_LOG 5
+#define MAX_EXCEPTIONS_TO_LOG 4
 
 //Try to let the game handle the exception first...
 #define CALL_FIRST 0

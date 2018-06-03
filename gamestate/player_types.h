@@ -1,21 +1,5 @@
 /**
- *	Project: Tempera
- *	File: main.cpp
- *	Copyright � 2018 Dwood
- *
- *	This file is part of Tempera.
- *
- * Tempera is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Tempera is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU General Public License
  * along with Tempera. If not, see <http://www.gnu.org/licenses/>.
  **/
 #pragma once
@@ -121,42 +105,42 @@ struct s_players_globals_data {
 	//TODO: verify if combined_pvs_local is actually the same as regular combined_pvs - Maybe they're separate and synched via network?
 	unsigned long combined_pvs_local[MAX_PLAYERS_IN_GAME];                    // 0x58 combined pvs of all local players
 
-	void DumpData(bool toConsole = false, Core *core = nullptr) {
-		const char *first_unused      = "First unused player Idx: %d";
-		const char *unused_after_init = "unused_after_initialize_unk %d\\n";
-		const char *local_plyr_cnt    = "local_player_count: %d\n";
-		const char *dbl_spd_tx        = "double speed tix remaining: %d\n";
-		const char *all_ded           = "Are all dead?: %d\n";
-		const char *inp_dis           = "Input disabled: %d\n";
-		const char *bsp_trig          = "BSP switch trigger: %d\n";
-
-		DEBUG("Beginning to dump Data");
-		auto plyrCt          = this->local_player_count;
-		Sleep(30);
-		DEBUG("Dumping Data");
-
-		int  unused_plyr_idx = find_unused_local_player_index();
-		Sleep(30);
-
-		DEBUG(first_unused, unused_plyr_idx);
-		DEBUG(unused_after_init, this->unused_after_initialize_unk);
-		DEBUG(local_plyr_cnt, plyrCt);
-		DEBUG(dbl_spd_tx, this->double_speed_ticks_remaining);
-		DEBUG(all_ded, this->are_all_dead);
-		DEBUG(inp_dis, this->input_disabled);
-		DEBUG(bsp_trig, this->_bsp_switch_trigger_idx);
-
-		if (toConsole) {
-			if(core != nullptr) {
-				core->ConsoleText(hGreen, first_unused, unused_plyr_idx);
-			}
-			printf(unused_after_init, this->unused_after_initialize_unk);
-			printf(local_plyr_cnt, plyrCt);
-			printf(dbl_spd_tx, this->double_speed_ticks_remaining);
-			printf(all_ded, this->are_all_dead);
-			printf(inp_dis, this->input_disabled);
-			printf(bsp_trig, this->_bsp_switch_trigger_idx);
-		}
+	static void DumpData(bool toConsole = false, Core *core = nullptr) {
+		// const char *first_unused      = "First unused player Idx: %d";
+		// const char *unused_after_init = "unused_after_initialize_unk %d\\n";
+		// const char *local_plyr_cnt    = "local_player_count: %d\n";
+		// const char *dbl_spd_tx        = "double speed tix remaining: %d\n";
+		// const char *all_ded           = "Are all dead?: %d\n";
+		// const char *inp_dis           = "Input disabled: %d\n";
+		// const char *bsp_trig          = "BSP switch trigger: %d\n";
+		//
+		// DEBUG("Beginning to dump Data");
+		// auto plyrCt          = this->local_player_count;
+		// Sleep(30);
+		// DEBUG("Dumping Data");
+		//
+		// int  unused_plyr_idx = find_unused_local_player_index();
+		// Sleep(30);
+		//
+		// DEBUG(first_unused, unused_plyr_idx);
+		// DEBUG(unused_after_init, this->unused_after_initialize_unk);
+		// DEBUG(local_plyr_cnt, plyrCt);
+		// DEBUG(dbl_spd_tx, this->double_speed_ticks_remaining);
+		// DEBUG(all_ded, this->are_all_dead);
+		// DEBUG(inp_dis, this->input_disabled);
+		// DEBUG(bsp_trig, this->_bsp_switch_trigger_idx);
+		//
+		// if (toConsole) {
+		// 	if(core != nullptr) {
+		// 		core->ConsoleText(hGreen, first_unused, unused_plyr_idx);
+		// 	}
+		// 	printf(unused_after_init, this->unused_after_initialize_unk);
+		// 	printf(local_plyr_cnt, plyrCt);
+		// 	printf(dbl_spd_tx, this->double_speed_ticks_remaining);
+		// 	printf(all_ded, this->are_all_dead);
+		// 	printf(inp_dis, this->input_disabled);
+		// 	printf(bsp_trig, this->_bsp_switch_trigger_idx);
+		// }
 	}
 };
 

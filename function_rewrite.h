@@ -36,7 +36,7 @@ namespace spcore {
 	};
 	STAT_ASSRT(s_player_hud_messages, 0x460);
 
-	struct s_hud_messaging_state { ;
+	struct s_hud_messaging_state {
 		s_player_hud_messages hmi[MAX_PLAYER_COUNT_LOCAL];
 		byte                  unknown[0x28];
 	};   STAT_ASSRT(s_hud_messaging_state, 0x28 + (0x460 * MAX_PLAYER_COUNT_LOCAL));
@@ -50,7 +50,7 @@ namespace spcore {
 	extern void                   **crc_checksum_buffer;
 	extern void                   **hud_scripted_globals;
 	extern void                   **hud_messaging_state;
-	extern s_players_globals_data *players_globals;
+	static s_players_globals_data *players_globals;
 
 	extern s_motion_sensor *motion_sensor;
 
@@ -74,6 +74,8 @@ namespace spcore {
 	};
 	namespace player_control {
 		void __cdecl  player_control_initialize_for_new_map();
+
+		const void player_control_initialize();
 	};
 
 	namespace memory {

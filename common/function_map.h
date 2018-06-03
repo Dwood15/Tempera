@@ -13,7 +13,7 @@ struct defined_functionrange {
 
 	bool operator==(defined_functionrange const &other) { return end == other.end && begin == other.begin; }
 
-	bool contains(uintptr_t const &other) { return ( other <= begin && other >= end ); }
+	bool contains(uintptr_t const &other) { return ( other >= begin && other <= this->end ); }
 };
 
 static const std::array<defined_functionrange, 6049> knownfunctionlist = {{
