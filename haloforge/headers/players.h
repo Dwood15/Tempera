@@ -16,7 +16,7 @@ struct player {
 	short   SwapSeat;        // Warthog - Driver = 0 / Passenger = 1 / Gunner = 2 / Weapon = -1
 	long    RespawnTimer;    // ?????? Counts down when dead, Alive = 0
 	long    RespawnTimeGrowth; // Always 0
-	ident   object;          // matches object table
+	ident   SlaveUnitIndex;          // matches object table
 	long    PlayerLastObjectId;        // Some sort of ID
 	long    Sector;          // This is very, very interesting. BG is split into 25 location ID's. 1 -19
 	long    Unknown4;        // Always -1 / 0xFFFFFFFF

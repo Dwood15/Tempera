@@ -31,32 +31,6 @@
 #include "addlog.h"
 #include "../../gamestate/objects.h"
 
-struct object_header;
-struct object_data;
-struct biped_data;
-
-struct object_header {
-	short         object_id;			//0x0
-	// x41: held by player (on back),
-	// xE2: wielded by a player (held)
-	// x63: on it's own (like on the ground - even counts for player bipeds)
-	unsigned char flags;					//0x2
-	unsigned char object_type;			//0x3
-	short         sector;  // 0x4 // portal rendering ( cluster index )
-	short         size;    // 0x6 // Structure size
-	object_data   *address; // 0x8
-
-	void DumpData(bool toConsole = false) {
-		Print(toConsole, "Object Header!\n");
-		Print(toConsole, "ID: %d\n", object_id);
-		Print(toConsole, "Flags: %x\n", flags);
-		Print(toConsole, "Object Type: %x\n", object_type);
-		Print(toConsole, "Cluster Index: %d\n", sector);
-		Print(toConsole, "Object Size: %d\n", size);
-		Print(toConsole, "Data's Address: %x\n", (unsigned int) address);
-	}
-};
-
 struct object_data {
 	ident                             Meta;                                            						// 0x0
 	s_halo_pc_network                 PcNetworkData;                                                	// 0x4
@@ -172,6 +146,29 @@ struct biped_data {
 	bone        RightHand;            // 0x08F8
 	BYTE        Unknown20[1216];    // 0x092C
 }; // Size - 3564(0x0DEC) bytes
+
+struct object_header {
+	short         object_id;			//0x0
+	// x41: held by player (on back),
+	// xE2: wielded by a player (held)
+	// x63: on it's own (like on the ground - even counts for player bipeds)
+	unsigned char flags;					//0x2
+	unsigned char object_type;			//0x3
+	short         sector;  // 0x4 // portal rendering ( cluster index )
+	short         size;    // 0x6 // Structure size
+	object_data   *address; // 0x8
+
+	void DumpData(bool toConsole = false) {
+		Print(toConsole, "Object Header!\n");
+		Print(toConsole, "ID: %d\n", object_id);
+		Print(toConsole, "Flags: %x\n", flags);
+		Print(toConsole, "Object Type: %x\n", object_type);
+		Print(toConsole, "Cluster Index: %d\n", sector);
+		Print(toConsole, "Object Size: %d\n", size);
+		Print(toConsole, "Data's Address: %x\n", (unsigned int) address);
+	}
+};
+
 
 /*
 ////////// Unused ///////////////

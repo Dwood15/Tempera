@@ -48,3 +48,23 @@ struct real_vector3d {
 	real y;
 	real z;
 }; STAT_ASSRT(real_vector3d, 0xC);
+
+struct real_euler_angles3d {
+	// Up, Down offset degrees
+	real yaw;
+
+	// Side to Side offset degrees
+	real pitch;
+
+	// Left to Right offset degrees
+	real roll;
+
+	inline operator float *() { return reinterpret_cast<float *>(this); };
+
+	inline operator real_euler_angles2d *() { return reinterpret_cast<real_euler_angles2d *>(this); };
+};
+
+struct real_rectangle2d {
+	real x0, x1; // top, bottom
+	real y0, y1; // left, right
+};

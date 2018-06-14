@@ -88,8 +88,23 @@ int __stdcall forgeMain() {
 	core->ConsoleText(hGreen, "Tempera initialized.");
 	PrintHelp();
 
+	s_unit_datum * player0unit = (s_unit_datum *)-1;
+	s_unit_datum * player1unit = (s_unit_datum *)-1;
+
 	while (1) {
-		Sleep(20);
+		Sleep(40);
+		if(player0unit != (s_unit_datum *)-1) {
+			if(player0unit->unit.control_flags.control_flags.jump_button != 0) {
+				player0unit->unit.control_flags.control_flags.jump_button = 0;
+			}
+		}
+
+		if(player1unit != (s_unit_datum *)-1) {
+			if(player1unit->unit.control_flags.control_flags.jump_button != 0) {
+				player1unit->unit.control_flags.control_flags.jump_button = 0;
+			}
+		}
+
 		// updateGlobals();
 
 		if (*at_main_menu) {
@@ -117,41 +132,50 @@ int __stdcall forgeMain() {
 		// 	core->ObjectControl->LogInfo();
 		// }
 
-		// if ((core->IsPlayerSpawned(1)) && GetAsyncKeyState(VK_F7) & 1) {
-		// 	ident plyr_datum = core->GetPlayerObjectIdent(1);
-		//
-		// 	if (plyr_datum.index > -1) {
-		// 		//object_header * objh = core->GetObjectHeader(plyr_datum.index);
-		// 		object_data *objd = core->GetGenericObject(plyr_datum.index);
-		//
-		// 		Print(true, "\n\t\t***~~~*** Player 2 Data Dump ***~~~***\n");
-		// 		objd->DumpData(true);
-		// 		Print(true, "\n\t\t***~~~*** END Player 2 Data Dump ***~~~***\n");
-		//
-		// 		//objd->Velocity.x += .15;
-		// 		//objd->Velocity.y  = 0;
-		//
-		// 		++objd->Animation.state.animation_index;
-		//
-		// 		Print(true, "Player 2 animation state: %d", objd->Animation.state.animation_index);
-		// 		// core->ConsoleText(hBlue, );
-		// 	}
-		// } else if (core->IsPlayerSpawned(0) && GetAsyncKeyState(VK_F8) & 1) {
-		// 	ident plyr_datum = core->GetPlayerObjectIdent(0);
-		// 	if (plyr_datum.index > -1) {
-		// 		//object_header * objh = core->GetObjectHeader(plyr_datum.index);
-		// 		object_data *objd = core->GetGenericObject(plyr_datum.index);
-		//
-		// 		Print(true, "\n\t***~~~*** Player 1 Data Dump ***~~~***\n");
-		// 		objd->DumpData(true);
-		// 		Print(true, "\n\t***~~~*** END Player 1 Data Dump ***~~~***\n");
-		//
-		// 		objd->Velocity.x += .15;
-		// 		objd->Velocity.y  = 0;
-		//
-		// 		core->ConsoleText(hBlue, "Increased Player 1 velocity! %.3f", objd->Velocity.x);
-		// 	}
-		// }
+		if (GetAsyncKeyState(VK_F7) & 1 && (core->IsPlayerSpawned(1))) {
+			ident plyr_datum = core->GetPlayerObjectIdent(1);
+
+			if (plyr_datum.index > -1) {
+				//object_header * objh = core->GetObjectHeader(plyr_datum.index);
+				player1unit = (s_unit_datum *)core->GetGenericObject(plyr_datum.index);
+
+				Print(true, "Player 1 unit location: 0x%x", (uintptr_t)player1unit);
+
+				Print(true, "\n\t\t***~~~*** Player 2 Data Dump ***~~~***\n");
+				// objd->DumpData(true);
+				Print(true, "\n\t\t***~~~*** END Player 2 Data Dump ***~~~***\n");
+
+				//objd->Velocity.x += .15;
+				//objd->Velocity.y  = 0;
+
+				// player1unit->unit.control_flags.control_flags.crouch_button = 1;
+				player1unit->unit.control_flags.control_flags.jump_button = 1;
+				//objd->Animation.state.animation_index;
+
+				//Print(true, "Player 2 animation state: %d", objd->Animation.state.animation_index);
+				// core->ConsoleText(hBlue, );
+			}
+		} else if (GetAsyncKeyState(VK_F8) & 1 && core->IsPlayerSpawned(0)) {
+			ident plyr_datum = core->GetPlayerObjectIdent(0);
+			if (plyr_datum.index > -1) {
+
+				//object_header * objh = core->GetObjectHeader(plyr_datum.index);
+				player0unit = (s_unit_datum *)core->GetGenericObject(plyr_datum.index);
+
+				Print(true, "Player 0 unit location: 0x%x", (uintptr_t)player0unit);
+
+				Print(true, "\n\t\t***~~~*** Player 1 Data Dump ***~~~***\n");
+				// objd->DumpData(true);
+				Print(true, "\n\t\t***~~~*** END Player 1 Data Dump ***~~~***\n");
+
+				//objd->Velocity.x += .15;
+				//objd->Velocity.y  = 0;
+
+				// player0unit->unit.control_flags.control_flags.crouch_button = 1;
+				player0unit->unit.control_flags.control_flags.jump_button = 1;
+
+			}
+		}
 		// else if (GetAsyncKeyState(VK_UP)) {
 		// 	core->ObjectControl->IncreaseHoldDistance();         // Object MOVE away.
 		//

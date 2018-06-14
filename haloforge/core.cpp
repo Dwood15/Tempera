@@ -109,7 +109,7 @@ player *Core::GetPlayer(short index) {
 // Check to see if a player is spawned && biped object is valid?
 bool Core::IsPlayerSpawned(short index) {
 	player *newplayer = GetPlayer(index);
-	return (newplayer->object.id != 0 && newplayer->object.id != INVALID);
+	return (newplayer->SlaveUnitIndex.id != 0 && newplayer->SlaveUnitIndex.id != INVALID);
 }
 
 // Check to see if a player is valid
@@ -144,7 +144,7 @@ void Core::TryLogPlayer(short index, bool toConsole) {
 // Returns a player object ident by player index
 ident Core::GetPlayerObjectIdent(short player_index) {
 	player *newplayer = GetPlayer(player_index);
-	return newplayer->object;
+	return newplayer->SlaveUnitIndex;
 }
 ////////////////////////////////////////
 // Object Methods
