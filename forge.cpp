@@ -57,8 +57,9 @@ static void handleMainMenuOptions() {
 	}
 
 	if(GetAsyncKeyState(VK_F1) & 1) {
+		//Player spawn count set to 2.
 		*(short *) 0x624A9C = (short) 0x2;
-		core->ConsoleText(hGreen, "Number players to spawn in next sp map: 3!");
+		core->ConsoleText(hGreen, "Number players to spawn in next sp map: +1!");
 	}
 }
 
@@ -89,7 +90,7 @@ int __stdcall forgeMain() {
 
 	while (1) {
 		Sleep(20);
-		updateGlobals();
+		// updateGlobals();
 
 		if (*at_main_menu) {
 			handleMainMenuOptions();
@@ -102,73 +103,74 @@ int __stdcall forgeMain() {
 			// }
 		}
 
-		if (GetAsyncKeyState(VK_F11) & 1) {
-			PrintHelp();
-			continue;
-		}
+		// if (GetAsyncKeyState(VK_F11) & 1) {
+		// 	PrintHelp();
+		// 	continue;
+		// }
+		//
+		// if (*at_main_menu) {
+		// 	Sleep(45);
+		// 	continue;
+		// }
+		//
+		// if (GetAsyncKeyState(VK_F5) & 1) {
+		// 	core->ObjectControl->LogInfo();
+		// }
 
-		if (*at_main_menu) {
-			Sleep(45);
-			continue;
-		}
-
-		if (GetAsyncKeyState(VK_F5) & 1) {
-			core->ObjectControl->LogInfo();
-		}
-
-		if ((core->IsPlayerSpawned(1)) && GetAsyncKeyState(VK_F7) & 1) {
-			ident plyr_datum = core->GetPlayerObjectIdent(1);
-
-			if (plyr_datum.index > -1) {
-				//object_header * objh = core->GetObjectHeader(plyr_datum.index);
-				object_data *objd = core->GetGenericObject(plyr_datum.index);
-
-				Print(true, "\n\t\t***~~~*** Player 2 Data Dump ***~~~***\n");
-				objd->DumpData(true);
-				Print(true, "\n\t\t***~~~*** END Player 2 Data Dump ***~~~***\n");
-
-				//objd->Velocity.x += .15;
-				//objd->Velocity.y  = 0;
-
-				++objd->Animation.state.animation_index;
-
-				Print(true, "Player 2 animation state: %d", objd->Animation.state.animation_index);
-				// core->ConsoleText(hBlue, );
-			}
-		} else if (core->IsPlayerSpawned(0) && GetAsyncKeyState(VK_F8) & 1) {
-			ident plyr_datum = core->GetPlayerObjectIdent(0);
-			if (plyr_datum.index > -1) {
-				//object_header * objh = core->GetObjectHeader(plyr_datum.index);
-				object_data *objd = core->GetGenericObject(plyr_datum.index);
-
-				Print(true, "\n\t***~~~*** Player 1 Data Dump ***~~~***\n");
-				objd->DumpData(true);
-				Print(true, "\n\t***~~~*** END Player 1 Data Dump ***~~~***\n");
-
-				objd->Velocity.x += .15;
-				objd->Velocity.y  = 0;
-
-				core->ConsoleText(hBlue, "Increased Player 1 velocity! %.3f", objd->Velocity.x);
-			}
-		} else if (GetAsyncKeyState(VK_UP)) {
-			core->ObjectControl->IncreaseHoldDistance();         // Object MOVE away.
-
-		} else if (GetAsyncKeyState(VK_DOWN)) {
-			core->ObjectControl->DecreaseHoldDistance();         // Object MOVE closer
-
-		} else if (GetAsyncKeyState(VK_SHIFT) & 1) {
-			// SHIFT to lock on object.
-			core->ObjectControl->UpdateSelection();
-
-		} else if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) { // XY plane
-			//left mouse button
-			core->ObjectControl->MoveObjXY();
-		} else if ((GetAsyncKeyState(VK_RBUTTON) & 0x8000)) {    // STRAIGHT in front of camera plane.
-			//Right mouse button
-			core->ObjectControl->UpdateHeldObject();
-		} else if (!(GetAsyncKeyState(VK_RBUTTON))) {
-			core->ObjectControl->DropHeldObject();
-		}
+		// if ((core->IsPlayerSpawned(1)) && GetAsyncKeyState(VK_F7) & 1) {
+		// 	ident plyr_datum = core->GetPlayerObjectIdent(1);
+		//
+		// 	if (plyr_datum.index > -1) {
+		// 		//object_header * objh = core->GetObjectHeader(plyr_datum.index);
+		// 		object_data *objd = core->GetGenericObject(plyr_datum.index);
+		//
+		// 		Print(true, "\n\t\t***~~~*** Player 2 Data Dump ***~~~***\n");
+		// 		objd->DumpData(true);
+		// 		Print(true, "\n\t\t***~~~*** END Player 2 Data Dump ***~~~***\n");
+		//
+		// 		//objd->Velocity.x += .15;
+		// 		//objd->Velocity.y  = 0;
+		//
+		// 		++objd->Animation.state.animation_index;
+		//
+		// 		Print(true, "Player 2 animation state: %d", objd->Animation.state.animation_index);
+		// 		// core->ConsoleText(hBlue, );
+		// 	}
+		// } else if (core->IsPlayerSpawned(0) && GetAsyncKeyState(VK_F8) & 1) {
+		// 	ident plyr_datum = core->GetPlayerObjectIdent(0);
+		// 	if (plyr_datum.index > -1) {
+		// 		//object_header * objh = core->GetObjectHeader(plyr_datum.index);
+		// 		object_data *objd = core->GetGenericObject(plyr_datum.index);
+		//
+		// 		Print(true, "\n\t***~~~*** Player 1 Data Dump ***~~~***\n");
+		// 		objd->DumpData(true);
+		// 		Print(true, "\n\t***~~~*** END Player 1 Data Dump ***~~~***\n");
+		//
+		// 		objd->Velocity.x += .15;
+		// 		objd->Velocity.y  = 0;
+		//
+		// 		core->ConsoleText(hBlue, "Increased Player 1 velocity! %.3f", objd->Velocity.x);
+		// 	}
+		// }
+		// else if (GetAsyncKeyState(VK_UP)) {
+		// 	core->ObjectControl->IncreaseHoldDistance();         // Object MOVE away.
+		//
+		// } else if (GetAsyncKeyState(VK_DOWN)) {
+		// 	core->ObjectControl->DecreaseHoldDistance();         // Object MOVE closer
+		//
+		// } else if (GetAsyncKeyState(VK_SHIFT) & 1) {
+		// 	// SHIFT to lock on object.
+		// 	core->ObjectControl->UpdateSelection();
+		//
+		// } else if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) { // XY plane
+		// 	//left mouse button
+		// 	core->ObjectControl->MoveObjXY();
+		// } else if ((GetAsyncKeyState(VK_RBUTTON) & 0x8000)) {    // STRAIGHT in front of camera plane.
+		// 	//Right mouse button
+		// 	core->ObjectControl->UpdateHeldObject();
+		// } else if (!(GetAsyncKeyState(VK_RBUTTON))) {
+		// 	core->ObjectControl->DropHeldObject();
+		// }
 
 		//		TODO: Scrolling to set selected item's distance from player.
 		// 	MSG msg;

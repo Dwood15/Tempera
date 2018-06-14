@@ -252,11 +252,11 @@ namespace spcore {
 		void __inline patchRenderWindowCompares() {
 			//TODO: CONFIRM FIXES FOR THE CMP'S IMMEDIATELY FOLLOWING THESE CALLS.
 
-			MPP_B(0x497584, "interface_render get_render_window_ct_patch_1");
-			MPP_B(0x4975CB, " get_render_window_ct_patch_2");
-			MPP_B(0x49792B, "Check_render_splitscreen get_render_window_ct_patch_3");
-			MPP_B(0x51EB05, "rasterizer_detail_objects_begin get_render_window_ct_patch_4");
-			MPP_B(0x51EE05, "rasterizer_detail_objects_rebuild_vertices get_render_window_ct_patch_5");
+			// MPP_B(0x497584, "interface_render get_render_window_ct_patch_1");
+			// MPP_B(0x4975CB, " get_render_window_ct_patch_2");
+			// MPP_B(0x49792B, "Check_render_splitscreen get_render_window_ct_patch_3");
+			// MPP_B(0x51EB05, "rasterizer_detail_objects_begin get_render_window_ct_patch_4");
+			// MPP_B(0x51EE05, "rasterizer_detail_objects_rebuild_vertices get_render_window_ct_patch_5");
 
 			//_rasterizer_detail_objects_draw51EF90
 			//THIS ONE IS THE SAME AS XBOX BETA ALMOST.
@@ -293,56 +293,54 @@ namespace spcore {
 		void __inline mem_patch_p1() {
 			//Function call
 			// 			signature: "8B 35 20 59 81 00 57 8B FA B9 .26 00 00 00 F3 AB 83 CF FF"
-			//constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
+			constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
 			//Relying on sizeof allows us to redefine MAX_PLAYER variables/defines
-			//patchValue<int>(players_initialize_for_new_map_overwrite, sizeof(s_players_globals_data));
+			patchValue<int>(players_initialize_for_new_map_overwrite, sizeof(s_players_globals_data));
 
 			//"E8 64 85 FE FF 66 83 3D 9C 4A 62 00 01 .75 3C A1 1C FE 6A 00"
 			//75 is jne, we're gonna replace it with jl.
-			//MPP_ARB(0x45B8D4, 0x7C, "precache_new_map_max_spawn_ct_cmp");
+			MPP_ARB(0x45B8D4, 0x7C, "precache_new_map_max_spawn_ct_cmp");
 			//0x476200
-
 			static_assert(sizeof(s_player_control_globals_data) < (unsigned int) 0xFF);
-
-			//MPP_ARB(0x476200, sizeof(s_player_control_globals_data), players_initialize_sizeof_a_patch);
-			//MPP_ARB(0x47620A, sizeof(s_player_control_globals_data));
+			MPP_ARB(0x476200, sizeof(s_player_control_globals_data), players_initialize_sizeof_a_patch);
+			MPP_ARB(0x47620A, sizeof(s_player_control_globals_data));
 
 			//"33 C0 83 F9 FF 74 05 B8 .01 00 00 00 66 89 46 0C");
-			//constexpr uintptr_t pub_server_patch = 0x477115;
-			//patchValue<int>(pub_server_patch, MAX_PLAYER_COUNT_LOCAL);  //max_player_count_local_patch
+			constexpr uintptr_t pub_server_patch = 0x477115;
+			patchValue<int>(pub_server_patch, MAX_PLAYER_COUNT_LOCAL);  //max_player_count_local_patch
 
 			//"66 8B 41 0C 66 3D 01 00 7C EA .7F E8 0F BF C0 C3"
-			//constexpr uintptr_t main_get_window_ct = 0x4CC5BA;
-			//patchValue<short>(main_get_window_ct, (short)0x9090);                //We nop the greater than count so we actually get the proper window renderings.
+			constexpr uintptr_t main_get_window_ct = 0x4CC5BA;
+			patchValue<short>(main_get_window_ct, (short)0x9090);                //We nop the greater than count so we actually get the proper window renderings.
 
 			//"FF FF FF 7D 05 89 75 F4 EB 0D .7E 05 89 75 F4 EB"
 			//main_game_render's jle effectively clamps us to 1, so we just do unconditional jmp
-			//MPP_ARB(0x4CC61A, 0xEB, "main_game_render_patch");
+			MPP_ARB(0x4CC61A, 0xEB, "main_game_render_patch");
 
 			//patch bytes region
 			//"90 39 1C B1 74 0A 46 83 FE .01 7C F5 5E 5B 59 C3"
-			//MPP_B(0x4764E8, player_new_clamp);
+			MPP_B(0x4764E8, player_new_clamp);
 
 			//"46 83 FE .04 7C F1 8B C7 5F 5E C3 5F 8B C6 5E C3"
-			//MPP_B(0x476333, find_unused_player_index_spawn);    //This patch MAY NOT be technically necessary but I'd rather have it documented than not.
+			MPP_B(0x476333, find_unused_player_index_spawn);    //This patch MAY NOT be technically necessary but I'd rather have it documented than not.
 
 			//, "74 15 66 83 F9 .01 7D 0F 8B 15 18 59 81 00");
-			//MPP_B(0x473C86, get_player_input_blob_clamping_patch);
-			//MPP_B(0x498470, player_ui_get_single_player_local_player_from_controller);
+			MPP_B(0x473C86, get_player_input_blob_clamping_patch);
+			MPP_B(0x498470, player_ui_get_single_player_local_player_from_controller);
 
 			//Still deciding if I like this macro and it's format or not.
-			//MPP_B(0x4476EF + 0x2, first_person_camera_update_clamp_patch);
-			//MPP_B(0x446760 + 0x3, director_choose_camera_game_clamp);
-			//MPP_ARB(0x49F897, 0x0, player_spawn_count_hack_fuck_off);
+			MPP_B(0x4476EF + 0x2, first_person_camera_update_clamp_patch);
+			MPP_B(0x446760 + 0x3, director_choose_camera_game_clamp);
+			MPP_ARB(0x49F897, 0x0, player_spawn_count_hack_fuck_off);
 
 			//I can't find the xbox equivalent of this function, so this may not be necessary?
-			//MPP_B(0X497930 + 0x2, check_render_splitscreen_clamp);
+			MPP_B(0X497930 + 0x2, check_render_splitscreen_clamp);
 
 			//Yep, this one's the real deal...
-			//MPP_B(0x4CBBFC + 0x3, create_local_players_clamp);
-			//MPP_B(0x4A04B0 + 0x1, coop_game_initialize);
-			//MPP_B(0x4A0076, local_player_initialize_spawn_ct);
-			//MPP_B(0x4A007E, local_player_initialize_window_ct);
+			MPP_B(0x4CBBFC + 0x3, create_local_players_clamp);
+			MPP_B(0x4A04B0 + 0x1, coop_game_initialize);
+			MPP_B(0x4A0076, local_player_initialize_spawn_ct);
+			MPP_B(0x4A007E, local_player_initialize_window_ct);
 
 			//-- address is to the func(x) itself, not to to the patch
 			//constexpr uintptr_t render_weapon_hud_loc = 0x4B53E0
@@ -354,15 +352,15 @@ namespace spcore {
 			mem_patch_p1();
 
 			printf("Ran the OG get_mem_and_patches");
-			//MPP_B(0x4B196A + 0x2, hud_messaging_update_clamp);
-			//MPP_B(0x4B2787 + 0x3, hud_update_nav_point_local_player_clamp);
-			//patchRenderPlayerFrameClamp();
-			//patchRenderWindowCompares();
-			//initializations::interface_initialize_patches();
+			MPP_B(0x4B196A + 0x2, hud_messaging_update_clamp);
+			MPP_B(0x4B2787 + 0x3, hud_update_nav_point_local_player_clamp);
+			patchRenderPlayerFrameClamp();
+			patchRenderWindowCompares();
+			initializations::interface_initialize_patches();
 
-			//insertRenderWindowCountHooks();
-			//patchSetLocalPlayer();
-			//patchHudCompares();
+			// insertRenderWindowCountHooks();
+			patchSetLocalPlayer();
+			patchHudCompares();
 		}
 	};
 };

@@ -72,7 +72,7 @@ STAT_ASSRT(double, 0x8);
 
 #pragma region maximums
 #ifndef MAX_PLAYER_COUNT_LOCAL
-#define MAX_PLAYER_COUNT_LOCAL       2
+#define MAX_PLAYER_COUNT_LOCAL       1
 #endif
 
 #ifndef MAX_GAMEPAD_COUNT
