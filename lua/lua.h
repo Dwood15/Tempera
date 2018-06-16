@@ -13,21 +13,39 @@ extern "C" {
 }
 
 enum LuaCallbackId {
-	invalid = -1,
-	on_load = 0,
-	on_map_load,
-	before_scenario_tags_load,
-	after_scenario_tags_load,
-	before_game_tick,
-	after_game_tick,
+	invalid                   = -1,
+	on_load                   = 0,
+	on_map_load               = 1,
+		// available, should be working
+	before_scenario_tags_load = 2,
+	after_scenario_tags_load  = 3,
+	before_game_tick          = 4,
+	after_game_tick           = 5,
+		//end available, working hooks.
 	max_callback_id
 };
 
+template <typename T = int>
+static bool isValidCbId(T id) {
+	return (id < LuaCallbackId::max_callback_id && id >= id);
+}
 
-static int l_print(lua_State* L) {
+static int l_print(lua_State *L) {
 	const bool tocmd = lua_toboolean(L, 1);
-	const char* str = lua_tostring(L, 2);
+	const char *str = lua_tostring(L, 2);
 	Print(tocmd, str);
+	return 0;
+}
+
+//hacks upon hacks
+static void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type);
+
+static int l_registerLuaCallback(lua_State *L) {
+	const char *str = lua_tostring(L, 1);
+	const int id = lua_tointeger(L, 2);
+	if (isValidCbId(id)) {
+		registerLuaCallback(str, (LuaCallbackId) id);
+	}
 	return 0;
 }
 
@@ -35,10 +53,21 @@ static int l_print(lua_State* L) {
 //The tutorial series here: https://eliasdaler.wordpress.com/2013/10/20/lua_and_cpp_pt2/
 class LuaScriptManager {
 private:
-	lua_State                                  *L;
-	int                                 level;
+	lua_State                                                   *L;
+	int                                                         level;
 	std::unordered_map<LuaCallbackId, std::vector<std::string>> callbacks;
 public:
+	/**
+ * Tells our class to call this function when the associated CB id is triggered.
+ * @param cb_name Name of Lua func to call.
+ * @param cb_type On which event this func is called.
+ */
+	void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
+		if (isValidCbId(cb_type)) {
+			this->callbacks[cb_type].push_back(cb_name);
+		}
+	}
+
 	LuaScriptManager(const std::string &filename) {
 		Print(true, "Trying To load: %s\n", filename.c_str());
 
@@ -53,7 +82,10 @@ public:
 		lua_pushcfunction(L, l_print);
 		lua_setglobal(L, "DebugPrint");
 
-		if( lua_pcall(L, 0, 0, 0)) {
+		lua_pushcfunction(L, l_registerLuaCallback);
+		lua_setglobal(L, "RegisterCallBack");
+
+		if (lua_pcall(L, 0, 0, 0)) {
 			Print(true, "Error: script failed to run! (%s)\n", filename.c_str());
 		}
 
@@ -198,33 +230,24 @@ public:
 		return v;
 	}
 
-	bool isValidCbId(LuaCallbackId id) {
-		return (id < LuaCallbackId::max_callback_id && id >= id);
-	}
-
-	void call_void_lua_func(const std::string & funcName) {
+	void call_void_lua_func(const std::string &funcName) {
 		lua_getglobal(L, funcName.c_str());
 		lua_pcall(L, 0, 0, 0);
-	}
-
-	/**
-	 * Tells our class to call this function when the associated CB id is triggered.
-	 * @param cb_name Name of Lua func to call.
-	 * @param cb_type On which event this func is called.
-	 */
-	void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
-		if(isValidCbId(cb_type)) {
-			this->callbacks[cb_type].push_back(cb_name);
-		}
 	}
 
 	void call_lua_event_by_type(LuaCallbackId eventType) {
 		std::vector<std::string> cb_list = this->callbacks[eventType];
 
-		for(std::string elem : cb_list) {
+		for (std::string elem : cb_list) {
 			call_void_lua_func(elem);
 		}
 	}
 };
 
-static LuaScriptManager * LuaState;
+static LuaScriptManager *LuaState;
+
+static void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
+	if (LuaState) {
+		LuaState->registerLuaCallback(cb_name, cb_type);
+	}
+}
