@@ -124,7 +124,7 @@ set(GAMEMAP_H
 	gamestate/controls.h
 	dinput/dinput.h
 	common/players_loop_related.h
-	gamestate/experimentation/player_controller_to_index_array.h gamestate/experimentation/render_window.h)
+	gamestate/experimentation/player_controller_to_index_array.h gamestate/experimentation/render_window.h headers/hce_addresses.h common/engine_interface.h)
 
 set(TAGS_H
 	tags/scenario.h

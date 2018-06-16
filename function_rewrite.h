@@ -55,8 +55,6 @@ namespace spcore {
 	extern s_motion_sensor *motion_sensor;
 
 	namespace initializations {
-		void __inline adjustNPatch32(uintptr_t *loc, uint32 size);
-
 		void __inline patch_game_state_allocat_func();
 
 		void __cdecl motion_sensor_initialize_for_new_map();
@@ -79,6 +77,28 @@ namespace spcore {
 	};
 
 	namespace memory {
+		template <typename T>
+		void patchValue(uintptr_t to_patch, T replace_with) {
+			*(T *) to_patch = replace_with;
+		}
+
+		inline int calc_offset(uintptr_t real_address, uintptr_t reference) {
+			return (int) ((real_address) - ((int) reference));
+		}
+
+		void __inline nopBytes(uintptr_t location, unsigned short numNops) {
+			for (unsigned short i = 0; i < numNops; i++) {
+				memory::patchValue<byte>(location + i, 0x90);
+			}
+		}
+
+		void __inline adjustNPatch32(uintptr_t *loc, uint32 size) {
+			memory::patchValue<uint32>(loc[0], size);
+			memory::patchValue<uint32>(loc[1], size);
+		}
+
+#define GET_OFFSET_FROM_FUNC(func, reference) calc_offset((uintptr_t)(func), reference)
+
 		//signature: "81 EC B4 00 00 00 8B 0D ?? ?? ?? ?? 53 8B D8"
 		//		extern uintptr_t player_spawn;
 		//			//Function call
@@ -109,15 +129,6 @@ namespace spcore {
 		//, "74 15 66 83 F9 .01 7D 0F 8B 15 18 59 81 00");
 		//		extern uintptr_t get_player_input_blob_clamping_patch;
 		//		extern uintptr_t player_ui_get_single_player_local_player_from_controller;
-
-
 		//		extern uintptr_t hud_message_update_clamp_loc;
-
-
-		void get_mem_and_patch();
-
-		template <typename T>
-		constexpr void patchValue(uintptr_t to_patch, T replace_with);
 	};
-
 };

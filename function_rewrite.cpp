@@ -2,98 +2,12 @@
 
 #include <cstring>
 #include <cstdio>
+#include <engine_interface.h>
 #include "function_rewrite.h"
 #include "gamestate/game_globals.h"
 #include "gamestate/player_types.h"
 #include "lua/lua.h"
-
-/**
- * @brief MPP == MAX PLAYER PATCH _B == BYTE
- * @param value == address to_patch
- */
-#define MPP_B(value, ...) patchValue<byte>(value, MAX_PLAYER_COUNT_LOCAL);
-#define MPP_ARB(value, arb, ...) patchValue<byte>(value, arb);
-
-
-namespace Enums {
-	enum CallingConventions {
-		m_cdecl, //Everything goes onto the stack - stack is cleaned up by the caller.
-		m_stdcall, //Everything goes onto the stack, but stack is cleaned up by callee.
-		m_fastcall, //Example: __fastcall void Foo(int iGoInto_ECX, int iGoInto_EDX, int iGetPushed_Last, int iGetPushed_2nd, int iGetPushed_First);
-		m_thiscall
-	};
-}
-
-typedef Enums::CallingConventions Convention;
-
-namespace calls {
-	/**********
-	 * Tempera
-	 */
-
-	/**
-	 * Do a competent function call
-	 * @tparam conv
-	 * @tparam retType
-	 * @tparam argTypes
-	 * @param addr
-	 * @param args
-	 * @return
-	 */
-	template <uintptr_t addr, Convention conv = Convention::m_cdecl, typename retType = void, typename ...argTypes>
-	inline retType DoCall(argTypes... args) {
-		// typedef retType (__stdcall *function_t)(argTypes...);
-		using ufunc_t = retType(__cdecl *)(argTypes...);
-
-		if constexpr(conv == Convention::m_stdcall) {
-			using ufunc_t = retType(__stdcall *)(argTypes...);
-
-		} else if constexpr(conv == Convention::m_fastcall) {
-			using ufunc_t = retType(__fastcall *)(argTypes...);
-
-		} else if constexpr(conv == Convention::m_thiscall) {
-			using ufunc_t = retType(__thiscall *)(argTypes...);
-
-		} else if constexpr(conv == Convention::m_cdecl) {
-			using ufunc_t = retType(__cdecl *)(argTypes...);
-
-		} else {
-			throw "Invalid return type specified!";
-		}
-
-		static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
-		return func_to_call(args...);
-	};
-
-	template <uintptr_t addr, Convention conv>
-	inline void DoCall() {
-		// typedef retType (__stdcall *function_t)(argTypes...);
-		using ufunc_t = void(__cdecl *)();
-
-		if constexpr(conv == Convention::m_stdcall) {
-			using ufunc_t = void(__stdcall *)();
-
-		} else if constexpr(conv == Convention::m_fastcall) {
-			using ufunc_t = void(__fastcall *)();
-
-		} else if constexpr(conv == Convention::m_thiscall) {
-			using ufunc_t = void(__thiscall *)();
-
-		} else if constexpr(conv == Convention::m_cdecl) {
-			using ufunc_t = void(__cdecl *)();
-
-		} else {
-			throw "Invalid return type specified!";
-		}
-
-		static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
-		func_to_call();
-	};
-
-
-};
-
-
+#include "headers/hce_addresses.h"
 
 namespace spcore {
 	static unsigned int           game_state_cpu_allocation  = *game_state_globals_ptr;
@@ -104,64 +18,13 @@ namespace spcore {
 	static uintptr game_state_globals_ptr          = (uintptr) 0x67DD88;
 	static void    **crc_checksum_buffer           = (void **) 0x4D36D0;
 
-	namespace hud {};
-
-	namespace memory {
-		template <typename T>
-		constexpr void patchValue<T>(uintptr_t to_patch, T replace_with) {
-			*(T *) to_patch = replace_with;
-		}
-
-		inline int calc_offset(uintptr_t real_address, uintptr_t reference) {
-			return (int) ((real_address) - ((int) reference));
-		}
-
-#define GET_OFFSET_FROM_FUNC(func, reference) calc_offset((uintptr_t)(func), reference)
-	}
-
 	static void **hud_scripted_globals = (void **) 0x6B44A8;
 	static void **hud_messaging_state  = (void **) 0x677624;
 
 	//static s_motion_sensor*motion_sensor = ;
 
 	namespace initializations {
-
 		//40000db0
-		void __inline adjustNPatch32(uintptr_t *loc, uint32 size) {
-			memory::patchValue<uint32>(loc[0], size);
-			memory::patchValue<uint32>(loc[1], size);
-		}
-
-		void __inline interface_initialize_patches() {
-			constexpr uintptr_t size_of_fp_weapons = 0x1EA0 * MAX_PLAYER_COUNT_LOCAL;
-
-			uintptr_t fp_weap_initialize[] = {0x497122, 0x49712F};
-
-			adjustNPatch32(fp_weap_initialize, size_of_fp_weapons);
-
-			//uintptr_t hud_scripted_globals_sizeofs[]          = { 0x4AC7A7, 0x4AC7AF };
-			uintptr_t hud_messaging_globals_sizeofs[] = {0x4AC7DD, 0x4AC7EA};
-			uintptr_t hud_messaging_state             = 0x4AC936;
-			//			static_assert(sizeof(s_hud_messaging_state)  == 0x122, "stat_assrt_fail: s hud msging state");
-			//memset , or rather, rep stosd assumes full integer (0x4) size in this case. thus, we
-			memory::patchValue<uintptr_t>(hud_messaging_state, sizeof(s_hud_messaging_state) / 4);
-			uintptr_t motion_sensor_sizeofs[] = {0x4AC8B3, 0x4AC8BC + 0x4};
-
-			//			Need to confirm these...
-			//			uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
-			//			uintptr_t weapon_hud_globals_sizeofs[]            = { 0x4AC848, 0x4AC850 + 0x4 };
-			//			uintptr_t hud_interface_related_globals_sizeofs[] = { 0x4AC87D, 0x4AC885 + 0x4 };
-
-
-			//adjustNPatch32(hud_scripted_globals_sizeofs, 0x4);
-			//0x488 og size.
-			adjustNPatch32(hud_messaging_globals_sizeofs, sizeof(s_hud_messaging_state));
-			//			adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
-			//			adjustNPatch32(weapon_hud_globals_sizeofs, 0x7C);
-			//			adjustNPatch32(hud_interface_related_globals_sizeofs, 0x30);
-			adjustNPatch32(motion_sensor_sizeofs, sizeof(s_motion_sensor));
-		}
-
 		//		void __cdecl motion_sensor_initialize_for_new_map() {
 		//			s_motion_sensor * motion_snsor_location = (s_motion_sensor*)0x6B44C8;
 		//			printf("Address @ motion sensor location: 0x08%x", *motion_snsor_location);
@@ -176,10 +39,6 @@ namespace spcore {
 		//				}
 		//			}
 		//		}
-
-		int __fastcall interface_get_tag_index(short x) {
-			return -1;
-		}
 
 		void scripted_hud_messages_clear() {
 			int        v0; // edx
@@ -202,12 +61,6 @@ namespace spcore {
 			} while (v1);
 		}
 	};
-
-	void __inline nopBytes(uintptr_t location, unsigned short numNops) {
-		for (unsigned short i = 0; i < numNops; i++) {
-			memory::patchValue<byte>(location + i, 0x90);
-		}
-	}
 
 	//Initialzie at new map!
 	static const void __cdecl player_control::player_control_initialize() {
@@ -301,56 +154,6 @@ namespace spcore {
 
 
 	namespace memory {
-		void __inline patchHudCompares() {
-			constexpr uintptr_t hud_update_weapon_local_player_clamp = 0x4B4D75;
-			patchValue<short>(hud_update_weapon_local_player_clamp, (short) MAX_PLAYER_COUNT_LOCAL);
-
-			constexpr uintptr_t hud_update_unit_local_player_clamp = 0x4B3565;
-			patchValue<byte>(hud_update_unit_local_player_clamp, (byte) MAX_PLAYER_COUNT_LOCAL);
-
-			constexpr uintptr_t hud_update_unit_local_player_clampB = 0x4B36D4;
-			patchValue<byte>(hud_update_unit_local_player_clampB, (byte) MAX_PLAYER_COUNT_LOCAL);
-
-			//TODO: Write the patch for hud_update_unit
-
-		}
-
-		//		uintptr_t player_spawn = 0x47A9E0; Valid, just not using it...
-		//Get_window_count patch locations
-
-		void __inline patchRenderPlayerFrameClamp() {
-			constexpr uintptr_t render_player_frame_jg_patch = 0x50F5EB;
-			patchValue<short>(render_player_frame_jg_patch, (short) 0x9090);
-			constexpr uintptr_t render_player_frame_cmp_patch = 0x50F5F0;
-			nopBytes(render_player_frame_cmp_patch, 0xA);
-
-			MPP_B(0x4476F1, "first_person_camera_update clamp fix")
-			MPP_B(0x45FC65, "game_engine_post_rasterize_in_game clamp fix")
-			MPP_B(0x474B0D, "player_control_get_facing_direction clamp fix")
-
-		}
-
-		void __inline patchRenderWindowCompares() {
-			//TODO: CONFIRM FIXES FOR THE CMP'S IMMEDIATELY FOLLOWING THESE CALLS.
-
-			// MPP_B(0x497584, "interface_render get_render_window_ct_patch_1");
-			// MPP_B(0x4975CB, " get_render_window_ct_patch_2");
-			// MPP_B(0x49792B, "Check_render_splitscreen get_render_window_ct_patch_3");
-			// MPP_B(0x51EB05, "rasterizer_detail_objects_begin get_render_window_ct_patch_4");
-			// MPP_B(0x51EE05, "rasterizer_detail_objects_rebuild_vertices get_render_window_ct_patch_5");
-
-			//_rasterizer_detail_objects_draw51EF90
-			//THIS ONE IS THE SAME AS XBOX BETA ALMOST.
-			//			constexpr uintptr_t get_render_window_ct_patch_6 = 0x51EE05;
-			//patchValue<short>(, (short)-1);
-		}
-
-		void __inline patchSetLocalPlayer() {
-			MPP_B(0x477BEF, "First cmp of requested_player_index with 1");
-			MPP_B(0x477C10, "2nd cmp of requested_player_index with 1");
-		}
-#pragma endregion
-
 		const void __cdecl scenario_tags_load() {
 			LuaState->call_lua_event_by_type(LuaCallbackId::before_scenario_tags_load);
 			calls::DoCall<0x442290>();
@@ -363,7 +166,55 @@ namespace spcore {
 			LuaState->call_lua_event_by_type(LuaCallbackId::after_game_tick);
 		}
 
-		void __inline patch_functions() {
+		void __inline interface_initialize_patches() {
+			constexpr uintptr_t size_of_fp_weapons = 0x1EA0 * MAX_PLAYER_COUNT_LOCAL;
+
+			uintptr_t fp_weap_initialize[] = {0x497122, 0x49712F};
+
+			memory::adjustNPatch32(fp_weap_initialize, size_of_fp_weapons);
+
+			//uintptr_t hud_scripted_globals_sizeofs[]          = { 0x4AC7A7, 0x4AC7AF };
+			uintptr_t hud_messaging_globals_sizeofs[] = {0x4AC7DD, 0x4AC7EA};
+			uintptr_t hud_messaging_state_size             = 0x4AC936;
+			//static_assert(sizeof(s_hud_messaging_state)  == 0x122, "stat_assrt_fail: s hud msging state");
+			//memset , or rather, rep stosd assumes full integer (0x4) size in this case.
+			memory::patchValue<uintptr_t>(hud_messaging_state_size, sizeof(s_hud_messaging_state) / 4);
+			uintptr_t motion_sensor_sizeofs[] = {0x4AC8B3, 0x4AC8BC + 0x4};
+
+			//			Need to confirm these...
+			//			uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
+			//			uintptr_t weapon_hud_globals_sizeofs[]            = { 0x4AC848, 0x4AC850 + 0x4 };
+			//			uintptr_t hud_interface_related_globals_sizeofs[] = { 0x4AC87D, 0x4AC885 + 0x4 };
+
+
+			//adjustNPatch32(hud_scripted_globals_sizeofs, 0x4);
+			//0x488 og size.
+			memory::adjustNPatch32(hud_messaging_globals_sizeofs, sizeof(s_hud_messaging_state));
+			//			adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
+			//			adjustNPatch32(weapon_hud_globals_sizeofs, 0x7C);
+			//			adjustNPatch32(hud_interface_related_globals_sizeofs, 0x30);
+			memory::adjustNPatch32(motion_sensor_sizeofs, sizeof(s_motion_sensor));
+		}
+
+		void get_mem_and_patch() {
+			//TODO: Coneceptually separate these out..
+			//Function call
+			// 			signature: "8B 35 20 59 81 00 57 8B FA B9 .26 00 00 00 F3 AB 83 CF FF"
+			constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
+			//Relying on sizeof allows us to redefine MAX_PLAYER variables/defines
+			patchValue<int>(players_initialize_for_new_map_overwrite, sizeof(s_players_globals_data));
+
+			//"E8 64 85 FE FF 66 83 3D 9C 4A 62 00 01 .75 3C A1 1C FE 6A 00"
+			//75 is jne, we're gonna replace it with jl.
+			//0x476200
+
+			printf("Ran the OG get_mem_and_patches");
+
+			//uintptr_t player_spawn = 0x47A9E0; Valid, just not using it...
+
+			interface_initialize_patches();
+
+			//Gotta be able to loop over all the players + input devices, no?.
 			//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
 			constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
 			//printf("Calculated - 4 offset: 0x%x\n", real_address_offset - 4);
@@ -383,81 +234,16 @@ namespace spcore {
 			//			real_address        = (int)&initializations::motion_sensor_initialize_for_new_map;
 			//			real_address_offset = ( real_address ) - ((int)0x4AC98E);																					// + (int)4);
 			//
-			//			patchValue<uintptr_t>(((unsigned int)0x4AC98E ), (unsigned int)( real_address_offset ) - 4);    								//Gotta be able to loop over all the players + input devices, no?.
-		}
+			//			patchValue<uintptr_t>(((unsigned int)0x4AC98E ), (unsigned int)( real_address_offset ) - 4);
 
-		void __inline mem_patch_p1() {
-			//Function call
-			// 			signature: "8B 35 20 59 81 00 57 8B FA B9 .26 00 00 00 F3 AB 83 CF FF"
-			constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
-			//Relying on sizeof allows us to redefine MAX_PLAYER variables/defines
-			patchValue<int>(players_initialize_for_new_map_overwrite, sizeof(s_players_globals_data));
-
-
-			//"E8 64 85 FE FF 66 83 3D 9C 4A 62 00 01 .75 3C A1 1C FE 6A 00"
-			//75 is jne, we're gonna replace it with jl.
-			MPP_ARB(0x45B8D4, 0x7C, "precache_new_map_max_spawn_ct_cmp");
-			//0x476200
-			static_assert(sizeof(s_player_control_globals_data) < (unsigned int) 0xFF);
-			MPP_ARB(0x476200, sizeof(s_player_control_globals_data), players_initialize_sizeof_a_patch);
-			MPP_ARB(0x47620A, sizeof(s_player_control_globals_data));
-
-			//"33 C0 83 F9 FF 74 05 B8 .01 00 00 00 66 89 46 0C");
-			constexpr uintptr_t pub_server_patch = 0x477115;
-			patchValue<int>(pub_server_patch, MAX_PLAYER_COUNT_LOCAL);  //max_player_count_local_patch
-
-			//"66 8B 41 0C 66 3D 01 00 7C EA .7F E8 0F BF C0 C3"
-			constexpr uintptr_t main_get_window_ct = 0x4CC5BA;
-			patchValue<short>(main_get_window_ct, (short)0x9090);                //We nop the greater than count so we actually get the proper window renderings.
-
-			//"FF FF FF 7D 05 89 75 F4 EB 0D .7E 05 89 75 F4 EB"
-			//main_game_render's jle effectively clamps us to 1, so we just do unconditional jmp
-			MPP_ARB(0x4CC61A, 0xEB, "main_game_render_patch");
-
-			//patch bytes region
-			//"90 39 1C B1 74 0A 46 83 FE .01 7C F5 5E 5B 59 C3"
-			MPP_B(0x4764E8, player_new_clamp);
-
-			//"46 83 FE .04 7C F1 8B C7 5F 5E C3 5F 8B C6 5E C3"
-			MPP_B(0x476333, find_unused_player_index_spawn);    //This patch MAY NOT be technically necessary but I'd rather have it documented than not.
-
-			//, "74 15 66 83 F9 .01 7D 0F 8B 15 18 59 81 00");
-			MPP_B(0x473C86, get_player_input_blob_clamping_patch);
-			MPP_B(0x498470, player_ui_get_single_player_local_player_from_controller);
-
-			//Still deciding if I like this macro and it's format or not.
-			MPP_B(0x4476EF + 0x2, first_person_camera_update_clamp_patch);
-			MPP_B(0x446760 + 0x3, director_choose_camera_game_clamp);
-			MPP_ARB(0x49F897, 0x0, player_spawn_count_hack_fuck_off);
-
-			//I can't find the xbox equivalent of this function, so this may not be necessary?
-			MPP_B(0X497930 + 0x2, check_render_splitscreen_clamp);
-
-			//Yep, this one's the real deal...
-			MPP_B(0x4CBBFC + 0x3, create_local_players_clamp);
-			MPP_B(0x4A04B0 + 0x1, coop_game_initialize);
-			MPP_B(0x4A0076, local_player_initialize_spawn_ct);
-			MPP_B(0x4A007E, local_player_initialize_window_ct);
-
-			//-- address is to the func(x) itself, not to to the patch
-			//constexpr uintptr_t render_weapon_hud_loc = 0x4B53E0
-			//MPP_B(render_weapon_hud_loc);
-		}
-
-		void get_mem_and_patch() {
-			//TODO: Coneceptually separate these out..
-			mem_patch_p1();
-
-			printf("Ran the OG get_mem_and_patches");
-			MPP_B(0x4B196A + 0x2, hud_messaging_update_clamp);
-			MPP_B(0x4B2787 + 0x3, hud_update_nav_point_local_player_clamp);
-			patchRenderPlayerFrameClamp();
-			patchRenderWindowCompares();
-			initializations::interface_initialize_patches();
 
 			// insertRenderWindowCountHooks();
-			patchSetLocalPlayer();
-			patchHudCompares();
+
+			//_rasterizer_detail_objects_draw51EF90
+			//THIS ONE IS THE SAME AS XBOX BETA ALMOST.
+			//			constexpr uintptr_t get_render_window_ct_patch_6 = 0x51EE05;
+			//patchValue<short>(, (short)-1);
+			::run_byte_size_patches();
 		}
 	};
 };

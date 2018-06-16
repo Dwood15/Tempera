@@ -2,7 +2,7 @@
 
 #include "precompile.h"
 
-// TODO: Transition to switch-case constexpr structure, a la a better memory_map.
+// TODO: a better memory_map.
 
 ADDR K_ = 0x56C650;
 
