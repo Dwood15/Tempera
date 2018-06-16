@@ -77,7 +77,7 @@ static void handleMPSPInput() {
 
 //TODO: Launch thread later on in the load cycle
 int __stdcall forgeMain() {
-	Sleep(600);
+	Sleep(6000);
 	//automatically spawn the maximum number of local players at the beginning of the game.
 	//*(short *) 0x624A9C = (short)MAX_PLAYER_COUNT_LOCAL;
 
@@ -95,13 +95,13 @@ int __stdcall forgeMain() {
 		Sleep(40);
 		if(player0unit != (s_unit_datum *)-1) {
 			if(player0unit->unit.control_flags.control_flags.jump_button != 0) {
-				player0unit->unit.control_flags.control_flags.jump_button = 0;
+				// player0unit->unit.control_flags.control_flags.jump_button = 0;
 			}
 		}
 
 		if(player1unit != (s_unit_datum *)-1) {
 			if(player1unit->unit.control_flags.control_flags.jump_button != 0) {
-				player1unit->unit.control_flags.control_flags.jump_button = 0;
+				// player1unit->unit.control_flags.control_flags.jump_button = 0;
 			}
 		}
 
@@ -118,19 +118,10 @@ int __stdcall forgeMain() {
 			// }
 		}
 
-		// if (GetAsyncKeyState(VK_F11) & 1) {
-		// 	PrintHelp();
-		// 	continue;
-		// }
-		//
-		// if (*at_main_menu) {
-		// 	Sleep(45);
-		// 	continue;
-		// }
-		//
-		// if (GetAsyncKeyState(VK_F5) & 1) {
-		// 	core->ObjectControl->LogInfo();
-		// }
+		if (*at_main_menu) {
+			Sleep(30);
+			continue;
+		}
 
 		if (GetAsyncKeyState(VK_F7) & 1 && (core->IsPlayerSpawned(1))) {
 			ident plyr_datum = core->GetPlayerObjectIdent(1);
@@ -145,8 +136,6 @@ int __stdcall forgeMain() {
 				// objd->DumpData(true);
 				Print(true, "\n\t\t***~~~*** END Player 2 Data Dump ***~~~***\n");
 
-				//objd->Velocity.x += .15;
-				//objd->Velocity.y  = 0;
 
 				// player1unit->unit.control_flags.control_flags.crouch_button = 1;
 				player1unit->unit.control_flags.control_flags.jump_button = 1;
@@ -162,14 +151,12 @@ int __stdcall forgeMain() {
 				//object_header * objh = core->GetObjectHeader(plyr_datum.index);
 				player0unit = (s_unit_datum *)core->GetGenericObject(plyr_datum.index);
 
+				Print(true, "\n\t\t***~~~*** Player 0 Data Dump ***~~~***\n");
+
 				Print(true, "Player 0 unit location: 0x%x", (uintptr_t)player0unit);
+				Print(true, "Player 0 control flags addr: 0x%x", &player0unit->unit.control_flags);
 
-				Print(true, "\n\t\t***~~~*** Player 1 Data Dump ***~~~***\n");
-				// objd->DumpData(true);
-				Print(true, "\n\t\t***~~~*** END Player 1 Data Dump ***~~~***\n");
-
-				//objd->Velocity.x += .15;
-				//objd->Velocity.y  = 0;
+				Print(true, "\n\t\t***~~~*** END Player 0 Data Dump ***~~~***\n");
 
 				// player0unit->unit.control_flags.control_flags.crouch_button = 1;
 				player0unit->unit.control_flags.control_flags.jump_button = 1;

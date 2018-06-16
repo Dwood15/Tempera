@@ -99,7 +99,7 @@ namespace spcore {
 			return -1;
 		}
 
-		void __cdecl scripted_hud_messages_clear() {
+		void scripted_hud_messages_clear() {
 			int        v0; // edx
 			signed int v1; // esi
 			char       *v2; // eax
@@ -273,6 +273,10 @@ namespace spcore {
 
 #pragma endregion
 
+		void __cdecl game_tick(int current_frame_tick) {
+
+
+		}
 
 
 		void __inline patch_functions() {

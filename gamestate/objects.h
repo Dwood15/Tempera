@@ -414,7 +414,7 @@ struct s_unit_data {
 	datum_index swarm_next_unit_index;                        // 0x1FC //0x8
 	datum_index swarm_prev_unit_index;                        // 0x200 //0x10
 	long_flags  flags;                                    // 0x204  //first 4 bits unknown,  5th bit == invisible 14 bits unknown
-	unit_control_flags control_flags;
+	unit_control_flags control_flags;							//0x208
 	short pad00;
 	short pad0;                                 // 0x20C related to the first two short's in s_unit_globals_data
 	sbyte       shield_sapping;                                 // 0x20E
@@ -445,7 +445,7 @@ struct s_unit_data {
 	short pad5s_unknown;                                 // 0x290
 	unsigned short  pad6s_unkown;                                             // 0x292
 	datum_index                 throwing_grenade_projectile_index;               // 0x294
-	s_unit_datum_animation_data animation;                        // 0x298
+	s_unit_datum_animation_data animation;                        					// 0x298
 	real                        ambient;                                       // 0x2E0
 	real                        illumination;                                    // 0x2E4
 	real                        mouth_aperture;                                 // 0x2E8
@@ -454,8 +454,8 @@ struct s_unit_data {
 	short current_weapon_index;                              // 0x2F2
 	short next_weapon_index;                              // 0x2F4
 	unsigned short pad8s_unknown;                                             // 0x2F6 need to verify this is padding
-	datum_index weapon_object_indices[4];   // 0x2F8
-	long        weapon_ready_times[4];   // 0x308
+	datum_index weapon_object_indices[4];  				 // 0x2F8
+	long        weapon_ready_times[4];   						// 0x308
 	datum_index equipment_index;                           // 0x218
 	sbyte       current_grenade_index;                           // 0x31C
 	sbyte       next_grenade_index;                              // 0x31D

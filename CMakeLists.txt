@@ -166,7 +166,7 @@ set(CEINTERNAL_H ${HALOFORGE_H}
 	common/target_version.h
 	common/open_sauce_mem_locs.h
 	common/precompile.h
-	common/eng_functions.h)
+	common/eng_functions.h lua/lua.h)
 
 set(HALOFORGE_CPP
 	./Direct3D/d3d9hook.cpp
@@ -187,6 +187,7 @@ set(CEINTERNAL_CPP ${CEINTERNAL_H} ${HALOFORGE_CPP}
 	gamestate/experimentation/hud_related.h)
 
 #EXTERNAL LIBS
+file(GLOB LUA53_GLOB ./libs/lua53.lib)
 file(GLOB DETOURS_GLOB ./libs/detours.lib)
 file(GLOB CAPSTONE_STATIC_GLOB ./libs/capstone_static.lib)
 
@@ -210,7 +211,7 @@ endif ()
 
 add_library(dinput8 SHARED ${CEINTERNAL_CPP})
 
-target_link_libraries(dinput8 ${DETOURS_GLOB} ${MARIADB_LIBRARY} ${CAPSTONE_STATIC_GLOB} ${DirectX_LIBRARIES})
+target_link_libraries(dinput8 ${DETOURS_GLOB} ${LUA53_GLOB} ${MARIADB_LIBRARY} ${CAPSTONE_STATIC_GLOB} ${DirectX_LIBRARIES})
 
 message(STATUS "Outputting libmariadb to: ${MARIADB_LIBRARY}")
 
