@@ -1,8 +1,6 @@
 /*
 	Project: tempera
 	File: forge.cpp
-	Copyright � 2009 SilentK, Abyll
- 	Copyright 	 2018 Dwood
 
 	This file is part of tempera.
 

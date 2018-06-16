@@ -38,6 +38,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include "ceinternal.h"
+#include "lua/lua.h"
 #include <vector>
 #include <Windows.h>
 #include <dbghelp.h>
@@ -69,11 +70,13 @@ static inline MYSQL *ConnectToSqlDB(const char *host, const char *usr, const cha
 	return con;
 }
 
+static const std::string LuaFileName = "C:\\Program Files (x86)\\Microsoft Games\\Halo Custom Edition\\init.lua";
+
 static inline void *init(HMODULE *reason) {
 	h = AddVectoredExceptionHandler(CALL_FIRST, CEInternalExceptionHandler);
 
 	char path[MAX_PATH];
-	GetSystemDirectory(path, sizeof(path));
+	GetSystemDirectoryA(path, sizeof(path));
 	strcat(path, "\\dinput8.dll");
 
 	*reason = LoadLibraryA(path);
@@ -87,6 +90,9 @@ static inline void *init(HMODULE *reason) {
 	if (::AllocConsole() != 0) {
 		freopen_s(&debug_out, "CONOUT$", "w", stdout);
 	}
+
+	Print(true, "Attempting to initialize luascript manager\n");
+	LuaState = new LuaScriptManager(LuaFileName);
 
 	//printf("init_for_new_map_overwrite addr: 0x%x\n", 0xBEEF);//init_for_new_map_overwrite);
 
@@ -109,10 +115,11 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 			Print(true, "Failed to Initialize properly, I guess. Exiting");
 			return false;
 		}
-		//Rip forge mode, lol. Gonna have to figure something else out now.
+		//Rip forge mode, lol. Gonna have to figure something else out.
 		DisableThreadLibraryCalls(hinstDLL);
 		CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
-		Print(true, "Created LPTHREAD\n");
+		Print(true, "Created Forge Thread!\n");
+
 
 		//auto sqlCon = ConnectToSqlDB("localhost" );
 		// if (sqlCon != NULL) {
@@ -123,6 +130,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 		loaded = true;
 
 	} else if (fdwReason == DLL_PROCESS_DETACH && loaded) {
+		delete LuaState;
 		detach(hinstDLL);
 		loaded = false;
 	}

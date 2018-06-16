@@ -5,6 +5,7 @@
 #include "function_rewrite.h"
 #include "gamestate/game_globals.h"
 #include "gamestate/player_types.h"
+#include "lua/lua.h"
 
 /**
  * @brief MPP == MAX PLAYER PATCH _B == BYTE
@@ -12,6 +13,87 @@
  */
 #define MPP_B(value, ...) patchValue<byte>(value, MAX_PLAYER_COUNT_LOCAL);
 #define MPP_ARB(value, arb, ...) patchValue<byte>(value, arb);
+
+
+namespace Enums {
+	enum CallingConventions {
+		m_cdecl, //Everything goes onto the stack - stack is cleaned up by the caller.
+		m_stdcall, //Everything goes onto the stack, but stack is cleaned up by callee.
+		m_fastcall, //Example: __fastcall void Foo(int iGoInto_ECX, int iGoInto_EDX, int iGetPushed_Last, int iGetPushed_2nd, int iGetPushed_First);
+		m_thiscall
+	};
+}
+
+typedef Enums::CallingConventions Convention;
+
+namespace calls {
+	/**********
+	 * Tempera
+	 */
+
+	/**
+	 * Do a competent function call
+	 * @tparam conv
+	 * @tparam retType
+	 * @tparam argTypes
+	 * @param addr
+	 * @param args
+	 * @return
+	 */
+	template <uintptr_t addr, Convention conv = Convention::m_cdecl, typename retType = void, typename ...argTypes>
+	inline retType DoCall(argTypes... args) {
+		// typedef retType (__stdcall *function_t)(argTypes...);
+		using ufunc_t = retType(__cdecl *)(argTypes...);
+
+		if constexpr(conv == Convention::m_stdcall) {
+			using ufunc_t = retType(__stdcall *)(argTypes...);
+
+		} else if constexpr(conv == Convention::m_fastcall) {
+			using ufunc_t = retType(__fastcall *)(argTypes...);
+
+		} else if constexpr(conv == Convention::m_thiscall) {
+			using ufunc_t = retType(__thiscall *)(argTypes...);
+
+		} else if constexpr(conv == Convention::m_cdecl) {
+			using ufunc_t = retType(__cdecl *)(argTypes...);
+
+		} else {
+			throw "Invalid return type specified!";
+		}
+
+		static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
+		return func_to_call(args...);
+	};
+
+	template <uintptr_t addr, Convention conv>
+	inline void DoCall() {
+		// typedef retType (__stdcall *function_t)(argTypes...);
+		using ufunc_t = void(__cdecl *)();
+
+		if constexpr(conv == Convention::m_stdcall) {
+			using ufunc_t = void(__stdcall *)();
+
+		} else if constexpr(conv == Convention::m_fastcall) {
+			using ufunc_t = void(__fastcall *)();
+
+		} else if constexpr(conv == Convention::m_thiscall) {
+			using ufunc_t = void(__thiscall *)();
+
+		} else if constexpr(conv == Convention::m_cdecl) {
+			using ufunc_t = void(__cdecl *)();
+
+		} else {
+			throw "Invalid return type specified!";
+		}
+
+		static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
+		func_to_call();
+	};
+
+
+};
+
+
 
 namespace spcore {
 	static unsigned int           game_state_cpu_allocation  = *game_state_globals_ptr;
@@ -126,7 +208,6 @@ namespace spcore {
 			memory::patchValue<byte>(location + i, 0x90);
 		}
 	}
-
 
 	//Initialzie at new map!
 	static const void __cdecl player_control::player_control_initialize() {
@@ -261,8 +342,6 @@ namespace spcore {
 			//_rasterizer_detail_objects_draw51EF90
 			//THIS ONE IS THE SAME AS XBOX BETA ALMOST.
 			//			constexpr uintptr_t get_render_window_ct_patch_6 = 0x51EE05;
-
-
 			//patchValue<short>(, (short)-1);
 		}
 
@@ -270,14 +349,19 @@ namespace spcore {
 			MPP_B(0x477BEF, "First cmp of requested_player_index with 1");
 			MPP_B(0x477C10, "2nd cmp of requested_player_index with 1");
 		}
-
 #pragma endregion
 
-		void __cdecl game_tick(int current_frame_tick) {
-
-
+		const void __cdecl scenario_tags_load() {
+			LuaState->call_lua_event_by_type(LuaCallbackId::before_scenario_tags_load);
+			calls::DoCall<0x442290>();
+			LuaState->call_lua_event_by_type(LuaCallbackId::after_scenario_tags_load);
 		}
 
+		const void __cdecl game_tick(int current_frame_tick) {
+			LuaState->call_lua_event_by_type(LuaCallbackId::before_game_tick);
+			calls::DoCall<0x45C0F0, Convention::m_cdecl, void, int>(current_frame_tick);
+			LuaState->call_lua_event_by_type(LuaCallbackId::after_game_tick);
+		}
 
 		void __inline patch_functions() {
 			//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
@@ -286,6 +370,14 @@ namespace spcore {
 			//Hooks
 			auto addr = calc_addr_offset(player_control_init_new_map_hook, (int)&spcore::player_control::player_control_initialize_for_new_map);
 			patchValue<uintptr_t>(player_control_init_new_map_hook, addr); //Gotta be able to loop over all the players + input devices, no?.
+
+			constexpr uintptr_t scenario_load_hook = 0x541A04;
+			addr = calc_addr_offset(scenario_load_hook, (int)&scenario_tags_load);
+			patchValue<uintptr_t>(scenario_load_hook, addr); //Gotta be able to loop over all the players + input devices, no?.
+
+			constexpr uintptr_t game_tick_hook = 0x473815;
+			addr = calc_addr_offset(game_tick_hook, (int)&game_tick);
+			patchValue<uintptr_t>(game_tick_hook, addr);
 
 			//Nothing wrong's with the hook, just the function.
 			//			real_address        = (int)&initializations::motion_sensor_initialize_for_new_map;
@@ -300,6 +392,7 @@ namespace spcore {
 			constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
 			//Relying on sizeof allows us to redefine MAX_PLAYER variables/defines
 			patchValue<int>(players_initialize_for_new_map_overwrite, sizeof(s_players_globals_data));
+
 
 			//"E8 64 85 FE FF 66 83 3D 9C 4A 62 00 01 .75 3C A1 1C FE 6A 00"
 			//75 is jne, we're gonna replace it with jl.
