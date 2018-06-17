@@ -1,0 +1,2979 @@
+{
+    "messageDelta": {
+        "engine": "Halo1_CE",
+        "fieldTypes": {
+            "type": [
+                {
+                    "name": "object_index",
+                    "type": "TranslatedIndex"
+                },
+                {
+                    "name": "locality_reference_position",
+                    "type": "LocalityReferencePosition"
+                },
+                {
+                    "name": "translational_velocity",
+                    "type": "SmartVector"
+                },
+                {
+                    "name": "integer_small",
+                    "type": "Integer"
+                },
+                {
+                    "name": "boolean",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "point3d",
+                    "type": "Point"
+                },
+                {
+                    "name": "angular_velocity",
+                    "type": "SmartVector"
+                },
+                {
+                    "name": "integer_medium",
+                    "type": "Integer"
+                },
+                {
+                    "name": "fixed_width_6bits",
+                    "type": "FixedWidth"
+                },
+                {
+                    "name": "grenade_counts",
+                    "type": "GrenadeCounts"
+                },
+                {
+                    "name": "fixed_width_3bits",
+                    "type": "FixedWidth"
+                },
+                {
+                    "name": "fixed_width_normal_8bit",
+                    "type": "FixedWidthNormalVector"
+                },
+                {
+                    "name": "time",
+                    "type": "Time"
+                },
+                {
+                    "name": "definition_index",
+                    "type": "Integer"
+                },
+                {
+                    "name": "integer_large",
+                    "type": "Integer"
+                },
+                {
+                    "name": "player_index",
+                    "type": "TranslatedIndex"
+                },
+                {
+                    "name": "damage_data_flags",
+                    "type": "Flags"
+                },
+                {
+                    "name": "vector3d",
+                    "type": "Vector"
+                },
+                {
+                    "name": "real",
+                    "type": "Real"
+                },
+                {
+                    "name": "vector2d",
+                    "type": "Vector"
+                },
+                {
+                    "name": "update_tick_count",
+                    "type": "Integer"
+                },
+                {
+                    "name": "control_flags",
+                    "type": "Flags"
+                },
+                {
+                    "name": "digital_throttle",
+                    "type": "DigitalThrottle"
+                },
+                {
+                    "name": "fixed_width_1bit",
+                    "type": "FixedWidth"
+                },
+                {
+                    "name": "fixed_width_weapon_index",
+                    "type": "FixedWidthWeaponIndex"
+                },
+                {
+                    "name": "fixed_width_grenade_index",
+                    "type": "FixedWidthGrenadeIndex"
+                },
+                {
+                    "name": "update_id",
+                    "type": "Integer"
+                },
+                {
+                    "name": "hud_chat_message_ptr",
+                    "type": "Pointer"
+                },
+                {
+                    "name": "slayer_score_array",
+                    "type": "Array"
+                },
+                {
+                    "name": "ctf_score_array",
+                    "type": "Array"
+                },
+                {
+                    "name": "oddball_score_array",
+                    "type": "Array"
+                },
+                {
+                    "name": "king_score_array",
+                    "type": "Array"
+                },
+                {
+                    "name": "race_score_array",
+                    "type": "Array"
+                },
+                {
+                    "name": "object_change_colors",
+                    "type": "Array"
+                },
+                {
+                    "name": "network_game_name",
+                    "type": "WideString"
+                },
+                {
+                    "name": "network_map",
+                    "type": "Structure"
+                },
+                {
+                    "name": "game_variant",
+                    "type": "Structure"
+                },
+                {
+                    "name": "network_game_players",
+                    "type": "Array"
+                },
+                {
+                    "name": "parameters_protocol_array",
+                    "type": "Array"
+                },
+                {
+                    "name": "local_player_update_sequence_number",
+                    "type": "Integer"
+                },
+                {
+                    "name": "remote_player_action_update_baseline_id",
+                    "type": "Integer"
+                },
+                {
+                    "name": "remote_player_update_sequence_number",
+                    "type": "Integer"
+                },
+                {
+                    "name": "fixed_width_normal_16bit",
+                    "type": "FixedWidthNormalVector"
+                },
+                {
+                    "name": "motd_text",
+                    "type": "AsciiString"
+                },
+                {
+                    "name": "rcon_password",
+                    "type": "AsciiString"
+                },
+                {
+                    "name": "rcon_command",
+                    "type": "AsciiString"
+                },
+                {
+                    "name": "rcon_response",
+                    "type": "AsciiString"
+                }
+            ]
+        },
+        "messages": {
+            "message": [
+                {
+                    "type": "00",
+                    "name": "object_deletion",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "1",
+                        "field": {
+                            "struct": "[custom]",
+                            "offset": "0000",
+                            "field": "object_index",
+                            "type": "object_index"
+                        }
+                    }
+                },
+                {
+                    "type": "01",
+                    "name": "projectile_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "4",
+                            "field": [
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0000",
+                                    "field": "object_index",
+                                    "type": "object_index"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0004",
+                                    "field": "baseline_index",
+                                    "type": "integer_small"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0005",
+                                    "field": "message_index",
+                                    "type": "integer_small"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0006",
+                                    "field": "update_baseline",
+                                    "type": "boolean"
+                                }
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "count": "2",
+                        "field": [
+                            {
+                                "struct": "projectile_datum_network_data",
+                                "offset": "0000",
+                                "field": "position",
+                                "type": "locality_reference_position"
+                            },
+                            {
+                                "struct": "projectile_datum_network_data",
+                                "offset": "000C",
+                                "field": "translational_velocity",
+                                "type": "translational_velocity"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "02",
+                    "name": "equipment_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "4",
+                            "field": [
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0000",
+                                    "field": "object_index",
+                                    "type": "object_index"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0004",
+                                    "field": "baseline_index",
+                                    "type": "integer_small"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0005",
+                                    "field": "message_index",
+                                    "type": "integer_small"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0006",
+                                    "field": "update_baseline",
+                                    "type": "boolean"
+                                }
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "equipment_datum_network_data",
+                                "offset": "0000",
+                                "field": "position",
+                                "type": "point3d"
+                            },
+                            {
+                                "struct": "equipment_datum_network_data",
+                                "offset": "000C",
+                                "field": "translational_velocity",
+                                "type": "translational_velocity"
+                            },
+                            {
+                                "struct": "equipment_datum_network_data",
+                                "offset": "0018",
+                                "field": "angular_velocity",
+                                "type": "angular_velocity"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "03",
+                    "name": "weapon_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "4",
+                            "field": [
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0000",
+                                    "field": "object_index",
+                                    "type": "object_index"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0004",
+                                    "field": "baseline_index",
+                                    "type": "integer_small"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0005",
+                                    "field": "message_index",
+                                    "type": "integer_small"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header",
+                                    "offset": "0006",
+                                    "field": "update_baseline",
+                                    "type": "boolean"
+                                }
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "count": "5",
+                        "field": [
+                            {
+                                "struct": "weapon_datum_network_data",
+                                "offset": "0000",
+                                "field": "position",
+                                "type": "point3d"
+                            },
+                            {
+                                "struct": "weapon_datum_network_data",
+                                "offset": "000C",
+                                "field": "translational_velocity",
+                                "type": "translational_velocity"
+                            },
+                            {
+                                "struct": "weapon_datum_network_data",
+                                "offset": "0024",
+                                "field": "magazine_0_rounds_total",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_datum_network_data",
+                                "offset": "0026",
+                                "field": "magazine_1_rounds_total",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_datum_network_data",
+                                "offset": "0028",
+                                "field": "age",
+                                "type": "fixed_width_6bits"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "04",
+                    "name": "biped_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "5",
+                            "field": [
+                                {
+                                    "struct": "biped_update_header",
+                                    "offset": "0000",
+                                    "field": "object_index",
+                                    "type": "object_index"
+                                },
+                                {
+                                    "struct": "biped_update_header",
+                                    "offset": "0004",
+                                    "field": "baseline_index",
+                                    "type": "integer_small"
+                                },
+                                {
+                                    "struct": "biped_update_header",
+                                    "offset": "0005",
+                                    "field": "message_index",
+                                    "type": "integer_small"
+                                },
+                                {
+                                    "struct": "biped_update_header",
+                                    "offset": "0006",
+                                    "field": "update_baseline",
+                                    "type": "boolean"
+                                },
+                                {
+                                    "struct": "biped_update_header",
+                                    "offset": "0007",
+                                    "field": "force_shield_update",
+                                    "type": "boolean"
+                                }
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "count": "4",
+                        "field": [
+                            {
+                                "struct": "biped_datum_network_data",
+                                "offset": "0000",
+                                "field": "grenade_counts",
+                                "type": "grenade_counts"
+                            },
+                            {
+                                "struct": "biped_datum_network_data",
+                                "offset": "0004",
+                                "field": "body_vitality",
+                                "type": "fixed_width_3bits"
+                            },
+                            {
+                                "struct": "biped_datum_network_data",
+                                "offset": "0008",
+                                "field": "shield_vitality",
+                                "type": "fixed_width_6bits"
+                            },
+                            {
+                                "struct": "biped_datum_network_data",
+                                "offset": "000C",
+                                "field": "shield_stun_ticks_greater_than_zero",
+                                "type": "boolean"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "05",
+                    "name": "vehicle_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "5",
+                            "field": [
+                                {
+                                    "struct": "message_delta_game_object_header_timestamped",
+                                    "offset": "0005",
+                                    "field": "message_index",
+                                    "type": "integer_small"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header_timestamped",
+                                    "offset": "0004",
+                                    "field": "baseline_index",
+                                    "type": "integer_small"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header_timestamped",
+                                    "offset": "0000",
+                                    "field": "object_index",
+                                    "type": "object_index"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header_timestamped",
+                                    "offset": "0008",
+                                    "field": "timestamp",
+                                    "type": "time"
+                                },
+                                {
+                                    "struct": "message_delta_game_object_header_timestamped",
+                                    "offset": "0006",
+                                    "field": "update_baseline",
+                                    "type": "boolean"
+                                }
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "count": "6",
+                        "field": [
+                            {
+                                "struct": "vehicle_datum_network_data",
+                                "offset": "0000",
+                                "field": "at_rest_bit",
+                                "type": "boolean"
+                            },
+                            {
+                                "struct": "vehicle_datum_network_data",
+                                "offset": "0004",
+                                "field": "position",
+                                "type": "locality_reference_position"
+                            },
+                            {
+                                "struct": "vehicle_datum_network_data",
+                                "offset": "0010",
+                                "field": "translational_velocity",
+                                "type": "translational_velocity"
+                            },
+                            {
+                                "struct": "vehicle_datum_network_data",
+                                "offset": "001C",
+                                "field": "angular_velocity",
+                                "type": "angular_velocity"
+                            },
+                            {
+                                "struct": "vehicle_datum_network_data",
+                                "offset": "0028",
+                                "field": "forward",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "vehicle_datum_network_data",
+                                "offset": "0034",
+                                "field": "up",
+                                "type": "fixed_width_normal_8bit"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "06",
+                    "name": "hud_add_item",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "hud_add_item_network_data",
+                                "offset": "0000",
+                                "field": "item_definition_index",
+                                "type": "definition_index"
+                            },
+                            {
+                                "struct": "hud_add_item_network_data",
+                                "offset": "0004",
+                                "field": "message_offset",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "hud_add_item_network_data",
+                                "offset": "0006",
+                                "field": "quantity",
+                                "type": "integer_medium"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "07",
+                    "name": "player_create",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "4",
+                        "field": [
+                            {
+                                "struct": "player_create_network_data",
+                                "offset": "0000",
+                                "field": "player_list_index",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "player_create_network_data",
+                                "offset": "0004",
+                                "field": "raw_player_index",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "player_create_network_data",
+                                "offset": "0008",
+                                "field": "translated_player_index",
+                                "type": "player_index"
+                            },
+                            {
+                                "struct": "player_create_network_data",
+                                "offset": "000C",
+                                "field": "team_index",
+                                "type": "integer_large"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "08",
+                    "name": "player_spawn",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "12",
+                        "field": [
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "0000",
+                                "field": "translated_player_index",
+                                "type": "player_index"
+                            },
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "0004",
+                                "field": "unit_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "0008",
+                                "field": "team_index",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "000C",
+                                "field": "parent_vehicle_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "0010",
+                                "field": "vehicle_seat_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "0014",
+                                "field": "weapon_object_indices[0]",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "0018",
+                                "field": "weapon_object_indices[1]",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "001C",
+                                "field": "weapon_object_indices[2]",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "0020",
+                                "field": "weapon_object_indices[3]",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "0024",
+                                "field": "desired_weapon_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "0026",
+                                "field": "powerup_durations[0]",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_spawn_network_data",
+                                "offset": "0028",
+                                "field": "powerup_durations[1]",
+                                "type": "integer_medium"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "09",
+                    "name": "player_exit_vehicle",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "2",
+                        "field": [
+                            {
+                                "struct": "player_exit_vehicle_network_data",
+                                "offset": "0000",
+                                "field": "object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "player_exit_vehicle_network_data",
+                                "offset": "0004",
+                                "field": "forced_exit",
+                                "type": "boolean"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "0A",
+                    "name": "player_set_action_result",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "6",
+                        "field": [
+                            {
+                                "struct": "player_set_action_result_network_data",
+                                "offset": "0000",
+                                "field": "player_index",
+                                "type": "player_index"
+                            },
+                            {
+                                "struct": "player_set_action_result_network_data",
+                                "offset": "0004",
+                                "field": "action_result_type",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "player_set_action_result_network_data",
+                                "offset": "0008",
+                                "field": "action_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "player_set_action_result_network_data",
+                                "offset": "000C",
+                                "field": "action_result",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_set_action_result_network_data",
+                                "offset": "000E",
+                                "field": "action_seat_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_set_action_result_network_data",
+                                "offset": "0010",
+                                "field": "weapon_to_drop_as_result_of_swap",
+                                "type": "object_index"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "0B",
+                    "name": "player_effect_start",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "6",
+                        "field": [
+                            {
+                                "struct": "player_effect_start_network_data",
+                                "offset": "0000",
+                                "field": "damage_definition_index",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "player_effect_start_network_data",
+                                "offset": "0004",
+                                "field": "damage_owner_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "player_effect_start_network_data",
+                                "offset": "0008",
+                                "field": "damage_flags",
+                                "type": "damage_data_flags"
+                            },
+                            {
+                                "struct": "player_effect_start_network_data",
+                                "offset": "000C",
+                                "field": "direction",
+                                "type": "vector3d"
+                            },
+                            {
+                                "struct": "player_effect_start_network_data",
+                                "offset": "0018",
+                                "field": "scale",
+                                "type": "real"
+                            },
+                            {
+                                "struct": "player_effect_start_network_data",
+                                "offset": "001C",
+                                "field": "total_damage",
+                                "type": "real"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "0C",
+                    "name": "unit_kill",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "12",
+                        "field": [
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "0000",
+                                "field": "unit_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "0004",
+                                "field": "should_cause_ping",
+                                "type": "boolean"
+                            },
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "0005",
+                                "field": "died",
+                                "type": "boolean"
+                            },
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "0006",
+                                "field": "feign_death",
+                                "type": "boolean"
+                            },
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "0007",
+                                "field": "died_flying",
+                                "type": "boolean"
+                            },
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "0008",
+                                "field": "ignore_hard_pings",
+                                "type": "boolean"
+                            },
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "0009",
+                                "field": "force_hard_pings",
+                                "type": "boolean"
+                            },
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "000A",
+                                "field": "should_alignment_vector_be_null",
+                                "type": "boolean"
+                            },
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "000C",
+                                "field": "damage_part",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "0010",
+                                "field": "angle",
+                                "type": "real"
+                            },
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "0014",
+                                "field": "alignment_vector",
+                                "type": "vector2d"
+                            },
+                            {
+                                "struct": "unit_kill_network_data",
+                                "offset": "001C",
+                                "field": "respawn_timer",
+                                "type": "integer_large"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "0D",
+                    "name": "client_game_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "1",
+                            "field": {
+                                "struct": "client_game_update_header",
+                                "offset": "0000",
+                                "field": "id",
+                                "type": "update_id"
+                            }
+                        }
+                    },
+                    "fields": {
+                        "count": "9",
+                        "field": [
+                            {
+                                "struct": "client_game_update",
+                                "offset": "0000",
+                                "field": "ticks_to_apply_update_to",
+                                "type": "update_tick_count"
+                            },
+                            {
+                                "struct": "client_game_update",
+                                "offset": "0008",
+                                "field": "control_flags",
+                                "type": "control_flags"
+                            },
+                            {
+                                "struct": "client_game_update",
+                                "offset": "000C",
+                                "field": "desired_facing.yaw",
+                                "type": "real"
+                            },
+                            {
+                                "struct": "client_game_update",
+                                "offset": "0010",
+                                "field": "desired_facing.pitch",
+                                "type": "real"
+                            },
+                            {
+                                "struct": "client_game_update",
+                                "offset": "0020",
+                                "field": "throttle",
+                                "type": "digital_throttle"
+                            },
+                            {
+                                "struct": "client_game_update",
+                                "offset": "0028",
+                                "field": "primary_trigger",
+                                "type": "fixed_width_1bit"
+                            },
+                            {
+                                "struct": "client_game_update",
+                                "offset": "002C",
+                                "field": "desired_weapon_index",
+                                "type": "fixed_width_weapon_index"
+                            },
+                            {
+                                "struct": "client_game_update",
+                                "offset": "002E",
+                                "field": "desired_grenade_index",
+                                "type": "fixed_width_grenade_index"
+                            },
+                            {
+                                "struct": "client_game_update",
+                                "offset": "0030",
+                                "field": "desired_zoom_level",
+                                "type": "integer_medium"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "0E",
+                    "name": "player_handle_powerup",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "player_handle_powerup_network_data",
+                                "offset": "0000",
+                                "field": "player_index",
+                                "type": "player_index"
+                            },
+                            {
+                                "struct": "player_handle_powerup_network_data",
+                                "offset": "0004",
+                                "field": "powerup_type",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_handle_powerup_network_data",
+                                "offset": "0006",
+                                "field": "duration_in_ticks",
+                                "type": "integer_medium"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "0F",
+                    "name": "hud_chat",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "hud_chat_network_data",
+                                "offset": "0000",
+                                "field": "msg_type",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "hud_chat_network_data",
+                                "offset": "0004",
+                                "field": "player_number",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "hud_chat_network_data",
+                                "offset": "0008",
+                                "field": "message",
+                                "type": "hud_chat_message_ptr"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "10",
+                    "name": "slayer_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "2",
+                        "field": [
+                            {
+                                "struct": "slayer_globals_type",
+                                "offset": "0040",
+                                "field": "individual_score",
+                                "type": "slayer_score_array"
+                            },
+                            {
+                                "struct": "slayer_globals_type",
+                                "offset": "0000",
+                                "field": "team_score",
+                                "type": "slayer_score_array"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "11",
+                    "name": "ctf_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "1",
+                            "field": {
+                                "struct": "ctf_update_header",
+                                "offset": "0000",
+                                "field": "flag_swap_timer",
+                                "type": "integer_large"
+                            }
+                        }
+                    },
+                    "fields": {
+                        "count": "2",
+                        "field": [
+                            {
+                                "struct": "ctf_network_game_state",
+                                "offset": "0000",
+                                "field": "score",
+                                "type": "ctf_score_array"
+                            },
+                            {
+                                "struct": "ctf_network_game_state",
+                                "offset": "0008",
+                                "field": "team_with_flag",
+                                "type": "integer_small"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "12",
+                    "name": "oddball_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "oddball_globals_type",
+                                "offset": "0044",
+                                "field": "individual_score",
+                                "type": "oddball_score_array"
+                            },
+                            {
+                                "struct": "oddball_globals_type",
+                                "offset": "0004",
+                                "field": "team_score",
+                                "type": "oddball_score_array"
+                            },
+                            {
+                                "struct": "oddball_globals_type",
+                                "offset": "00C4",
+                                "field": "current_ball_owner",
+                                "type": "oddball_score_array"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "13",
+                    "name": "king_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "2",
+                        "field": [
+                            {
+                                "struct": "king_globals_type",
+                                "offset": "0000",
+                                "field": "score",
+                                "type": "king_score_array"
+                            },
+                            {
+                                "struct": "king_globals_type",
+                                "offset": "01A4",
+                                "field": "hill_id",
+                                "type": "integer_large"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "14",
+                    "name": "race_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "5",
+                        "field": [
+                            {
+                                "struct": "race_globals_type",
+                                "offset": "0088",
+                                "field": "team_laps",
+                                "type": "race_score_array"
+                            },
+                            {
+                                "struct": "race_globals_type",
+                                "offset": "0004",
+                                "field": "first_flag",
+                                "type": "race_score_array"
+                            },
+                            {
+                                "struct": "race_globals_type",
+                                "offset": "0044",
+                                "field": "lap_bit_vector",
+                                "type": "race_score_array"
+                            },
+                            {
+                                "struct": "race_globals_type",
+                                "offset": "0000",
+                                "field": "lap_completed_value",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "race_globals_type",
+                                "offset": "0084",
+                                "field": "rally_flag",
+                                "type": "integer_large"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "15",
+                    "name": "player_score_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "1",
+                            "field": {
+                                "struct": "player_score_update_header",
+                                "offset": "0000",
+                                "field": "player_index",
+                                "type": "player_index"
+                            }
+                        }
+                    },
+                    "fields": {
+                        "count": "17",
+                        "field": [
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0000",
+                                "field": "kills[0]",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0002",
+                                "field": "kills[1]",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0004",
+                                "field": "kills[2]",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0006",
+                                "field": "kills[3]",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0008",
+                                "field": "assists[0]",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "000A",
+                                "field": "assists[1]",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "000C",
+                                "field": "assists[2]",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "000E",
+                                "field": "assists[3]",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0010",
+                                "field": "friendly_fire_kills",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0012",
+                                "field": "deaths",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0014",
+                                "field": "suicides",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0016",
+                                "field": "multiplayer_stats.ctf_statistics.flag_grabs",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0018",
+                                "field": "multiplayer_stats.ctf_statistics.flag_returns",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "001A",
+                                "field": "multiplayer_stats.ctf_statistics.flag_scores",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "001C",
+                                "field": "special",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0020",
+                                "field": "is_odd_man_out",
+                                "type": "boolean"
+                            },
+                            {
+                                "struct": "player_score_network_data",
+                                "offset": "0024",
+                                "field": "speed_multiplier",
+                                "type": "real"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "16",
+                    "name": "game_engine_change_mode",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "1",
+                        "field": {
+                            "struct": "game_engine_change_mode_network_data",
+                            "offset": "0000",
+                            "field": "new_mode",
+                            "type": "integer_large"
+                        }
+                    }
+                },
+                {
+                    "type": "17",
+                    "name": "game_engine_map_reset",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "1",
+                        "field": {
+                            "struct": "game_engine_map_reset_network_data",
+                            "offset": "0000",
+                            "field": "dummy",
+                            "type": "boolean"
+                        }
+                    }
+                },
+                {
+                    "type": "18",
+                    "name": "multiplayer_hud_message",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "multiplayer_hud_message_network_data",
+                                "offset": "0000",
+                                "field": "player_index",
+                                "type": "player_index"
+                            },
+                            {
+                                "struct": "multiplayer_hud_message_network_data",
+                                "offset": "0004",
+                                "field": "message",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "multiplayer_hud_message_network_data",
+                                "offset": "0008",
+                                "field": "message_data",
+                                "type": "integer_large"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "19",
+                    "name": "multiplayer_sound",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "1",
+                        "field": {
+                            "struct": "multiplayer_sound_network_data",
+                            "offset": "0000",
+                            "field": "index",
+                            "type": "integer_large"
+                        }
+                    }
+                },
+                {
+                    "type": "1A",
+                    "name": "team_change",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "2",
+                        "field": [
+                            {
+                                "struct": "team_change_network_data",
+                                "offset": "0000",
+                                "field": "player_number",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "team_change_network_data",
+                                "offset": "0001",
+                                "field": "new_team_choice",
+                                "type": "integer_small"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "1B",
+                    "name": "unit_drop_current_weapon",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "unit_drop_current_weapon_network_data",
+                                "offset": "0000",
+                                "field": "unit_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "unit_drop_current_weapon_network_data",
+                                "offset": "0004",
+                                "field": "weapon_to_drop",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "unit_drop_current_weapon_network_data",
+                                "offset": "0008",
+                                "field": "immediate",
+                                "type": "boolean"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "1C",
+                    "name": "vehicle_new",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "15",
+                        "field": [
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0000",
+                                "field": "definition_index",
+                                "type": "definition_index"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0004",
+                                "field": "server_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0008",
+                                "field": "owner_team_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "000C",
+                                "field": "owner_player_index",
+                                "type": "player_index"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0010",
+                                "field": "owner_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0014",
+                                "field": "weapon_object_indices[0]",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0018",
+                                "field": "weapon_object_indices[1]",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "001C",
+                                "field": "weapon_object_indices[2]",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0020",
+                                "field": "weapon_object_indices[3]",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0060",
+                                "field": "current_baseline_index",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0024",
+                                "field": "position",
+                                "type": "point3d"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0030",
+                                "field": "forward",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "003C",
+                                "field": "up",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0048",
+                                "field": "translational_velocity",
+                                "type": "translational_velocity"
+                            },
+                            {
+                                "struct": "vehicle_new_data",
+                                "offset": "0054",
+                                "field": "angular_velocity",
+                                "type": "angular_velocity"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "1D",
+                    "name": "biped_new",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "17",
+                        "field": [
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0000",
+                                "field": "definition_index",
+                                "type": "definition_index"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0004",
+                                "field": "server_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0008",
+                                "field": "owner_team_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "000C",
+                                "field": "owner_player_index",
+                                "type": "player_index"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0010",
+                                "field": "owner_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0020",
+                                "field": "forward",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "002C",
+                                "field": "up",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0044",
+                                "field": "change_colors",
+                                "type": "object_change_colors"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0074",
+                                "field": "unit_integrated_light_on_bit",
+                                "type": "boolean"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0078",
+                                "field": "integrated_light_battery",
+                                "type": "fixed_width_6bits"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "007C",
+                                "field": "current_baseline_index",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0014",
+                                "field": "position",
+                                "type": "point3d"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0038",
+                                "field": "translational_velocity",
+                                "type": "translational_velocity"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "007D",
+                                "field": "grenade_counts",
+                                "type": "grenade_counts"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0080",
+                                "field": "body_vitality",
+                                "type": "fixed_width_3bits"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0084",
+                                "field": "shield_vitality",
+                                "type": "fixed_width_6bits"
+                            },
+                            {
+                                "struct": "biped_new_data",
+                                "offset": "0088",
+                                "field": "shield_stun_ticks_greater_than_zero",
+                                "type": "boolean"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "1E",
+                    "name": "projectile_new",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "11",
+                        "field": [
+                            {
+                                "struct": "projectile_new_data",
+                                "offset": "0000",
+                                "field": "definition_index",
+                                "type": "definition_index"
+                            },
+                            {
+                                "struct": "projectile_new_data",
+                                "offset": "0004",
+                                "field": "server_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "projectile_new_data",
+                                "offset": "0008",
+                                "field": "owner_team_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "projectile_new_data",
+                                "offset": "000C",
+                                "field": "owner_player_index",
+                                "type": "player_index"
+                            },
+                            {
+                                "struct": "projectile_new_data",
+                                "offset": "0010",
+                                "field": "owner_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "projectile_new_data",
+                                "offset": "0020",
+                                "field": "forward",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "projectile_new_data",
+                                "offset": "002C",
+                                "field": "up",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "projectile_new_data",
+                                "offset": "0044",
+                                "field": "angular_velocity",
+                                "type": "angular_velocity"
+                            },
+                            {
+                                "struct": "projectile_new_data",
+                                "offset": "0050",
+                                "field": "current_baseline_index",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "projectile_new_data",
+                                "offset": "0014",
+                                "field": "position",
+                                "type": "locality_reference_position"
+                            },
+                            {
+                                "struct": "projectile_new_data",
+                                "offset": "0038",
+                                "field": "translational_velocity",
+                                "type": "translational_velocity"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "1F",
+                    "name": "equipment_new",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "12",
+                        "field": [
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "0000",
+                                "field": "definition_index",
+                                "type": "definition_index"
+                            },
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "0004",
+                                "field": "server_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "0008",
+                                "field": "owner_team_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "000C",
+                                "field": "owner_player_index",
+                                "type": "player_index"
+                            },
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "0010",
+                                "field": "owner_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "0014",
+                                "field": "object_flags",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "0024",
+                                "field": "forward",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "0030",
+                                "field": "up",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "0054",
+                                "field": "current_baseline_index",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "0018",
+                                "field": "position",
+                                "type": "point3d"
+                            },
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "003C",
+                                "field": "translational_velocity",
+                                "type": "translational_velocity"
+                            },
+                            {
+                                "struct": "equipment_new_data",
+                                "offset": "0048",
+                                "field": "angular_velocity",
+                                "type": "angular_velocity"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "20",
+                    "name": "weapon_new",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "16",
+                        "field": [
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0000",
+                                "field": "definition_index",
+                                "type": "definition_index"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0004",
+                                "field": "server_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0008",
+                                "field": "owner_team_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "000C",
+                                "field": "owner_player_index",
+                                "type": "player_index"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0010",
+                                "field": "owner_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0014",
+                                "field": "object_flags",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0024",
+                                "field": "forward",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0030",
+                                "field": "up",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0048",
+                                "field": "current_baseline_index",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0018",
+                                "field": "position",
+                                "type": "point3d"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "003C",
+                                "field": "translational_velocity",
+                                "type": "translational_velocity"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "004A",
+                                "field": "magazine_0_rounds_total",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "004C",
+                                "field": "magazine_1_rounds_total",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0050",
+                                "field": "age",
+                                "type": "fixed_width_6bits"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0054",
+                                "field": "magazine_0_rounds_loaded",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_new_data",
+                                "offset": "0056",
+                                "field": "magazine_1_rounds_loaded",
+                                "type": "integer_medium"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "21",
+                    "name": "game_settings_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "11",
+                        "field": [
+                            {
+                                "struct": "network_game_data",
+                                "offset": "0000",
+                                "field": "name",
+                                "type": "network_game_name"
+                            },
+                            {
+                                "struct": "network_game_data",
+                                "offset": "0080",
+                                "field": "map",
+                                "type": "network_map"
+                            },
+                            {
+                                "struct": "network_game_data",
+                                "offset": "0104",
+                                "field": "variant",
+                                "type": "game_variant"
+                            },
+                            {
+                                "struct": "network_game_data",
+                                "offset": "01DC",
+                                "field": "_unused_game_engine",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "network_game_data",
+                                "offset": "01DD",
+                                "field": "maximum_players",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "network_game_data",
+                                "offset": "01DE",
+                                "field": "difficulty_level",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "network_game_data",
+                                "offset": "01E0",
+                                "field": "player_count",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "network_game_data",
+                                "offset": "01E2",
+                                "field": "players",
+                                "type": "network_game_players"
+                            },
+                            {
+                                "struct": "network_game_data",
+                                "offset": "03E4",
+                                "field": "network_game_random_seed",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "network_game_data",
+                                "offset": "03E8",
+                                "field": "number_of_games_played",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "network_game_data",
+                                "offset": "03EC",
+                                "field": "local_data",
+                                "type": "integer_large"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "22",
+                    "name": "parameters_protocol",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "2",
+                        "field": [
+                            {
+                                "struct": "message_parameters_set",
+                                "offset": "0000",
+                                "field": "protocol_parameters",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "message_parameters_set",
+                                "offset": "0004",
+                                "field": "parameters_data",
+                                "type": "parameters_protocol_array"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "23",
+                    "name": "local_player_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "local_player_update_network_data",
+                                "offset": "0000",
+                                "field": "sequence_number",
+                                "type": "local_player_update_sequence_number"
+                            },
+                            {
+                                "struct": "local_player_update_network_data",
+                                "offset": "0001",
+                                "field": "last_completed_update_id",
+                                "type": "update_id"
+                            },
+                            {
+                                "struct": "local_player_update_network_data",
+                                "offset": "0004",
+                                "field": "position",
+                                "type": "point3d"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "24",
+                    "name": "local_player_vehicle_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "8",
+                        "field": [
+                            {
+                                "struct": "local_player_vehicle_update_network_data",
+                                "offset": "0000",
+                                "field": "sequence_number",
+                                "type": "local_player_update_sequence_number"
+                            },
+                            {
+                                "struct": "local_player_vehicle_update_network_data",
+                                "offset": "0001",
+                                "field": "last_completed_update_id",
+                                "type": "update_id"
+                            },
+                            {
+                                "struct": "local_player_vehicle_update_network_data",
+                                "offset": "0004",
+                                "field": "vehicle_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "local_player_vehicle_update_network_data",
+                                "offset": "0008",
+                                "field": "position",
+                                "type": "locality_reference_position"
+                            },
+                            {
+                                "struct": "local_player_vehicle_update_network_data",
+                                "offset": "0014",
+                                "field": "translational_velocity",
+                                "type": "translational_velocity"
+                            },
+                            {
+                                "struct": "local_player_vehicle_update_network_data",
+                                "offset": "0020",
+                                "field": "angular_velocity",
+                                "type": "angular_velocity"
+                            },
+                            {
+                                "struct": "local_player_vehicle_update_network_data",
+                                "offset": "002C",
+                                "field": "forward",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "local_player_vehicle_update_network_data",
+                                "offset": "0038",
+                                "field": "up",
+                                "type": "fixed_width_normal_8bit"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "25",
+                    "name": "remote_player_action_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "3",
+                            "field": [
+                                {
+                                    "struct": "remote_player_action_update_header",
+                                    "offset": "0000",
+                                    "field": "player_index",
+                                    "type": "player_index"
+                                },
+                                {
+                                    "struct": "remote_player_action_update_header",
+                                    "offset": "0004",
+                                    "field": "update_id",
+                                    "type": "update_id"
+                                },
+                                {
+                                    "struct": "remote_player_action_update_header",
+                                    "offset": "0005",
+                                    "field": "baseline_id",
+                                    "type": "remote_player_action_update_baseline_id"
+                                }
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "count": "7",
+                        "field": [
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "0000",
+                                "field": "ticks_to_apply_update_to",
+                                "type": "update_tick_count"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "0004",
+                                "field": "action.control_flags",
+                                "type": "control_flags"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "0024",
+                                "field": "facing_vector",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "0010",
+                                "field": "action.throttle",
+                                "type": "digital_throttle"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "0018",
+                                "field": "action.primary_trigger",
+                                "type": "fixed_width_1bit"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "001C",
+                                "field": "action.desired_weapon_index",
+                                "type": "fixed_width_weapon_index"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "001E",
+                                "field": "action.desired_grenade_index",
+                                "type": "fixed_width_grenade_index"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "26",
+                    "name": "super_remote_players_action_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "3",
+                            "field": [
+                                {
+                                    "struct": "remote_player_action_update_header",
+                                    "offset": "0000",
+                                    "field": "player_index",
+                                    "type": "player_index"
+                                },
+                                {
+                                    "struct": "remote_player_action_update_header",
+                                    "offset": "0004",
+                                    "field": "update_id",
+                                    "type": "update_id"
+                                },
+                                {
+                                    "struct": "remote_player_action_update_header",
+                                    "offset": "0005",
+                                    "field": "baseline_id",
+                                    "type": "remote_player_action_update_baseline_id"
+                                }
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "count": "7",
+                        "field": [
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "0000",
+                                "field": "ticks_to_apply_update_to",
+                                "type": "update_tick_count"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "0004",
+                                "field": "action.control_flags",
+                                "type": "control_flags"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "0024",
+                                "field": "facing_vector",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "0010",
+                                "field": "action.throttle",
+                                "type": "digital_throttle"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "0018",
+                                "field": "action.primary_trigger",
+                                "type": "fixed_width_1bit"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "001C",
+                                "field": "action.desired_weapon_index",
+                                "type": "fixed_width_weapon_index"
+                            },
+                            {
+                                "struct": "remote_player_action_update_network_data",
+                                "offset": "001E",
+                                "field": "action.desired_grenade_index",
+                                "type": "fixed_width_grenade_index"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "27",
+                    "name": "remote_player_position_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "3",
+                            "field": [
+                                {
+                                    "struct": "remote_player_position_update_header",
+                                    "offset": "0000",
+                                    "field": "player_index",
+                                    "type": "player_index"
+                                },
+                                {
+                                    "struct": "remote_player_position_update_header",
+                                    "offset": "0004",
+                                    "field": "update_id",
+                                    "type": "update_id"
+                                },
+                                {
+                                    "struct": "remote_player_position_update_header",
+                                    "offset": "0005",
+                                    "field": "sequence_number",
+                                    "type": "remote_player_update_sequence_number"
+                                }
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "count": "1",
+                        "field": {
+                            "struct": "remote_player_position_update_network_data",
+                            "offset": "0000",
+                            "field": "position",
+                            "type": "locality_reference_position"
+                        }
+                    }
+                },
+                {
+                    "type": "28",
+                    "name": "remote_player_vehicle_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "3",
+                            "field": [
+                                {
+                                    "struct": "remote_player_position_update_header",
+                                    "offset": "0000",
+                                    "field": "player_index",
+                                    "type": "player_index"
+                                },
+                                {
+                                    "struct": "remote_player_position_update_header",
+                                    "offset": "0004",
+                                    "field": "update_id",
+                                    "type": "update_id"
+                                },
+                                {
+                                    "struct": "remote_player_position_update_header",
+                                    "offset": "0005",
+                                    "field": "sequence_number",
+                                    "type": "remote_player_update_sequence_number"
+                                }
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "count": "6",
+                        "field": [
+                            {
+                                "struct": "remote_player_vehicle_update_network_data",
+                                "offset": "0000",
+                                "field": "vehicle_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "remote_player_vehicle_update_network_data",
+                                "offset": "0004",
+                                "field": "position",
+                                "type": "locality_reference_position"
+                            },
+                            {
+                                "struct": "remote_player_vehicle_update_network_data",
+                                "offset": "0010",
+                                "field": "translational_velocity",
+                                "type": "translational_velocity"
+                            },
+                            {
+                                "struct": "remote_player_vehicle_update_network_data",
+                                "offset": "001C",
+                                "field": "angular_velocity",
+                                "type": "angular_velocity"
+                            },
+                            {
+                                "struct": "remote_player_vehicle_update_network_data",
+                                "offset": "0028",
+                                "field": "forward",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "remote_player_vehicle_update_network_data",
+                                "offset": "0034",
+                                "field": "up",
+                                "type": "fixed_width_normal_8bit"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "29",
+                    "name": "remote_player_total_update_biped",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "4",
+                            "field": [
+                                {
+                                    "struct": "remote_player_total_update_header",
+                                    "offset": "0000",
+                                    "field": "action_header.player_index",
+                                    "type": "player_index"
+                                },
+                                {
+                                    "struct": "remote_player_total_update_header",
+                                    "offset": "0004",
+                                    "field": "action_header.update_id",
+                                    "type": "update_id"
+                                },
+                                {
+                                    "struct": "remote_player_total_update_header",
+                                    "offset": "0005",
+                                    "field": "action_header.baseline_id",
+                                    "type": "remote_player_action_update_baseline_id"
+                                },
+                                {
+                                    "struct": "remote_player_total_update_header",
+                                    "offset": "0008",
+                                    "field": "sequence_number",
+                                    "type": "remote_player_update_sequence_number"
+                                }
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "count": "8",
+                        "field": [
+                            {
+                                "struct": "remote_player_total_update_biped_network_data",
+                                "offset": "0000",
+                                "field": "action_data.ticks_to_apply_update_to",
+                                "type": "update_tick_count"
+                            },
+                            {
+                                "struct": "remote_player_total_update_biped_network_data",
+                                "offset": "0004",
+                                "field": "action_data.action.control_flags",
+                                "type": "control_flags"
+                            },
+                            {
+                                "struct": "remote_player_total_update_biped_network_data",
+                                "offset": "0024",
+                                "field": "action_data.facing_vector",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "remote_player_total_update_biped_network_data",
+                                "offset": "0010",
+                                "field": "action_data.action.throttle",
+                                "type": "digital_throttle"
+                            },
+                            {
+                                "struct": "remote_player_total_update_biped_network_data",
+                                "offset": "0018",
+                                "field": "action_data.action.primary_trigger",
+                                "type": "fixed_width_1bit"
+                            },
+                            {
+                                "struct": "remote_player_total_update_biped_network_data",
+                                "offset": "001C",
+                                "field": "action_data.action.desired_weapon_index",
+                                "type": "fixed_width_weapon_index"
+                            },
+                            {
+                                "struct": "remote_player_total_update_biped_network_data",
+                                "offset": "001E",
+                                "field": "action_data.action.desired_grenade_index",
+                                "type": "fixed_width_grenade_index"
+                            },
+                            {
+                                "struct": "remote_player_total_update_biped_network_data",
+                                "offset": "0030",
+                                "field": "biped_data.position",
+                                "type": "locality_reference_position"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "2A",
+                    "name": "remote_player_total_update_vehicle",
+                    "header": {
+                        "maxSize": "FFFFFFFF",
+                        "fields": {
+                            "count": "4",
+                            "field": [
+                                {
+                                    "struct": "remote_player_total_update_header",
+                                    "offset": "0000",
+                                    "field": "action_header.player_index",
+                                    "type": "player_index"
+                                },
+                                {
+                                    "struct": "remote_player_total_update_header",
+                                    "offset": "0004",
+                                    "field": "action_header.update_id",
+                                    "type": "update_id"
+                                },
+                                {
+                                    "struct": "remote_player_total_update_header",
+                                    "offset": "0005",
+                                    "field": "action_header.baseline_id",
+                                    "type": "remote_player_action_update_baseline_id"
+                                },
+                                {
+                                    "struct": "remote_player_total_update_header",
+                                    "offset": "0008",
+                                    "field": "sequence_number",
+                                    "type": "remote_player_update_sequence_number"
+                                }
+                            ]
+                        }
+                    },
+                    "fields": {
+                        "count": "13",
+                        "field": [
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "0000",
+                                "field": "action_data.ticks_to_apply_update_to",
+                                "type": "update_tick_count"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "0004",
+                                "field": "action_data.action.control_flags",
+                                "type": "control_flags"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "0024",
+                                "field": "action_data.facing_vector",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "0010",
+                                "field": "action_data.action.throttle",
+                                "type": "digital_throttle"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "0018",
+                                "field": "action_data.action.primary_trigger",
+                                "type": "fixed_width_1bit"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "001C",
+                                "field": "action_data.action.desired_weapon_index",
+                                "type": "fixed_width_weapon_index"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "001E",
+                                "field": "action_data.action.desired_grenade_index",
+                                "type": "fixed_width_grenade_index"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "0030",
+                                "field": "vehicle_data.vehicle_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "0034",
+                                "field": "vehicle_data.position",
+                                "type": "locality_reference_position"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "0040",
+                                "field": "vehicle_data.translational_velocity",
+                                "type": "translational_velocity"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "004C",
+                                "field": "vehicle_data.angular_velocity",
+                                "type": "angular_velocity"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "0058",
+                                "field": "vehicle_data.forward",
+                                "type": "fixed_width_normal_8bit"
+                            },
+                            {
+                                "struct": "remote_player_total_update_vehicle_network_data",
+                                "offset": "0064",
+                                "field": "vehicle_data.up",
+                                "type": "fixed_width_normal_8bit"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "2B",
+                    "name": "weapon_start_reload",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "4",
+                        "field": [
+                            {
+                                "struct": "weapon_start_reload_network_data",
+                                "offset": "0000",
+                                "field": "weapon_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "weapon_start_reload_network_data",
+                                "offset": "0004",
+                                "field": "magazine_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_start_reload_network_data",
+                                "offset": "0006",
+                                "field": "starting_total_rounds",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_start_reload_network_data",
+                                "offset": "0008",
+                                "field": "starting_loaded_rounds",
+                                "type": "integer_medium"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "2C",
+                    "name": "weapon_ammo_pickup_mid_reload",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "weapon_ammo_pickup_mid_reload_network_data",
+                                "offset": "0000",
+                                "field": "weapon_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "weapon_ammo_pickup_mid_reload_network_data",
+                                "offset": "0004",
+                                "field": "magazine_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_ammo_pickup_mid_reload_network_data",
+                                "offset": "0006",
+                                "field": "rounds_picked_up",
+                                "type": "integer_medium"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "2D",
+                    "name": "weapon_finish_reload",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "4",
+                        "field": [
+                            {
+                                "struct": "weapon_finish_reload_network_data",
+                                "offset": "0000",
+                                "field": "weapon_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "weapon_finish_reload_network_data",
+                                "offset": "0004",
+                                "field": "magazine_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_finish_reload_network_data",
+                                "offset": "0006",
+                                "field": "ending_total_rounds",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_finish_reload_network_data",
+                                "offset": "0008",
+                                "field": "ending_loaded_rounds",
+                                "type": "integer_medium"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "2E",
+                    "name": "weapon_cancel_reload",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "4",
+                        "field": [
+                            {
+                                "struct": "weapon_cancel_reload_network_data",
+                                "offset": "0000",
+                                "field": "weapon_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "weapon_cancel_reload_network_data",
+                                "offset": "0004",
+                                "field": "magazine_index",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_cancel_reload_network_data",
+                                "offset": "0006",
+                                "field": "ending_total_rounds",
+                                "type": "integer_medium"
+                            },
+                            {
+                                "struct": "weapon_cancel_reload_network_data",
+                                "offset": "0008",
+                                "field": "ending_loaded_rounds",
+                                "type": "integer_medium"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "2F",
+                    "name": "netgame_equipment_new",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "netgame_equipment_new_network_data",
+                                "offset": "0000",
+                                "field": "server_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "netgame_equipment_new_network_data",
+                                "offset": "0004",
+                                "field": "item_definition_index",
+                                "type": "integer_large"
+                            },
+                            {
+                                "struct": "netgame_equipment_new_network_data",
+                                "offset": "0008",
+                                "field": "netgame_equipment_index",
+                                "type": "integer_medium"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "30",
+                    "name": "projectile_detonate",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "2",
+                        "field": [
+                            {
+                                "struct": "projectile_detonate_network_data",
+                                "offset": "0000",
+                                "field": "object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "projectile_detonate_network_data",
+                                "offset": "0004",
+                                "field": "position",
+                                "type": "point3d"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "31",
+                    "name": "item_accelerate",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "item_accelerate_network_data",
+                                "offset": "0000",
+                                "field": "object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "item_accelerate_network_data",
+                                "offset": "0004",
+                                "field": "magnitude",
+                                "type": "real"
+                            },
+                            {
+                                "struct": "item_accelerate_network_data",
+                                "offset": "0008",
+                                "field": "direction",
+                                "type": "fixed_width_normal_16bit"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "32",
+                    "name": "damage_dealt",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "damage_dealt_network_data",
+                                "offset": "0000",
+                                "field": "damaged_object_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "damage_dealt_network_data",
+                                "offset": "0004",
+                                "field": "shield_damage",
+                                "type": "fixed_width_6bits"
+                            },
+                            {
+                                "struct": "damage_dealt_network_data",
+                                "offset": "0008",
+                                "field": "shields_depleted",
+                                "type": "boolean"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "33",
+                    "name": "projectile_attach",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "3",
+                        "field": [
+                            {
+                                "struct": "projectile_attach_network_data",
+                                "offset": "0000",
+                                "field": "projectile_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "projectile_attach_network_data",
+                                "offset": "0004",
+                                "field": "parent_index",
+                                "type": "object_index"
+                            },
+                            {
+                                "struct": "projectile_attach_network_data",
+                                "offset": "0008",
+                                "field": "parent_node_index",
+                                "type": "integer_medium"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "34",
+                    "name": "client_to_server_pong",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "1",
+                        "field": {
+                            "struct": "message_client_to_server_pong",
+                            "offset": "0000",
+                            "field": "player_number",
+                            "type": "integer_small"
+                        }
+                    }
+                },
+                {
+                    "type": "35",
+                    "name": "super_ping_update",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "2",
+                        "field": [
+                            {
+                                "struct": "client_ping_update",
+                                "offset": "0000",
+                                "field": "player_number",
+                                "type": "integer_small"
+                            },
+                            {
+                                "struct": "client_ping_update",
+                                "offset": "0004",
+                                "field": "player_ping",
+                                "type": "integer_large"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "36",
+                    "name": "sv_motd",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "1",
+                        "field": {
+                            "struct": "sv_motd_network_data",
+                            "offset": "0000",
+                            "field": "motd_text",
+                            "type": "motd_text"
+                        }
+                    }
+                },
+                {
+                    "type": "37",
+                    "name": "rcon_request",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "2",
+                        "field": [
+                            {
+                                "struct": "rcon_request_nework_data",
+                                "offset": "0000",
+                                "field": "password",
+                                "type": "rcon_password"
+                            },
+                            {
+                                "struct": "rcon_request_nework_data",
+                                "offset": "0009",
+                                "field": "command",
+                                "type": "rcon_command"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "38",
+                    "name": "rcon_response",
+                    "header": {
+                        "maxSize": "FFFFFFFF"
+                    },
+                    "fields": {
+                        "count": "1",
+                        "field": {
+                            "struct": "rcon_response_network_data",
+                            "offset": "0000",
+                            "field": "response",
+                            "type": "rcon_response"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

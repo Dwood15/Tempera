@@ -17,7 +17,7 @@
 #You should have received a copy of the gnu general public license
 #along with Tempera.  if not, see <http://www.gnu.org/licenses/>.
 
-#this file is currently heavily inconsistent. I'm sorry.
+#this file is currently heavily inconsistent. Sorry.
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 
 unset(CMAKE_SHARED_LIBRARY_PREFIX)
@@ -39,24 +39,30 @@ set(CAPSTONE_X86_ATT_DISABLE ON)
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
 
 set(PROJECT_NAME tempera)
-set(INSTALL_DRIVE D:)
 project(${PROJECT_NAME} CXX C)
 
-message(STATUS "MSVC VERSION --- ${MSVC_VERSION}")
-message(STATUS "BINARY OUT DIR --- ${PROJECT_BINARY_DIR}")
+#This library has _so much_ information and changes and data that sigscanning isn't really a worthwhile exercise.
+#For one, I'm not looking forward to finding all those signatures. Whoever wants to is welcome to try, however... see the queued_sigscanner.h file.
+set(TARGET_GAME_VER "HALO_CE_1_10")
+
+add_subdirectory(runtime)
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
-find_path(HCE_PATH FindHaloCE.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 find_path(MDB_PATH FindMariaDB.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${DX_PATH} ${HCE_PATH} ${MDB_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${DX_PATH} ${GAME_PATH} ${MDB_PATH})
 
 find_package(HaloCE REQUIRED)
 find_package(DirectX REQUIRED)
 find_package(MariaDB REQUIRED)
 #TODO: JSON SERIALIZATION/DESERIALIZATION
 #https://github.com/nlohmann/json#serialization--deserialization
-include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${MARIADB_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/common/)
+
+set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+
+set(COMMON ${CMAKE_CURRENT_SOURCE_DIR}/common/ ${INCLUDE}/cap_h ${INCLUDE}/detours ${INCLUDE}/lua_headers)
+
+include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${MARIADB_INCLUDE_DIR} ${COMMON})
 message(STATUS "DX include Dirs: ${DirectX_INCLUDE_DIRS}")
 
 # Defines Release by default.
@@ -112,79 +118,80 @@ endif ()
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_DIR}/ar")
 
 set(GAMEMAP_H
-	./gamestate/objects.h
-	./headers/colors.h
-	tags/bsp.h
-	./gamestate/halo_types.h
-	tags/map.h
-	tags/tags.h
-	gamestate/scenario.h
-	gamestate/game_input.h
-	enums/ControlTypes.h
-	gamestate/controls.h
-	dinput/dinput.h
-	common/players_loop_related.h
-	gamestate/experimentation/player_controller_to_index_array.h gamestate/experimentation/render_window.h headers/hce_addresses.h common/engine_interface.h)
+	src_generic/gamestate/objects.h
+	src_generic/headers/colors.h
+	src_generic/tags/bsp.h
+	src_generic/gamestate/halo_types.h
+	src_generic/tags/map.h
+	src_generic/tags/tags.h
+	src_generic/gamestate/scenario.h
+	src_generic/gamestate/game_input.h
+	src_generic/enums/ControlTypes.h
+	src_generic/gamestate/controls.h
+	src_generic/dinput/dinput.h
+	src_generic/players_loop_related.h
+	src_generic/gamestate/experimentation/player_controller_to_index_array.h
+	src_generic/gamestate/experimentation/render_window.h
+	src_generic/headers/hce_addresses.h
+	common/engine_interface.h)
 
 set(TAGS_H
-	tags/scenario.h
-	tags/map.h
-	tags/bsp.h
-	tags/tags.h
+	src_generic/tags/scenario.h
+	src_generic/tags/map.h
+	src_generic/tags/bsp.h
+	src_generic/tags/tags.h
 	)
 
 set(HALOFORGE_H
 	${TAGS_H} ${GAMEMAP_H}
-	./haloforge/headers/addlog.h
-	./haloforge/headers/blam.h
-	./haloforge/headers/camera.h
-	./haloforge/headers/core.h
-	./haloforge/headers/detours.h
-	./haloforge/headers/forge.h
-	./haloforge/headers/objectcontroller.h
-	./haloforge/headers/objects.h
-	./haloforge/headers/players.h
-	./Direct3D/textures.h
-	./Direct3D/d3d9hook.h
-	haloforge/headers/forge.h
-	headers/weapons.h common/function_map.h)
+	src_generic/extended/addlog.h
+	src_generic/gamestate/headers/blam.h
+	src_generic/gamestate/headers/camera.h
+	src_generic/gamestate/headers/core.h
+	include/detours/detours.h
+	src_generic/gamestate/headers/forge.h
+	src_generic/gamestate/headers/objectcontroller.h
+	src_generic/gamestate/players.h
+	src_generic/Direct3D/textures.h
+	src_generic/Direct3D/d3d9hook.h
+	src_generic/gamestate/headers/forge.h
+	src_generic/headers/weapons.h common/function_map.h)
 
 set(CEINTERNAL_H ${HALOFORGE_H}
-	./headers/real_math.h
-	./headers/int_math.h
-	./ce_base_types.h
-	headers/enums_generic.h
-	./gamestate/player_types.h
-	headers/macros_generic.h
-	./exceptions/exception_handler.h
-	headers/animations.h
-	gamestate/sbsp.h
-	gamestate/networking.h
-	gamestate/game_globals.h
-	gamestate/render.h
-	gamestate/tags_generic.h
+	src_generic/headers/real_math.h
+	src_generic/headers/int_math.h
+	src_generic/ce_base_types.h
+	src_generic/headers/enums_generic.h
+	src_generic/gamestate/player_types.h
+	src_generic/headers/macros_generic.h
+	src_generic/exceptions/exception_handler.h
+	src_generic/headers/animations.h
+	src_generic/gamestate/sbsp.h
+	src_generic/gamestate/networking.h
+	src_generic/gamestate/game_globals.h
+	src_generic/gamestate/render.h
+	src_generic/gamestate/tags_generic.h
 	common/target_version.h
-	common/open_sauce_mem_locs.h
 	common/precompile.h
-	common/eng_functions.h lua/lua.h)
+	src_generic/lua/lua_script_manager.h)
 
 set(HALOFORGE_CPP
-	./Direct3D/d3d9hook.cpp
-	./haloforge/addlog.cpp
-	./haloforge/blam.cpp
-	./haloforge/camera.cpp
-	./haloforge/core.cpp
-	./haloforge/math.cpp
-	./haloforge/objectcontroller.cpp
-	./forge.cpp
+	src_generic/Direct3D/d3d9hook.cpp
+	src_generic/extended/addlog.cpp
+	src_generic/gamestate/blam.cpp
+	src_generic/gamestate/camera.cpp
+	src_generic/gamestate/core.cpp
+	src_generic/gamestate/math.cpp
+	src_generic/gamestate/objectcontroller.cpp
+	src_generic/forge.cpp
 	)
 
 set(CEINTERNAL_CPP ${CEINTERNAL_H} ${HALOFORGE_CPP}
-	./function_rewrite.cpp
-	./exceptions/exception_handler.cpp
-	./main.cpp
-	gamestate/controls.cpp
-	gamestate/experimentation/hud_related.h)
+	src_generic/function_rewrite.cpp
+	src_generic/exceptions/exception_handler.cpp
+	main.cpp
+	src_generic/gamestate/controls.cpp
+	src_generic/gamestate/experimentation/hud_related.h)
 
 #EXTERNAL LIBS
 file(GLOB LUA53_GLOB ./libs/lua53.lib)

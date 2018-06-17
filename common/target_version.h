@@ -30,11 +30,11 @@ namespace engines {
 };
 
 #define ADDR static constexpr uintptr_t
-static const char *K_DEBUG_FILENAME     = "Game.debug.log";
-static const char *K_EVENT_LOG_FILENAME = "Game.Log.txt";
+static const char *K_DEBUG_FILENAME     = "tempera.debug.log";
+// static const char *K_EVENT_LOG_FILENAME = "tempera.Log.txt";
 
 
-//I recognize this isn't an ideal setup.
+//I know this isn't ideal.
 constexpr engines::major ENGINE_TARGET = engines::major::CE;
 constexpr engines::with_minor GAME_MINOR = engines::with_minor::halo_1_10;
 

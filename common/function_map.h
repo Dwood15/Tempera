@@ -16,7 +16,7 @@ struct defined_functionrange {
 	bool contains(uintptr_t const &other) { return ( other >= begin && other <= this->end ); }
 };
 
-static const std::array<defined_functionrange, 6049> knownfunctionlist = {{
+static std::array<defined_functionrange, 6049> knownfunctionlist = {{
 																									  { 0x401000, "magnitude_squared3d", 0x40101F },
 																									  { 0x401020, "distance_squared3d", 0x40104F },
 																									  { 0x401050, "real_seed_random_range_extended", 0x40108F },

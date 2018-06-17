@@ -42,6 +42,7 @@
 #include <winnt.h>
 //Our defined includes below:
 typedef unsigned int uintptr_t;
+#define ADDR static constexpr uintptr_t
 
 #include "target_version.h"
-#include "../headers/macros_generic.h"
+#include "../src_generic/headers/macros_generic.h"
