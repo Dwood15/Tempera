@@ -6,7 +6,7 @@
 #include "function_rewrite.h"
 #include "gamestate/game_globals.h"
 #include "gamestate/player_types.h"
-#include "lua/lua_script_manager.h"
+#include "lua/script_manager.h"
 #include "headers/hce_addresses.h"
 #include "gamestate/headers/forge.h"
 

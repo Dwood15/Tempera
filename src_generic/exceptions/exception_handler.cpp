@@ -12,7 +12,7 @@
 
 #include "exception_handler.h"
 #include "../ceinternal.h"
-#include "function_map.h"
+#include <memory_map.h>
 
 //Not sure we need to guarantee we're in MSVC any more...
 #if defined(_MSC_VER)

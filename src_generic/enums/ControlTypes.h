@@ -7,7 +7,7 @@
 */
 #pragma once
 
-#include "../headers/macros_generic.h"
+#include "macros_generic.h"
 
 namespace enums {
 	enum ControlDevice {

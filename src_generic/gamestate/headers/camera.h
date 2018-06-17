@@ -23,11 +23,11 @@
 #pragma once
 
 #include <Windows.h>
+#include <engine_functions.h>
 #include "math.h"
 #include "../../extended/addlog.h"
 #include "../../headers/colors.h"
 
-#define CAMERA_ADDRESS 0x6474E4
 //0x006AC4DC;
 
 #define FOV_XBOUND 0.024f

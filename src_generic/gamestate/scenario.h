@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../headers/macros_generic.h"
+#include "macros_generic.h"
 
 struct s_scenario_location {
 	long             leaf_index;

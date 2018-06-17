@@ -6,6 +6,7 @@
 #include <iostream>
 #include "../extended/addlog.h"
 #include "../function_rewrite.h"
+#include "memory_interface.h"
 
 extern "C" {
 #include "../../include/lua_headers/lua.h"
@@ -15,11 +16,13 @@ extern "C" {
 
 enum LuaCallbackId {
 	invalid                   = -1,
+	//should be working
 	on_load                   = 0,
+	//not working, but still available to hook into.
 	on_map_load               = 1,
-	// available, should be working
 	before_scenario_tags_load = 2,
 	after_scenario_tags_load  = 3,
+	// available, should be working
 	before_game_tick          = 4,
 	after_game_tick           = 5,
 	//end available, working hooks.
@@ -31,43 +34,17 @@ static bool isValidCbId(T id) {
 	return (id < LuaCallbackId::max_callback_id && id >= id);
 }
 
+
+
+//hacks upon hacks
+static void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type);
+
 static int l_print(lua_State *L) {
 	const bool tocmd = lua_toboolean(L, 1);
 	const char *str  = lua_tostring(L, 2);
 	Print(tocmd, str);
 	return 0;
 }
-
-static int l_readInt(lua_State *L) {
-	const uintptr_t loc     = lua_tointeger(L, 1);
-	int             *toRead = (int *) loc;
-	return *toRead;
-}
-
-// static int l_writeByte(lua_State *L) {
-// 	const uintptr_t loc = lua_tointeger(L, 1);
-// 	const unsigned int l_byte = lua_tointeger(L, 2);
-//
-// 	if(l_byte < (unsigned int)0xFF) {
-// 		spcore::memory::patchValue<byte>(loc, static_cast<byte>(l_byte));
-// 		   return 0;
-// 	}
-// 	return 1;
-// }
-
-static int l_writeInt(lua_State *L) {
-	const uintptr_t    loc    = lua_tointeger(L, 1);
-	const unsigned int l_byte = lua_tointeger(L, 2);
-
-	if (loc != (unsigned int) -1) {
-		spcore::memory::patchValue<byte>(loc, static_cast<byte>(l_byte));
-		return 0;
-	}
-	return 1;
-}
-
-//hacks upon hacks
-static void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type);
 
 static int l_registerLuaCallback(lua_State *L) {
 	const char *str = lua_tostring(L, 1);
@@ -112,7 +89,7 @@ public:
 		}
 	}
 
-	LuaScriptManager(const std::string &filename = "init.txt") {
+	explicit LuaScriptManager(const std::string &filename = "init.txt") {
 		this->callbacks = std::vector<std::vector<std::string>>();
 		this->callbacks.resize(LuaCallbackId::max_callback_id);
 
@@ -132,8 +109,16 @@ public:
 			return;
 		}
 
+		registerGlobalLuaFunction("ReadByte", l_readByte);
+		registerGlobalLuaFunction("ReadFloat", l_readFloat);
 		registerGlobalLuaFunction("ReadInteger", l_readInt);
+		registerGlobalLuaFunction("ReadShort", l_readShort);
+
+		registerGlobalLuaFunction("WriteByte", l_writeByte);
+		registerGlobalLuaFunction("WriteFloat", l_writeFloat);
 		registerGlobalLuaFunction("WriteInteger", l_writeInt);
+		registerGlobalLuaFunction("WriteShort", l_writeShort);
+
 		registerGlobalLuaFunction("DebugPrint", l_print);
 		registerGlobalLuaFunction("RegisterCallBack", l_registerLuaCallback);
 

@@ -1,19 +1,21 @@
 #pragma once
 
 #include "../enums/ControlTypes.h"
-#include "../headers/macros_generic.h"
+#include "macros_generic.h"
 #include "../ce_base_types.h"
 
 namespace Input {
 	struct ControlSettings {
 		bool Initialized;
-		char : 8;
+		char pad0;
 		int16 Device; // ControlDevice
-		PAD16;
+		int16 pad1;
 		int16 Type; // ControlType
 		int16 Index; // Key / GamepadButton / GamepadAxis / MouseButton / MouseAxis
 		int16 Direction; // GamepadAxisDirection / GamepadDpadDirection / MouseAxisDirection
 	};
+	static auto *const Settings           = (reinterpret_cast<Input::ControlSettings *>(0x6AD802));
+
 
 	struct GamepadAxisState {
 		byte  Speed; // not even used

@@ -1,28 +1,12 @@
 #pragma once
 
 #include <precompile.h>
-#include "../../../../../../BlamSauce/interface/input/player_control.h"
-#include "../../../../../../BlamSauce/interface/hud/hud.hpp"
-#include "../../../../../../BlamSauce/interface/hud/hud_messaging.hpp"
-#include "../../../../../../BlamSauce/interface/hud/hud_unit.hpp"
-#include "../../../../../../BlamSauce/interface/hud/hud_weapon.hpp"
-#include "../../../../../../BlamSauce/interface/hud/hud_nav_points.hpp"
-#include "../../../../../../BlamSauce/interface/hud/motion_sensor.hpp"
-#include "../../../../../../BlamSauce/interface/hud/first_person_weapons.hpp"
-#include "../../../../../../BlamSauce/interface/strings/draw_string.hpp"
-#include "../../../../../../BlamSauce/interface/hud/hud_chat.hpp"
-#include "../../../../../../BlamSauce/models/animations/recorded_animations.hpp"
-#include "../../../../../../BlamSauce/hs/object_lists.hpp"
-#include "../../../../../../BlamSauce/hs/structures.hpp"
-#include "../../../../../../BlamSauce/cseries/base.h"
+
+#include "../../../../../../src_generic/gamestate/player_types.h"
 
 // TODO: Make this whole thing _not_ suck as bad as it does. :)
-//	FUNC_PTR(INPUT_UPDATE_HOOK,						K_INPUT_UPDATE_HOOK, FUNC_PTR_NULL);
-static auto const INPUT_UPDATE_HOOK = (uintptr_t) 0x493856;
-static auto *const InputStateFlags    = (reinterpret_cast<byte *>(0x6AD572));
-static auto *const ControlState       = (reinterpret_cast<Yelo::Input::ControlStates *>(0x64C550));
-static auto *const MousePositionState = (reinterpret_cast<Yelo::Input::PositionState *>(0x6B4008));
-static auto *const Settings           = (reinterpret_cast<Yelo::Input::ControlSettings *>(0x6AD802));
+
+
 
 namespace Yelo::GameUI {
 	//#define FUNC_PTR(name, ...)  enum FUNC_PTR_##name  { PTR_##name = PLATFORM_VALUE_HACK_((__VA_ARGS__)) }; static_assert( GET_FUNC_PTR(name) != NULL );

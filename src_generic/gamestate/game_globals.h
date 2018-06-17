@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../headers/macros_generic.h"
+#include "macros_generic.h"
 #include "../headers/enums_generic.h"
 #include "../ce_base_types.h"
 #include "player_types.h"

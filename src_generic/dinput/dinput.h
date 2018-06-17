@@ -1,7 +1,7 @@
 #pragma once
 
 #include <dinput.h>
-#include "../headers/macros_generic.h"
+#include "macros_generic.h"
 
 namespace Input {
 	namespace DInput {

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <array>
+#include <vector>
+#include <precompile.h>
 
 typedef unsigned int uintptr_t;
 
@@ -8,6 +10,7 @@ struct defined_functionrange {
 	uintptr_t begin;
 	const char* functionName;
 	uintptr_t end;
+	std::vector<std::pair<uintptr_t, byte>> values_to_patch;
 
 	bool operator<(defined_functionrange const &other) { return begin < other.end; }
 
@@ -16,6 +19,11 @@ struct defined_functionrange {
 	bool operator==(defined_functionrange const &other) { return end == other.end && begin == other.begin; }
 
 	bool contains(uintptr_t const &other) { return ( other <= begin && other >= end ); }
+};
+
+struct patchManager {
+	defined_functionrange * function;
+
 };
 
 static const std::array<defined_functionrange, 7049> knownfunctionlist = {{
@@ -4907,7 +4915,7 @@ static const std::array<defined_functionrange, 7049> knownfunctionlist = {{
 																						 { 0x571760, "sub_571760", 0x57177F },
 																						 { 0x571780, "sub_571780", 0x57197F },
 																						 { 0x571980, "sub_571980", 0x571B3F },
-																						 { 0x571B40, "sub_571B40", 0x571F1F },
+																						 { 0x571B40, "unit_throw_grenade_release", 0x571F1F },
 																						 { 0x571F20, "sub_571F20", 0x57228F },
 																						 { 0x572290, "sub_572290", 0x5722CF },
 																						 { 0x5722D0, "unit_set_animation", 0x57230F },
@@ -5891,7 +5899,6 @@ static const std::array<defined_functionrange, 7049> knownfunctionlist = {{
 																						 { 0x5AB7A0, "sub_5AB7A0", 0x5AB7EF },
 																						 { 0x5AB7F0, "sub_5AB7F0", 0x5AB80F },
 																						 { 0x5AB810, "sub_5AB810", 0x5ABAAF },
-																						 { 0x5ABAB0, "public: virtual void * __thiscall std::_Ref_count_base::_Get_deleter(class type_info const &)const", 0x5ABABF },
 																						 { 0x5ABAC0, "sub_5ABAC0", 0x5ABCFF },
 																						 { 0x5ABD00, "sub_5ABD00", 0x5ABE8F },
 																						 { 0x5ABE90, "sub_5ABE90", 0x5ABFDF },

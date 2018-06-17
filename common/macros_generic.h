@@ -15,6 +15,7 @@ typedef long          byte_swap_code_t;
 typedef unsigned char byte;
 typedef unsigned int  *uintptr;
 typedef unsigned int  uint32;
+typedef unsigned int  uint;
 
 STAT_ASSRT(bool, 0x1);
 STAT_ASSRT(char, 0x1);

@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace engines {
 	enum major {
 		CE,
@@ -33,10 +32,9 @@ namespace engines {
 static const char *K_DEBUG_FILENAME     = "tempera.debug.log";
 // static const char *K_EVENT_LOG_FILENAME = "tempera.Log.txt";
 
-
 //I know this isn't ideal.
-constexpr engines::major ENGINE_TARGET = engines::major::CE;
-constexpr engines::with_minor GAME_MINOR = engines::with_minor::halo_1_10;
+extern engines::major ENGINE_TARGET;
+extern engines::with_minor GAME_MINOR;
 
-//TODO: Something like "GetGameRegistryPath"
-constexpr const char * GAME_REGISTRY_PATH =  R"(Software\Microsoft\Microsoft Games\Halo CE)";
+//TODO: Something like: "GetGameRegistryPath"
+extern const char * GAME_REGISTRY_PATH;

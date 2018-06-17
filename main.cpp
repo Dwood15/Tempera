@@ -38,7 +38,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include "src_generic/ceinternal.h"
-#include "src_generic/lua/lua_script_manager.h"
+#include "src_generic/lua/script_manager.h"
 #include <vector>
 #include <Windows.h>
 #include <dbghelp.h>

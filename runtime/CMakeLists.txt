@@ -104,6 +104,7 @@ set(R_ENGINELAYOUT_INL
 
 set(RUNTIME_H
 	${GAME_DIR}/memory_locations.h
+	${GAME_DIR}/memory_map.h
 	${GAME_DIR}/engine_functions.h
 	${GAME_DIR}/current_engine.h
 	${LEVELS_DIR}/levels.h

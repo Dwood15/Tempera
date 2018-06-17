@@ -189,6 +189,14 @@ namespace input {
 	};
 };
 
+namespace Flags {
+	enum input_state {
+		_input_state_enabled_bit,
+		_input_state_menu_bit,
+		_input_state_chat_bit,
+	};
+};
+
 namespace players {
 	enum input_state_flags {
 		_input_state_enabled_bit,
@@ -196,24 +204,29 @@ namespace players {
 		_input_state_chat_bit,
 	};
 
+	static auto *const InputStateFlags    = (reinterpret_cast<byte *>(0x6AD572));
+
+
 	struct ControlStates {
 		// key states (how long its been pressed until 0xFF, 0 if not pressed)
 		byte Keys[enums::k_number_of_keys];
 
-		PAD(0, sizeof(byte) * 383);
+		byte pad0[sizeof(byte) * 383];
 
 		int32 MouseAxis[enums::_MouseAxis];
 		byte  MouseButton[enums::_MouseButton];
 
-		PAD(1, sizeof(byte) * 4680);
+		byte pad1[sizeof(byte) * 4680];
 
 		byte             GamepadButton[enums::_GamepadButton];
-		GamepadAxisState GamepadAxis[enums::_GamepadAxis];
+		Input::GamepadAxisState GamepadAxis[enums::_GamepadAxis];
 
-		PAD(2, sizeof(byte) * 56);
+		byte pad2[sizeof(byte) * 56];
 
 		int32 GamepadDpad[enums::_GamepadDpad];
 	};
+
+	static auto *const ControlState       = (reinterpret_cast<ControlStates *>(0x64C550));
 
 	struct PositionState {
 		//PAD16;
@@ -222,4 +235,6 @@ namespace players {
 		long pad_a;
 		long Position[2]; // menu space coordinates (0,0) to (640,480)
 	};
+	static auto *const MousePositionState = (reinterpret_cast<Input::PositionState *>(0x6B4008));
+
 };

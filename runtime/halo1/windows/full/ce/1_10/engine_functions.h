@@ -3,7 +3,7 @@
 #pragma once
 
 #include <precompile.h>
-
+//TODO: Port this form OS so it's not complete ass to look at.
 // TODO: Transition to switch-case constexpr structure, a la a better memory_map.
 ADDR K_GATHER_EXCEPTION_DATA                        = 0x6BDE8C;
 ADDR K_GATHER_EXCEPTION                             = 0x582060;
@@ -156,7 +156,6 @@ ADDR K_CACHE_FILES_INITIALIZE = 0x442FF0;
 
 ADDR K_CACHE_FILES_DISPOSE = 0x56C650;
 
-
 /************** MAYBE DUPLICATE ADDRESSES ************/
 #pragma once
 
@@ -179,14 +178,13 @@ ADDR CORE4 = 0x81B800;
 ADDR CORE5 = 0x81B894;
 ADDR CORE6 = 0x653BE4;
 
+ADDR CAMERA_ADDRESS = 0x6474E4;
 
 //TODO: Verify These addresses are accurate to 110...
 ADDR CORE3 = 0x87A76C;
 ADDR CORE7 = 0x71D0E8;
 
-
 ADDR K_UNIT_GET_CAMERA_POSITION_PLAYER_RELATED = 0x56C650;
-
 
 //From Open Sauce.
 ADDR K_RECORDED_ANIMATIONS                                     = 0x64B940;
@@ -454,7 +452,6 @@ ADDR K_PLAYER_HANDLE_ACTION_JMP_TABLE                                = 0x5C36A3;
  */
 
 
-// ADDR K_INPUT_UPDATE_HOOK = 0x493856;
 // ADDR K_SETTINGS = 0x6AD802;
 // ADDR K_CONTROL_STATE = 0x64C550;
 // ADDR K_MOUSE_POSITION_STATE = 0x6B4008;
@@ -899,7 +896,7 @@ ADDR K_RESOLUTION_LIST_REFRESH_RATE_REFERENCE_6                             = 0x
 ADDR K_NVIDIA_USE_BASIC_CAMO_TOGGLE                                         = 0x51A788;
 ADDR K_SCREENSHOT_FOLDER_REFERENCE_0                                        = 0x4CD77C;
 ADDR K_SCREENSHOT_FOLDER_REFERENCE_1                                        = 0x4CD793;
-ADDR K_RENDER_WINDOW                                                        = 0x6B4C00;
+// ADDR K_RENDER_WINDOW                                                        = 0x6B4C00;
 ADDR K_RENDER_GLOBALS                                                       = 0x75E460;
 ADDR K_GLOBAL_RENDER_TARGETS                                                = 0x638A10;
 ADDR K_STRUCTURE_RENDER_GLOBALS                                             = 0x67EA98;
@@ -1006,10 +1003,10 @@ ADDR K_STRUCTURE_BSP_INDEX                                                      
 ADDR K_OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__READ                        = 0x4F8207;
 ADDR K_OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__WRITE                       = 0x4F83CE;
 ADDR K_OBJECTS_INITIALIZE_FOR_NEW_MAP_MOD_PROCESSED_BSPS                          = 0x4F84E2;
-ADDR K_CACHE_FILES_INITIALIZE                                                     = 0x442FF0;
+// ADDR K_CACHE_FILES_INITIALIZE                                                     = 0x442FF0;
 ADDR K_CACHE_FILES_INITIALIZE_HOOK                                                = 0x442FFB;
 ADDR K_CACHE_FILES_INITIALIZE_RETN                                                = 0x4432E3;
-ADDR K_CACHE_FILES_DISPOSE                                                        = 0x56C650;
+// ADDR K_CACHE_FILES_DISPOSE                                                        = 0x56C650;
 ADDR K_CACHE_FILES_DISPOSE_HOOK                                                   = 0x56C698;
 ADDR K_CACHE_FILES_DISPOSE_RETN                                                   = 0x56C8B2;
 ADDR K_DATA_FILE_READ                                                             = 0x444420;

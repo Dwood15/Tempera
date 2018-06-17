@@ -1,7 +1,4 @@
 ﻿/*
-	Project: tempera
-	File: addlog.cpp
-	Copyright � 2009 SilentK, Abyll
 	Copyright � 2018 Dwood15
 
 	This file is part of tempera.
@@ -11,7 +8,7 @@
 */
 #pragma once
 
-#include "headers/macros_generic.h"
+#include "macros_generic.h"
 #include "gamestate/player_types.h"
 
 //Allows us to: 1) declare a ptr as potentially unused.
