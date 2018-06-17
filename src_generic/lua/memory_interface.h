@@ -58,11 +58,10 @@ static int l_writeByte(lua_State *L) {
 	uintptr_t  loc    = getLuaInt(L);
 	const uint l_byte = lua_tointeger(L, 2);
 
-	if (!inBounds<byte>(l_byte)) {
-		return 0;
+	if (inBounds<byte>(l_byte)) {
+		spcore::memory::patchValue<byte>(loc, static_cast<byte>(l_byte));
 	}
 
-	spcore::memory::patchValue<byte>(loc, static_cast<byte>(l_byte));
 	return 0;
 }
 
@@ -72,8 +71,8 @@ static int l_writeFloat(lua_State *L) {
 
 	if (loc != (uint) -1) {
 		spcore::memory::patchValue<float>(loc, l_flt);
-		return 0;
 	}
+
 	return 0;
 }
 
@@ -81,11 +80,10 @@ static int l_writeInt(lua_State *L) {
 	uintptr_t loc   = getLuaInt(L);
 	const int l_int = lua_tointeger(L, 2);
 
-	if (loc == (uint) -1) {
-		return 0;
+	if (loc != (uint) -1) {
+		spcore::memory::patchValue<int>(loc, l_int);
 	}
 
-	spcore::memory::patchValue<int>(loc, l_int);
 	return 0;
 }
 
@@ -93,11 +91,10 @@ static int l_writeShort(lua_State *L) {
 	uintptr_t loc   = getLuaInt(L);
 	const int l_sht = lua_tointeger(L, 2);
 
-	if (loc == (uint)-1 || !inBounds<short>(l_sht)) {
-		return 0;
+	if (loc != (uint)-1 && inBounds<short>(l_sht)) {
+		spcore::memory::patchValue<short>(loc, l_sht);
 	}
 
-	spcore::memory::patchValue<float>(loc, l_sht);
 	return 0;
 }
 

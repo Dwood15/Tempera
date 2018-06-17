@@ -109,16 +109,20 @@ public:
 			return;
 		}
 
+		//1 Param - location to read value from
 		registerGlobalLuaFunction("ReadByte", l_readByte);
 		registerGlobalLuaFunction("ReadFloat", l_readFloat);
 		registerGlobalLuaFunction("ReadInteger", l_readInt);
 		registerGlobalLuaFunction("ReadShort", l_readShort);
 
+		//2 Params - location to write value, value to write to location.
 		registerGlobalLuaFunction("WriteByte", l_writeByte);
 		registerGlobalLuaFunction("WriteFloat", l_writeFloat);
 		registerGlobalLuaFunction("WriteInteger", l_writeInt);
 		registerGlobalLuaFunction("WriteShort", l_writeShort);
 
+		//2 Params - boolean - tells whether or not to write to console. always writes to dbg log.
+		//2nd param - const char * string to print to the log.
 		registerGlobalLuaFunction("DebugPrint", l_print);
 		registerGlobalLuaFunction("RegisterCallBack", l_registerLuaCallback);
 
