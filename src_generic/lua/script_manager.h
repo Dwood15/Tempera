@@ -7,6 +7,8 @@
 #include "../extended/addlog.h"
 #include "../function_rewrite.h"
 #include "memory_interface.h"
+#include "players_interface.h"
+#include "gamestate_interface.h"
 
 extern "C" {
 #include "../../include/lua_headers/lua.h"
@@ -16,15 +18,16 @@ extern "C" {
 
 enum LuaCallbackId {
 	invalid                   = -1,
-	//should be working
-	on_load                   = 0,
 	//not working, but still available to hook into.
+	on_load						  = 0,
 	on_map_load               = 1,
 	before_scenario_tags_load = 2,
 	after_scenario_tags_load  = 3,
 	// available, should be working
 	before_game_tick          = 4,
 	after_game_tick           = 5,
+	post_initialize           = 6,
+	post_dll_init             = 7,
 	//end available, working hooks.
 	max_callback_id
 };
@@ -33,8 +36,6 @@ template <typename T = int>
 static bool isValidCbId(T id) {
 	return (id < LuaCallbackId::max_callback_id && id >= id);
 }
-
-
 
 //hacks upon hacks
 static void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type);
@@ -109,22 +110,28 @@ public:
 			return;
 		}
 
-		//1 Param - location to read value from
+		//Takes 1 Param - location to read value from
 		registerGlobalLuaFunction("ReadByte", l_readByte);
-		registerGlobalLuaFunction("ReadFloat", l_readFloat);
-		registerGlobalLuaFunction("ReadInteger", l_readInt);
-		registerGlobalLuaFunction("ReadShort", l_readShort);
+		registerGlobalLuaFunction("Read32f", l_readFloat);
+		registerGlobalLuaFunction("Read32i", l_readInt);
+		registerGlobalLuaFunction("Read16i", l_readShort);
 
-		//2 Params - location to write value, value to write to location.
+		//Takes 2 Params - location to write value, value to write to location.
 		registerGlobalLuaFunction("WriteByte", l_writeByte);
-		registerGlobalLuaFunction("WriteFloat", l_writeFloat);
-		registerGlobalLuaFunction("WriteInteger", l_writeInt);
-		registerGlobalLuaFunction("WriteShort", l_writeShort);
+		registerGlobalLuaFunction("Write32f", l_writeFloat);
+		registerGlobalLuaFunction("Write32i", l_writeInt);
+		registerGlobalLuaFunction("Write16i", l_writeShort);
 
 		//2 Params - boolean - tells whether or not to write to console. always writes to dbg log.
 		//2nd param - const char * string to print to the log.
 		registerGlobalLuaFunction("DebugPrint", l_print);
+
+		//2 Params
 		registerGlobalLuaFunction("RegisterCallBack", l_registerLuaCallback);
+		registerGlobalLuaFunction("GetMaxLocalPlayers", l_GetMaxLocalPlayers);
+
+		registerGlobalLuaFunction("AreWeInMainMenu", l_InMainMenu);
+		registerGlobalLuaFunction("GetEngineContext", l_GetEngineContext);
 
 		this->filename = filename;
 	}
@@ -273,7 +280,13 @@ public:
 		lua_pcall(L, 0, 0, 0);
 	}
 
-	void call_lua_event_by_type(LuaCallbackId eventType) {
+	// void call_void_lua_func(const std::string_view &funcName, float arg) {
+	// 	lua_getglobal(L, std::string(funcName).c_str());
+	// 	lua_pcall(L, 0, 0, 0);
+	// }
+
+	template <LuaCallbackId eventType>
+	void call_lua_event_by_type() {
 		if (!this || this->callbacks.empty()) {
 			return;
 		}
@@ -290,6 +303,25 @@ public:
 			call_void_lua_func(elem);
 		}
 	}
+
+	// template<LuaCallbackId eventType, typename T>
+	// void call_lua_event_by_type(T arg) {
+	// 	if (!this || this->callbacks.empty()) {
+	// 		return;
+	// 	}
+	//
+	// 	std::vector<std::string> cb_list = this->callbacks.at(eventType);
+	//
+	// 	Print(true, "Begin calling lua event by type");
+	//
+	// 	if (cb_list.empty()) {
+	// 		return;
+	// 	}
+	//
+	// 	for (std::string_view elem : cb_list) {
+	// 		call_void_lua_func(elem);
+	// 	}
+	// }
 };
 
 static LuaScriptManager *LuaState;

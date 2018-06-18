@@ -21,7 +21,7 @@
 */
 
 #include <Windows.h>
-#include "../gamestate/headers/camera.h"
+#include "camera.h"
 
 float g_Aspect = 4.0f / 3.0f;
 

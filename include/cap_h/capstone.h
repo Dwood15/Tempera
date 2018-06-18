@@ -221,7 +221,7 @@ typedef struct cs_opt_skipdata {
 #include "x86.h"
 #include "xcore.h"
 
-// NOTE: All information in cs_detail is only available when CS_OPT_DETAIL = CS_OPT_ON
+//NOTE: All information in cs_detail is only available when CS_OPT_DETAIL = CS_OPT_ON
 typedef struct cs_detail {
 	uint8_t regs_read[12]; // list of implicit registers read by this insn
 	uint8_t regs_read_count; // number of implicit registers read by this insn

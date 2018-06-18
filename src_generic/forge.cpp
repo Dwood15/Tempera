@@ -11,25 +11,14 @@
 #include <Windows.h>
 #include <stdio.h>
 
-#include "gamestate/headers/forge.h"
-#include "gamestate/headers/camera.h"
+#include "gamestate/forge.h"
+#include "gamestate/camera.h"
 #include "extended/addlog.h"
-#include "gamestate/headers/core.h"
+#include "gamestate/core.h"
 #include "Direct3D/d3d9hook.h"
 #include "gamestate/player_types.h"
 
-static short last_respawn_count       = 0x0;
-static short last_spawn_count         = 0x0;
-static short last_render_window_count = 0x0;
 
-//Live-updating number of players game should spawn.
-static short *to_respawn_count = (short *) 0x6B4802;
-
-//Number of players to spawn - set on map initialization/unloading.
-static short *spawn_count         = (short *) 0x624A9C;
-///num windows to render. Fills with black for invalid.    f
-static short *render_window_count = (short *) 0x6B4098;
-bool         *at_main_menu        = (bool *) 0x6B4051;
 
 static void updateGlobals() {
 	if (last_respawn_count != *to_respawn_count) {
@@ -50,7 +39,7 @@ static void updateGlobals() {
 
 static void handleMainMenuOptions() {
 	if(!core) {
-		//Don't want to mess with shit if it's not initialized properly.
+		//Don't mess with shit if it's not initialized.
 		return;
 	}
 

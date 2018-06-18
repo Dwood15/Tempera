@@ -15,8 +15,8 @@
 #include <fstream>
 #include "d3d9hook.h"
 #include "textures.h"
-#include "../gamestate/headers/core.h"
-#include "../gamestate/headers/camera.h"
+#include "../gamestate/core.h"
+#include "../gamestate/camera.h"
 
 CD3D d3d;
 

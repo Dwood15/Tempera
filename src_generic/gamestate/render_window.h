@@ -1,8 +1,8 @@
 #pragma once
 
 #include <precompile.h>
-#include "../player_types.h"
-#include "../../function_rewrite.h"
+#include "player_types.h"
+#include "../function_rewrite.h"
 
 namespace render {
 	using ::players_global_data;

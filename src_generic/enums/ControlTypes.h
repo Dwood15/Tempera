@@ -440,13 +440,13 @@ namespace enums {
 
 		k_number_of_gamepad_buttons // NUMBER_OF_GAMEPAD_BUTTONS
 	};
+	
 	enum {
 		_gamepad_left_stick,
 		_gamepad_right_stick,
 
 		k_number_of_gamepad_sticks // NUMBER_OF_GAMEPAD_STICKS
 	};
-
 };
 
 namespace enums {

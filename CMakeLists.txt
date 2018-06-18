@@ -88,7 +88,7 @@ if (NOT MSVC OR NOT MSVC_VERSION)
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g -m32 -masm=intel")
 elseif (MSVC)
 	#vc++ 2017 toolset. Available from microsoft here: http://landinghub.visualstudio.com/visual-cpp-build-tools
-	if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.16299.0")
+	if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.17134.0")
 		#message(WARNING "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION is empty! Could not find applicable windows 10 sdk.")
 		set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION 10.0.16299.0)
 		#TODO: CHECK FOR AVAILABLE SDK VERSIONS IF NONE SET
@@ -124,22 +124,29 @@ add_subdirectory(src_generic)
 #	include/cap_h/
 set(GLOBAL_INCLUDE_H
 	include/detours/detours.h
-	)
+	include/lua_headers/luawrapper.h
+#	include/cap_h/arm.h
+#	include/cap_h/arm64.h
+#	include/cap_h/sparc.h
+#	include/cap_h/ppc.h
+#	include/cap_h/mips.h
+	include/cap_h/x86.h
+	include/cap_h/capstone.h)
 
 set(GLOBAL_H
-	${GLOBAL_INCLUDE_H}
-	${RUNTIME_H}
-	common/target_version.h
 	common/macros_generic.h
 	common/engine_interface.h
 	common/struct_helper.h
 	common/precompile.h
-	)
+	include/lua_headers/luawrapperutil.h
+	src_generic/lua/players_interface.h
+	runtime/address_manager.h
+	src_generic/lua/gamestate_interface.h runtime/memory_map.h)
 
 #EXTERNAL LIBS
 file(GLOB LUA53_GLOB ./libs/lua53.lib)
 file(GLOB DETOURS_GLOB ./libs/detours.lib)
-#file(GLOB CAPSTONE_STATIC_GLOB ./libs/capstone_static.lib)
+file(GLOB CAPSTONE_STATIC_GLOB ./libs/capstone_static.lib)
 
 if (MSVC)
 	set(BASE_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ignore:4070\ /ignore:4099")
@@ -155,11 +162,16 @@ endif ()
 
 if (MARIADB_FOUND)
 	add_library(mdb STATIC IMPORTED)
-	message(STATUS "WE HAVE MARIADB ${MARIADB_LIBRARY}")
 	set_target_properties(mdb PROPERTIES IMPORTED_LOCATION ${MARIADB_LIBRARY})
 endif ()
 
-add_library(dinput8 SHARED ${CEINTERNAL_CPP} ${GLOBAL_INCLUDE_H} ${GLOBAL_H} main.cpp
+add_library(dinput8 SHARED
+			${RUNTIME_H}
+			${GLOBAL_INCLUDE_H}
+			${CEINTERNAL_CPP}
+			${GLOBAL_INCLUDE_H}
+			${GLOBAL_H}
+			main.cpp
 			)
 
 target_link_libraries(dinput8 ${DETOURS_GLOB} ${LUA53_GLOB} ${MARIADB_LIBRARY} ${CAPSTONE_STATIC_GLOB} ${DirectX_LIBRARIES})

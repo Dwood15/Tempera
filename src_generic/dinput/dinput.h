@@ -5,27 +5,21 @@
 
 namespace Input {
 	namespace DInput {
-		inline class Dinput8Manager {
-			static IDirectInput8       *DInput8Device;
-			static IDirectInputDevice8 *KeyboardInput;
-			static IDirectInputDevice8 *MouseInput;
-			static IDirectInputDevice8 ** JoystickInput;
+		static IDirectInput8A *GetDInput8Device() { return *(IDirectInput8A **) 0x64C52C; }
 
-			Dinput8Manager() {
-				DInput8Device = *(IDirectInput8 **) 0x64C52C;
-				KeyboardInput = *(IDirectInputDevice8 **) 0x64C730;
-				MouseInput    = *(IDirectInputDevice8 **) 0x64C734;
-				JoystickInput = (IDirectInputDevice8 **) 0x64C778;
+		static IDirectInputDevice8A *GetKeyboardInput() { return *(IDirectInputDevice8A **) 0x64C730; }
+
+		static IDirectInputDevice8A *GetMouseInput() { return *(IDirectInputDevice8A **) 0x64C734; }
+
+		static IDirectInputDevice8A **GetJoystickInputs() { return (IDirectInputDevice8A **) 0x64C778; }
+
+		static IDirectInputDevice8A *GetJoystick(unsigned int idx = 0) {
+			if (idx > 7) {
+				return NULL;
 			}
 
-		public:
-			IDirectInputDevice8 * GetJoystick(unsigned int idx = 0) {
-				if (idx > 7) {
-					return NULL;
-				}
+			return (GetJoystickInputs())[idx];
+		}
 
-				return (JoystickInput)[idx];
-			}
-		};
 	}
 }

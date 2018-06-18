@@ -19,7 +19,7 @@
     along with haloforge.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../gamestate/headers/objectcontroller.h"
+#include "objectcontroller.h"
 
 void ObjectController::SetHoldDistance(float dist) {
 	HoldDistance = dist;

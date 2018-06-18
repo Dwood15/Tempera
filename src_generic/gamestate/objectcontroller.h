@@ -16,7 +16,7 @@ class ObjectController;
 
 #include <precompile.h>
 #include "core.h"
-#include "../objects.h"
+#include "objects.h"
 
 class ObjectController {
 	float StepSize     = 0.05f;

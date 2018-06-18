@@ -88,7 +88,7 @@ set(GAME_DIR ${PROJECT_SOURCE_DIR}/${GAME})
 set(LEVELS_DIR ${PROJECT_SOURCE_DIR}/${LEVELS})
 set(RUNTIME_DIR ${PROJECT_SOURCE_DIR}/runtime)
 
-include_directories(AFTER ${GAME_DIR} ${LEVELS_DIR})
+include_directories(AFTER ${RUNTIME_DIR} PARENT_SCOPE)
 
 set(R_ENGINELAYOUT_INL
 #	${GAME_DIR}/enginelayout/Game.inl
@@ -103,14 +103,12 @@ set(R_ENGINELAYOUT_INL
 	)
 
 set(RUNTIME_H
+	${RUNTIME_DIR}/address_manager.h
 	${GAME_DIR}/memory_locations.h
-	${GAME_DIR}/memory_map.h
-	${GAME_DIR}/engine_functions.h
+	${GAME_DIR}/memory_map.cpp
 	${GAME_DIR}/current_engine.h
 	${LEVELS_DIR}/levels.h
 	${R_ENGINELAYOUT_INL}
-	${RUNTIME_DIR}/versions/cache_files_win.hpp
-	${RUNTIME_DIR}/versions/precompile.h
 	${RUNTIME_DIR}/versions/versions.h
 	PARENT_SCOPE)
 

@@ -11,7 +11,7 @@
 #include "../ce_base_types.h"
 #include "../headers/enums_generic.h"
 #include "../headers/colors.h"
-#include "../gamestate/headers/core.h"
+#include "core.h"
 
 STAT_ASSRT(sbyte, 1);
 

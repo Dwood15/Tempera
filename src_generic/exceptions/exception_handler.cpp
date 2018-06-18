@@ -93,22 +93,7 @@ const void SetPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, b
 	DEBUG("PageGuard should be getting set now. Not implemented yet tho.");
 }
 
-const char * getMemoryRegionDescriptor(const uintptr_t addr) {
 
-	printf("searching for address: 0x%X\n", addr);
-
-	if(addr < 0x400000) {
-		return "probably_in_stack";
-	}
-
-	for(auto funcRange : knownfunctionlist) {
-		if(funcRange.contains(addr)){
-			return funcRange.functionName;
-		}
-	}
-
-	return "un_mapped_region";
-}
 
 
 LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo) {

@@ -8,7 +8,8 @@
 #include "gamestate/player_types.h"
 #include "lua/script_manager.h"
 #include "headers/hce_addresses.h"
-#include "gamestate/headers/forge.h"
+#include "gamestate/forge.h"
+#include "dinput/dinput.h"
 
 namespace spcore {
 	static unsigned int           game_state_cpu_allocation  = *game_state_globals_ptr;
@@ -112,8 +113,8 @@ namespace spcore {
 	}
 
 	void __cdecl hud_update_nav_points() {
-		signed int player_idx = 0;
-		auto player_datum = players_globals->local_player_players[player_idx].index;
+		signed int player_idx   = 0;
+		auto       player_datum = players_globals->local_player_players[player_idx].index;
 
 		if (player_datum < 0) {
 			return;
@@ -126,16 +127,15 @@ namespace spcore {
 			//	void __usercall hud_update_nav_point_local_player(__int16 player_idx@<di>)
 			// 0x4B3550
 			//hud_update_unit_local_player(player_datum);
-			if (player_idx >= 4 ) {
+			if (player_idx >= 4) {
 				player_datum = -1;
 			}
-		} while ( player_datum > 0 );
+		} while (player_datum > 0);
 	}
 
-
 	void __cdecl hud_update_unit() {
-		signed int player_idx = 0;
-		auto player_datum = players_globals->local_player_players[player_idx].index;
+		signed int player_idx   = 0;
+		auto       player_datum = players_globals->local_player_players[player_idx].index;
 
 		if (player_datum < 0) {
 			return;
@@ -147,38 +147,42 @@ namespace spcore {
 			//According to ida:
 			//	void __usercall hud_update_unit_local_player(__int16 player_idx@<di>)
 			//hud_update_unit_local_player(player_datum);
-			if (player_idx >= 4 ) {
+			if (player_idx >= 4) {
 				player_datum = -1;
 			}
-		} while ( player_datum > 0 );
+		} while (player_datum > 0);
 	}
 
-
 	namespace memory {
-		static int __cdecl scenario_load() {
-			static datum_index ddi = 0;
+		//Compile-time function & macro, yip yip.
+#define FUNC_GET(funcName)       getFunctionBegin<true>(#funcName)
+		//Calls every registered lua function by that event.
+#define CALL_LUA_BY_EVENT(event) LuaState->call_lua_event_by_type<LuaCallbackId::##event>()
 
-			__asm mov ddi, eax;
-
-			LuaState->call_lua_event_by_type(LuaCallbackId::before_scenario_tags_load);
-
-			__asm mov eax, ddi
-
-			int ret = calls::DoCall<0x541A00, Convention::m_cdecl, int>();
-			LuaState->call_lua_event_by_type(LuaCallbackId::after_scenario_tags_load);
-			return ret;
+		/**
+		 * Called variably based on fps
+		 * @param current_frame_tick - ticks remaining before rendering the next frame
+		 */
+		static void game_tick(int current_frame_tick) {
+			CALL_LUA_BY_EVENT(before_game_tick);
+			calls::DoCall<FUNC_GET(game_tick), Convention::m_cdecl, void, int>(current_frame_tick);
+			CALL_LUA_BY_EVENT(after_game_tick);
 		}
 
-		static void __cdecl game_tick(int current_frame_tick) {
-			LuaState->call_lua_event_by_type(LuaCallbackId::before_game_tick);
-			calls::DoCall<0x45C0F0, Convention::m_cdecl, void, int>(current_frame_tick);
-			LuaState->call_lua_event_by_type(LuaCallbackId::after_game_tick);
+		/**
+		 * Called right before game loop starts, memory has already been initialized
+		 */
+		static void parse_for_connect_invert() {
+			calls::DoCall<FUNC_GET(parse_for_connect_invert), Convention::m_cdecl>();
+			CALL_LUA_BY_EVENT(post_initialize);
 		}
 
-		static void __cdecl parse_for_connect_invert() {
-			calls::DoCall<0x4CD080, Convention::m_cdecl>();
-			LuaState->call_lua_event_by_type(LuaCallbackId::on_load);
+		static void post_dll_load() {
+			CALL_LUA_BY_EVENT(post_dll_init);
 		}
+		//don't pollute the global macro space.
+#undef CALL_LUA_BY_EVENT
+#undef FUNC_GET
 
 		void __inline interface_initialize_patches() {
 			constexpr uintptr_t size_of_fp_weapons = 0x1EA0 * MAX_PLAYER_COUNT_LOCAL;
@@ -189,7 +193,7 @@ namespace spcore {
 
 			//uintptr_t hud_scripted_globals_sizeofs[]          = { 0x4AC7A7, 0x4AC7AF };
 			uintptr_t hud_messaging_globals_sizeofs[] = {0x4AC7DD, 0x4AC7EA};
-			uintptr_t hud_messaging_state_size             = 0x4AC936;
+			uintptr_t hud_messaging_state_size        = 0x4AC936;
 			//static_assert(sizeof(s_hud_messaging_state)  == 0x122, "stat_assrt_fail: s hud msging state");
 			//memset , or rather, rep stosd assumes full integer (0x4) size in this case.
 			memory::patchValue<uintptr_t>(hud_messaging_state_size, sizeof(s_hud_messaging_state) / 4);
@@ -207,6 +211,7 @@ namespace spcore {
 			//			adjustNPatch32(weapon_hud_globals_sizeofs, 0x7C);
 			//			adjustNPatch32(hud_interface_related_globals_sizeofs, 0x30);
 			memory::adjustNPatch32(motion_sensor_sizeofs, sizeof(s_motion_sensor));
+
 		}
 
 		void get_mem_and_patch() {
@@ -225,7 +230,7 @@ namespace spcore {
 			//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
 			constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
 			// //Hooks
-			addr = calc_addr_offset(player_control_init_new_map_hook, (int)&spcore::player_control::player_control_initialize_for_new_map);
+			addr = calc_addr_offset(player_control_init_new_map_hook, (int) &spcore::player_control::player_control_initialize_for_new_map);
 			patchValue<uintptr_t>(player_control_init_new_map_hook, addr); //Gotta be able to loop over all the players + input devices, no?.
 
 			// constexpr uintptr_t scenario_load_hookA = 0x4CC9AD; //inside main_new_map
@@ -238,11 +243,11 @@ namespace spcore {
 
 			//This hook is called right before the game enters the actual main loop
 			constexpr uintptr_t parse_for_connect_invert_hook = 0x4CAAC4;
-			addr = calc_addr_offset(parse_for_connect_invert_hook, (int)&parse_for_connect_invert);
+			addr = calc_addr_offset(parse_for_connect_invert_hook, (int) &parse_for_connect_invert);
 			patchValue<uintptr_t>(parse_for_connect_invert_hook, addr); //Gotta be able to loop over all the players + input devices, no?.
 
 			constexpr uintptr_t game_tick_hook = 0x473815;
-			addr = calc_addr_offset(game_tick_hook, (int)&game_tick);
+			addr = calc_addr_offset(game_tick_hook, (int) &game_tick);
 			patchValue<uintptr_t>(game_tick_hook, addr);
 
 			//Nothing wrong's with the hook, just the function.

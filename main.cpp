@@ -96,11 +96,13 @@ static inline void *init(HMODULE *reason) {
 	LuaState = new LuaScriptManager("init.lua");
 	LuaState->beginLua();
 
-	//printf("init_for_new_map_overwrite addr: 0x%x\n", 0xBEEF);//init_for_new_map_overwrite);
-
 	DWORD old;
 	VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);
 	spcore::memory::get_mem_and_patch();
+	//We need to protect memory, I suppose.
+	VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READ, &old);
+
+	spcore::memory::post_dll_load();
 
 	return orig_DirectInput8Create;
 }
@@ -118,8 +120,12 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 			return false;
 		}
 		DisableThreadLibraryCalls(hinstDLL);
-		CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
-		Print(true, "Created Forge Thread!\n");
+
+		//Don't setup and run a forge thread for an unsupported build target.
+		if constexpr (ENGINE_TARGET == engines::major::CE && GAME_MINOR == engines::minor::halo_1_10) {
+			CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
+			Print(true, "Created Forge Thread!\n");
+		}
 
 		//auto sqlCon = ConnectToSqlDB("localhost" );
 		// if (sqlCon != NULL) {

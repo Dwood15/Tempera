@@ -12,6 +12,8 @@
 #define _X86_
 #endif
 
+#define DIRECTINPUT_VERSION 0x0800
+
 #include <algorithm>
 #include <array>
 #include <assert.h>
@@ -21,6 +23,8 @@
 #include <cstdint>
 
 #include <d3dx9math.h>
+
+#include <fstream>
 #include <functional>
 
 #include <handleapi.h>
@@ -32,6 +36,8 @@
 
 #include <sal.h>
 #include <stdexcept>
+#include <stdlib.h>
+
 #include <string>
 
 #include <stdio.h>
@@ -39,10 +45,15 @@
 #include <type_traits>
 #include <vector>
 
+#include <Windows.h>
 #include <winnt.h>
 //Our defined includes below:
 typedef unsigned int uintptr_t;
-#define ADDR static constexpr uintptr_t
 
-#include "target_version.h"
+// GameSpy includes & definitions
+/* TODO: GameSpy SDK bug fix. see official OS repository */
+
+// Always use ASCII
+#undef GSI_UNICODE
+
 #include "macros_generic.h"

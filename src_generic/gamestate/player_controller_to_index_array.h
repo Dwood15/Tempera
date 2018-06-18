@@ -1,7 +1,7 @@
 #pragma once
 
 #include <precompile.h>
-#include "../player_types.h"
+#include "player_types.h"
 namespace gamepads {
 	constexpr __int16 *og_player_to_controller_array = (__int16 *) 0x6AFE26;
 

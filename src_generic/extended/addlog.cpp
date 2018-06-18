@@ -87,6 +87,8 @@ void PrintHelp() {
 }
 
 #include <filesystem>
+#include <versions.h>
+
 void InitAddLog(HMODULE hModule) {
 	GetModuleFileNameA(hModule, dlldir, 512);
 
@@ -99,9 +101,9 @@ void InitAddLog(HMODULE hModule) {
 	//why in hell is it still experimental???
 	auto myPath = std::experimental::filesystem::current_path();
 
-	myPath = myPath /=   "tempera_dbg_log.log";
+	myPath = myPath /=   K_DEBUG_FILENAME;
 
-	printf("Initializing log. Path: %s", myPath.c_str());
+	printf("Initializing log. Path: %ls", myPath.c_str());
 
 	ofile.open(myPath, std::ios::app);
 	std::time_t time = std::time(nullptr);

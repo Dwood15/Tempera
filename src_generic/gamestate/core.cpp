@@ -10,7 +10,7 @@
    along with tempera.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../gamestate/headers/core.h"
+#include "core.h"
 #include "halo_types.h"
 #include "math.h"
 

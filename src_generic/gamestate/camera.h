@@ -23,10 +23,10 @@
 #pragma once
 
 #include <Windows.h>
-#include <engine_functions.h>
+#include "../../runtime/address_manager.h"
 #include "math.h"
-#include "../../extended/addlog.h"
-#include "../../headers/colors.h"
+#include "../extended/addlog.h"
+#include "../headers/colors.h"
 
 //0x006AC4DC;
 

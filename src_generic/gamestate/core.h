@@ -13,21 +13,17 @@ class Core;
 
 #pragma once
 
-#include <Windows.h>
-#include <fstream>
-#include <string>
-#include <stdio.h>
-#include <stdlib.h>
-#include "../../../include/detours/detours.h"
-#include "../halo_types.h"
+#include <precompile.h>
+#include "detours.h"
+#include "halo_types.h"
 #include "objectcontroller.h"
 #include "camera.h"
-#include "../players.h"
-#include "../../tags/map.h"
-#include "../../tags/tags.h"
+#include "players.h"
+#include "../tags/map.h"
+#include "../tags/tags.h"
 #include "math.h"
-#include "../../Direct3D/d3d9hook.h"
-#include "../objects.h"
+#include "../Direct3D/d3d9hook.h"
+#include "objects.h"
 //using namespace std;
 ////////////////////////////////////////
 // Defines

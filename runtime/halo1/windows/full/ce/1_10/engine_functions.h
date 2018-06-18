@@ -3,6 +3,9 @@
 #pragma once
 
 #include <precompile.h>
+
+// static_assert(false, "dont compile engine_functions.h");
+#define ADDR constexpr uintptr_t
 //TODO: Port this form OS so it's not complete ass to look at.
 // TODO: Transition to switch-case constexpr structure, a la a better memory_map.
 ADDR K_GATHER_EXCEPTION_DATA                        = 0x6BDE8C;
@@ -159,7 +162,6 @@ ADDR K_CACHE_FILES_DISPOSE = 0x56C650;
 /************** MAYBE DUPLICATE ADDRESSES ************/
 #pragma once
 
-#include "target_version.h"
 #include <precompile.h>
 
 //I recognize this isn't an ideal constexpr setup. Will look into different solutions.
