@@ -24,9 +24,13 @@ constexpr bool equal(const char *lhs, const char *rhs) {
  * @return uintptr of the entry point of function.
  */
 static uintptr_t getFunctionBegin(const char *needle) {
-	for (auto item : getKnownFunctionList()) {
-		if (equal(needle, item.funcName)) {
-			return item.begin;
+	using dfr = defined_functionrange;
+
+	const dfr* funcList = supersecret_hax::function_map;
+
+	for (dfr * item = const_cast<dfr *>(funcList); item++;  item) {
+		if (equal(needle, item->funcName)) {
+			return item->begin;
 		}
 	}
 
@@ -41,12 +45,16 @@ static uintptr_t getFunctionBegin(const char *needle) {
  * @return uintptr of the entry point of function.
  */
 template <bool useCompTime>
-constexpr uintptr_t getFunctionBegin(const char *needle) {
+constexpr uintptr_t cgetFunctionBegin(const char *needle) {
 	if constexpr (useCompTime) {}
+	using dfr = defined_functionrange;
 
-	for (auto item : getKnownFunctionList()) {
-		if (equal(needle, item.funcName)) {
-			return item.begin;
+
+	const dfr* funcList = supersecret_hax::function_map;
+
+	for (dfr * item = const_cast<dfr *>(funcList); item++;  item) {
+		if (equal(needle, item->funcName)) {
+			return item->begin;
 		}
 	}
 
@@ -71,10 +79,12 @@ static const char *getMemoryRegionDescriptor(const uintptr_t addr) {
 	if (addr < 0x400000) {
 		return "unmapped_region";
 	}
+	using dfr = defined_functionrange;
 
-	for (auto item : getKnownFunctionList()) {
-		if (item.contains(addr)) {
-			return item.funcName;
+	const dfr* funcList = supersecret_hax::function_map;
+	for (dfr * item = const_cast<dfr*>(funcList); item++;  item) {
+		if (item->contains(addr)) {
+			return item->funcName;
 		}
 	}
 
@@ -102,7 +112,7 @@ constexpr const char *getMemoryRegionDescriptor() {
 		return "unmapped_region";
 	}
 
-	for (auto item : getKnownFunctionList()) {
+	for (auto item : supersecret_hax::function_map) {
 		if (item.contains(addr)) {
 			return item.funcName;
 		}

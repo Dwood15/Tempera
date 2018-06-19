@@ -4,8 +4,8 @@
 #include <versions.h>
 
 //I recognize this isn't an ideal constexpr setup.
-constexpr engines::major ENGINE_TARGET = engines::major::CE;
-constexpr engines::with_minor GAME_MINOR = engines::with_minor::halo_1_10;
+const engines::major ENGINE_TARGET = engines::major::CE;
+const engines::with_minor GAME_MINOR = engines::with_minor::halo_1_10;
 
 
 //HaloForge

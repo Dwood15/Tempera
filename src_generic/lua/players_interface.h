@@ -3,7 +3,7 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-int l_GetMaxLocalPlayers(lua_State* L) {
+static int l_GetMaxLocalPlayers(lua_State* L) {
 	lua_pushinteger(L, MAX_PLAYER_COUNT_LOCAL);
 	return 1;
 }

@@ -15,9 +15,6 @@ typedef unsigned int              uintptr_t;
 typedef char                      tag_string[32];
 typedef const char                *cstring;
 
-
-
-
 /// <summary>	Handle to data allocated by the engine's data-array construct. </summary>
 struct datum_index {
 	typedef short t_index;

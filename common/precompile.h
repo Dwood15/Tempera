@@ -57,3 +57,5 @@ typedef unsigned int uintptr_t;
 #undef GSI_UNICODE
 
 #include "macros_generic.h"
+#include <dbghelp.h>
+#include <mysql.h>

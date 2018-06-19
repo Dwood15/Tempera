@@ -87,8 +87,7 @@ endif ()
 set(GAME_DIR ${PROJECT_SOURCE_DIR}/${GAME})
 set(LEVELS_DIR ${PROJECT_SOURCE_DIR}/${LEVELS})
 set(RUNTIME_DIR ${PROJECT_SOURCE_DIR}/runtime)
-
-include_directories(AFTER ${RUNTIME_DIR} PARENT_SCOPE)
+set(VERSIONS_DIR ${PROJECT_SOURCE_DIR}/runtime/versions)
 
 set(R_ENGINELAYOUT_INL
 #	${GAME_DIR}/enginelayout/Game.inl
@@ -104,12 +103,11 @@ set(R_ENGINELAYOUT_INL
 
 set(RUNTIME_H
 	${RUNTIME_DIR}/address_manager.h
+	${VERSIONS_DIR}/versions.h
 	${GAME_DIR}/memory_locations.h
-	${GAME_DIR}/memory_map.cpp
 	${GAME_DIR}/current_engine.h
 	${LEVELS_DIR}/levels.h
 	${R_ENGINELAYOUT_INL}
-	${RUNTIME_DIR}/versions/versions.h
 	PARENT_SCOPE)
 
-set(GAME_LIB_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/versions ${GAME_DIR} ${LEVELS_DIR} CACHE INTERNAL "")
+set(GAME_LIB_DIRS  ${VERSIONS_DIR} ${RUNTIME_DIR} ${GAME_DIR} ${LEVELS_DIR} CACHE INTERNAL "")

@@ -1,10 +1,13 @@
 #pragma once
+#include <precompile.h>
 #include <versions.h>
 #include <winnt.h>
 
-//I recognize this isn't an ideal constexpr setup.
-constexpr engines::major ENGINE_TARGET = engines::major::PC;
-constexpr engines::with_minor GAME_MINOR = engines::minor::halo_1_10;
+static const char* DEBUG_FILENAME = "tempera.sapien.debug.log";
 
+namespace current_engine {
+	const engines::major      ENGINE_TARGET = engines::major::HEK;
+	const engines::with_minor GAME_MINOR    = engines::minor::sapien;
+};
 //TODO: Something like "GetGameRegistryPath"
-constexpr const char * GAME_REGISTRY_PATH =  R"(Software\Microsoft\Microsoft Games\Halo)";
+const const char * GAME_REGISTRY_PATH =   R"(Software\Microsoft\Microsoft Games\Halo CE)";

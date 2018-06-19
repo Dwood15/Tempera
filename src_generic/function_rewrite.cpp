@@ -155,7 +155,7 @@ namespace spcore {
 
 	namespace memory {
 		//Compile-time function & macro, yip yip.
-#define FUNC_GET(funcName)       getFunctionBegin<true>(#funcName)
+#define FUNC_GET(funcName)       cgetFunctionBegin<true>(#funcName)
 		//Calls every registered lua function by that event.
 #define CALL_LUA_BY_EVENT(event) LuaState->call_lua_event_by_type<LuaCallbackId::##event>()
 
@@ -165,7 +165,8 @@ namespace spcore {
 		 */
 		static void game_tick(int current_frame_tick) {
 			CALL_LUA_BY_EVENT(before_game_tick);
-			calls::DoCall<FUNC_GET(game_tick), Convention::m_cdecl, void, int>(current_frame_tick);
+			auto constexpr got = FUNC_GET(game_tick);
+			calls::DoCall<got, Convention::m_cdecl, void, int>(current_frame_tick);
 			CALL_LUA_BY_EVENT(after_game_tick);
 		}
 
@@ -173,11 +174,11 @@ namespace spcore {
 		 * Called right before game loop starts, memory has already been initialized
 		 */
 		static void parse_for_connect_invert() {
-			calls::DoCall<FUNC_GET(parse_for_connect_invert), Convention::m_cdecl>();
+			// calls::DoCall<cgetFunctionBegin<true>("parse_for_connect_invert"), Convention::m_cdecl>();
 			CALL_LUA_BY_EVENT(post_initialize);
 		}
 
-		static void post_dll_load() {
+		void post_dll_load() {
 			CALL_LUA_BY_EVENT(post_dll_init);
 		}
 		//don't pollute the global macro space.

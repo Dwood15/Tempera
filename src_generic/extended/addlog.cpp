@@ -101,7 +101,7 @@ void InitAddLog(HMODULE hModule) {
 	//why in hell is it still experimental???
 	auto myPath = std::experimental::filesystem::current_path();
 
-	myPath = myPath /=   K_DEBUG_FILENAME;
+	myPath = myPath /=   DEBUG_FILENAME;
 
 	printf("Initializing log. Path: %ls", myPath.c_str());
 

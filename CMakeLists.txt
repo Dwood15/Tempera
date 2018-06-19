@@ -90,7 +90,7 @@ elseif (MSVC)
 	#vc++ 2017 toolset. Available from microsoft here: http://landinghub.visualstudio.com/visual-cpp-build-tools
 	if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.17134.0")
 		#message(WARNING "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION is empty! Could not find applicable windows 10 sdk.")
-		set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION 10.0.16299.0)
+		set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION 10.0.17134.0)
 		#TODO: CHECK FOR AVAILABLE SDK VERSIONS IF NONE SET
 	endif ()
 
@@ -117,19 +117,11 @@ elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
 	set(OUTPUT_DIR ./bin/${COMPILER_REL_FLDR}-Release)
 endif ()
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_DIR}/ar")
-
 add_subdirectory(src_generic)
 
-#	include/cap_h/
 set(GLOBAL_INCLUDE_H
 	include/detours/detours.h
 	include/lua_headers/luawrapper.h
-#	include/cap_h/arm.h
-#	include/cap_h/arm64.h
-#	include/cap_h/sparc.h
-#	include/cap_h/ppc.h
-#	include/cap_h/mips.h
 	include/cap_h/x86.h
 	include/cap_h/capstone.h)
 

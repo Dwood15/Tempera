@@ -37,15 +37,16 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 
+
+#include <precompile.h>
 #include "src_generic/ceinternal.h"
 #include "src_generic/lua/script_manager.h"
-#include <vector>
-#include <Windows.h>
-#include <dbghelp.h>
-#include <mysql.h>
+
+//For some unknown reason, dll_load is not getting recognized on the main.cpp compile step.
+// extern void spcore::memory::post_dll_load();
+
 
 static bool loaded = false;
-
 static void *orig_DirectInput8Create;
 
 //Used in order to proxy direct input.
@@ -69,6 +70,7 @@ static inline MYSQL *ConnectToSqlDB(const char *host, const char *usr, const cha
 
 	return con;
 }
+
 
 
 static inline void *init(HMODULE *reason) {
@@ -122,7 +124,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 		DisableThreadLibraryCalls(hinstDLL);
 
 		//Don't setup and run a forge thread for an unsupported build target.
-		if constexpr (ENGINE_TARGET == engines::major::CE && GAME_MINOR == engines::minor::halo_1_10) {
+		if constexpr (current_engine::ENGINE_TARGET == engines::major::CE && current_engine::GAME_MINOR == engines::minor::halo_1_10) {
 			CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
 			Print(true, "Created Forge Thread!\n");
 		}
