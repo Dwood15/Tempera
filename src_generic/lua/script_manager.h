@@ -105,7 +105,7 @@ public:
 		L = luaL_newstate();
 		luaL_openlibs(L);
 		if (luaL_loadfile(L, filename.c_str())) {
-			Print(true, "Error: script not loaded (%s)\n", filename.c_str());
+			Print(true, "Error: script failed to load: (%s)\n\tDoes it exist?\n", filename.c_str());
 			L = 0;
 			return;
 		}

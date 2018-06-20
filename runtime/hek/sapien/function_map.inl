@@ -1,15 +1,8 @@
 FUNCTIONMAP = {
 	{"public: virtual __thiscall block_folder<struct recorded_animation_definition, 0>::~block_folder<struct recorded_animation_definition, 0>(void)",                                                                                                                                                       0x401073, 0x401077},
 
-	{"j_nullsub_204",                                                                                                                                                                                                                                                                                        0x40108C, 0x401095},
-
 	{"j_block_folder::ai_script_reference_definition::ctor",                                                                                                                                                                                                                                                 0x4010A0, 0x4010A4},
-
 	{"public: virtual __thiscall block_folder<struct ai_command_definition, 1>::~block_folder<struct ai_command_definition, 1>(void)",                                                                                                                                                                       0x4010C3, 0x4010C7},
-
-	{"j_nullsub_216",                                                                                                                                                                                                                                                                                        0x4010FA, 0x4010FE},
-
-	{"j_unknown_libname_504",                                                                                                                                                                                                                                                                                0x401118, 0x40111C},
 	{"j_hierarchy_items_439260",                                                                                                                                                                                                                                                                             0x40117C, 0x401180},
 
 	{"public: virtual void * __thiscall ATL::CSimpleDialog<100, 0>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                             0x401186, 0x40118A},
@@ -19,7 +12,7 @@ FUNCTIONMAP = {
 
 	{"j_hierarchy_item_impl__block_folder__scenario_cutscene_flag::ctor",                                                                                                                                                                                                                                    0x40125D, 0x401261},
 	{"j_unit_folder_ctor",                                                                                                                                                                                                                                                                                   0x4012C6, 0x4012CA},
-	{"j_nullsub_249",                                                                                                                                                                                                                                                                                        0x401348, 0x401351},
+
 	{"public: virtual __thiscall structure_palette_folder<struct structure_weather_palette_entry>::~structure_palette_folder<struct structure_weather_palette_entry>(void)",                                                                                                                                 0x401352, 0x401356},
 
 	{"public: virtual __thiscall block_expandable_folder<struct squad_definition, class squad_tree_item>::~block_expandable_folder<struct squad_definition, class squad_tree_item>(void)",                                                                                                                   0x4013D4, 0x4013D8},
@@ -29,30 +22,16 @@ FUNCTIONMAP = {
 	{"long __cdecl ATL::AtlHresultFromLastError(void)",                                                                                                                                                                                                                                                      0x40141A, 0x401428},
 
 	{"public: virtual __thiscall scenario_object_folder<struct scenario_vehicle_datum>::~scenario_object_folder<struct scenario_vehicle_datum>(void)",                                                                                                                                                       0x40146F, 0x401473},
-
 	{"j__valid_real_point3d",                                                                                                                                                                                                                                                                                0x40151E, 0x401522},
-
 	{"j__main",                                                                                                                                                                                                                                                                                              0x401555, 0x40155E},
-
 	{"j__extra_initialize_for_new_map",                                                                                                                                                                                                                                                                      0x401596, 0x40159A},
 
 	{"public: virtual void * __thiscall ATL::CSimpleDialog<20013, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                           0x4015A0, 0x4015A4},
-
-	{"j_nullsub_208",                                                                                                                                                                                                                                                                                        0x4015FA, 0x40160D},
-
 	{"public: virtual void * __thiscall render_block_folder<struct ai_command_point_definition, 0, struct ai_command_list_definition, class ai_command_list_item, 48, 1>::`scalar deleting destructor'(unsigned int)",                                                                                       0x401703, 0x401707},
 
 	{"public: virtual __thiscall ai_command_list_item::~ai_command_list_item(void)",                                                                                                                                                                                                                         0x401735, 0x401739},
-	{"j_nullsub_231",                                                                                                                                                                                                                                                                                        0x40173A, 0x40173E},
-
-	{"j_nullsub_223",                                                                                                                                                                                                                                                                                        0x401771, 0x401775},
-
 	{"j__editor_dispose_from_old_map",                                                                                                                                                                                                                                                                       0x40178F, 0x40179D},
-
 	{"public: virtual void * __thiscall COptionsDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                            0x4017AD, 0x4017D9},
-
-	{"j_nullsub_232",                                                                                                                                                                                                                                                                                        0x401852, 0x401856},
-
 	{"j_cinema_tool_handler::recorded_animation_write_unit_control",                                                                                                                                                                                                                                         0x401910, 0x401919},
 
 	{"public: virtual void * __thiscall ATL::CRegObject::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                        0x401942, 0x401946},
@@ -65,16 +44,11 @@ FUNCTIONMAP = {
 	{"public: virtual __thiscall ATL::CSimpleDialog<100, 0>::~CSimpleDialog<100, 0>(void)",                                                                                                                                                                                                                  0x401A14, 0x401A18},
 
 	{"public: static struct tag_group const * __cdecl tags_interface::find_tag_group(char const *)",                                                                                                                                                                                                         0x401A64, 0x401A6D},
-
 	{"j__write_to_error_file",                                                                                                                                                                                                                                                                               0x401B13, 0x401B17},
 	{"public: virtual void * __thiscall block_folder<struct structure_weather_palette_entry, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                0x401B18, 0x401B21},
-
 	{"public: virtual __thiscall ATL::CRegObject::~CRegObject(void)",                                                                                                                                                                                                                                        0x401B27, 0x401B2B},
-
 	{"public: virtual void * __thiscall CCinemaDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                             0x401B31, 0x401B35},
-
 	{"public: virtual __thiscall CHierarchyDialogBar::~CHierarchyDialogBar(void)",                                                                                                                                                                                                                           0x401B40, 0x401B44},
-
 	{"public: virtual void * __thiscall BSPDialog::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                              0x401B5E, 0x401B67},
 	{"public: virtual void * __thiscall block_folder<struct scenario_player, 0>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                0x401B68, 0x401B6C},
 
@@ -100,19 +74,13 @@ FUNCTIONMAP = {
 	{"public: virtual void * __thiscall std::length_error::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x401F73, 0x401F7C},
 	{"j_conversation_tree_item::ctor",                                                                                                                                                                                                                                                                       0x401F7D, 0x401F81},
 
-	{"j_nullsub_262",                                                                                                                                                                                                                                                                                        0x401FB4, 0x401FBD},
-
-	{"protected: char * __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::_Gndec(void)",                                                                                                                                                                                                 0x401FD7, 0x401FDB},
-
-	{"j_nullsub_211",                                                                                                                                                                                                                                                                                        0x401FE1, 0x401FE5},
-
 	{"j__sound_manager_sound_idle",                                                                                                                                                                                                                                                                          0x402031, 0x402049},
 
 	{"public: virtual __thiscall CChildFrame::~CChildFrame(void)",                                                                                                                                                                                                                                           0x4020BD, 0x4020C1},
 
 	{"public: __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::basic_streambuf<char, struct std::char_traits<char>>(void)",                                                                                                                                                             0x4020D6, 0x4020DF},
 
-	{"j_nullsub_221",                                                                                                                                                                                                                                                                                        0x4020F4, 0x4020F8},
+
 	{"public: virtual void * __thiscall block_folder<struct ai_command_point_definition, 0>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                    0x402158, 0x402170},
 	{"j_organizer_item::ctor",                                                                                                                                                                                                                                                                               0x402171, 0x402189},
 	{"j_mission_folder::ctor",                                                                                                                                                                                                                                                                               0x4022B6, 0x4022CE},
@@ -120,14 +88,14 @@ FUNCTIONMAP = {
 	{"public: virtual void * __thiscall scenario_block_folder<struct scenario_netgame_flag>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                    0x4022F7, 0x4022FB},
 	{"public: virtual __thiscall encounter_block_folder<struct firing_position_definition, 0, 152, 1>::~encounter_block_folder<struct firing_position_definition, 0, 152, 1>(void)",                                                                                                                         0x402324, 0x402328},
 	{"public: virtual void * __thiscall block_folder<struct scenario_trigger_volume, 0>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                        0x402342, 0x402346},
-	{"j_nullsub_233",                                                                                                                                                                                                                                                                                        0x40235B, 0x402369},
+
 	{"public: __thiscall COptionsDlg::COptionsDlg(void)",                                                                                                                                                                                                                                                    0x40237E, 0x402382},
 	{"j_factory::field_block_index_dialog_handler::create",                                                                                                                                                                                                                                                  0x4023C4, 0x4023CD},
 	{"public: virtual __thiscall block_folder<struct scenario_player, 0>::~block_folder<struct scenario_player, 0>(void)",                                                                                                                                                                                   0x4023D8, 0x4023DC},
-	{"j_nullsub_148",                                                                                                                                                                                                                                                                                        0x402441, 0x40244F},
+
 	{"j_change_sapien_save_dlg_text",                                                                                                                                                                                                                                                                        0x4024A0, 0x4024A4},
 	{"public: virtual void * __thiscall block_folder<struct structure_sound_environment_palette_entry, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                      0x4024A5, 0x4024AE},
-	{"j_nullsub_241",                                                                                                                                                                                                                                                                                        0x4024B9, 0x4024C2},
+
 	{"j__valid_real_normal3d",                                                                                                                                                                                                                                                                               0x40250E, 0x402512},
 
 	{"j_hierarchy_items_434FF0",                                                                                                                                                                                                                                                                             0x402518, 0x40251C},
@@ -143,7 +111,7 @@ FUNCTIONMAP = {
 
 	{"public: __thiscall block_expandable_folder<struct ai_conversation, class conversation_tree_item>::block_expandable_folder<struct ai_conversation, class conversation_tree_item>(void)",                                                                                                                0x402644, 0x402648},
 
-	{"j_unknown_libname_144",                                                                                                                                                                                                                                                                                0x40268A, 0x402693},
+
 
 	{"j_COptionsMainFrame_ctor",                                                                                                                                                                                                                                                                             0x4026A8, 0x4026AC},
 	{"public: virtual void * __thiscall WTL::CFileDialog::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                       0x4026AD, 0x4026C0},
@@ -152,7 +120,7 @@ FUNCTIONMAP = {
 
 	{"j_try_save_sapien_config",                                                                                                                                                                                                                                                                             0x40277A, 0x40277E},
 
-	{"j_nullsub_246",                                                                                                                                                                                                                                                                                        0x4027D9, 0x4027DD},
+
 
 	{"public: virtual void * __thiscall conversation_tree_item::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                 0x4027FC, 0x402800},
 
@@ -189,170 +157,76 @@ FUNCTIONMAP = {
 	{"public: virtual void * __thiscall block_expandable_folder<struct encounter_definition, class encounter_tree_item>::`scalar deleting destructor'(unsigned int)",                                                                                                                                        0x402CED, 0x402CF1},
 
 	{"j_block_folder::scenario_cutscene_flag::ctor",                                                                                                                                                                                                                                                         0x402D1F, 0x402D37},
-
-	{"j_nullsub_247",                                                                                                                                                                                                                                                                                        0x402D51, 0x402D5F},
 	{"public: virtual void * __thiscall scenario_block_folder<struct scenario_netgame_equipment>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                               0x402D60, 0x402D69},
 
 	{"public: virtual void * __thiscall CColorButton::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                           0x402DA6, 0x402DBE},
-
-	{"j_nullsub_187",                                                                                                                                                                                                                                                                                        0x402E19, 0x402E1D},
-
 	{"public: virtual __thiscall scenario_block_with_palette_folder<struct scenario_decal>::~scenario_block_with_palette_folder<struct scenario_decal>(void)",                                                                                                                                               0x402E2D, 0x402E3B},
-
-	{"j_nullsub_209",                                                                                                                                                                                                                                                                                        0x402EBE, 0x402EC2},
-
-	{"j_nullsub_229",                                                                                                                                                                                                                                                                                        0x402EC8, 0x402ED1},
-
 	{"j__shell_platform_dispose",                                                                                                                                                                                                                                                                            0x402EEB, 0x402EEF},
-
 	{"public: virtual __thiscall scenario_object_folder<struct scenario_control_datum>::~scenario_object_folder<struct scenario_control_datum>(void)",                                                                                                                                                       0x402F04, 0x402F08},
 	{"public: virtual __thiscall std::basic_ios<char, struct std::char_traits<char>>::~basic_ios<char, struct std::char_traits<char>>(void)",                                                                                                                                                                0x402F09, 0x402F12},
-
-	{"j_nullsub_205",                                                                                                                                                                                                                                                                                        0x402F36, 0x402F3A},
 	{"public: virtual void * __thiscall COutputMainFrame::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                       0x402F3B, 0x402F4E},
-
-	{"j_nullsub_225",                                                                                                                                                                                                                                                                                        0x402FBD, 0x402FDF},
-
 	{"public: virtual __thiscall COptionsDialog::~COptionsDialog(void)",                                                                                                                                                                                                                                     0x4030CB, 0x4030CF},
-
 	{"j__game_in_editor",                                                                                                                                                                                                                                                                                    0x403125, 0x403142},
-
 	{"public: virtual void * __thiscall scenario_object_folder<struct scenario_light_fixture_datum>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                            0x40321A, 0x40322D},
 
-	{"protected: virtual char __thiscall std::ctype<char>::do_widen(char)const",                                                                                                                                                                                                                             0x4032E2, 0x4032EB},
-
 	{"j_editor_render",                                                                                                                                                                                                                                                                                      0x40330F, 0x403318},
-
 	{"public: virtual void * __thiscall firing_position_folder_definition::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                      0x403364, 0x403368},
-
 	{"public: virtual void * __thiscall CHierarchyDialogBar::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                    0x403378, 0x403390},
-	{"j_nullsub_180",                                                                                                                                                                                                                                                                                        0x403391, 0x40339A},
-
 	{"public: virtual void * __thiscall block_folder<struct scenario_device_group, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                          0x4033CD, 0x4033D1},
-
 	{"j_encounter_tree_item::ctor",                                                                                                                                                                                                                                                                          0x4033EB, 0x4033EF},
-
 	{"public: virtual __thiscall block_folder<struct structure_background_sound_palette_entry, 1>::~block_folder<struct structure_background_sound_palette_entry, 1>(void)",                                                                                                                                 0x40341D, 0x403421},
-
 	{"public: __thiscall block_expandable_folder<struct ai_command_list_definition, class ai_command_list_item>::block_expandable_folder<struct ai_command_list_definition, class ai_command_list_item>(void)",                                                                                              0x40344A, 0x403458},
 	{"public: virtual __thiscall COptionsDlg::~COptionsDlg(void)",                                                                                                                                                                                                                                           0x403459, 0x40345D},
-
 	{"public: virtual __thiscall CInstanceListView::~CInstanceListView(void)",                                                                                                                                                                                                                               0x403463, 0x403467},
-
-	{"fn",                                                                                                                                                                                                                                                                                                   0x40348B, 0x40349E},
-
 	{"public: virtual void * __thiscall WTL::CSplitterWindowT<1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                               0x4034CC, 0x4034D0},
-
 	{"j_on_view_property_view",                                                                                                                                                                                                                                                                              0x40353F, 0x403543},
-
 	{"j_on_edit_switch_bsp",                                                                                                                                                                                                                                                                                 0x4035B7, 0x4035BB},
-
 	{"public: __thiscall std::locale::~locale(void)",                                                                                                                                                                                                                                                        0x403625, 0x40362E},
-
 	{"public: virtual __thiscall encounter_block_folder<struct move_position_definition, 0, 128, 3>::~encounter_block_folder<struct move_position_definition, 0, 128, 3>(void)",                                                                                                                             0x40363E, 0x403642},
 	{"j_block_folder::ai_animation_reference_definition::ctor",                                                                                                                                                                                                                                              0x403643, 0x403647},
-
-	{"j_nullsub_236",                                                                                                                                                                                                                                                                                        0x4036E8, 0x4036EC},
-
 	{"public: virtual __thiscall block_folder<struct ai_script_reference_definition, 1>::~block_folder<struct ai_script_reference_definition, 1>(void)",                                                                                                                                                     0x403701, 0x403705},
-
-	{"j_nullsub_259",                                                                                                                                                                                                                                                                                        0x403733, 0x403737},
-
 	{"public: virtual void * __thiscall ATL::CComModule::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                        0x403797, 0x4037AA},
-
 	{"public: virtual void * __thiscall std::codecvt<char, char, int>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                          0x4037B0, 0x4037D2},
-
 	{"public: virtual __thiscall std::length_error::~length_error(void)",                                                                                                                                                                                                                                    0x4037E7, 0x4037F0},
-
 	{"public: virtual __thiscall std::num_put<char, class std::ostreambuf_iterator<char, struct std::char_traits<char>>>::~num_put<char, class std::ostreambuf_iterator<char, struct std::char_traits<char>>>(void)",                                                                                        0x40380F, 0x403827},
-
 	{"public: static void __cdecl tags_interface::dispose(void)",                                                                                                                                                                                                                                            0x403841, 0x403845},
-
 	{"j_recorded_animation_compress_4D8A90",                                                                                                                                                                                                                                                                 0x403896, 0x4038A4},
-
-	{"j_nullsub_248",                                                                                                                                                                                                                                                                                        0x403913, 0x403926},
-
-	{"j_nullsub_214",                                                                                                                                                                                                                                                                                        0x40392C, 0x403930},
-
 	{"j_on_ide_calculate_baggage_32798",                                                                                                                                                                                                                                                                     0x4039A4, 0x4039AD},
-	{"j_nullsub_182",                                                                                                                                                                                                                                                                                        0x4039AE, 0x4039B2},
-
-	{"j_nullsub_238",                                                                                                                                                                                                                                                                                        0x4039DB, 0x4039E4},
-
 	{"public: virtual void * __thiscall CTypeListDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                           0x403A6C, 0x403A75},
 	{"public: virtual void * __thiscall block_expandable_folder<struct ai_command_list_definition, class ai_command_list_item>::`scalar deleting destructor'(unsigned int)",                                                                                                                                 0x403A76, 0x403A7A},
-
 	{"j_create_detail_object_tool",                                                                                                                                                                                                                                                                          0x403AB2, 0x403AD4},
-
 	{"public: virtual __thiscall COptionsMainFrame::~COptionsMainFrame(void)",                                                                                                                                                                                                                               0x403ADA, 0x403AF2},
 	{"public: unsigned char __thiscall tag_information::reset_address(void *)",                                                                                                                                                                                                                              0x403AF3, 0x403AF7},
-	{"j_nullsub_202",                                                                                                                                                                                                                                                                                        0x403AF8, 0x403AFC},
 	{"j_object_name_index_get",                                                                                                                                                                                                                                                                              0x403AFD, 0x403B0B},
-
 	{"public: virtual __thiscall CModelDlg::~CModelDlg(void)",                                                                                                                                                                                                                                               0x403B98, 0x403B9C},
-
 	{"public: virtual void * __thiscall block_folder<struct ai_conversation_line, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                           0x403BBB, 0x403BBF},
-	{"j_nullsub_263",                                                                                                                                                                                                                                                                                        0x403BC0, 0x403BC4},
-
 	{"public: virtual void * __thiscall structure_block_folder<struct structure_cluster, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                    0x403BCF, 0x403BD3},
-
 	{"public: virtual void * __thiscall block_folder<struct recorded_animation_definition, 0>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                  0x403BFC, 0x403C00},
-
 	{"public: virtual __thiscall CTagStringEdit::~CTagStringEdit(void)",                                                                                                                                                                                                                                     0x403C10, 0x403C14},
-
 	{"public: virtual __thiscall scenario_object_folder<struct scenario_scenery_datum>::~scenario_object_folder<struct scenario_scenery_datum>(void)",                                                                                                                                                       0x403C29, 0x403C2D},
-
 	{"j_CPropertyMainFrame_ctor",                                                                                                                                                                                                                                                                            0x403C83, 0x403C96},
-
 	{"public: virtual __thiscall CSpraypaintDlg::~CSpraypaintDlg(void)",                                                                                                                                                                                                                                     0x403CA1, 0x403CB9},
-
 	{"public: virtual __thiscall render_block_folder<struct ai_command_point_definition, 0, struct ai_command_list_definition, class ai_command_list_item, 48, 1>::~render_block_folder<struct ai_command_point_definition, 0, struct ai_command_list_definition, class ai_command_list_item, 48, 1>(void)", 0x403CC9, 0x403CCD},
-
 	{"_stdcall WinMain(x, x, x, x)",                                                                                                                                                                                                                                                                         0x403CDD, 0x403CE1},
 	{"public: virtual __thiscall structure_palette_folder<struct structure_background_sound_palette_entry>::~structure_palette_folder<struct structure_background_sound_palette_entry>(void)",                                                                                                               0x403CE2, 0x403CEB},
-
 	{"j_field_tag_reference_dialog_handler::ctor",                                                                                                                                                                                                                                                           0x403D4B, 0x403D4F},
-
 	{"j_mission_folder_new",                                                                                                                                                                                                                                                                                 0x403D82, 0x403D86},
-
-	{"j_unknown_libname_502",                                                                                                                                                                                                                                                                                0x403D9B, 0x403D9F},
-
 	{"public: virtual __thiscall cluster_properties_folder::~cluster_properties_folder(void)",                                                                                                                                                                                                               0x403DFF, 0x403E03},
-
 	{"public: virtual void * __thiscall block_folder<struct structure_background_sound_palette_entry, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                       0x403EB3, 0x403EC6},
-
 	{"j_on_file_save_mission_as",                                                                                                                                                                                                                                                                            0x403EEA, 0x403EEE},
 	{"j_editor_get_command_active_state",                                                                                                                                                                                                                                                                    0x403EEF, 0x403EF3},
-
 	{"public: virtual void * __thiscall CInstanceListView::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x403FB2, 0x403FB6},
-
 	{"public: virtual void * __thiscall CCinemaSaveDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                         0x404025, 0x40402E},
-
 	{"j_on_window_arrange_icons",                                                                                                                                                                                                                                                                            0x40408E, 0x404092},
-
-	{"j_nullsub_145",                                                                                                                                                                                                                                                                                        0x40412E, 0x404137},
-
-	{"j_nullsub_226",                                                                                                                                                                                                                                                                                        0x40414C, 0x40415F},
-
 	{"public: virtual void * __thiscall scenario_object_folder<struct scenario_machine_datum>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                  0x404192, 0x404196},
-
 	{"j_editor_main_status_bar_set",                                                                                                                                                                                                                                                                         0x4041CE, 0x4041D7},
-
 	{"public: virtual __thiscall CMainDlg::~CMainDlg(void)",                                                                                                                                                                                                                                                 0x404205, 0x404209},
-
 	{"public: virtual __thiscall encounter_block_folder<struct scenario_player, 0, 164, 1>::~encounter_block_folder<struct scenario_player, 0, 164, 1>(void)",                                                                                                                                               0x40420F, 0x404213},
-
 	{"j_factory::field_tag_reference_dialog_handler::create",                                                                                                                                                                                                                                                0x404223, 0x404227},
-
 	{"j__valid_real_matrix4x3",                                                                                                                                                                                                                                                                              0x404241, 0x40424F},
-
 	{"public: virtual void * __thiscall std::out_of_range::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x40427D, 0x404286},
-
 	{"j_CGuerillaView::ctor",                                                                                                                                                                                                                                                                                0x404291, 0x404295},
 	{"public: virtual __thiscall unit_folder::~unit_folder(void)",                                                                                                                                                                                                                                           0x404296, 0x40429A},
-
-	{"j_nullsub_237",                                                                                                                                                                                                                                                                                        0x4042AA, 0x4042B8},
-
 	{"DialogFunc",                                                                                                                                                                                                                                                                                           0x4042D2, 0x4042EA},
 	{"public: virtual __thiscall std::numpunct<char>::~numpunct<char>(void)",                                                                                                                                                                                                                                0x4042EB, 0x4042F9},
 
@@ -360,89 +234,41 @@ FUNCTIONMAP = {
 	{"j_block_folder::ai_recording_reference_definition::ctor",                                                                                                                                                                                                                                              0x40430E, 0x404312},
 
 	{"j_registry_set_value",                                                                                                                                                                                                                                                                                 0x40440D, 0x404411},
-
 	{"public: virtual void * __thiscall CTreelistviewView::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x404453, 0x404457},
 	{"public: virtual __thiscall std::out_of_range::~out_of_range(void)",                                                                                                                                                                                                                                    0x404458, 0x40445C},
-
 	{"public: virtual __thiscall cluster_palettes_folder::~cluster_palettes_folder(void)",                                                                                                                                                                                                                   0x40450C, 0x404510},
-
 	{"public: virtual __thiscall CDetailObjectDlg::~CDetailObjectDlg(void)",                                                                                                                                                                                                                                 0x404516, 0x404529},
-
 	{"j_main_frame_create_dialog_by_id",                                                                                                                                                                                                                                                                     0x40457A, 0x404583},
-
 	{"j_scenario_block_folder::scenario_netgame_equipment::ctor",                                                                                                                                                                                                                                            0x404629, 0x40462D},
-
 	{"public: virtual void * __thiscall WTL::CCommandBarCtrl::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                   0x40463D, 0x404641},
-
-	{"j_nullsub_206",                                                                                                                                                                                                                                                                                        0x40464C, 0x404655},
-
 	{"public: virtual void * __thiscall game_data_folder::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                       0x40465B, 0x40465F},
 	{"public: virtual __thiscall CClusterpaintDlg::~CClusterpaintDlg(void)",                                                                                                                                                                                                                                 0x404660, 0x404664},
-
-	{"j_nullsub_253",                                                                                                                                                                                                                                                                                        0x404688, 0x404691},
-
 	{"public: virtual __thiscall CTreelistviewView::~CTreelistviewView(void)",                                                                                                                                                                                                                               0x404723, 0x404736},
-
 	{"j_field_block_dialog_handler::ctor",                                                                                                                                                                                                                                                                   0x404769, 0x40476D},
-
 	{"sapien_config_nested_initi",                                                                                                                                                                                                                                                                           0x404791, 0x4047A4},
 	{"j_block_tree_item_platoon_definition_platoon_tree_item_::ctor",                                                                                                                                                                                                                                        0x4047A5, 0x4047A9},
-
 	{"public: __thiscall CDialogScrollView::CDialogScrollView(void)",                                                                                                                                                                                                                                        0x4047B9, 0x4047C2},
-
-	{"j_nullsub_257",                                                                                                                                                                                                                                                                                        0x4047F5, 0x4047F9},
-
 	{"public: virtual void * __thiscall WTL::CAppModule::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                        0x404809, 0x40480D},
-
 	{"public: virtual void * __thiscall scenario_block_folder<struct scenario_player>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                          0x404863, 0x404867},
-
 	{"public: virtual void * __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                              0x404877, 0x40487B},
-
 	{"public: virtual void * __thiscall CScenarioTypeListDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                   0x404881, 0x40488A},
-
 	{"j_j_j_??1?$block_expandable_folder@Usquad_definition@@Vsquad_tree_item@@@@UAE@XZ",                                                                                                                                                                                                                     0x40489F, 0x4048AD},
-
 	{"public: virtual __thiscall scenario_object_folder<struct scenario_weapon_datum>::~scenario_object_folder<struct scenario_weapon_datum>(void)",                                                                                                                                                         0x4048E0, 0x4048E4},
-
 	{"public: virtual void * __thiscall block_folder<struct scenario_cutscene_camera_point, 0>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                 0x4048FE, 0x404902},
 	{"j_utility_wrappers_44FC30",                                                                                                                                                                                                                                                                            0x404903, 0x404907},
-
-	{"j_nullsub_207",                                                                                                                                                                                                                                                                                        0x40495D, 0x404961},
-
 	{"public: __thiscall block_expandable_folder<struct encounter_definition, class encounter_tree_item>::block_expandable_folder<struct encounter_definition, class encounter_tree_item>(void)",                                                                                                            0x4049E4, 0x4049E8},
 	{"public: virtual __thiscall ATL::CSimpleDialog<258, 1>::~CSimpleDialog<258, 1>(void)",                                                                                                                                                                                                                  0x4049E9, 0x4049F2},
-
 	{"public: virtual __thiscall structure_block_folder<struct structure_cluster, 3>::~structure_block_folder<struct structure_cluster, 3>(void)",                                                                                                                                                           0x404A02, 0x404A06},
-
 	{"public: __thiscall std::basic_filebuf<char, struct std::char_traits<char>>::basic_filebuf<char, struct std::char_traits<char>>(void)",                                                                                                                                                                 0x404A93, 0x404ACE},
-
 	{"j_hierarchy_items_439230",                                                                                                                                                                                                                                                                             0x404AE8, 0x404AFB},
-
 	{"j_editor_window_register",                                                                                                                                                                                                                                                                             0x404B42, 0x404B46},
-
-	{"j_j_j_??1CGuerillaView@@UAE@XZ_0",                                                                                                                                                                                                                                                                     0x404B6A, 0x404B6E},
-
 	{"j__shell_platform_initialize",                                                                                                                                                                                                                                                                         0x404B7E, 0x404B82},
-
-	{"j_nullsub_146",                                                                                                                                                                                                                                                                                        0x404BAB, 0x404BB4},
-
 	{"public: virtual __thiscall ATL::CComModule::~CComModule(void)",                                                                                                                                                                                                                                        0x404BD3, 0x404BF5},
-
-	{"j_nullsub_245",                                                                                                                                                                                                                                                                                        0x404C46, 0x404C4F},
-
 	{"j_factory::field_block_dialog_handler::create",                                                                                                                                                                                                                                                        0x404C5A, 0x404C5E},
-
-	{"j_nullsub_218",                                                                                                                                                                                                                                                                                        0x404C91, 0x404C9A},
-
 	{"EnumFunc",                                                                                                                                                                                                                                                                                             0x404CA0, 0x404CA9},
-
 	{"public: virtual __thiscall block_folder<struct firing_position_definition, 0>::~block_folder<struct firing_position_definition, 0>(void)",                                                                                                                                                             0x404CD7, 0x404CE0},
 	{"public: virtual void * __thiscall std::numpunct<char>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                    0x404CE1, 0x404CE5},
-
 	{"public: virtual void * __thiscall std::codecvt_base::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x404D18, 0x404D21},
-
-	{"protected: virtual int __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::uflow(void)",                                                                                                                                                                                             0x404D59, 0x404D6C},
-
 	{"j_block_folder::scenario_device_group::ctor",                                                                                                                                                                                                                                                          0x404DC2, 0x404DC6},
 
 	{"j__editor_render_plane_marker",                                                                                                                                                                                                                                                                        0x404E94, 0x404E98},
@@ -511,7 +337,7 @@ FUNCTIONMAP = {
 
 	{"public: virtual __thiscall CMdid3dView::~CMdid3dView(void)",                                                                                                                                                                                                                                           0x40556F, 0x40557D},
 
-	{"j_nullsub_235",                                                                                                                                                                                                                                                                                        0x4055C9, 0x4055E1},
+
 	{"public: __thiscall CSpraypaintDlg::CSpraypaintDlg(void)",                                                                                                                                                                                                                                              0x4055E2, 0x4055F0},
 	{"j_create_cinematic_tool",                                                                                                                                                                                                                                                                              0x4055F1, 0x4055F5},
 
@@ -532,14 +358,14 @@ FUNCTIONMAP = {
 
 	{"public: virtual void * __thiscall ai_folder::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                              0x4058DA, 0x4058DE},
 
-	{"j_nullsub_370",                                                                                                                                                                                                                                                                                        0x40591B, 0x40591F},
-	{"j_unknown_libname_849",                                                                                                                                                                                                                                                                                0x405920, 0x405924},
-	{"j_nullsub_369",                                                                                                                                                                                                                                                                                        0x405925, 0x405929},
+
+
+
 	{"j_editor_camera_point_proxy::dtor",                                                                                                                                                                                                                                                                    0x40592A, 0x40592E},
 
-	{"j_unknown_libname_53",                                                                                                                                                                                                                                                                                 0x405943, 0x405947},
 
-	{"j_nullsub_243",                                                                                                                                                                                                                                                                                        0x40597A, 0x40597E},
+
+
 
 	{"j_scenario_block_folder::scenario_netgame_flag::ctor",                                                                                                                                                                                                                                                 0x405993, 0x405997},
 
@@ -555,23 +381,12 @@ FUNCTIONMAP = {
 	{"j_hierarchy_items_439290",                                                                                                                                                                                                                                                                             0x405B78, 0x405B81},
 
 	{"public: virtual void * __thiscall block_folder<struct scenario_cutscene_title, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                        0x405BA5, 0x405BA9},
-
 	{"public: virtual void * __thiscall structure_block_folder<struct structure_cluster, 0>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                    0x405BC8, 0x405BE5},
-
-	{"j_nullsub_264",                                                                                                                                                                                                                                                                                        0x405C72, 0x405C76},
 	{"j_create_model_tool",                                                                                                                                                                                                                                                                                  0x405C77, 0x405C8F},
-
 	{"public: virtual void * __thiscall std::ios_base::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                          0x405CAE, 0x405CB7},
-
 	{"public: virtual void * __thiscall block_folder<struct structure_fog_palette_entry, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                    0x405D21, 0x405D2A},
-
-	{"j_nullsub_230",                                                                                                                                                                                                                                                                                        0x405D4E, 0x405D57},
-
 	{"public: virtual __thiscall WTL::CSplitterWindowT<1>::~CSplitterWindowT<1>(void)",                                                                                                                                                                                                                      0x405D67, 0x405D6B},
 	{"public: virtual void * __thiscall block_expandable_folder<struct squad_definition, class squad_tree_item>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                0x405D6C, 0x405D70},
-
-	{"j_nullsub_301",                                                                                                                                                                                                                                                                                        0x405D94, 0x405DA2},
-
 	{"public: virtual void * __thiscall COptionsView::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                           0x405DBC, 0x405DC0},
 
 	{"stack_walk_dispose",                                                                                                                                                                                                                                                                                   0x405DE4, 0x405DF2},
@@ -584,11 +399,7 @@ FUNCTIONMAP = {
 	{"public: __thiscall CCinemaDlg::CCinemaDlg(void)",                                                                                                                                                                                                                                                      0x405ED4, 0x405ED8},
 
 	{"public: __thiscall CDetailObjectDlg::CDetailObjectDlg(void)",                                                                                                                                                                                                                                          0x405F65, 0x405F6E},
-
 	{"j_block_folder::scenario_trigger_volume::ctor",                                                                                                                                                                                                                                                        0x405FF1, 0x405FF5},
-
-	{"j_nullsub_265",                                                                                                                                                                                                                                                                                        0x406000, 0x406018},
-
 	{"public: virtual __thiscall std::logic_error::~logic_error(void)",                                                                                                                                                                                                                                      0x406096, 0x4060A9},
 
 	{"public: virtual __thiscall CPropertyChildFrame::~CPropertyChildFrame(void)",                                                                                                                                                                                                                           0x406181, 0x40618F},
@@ -608,18 +419,9 @@ FUNCTIONMAP = {
 	{"j_on_main_0",                                                                                                                                                                                                                                                                                          0x40632F, 0x40633D},
 
 	{"public: __thiscall CRect::CRect(struct tagPOINT, struct tagSIZE)",                                                                                                                                                                                                                                     0x40635C, 0x406360},
-
-	{"j_nullsub_261",                                                                                                                                                                                                                                                                                        0x4063D9, 0x4063E2},
-
 	{"public: virtual __thiscall CScenarioTypeListDlg::~CScenarioTypeListDlg(void)",                                                                                                                                                                                                                         0x40641F, 0x406423},
 
 	{"public: __thiscall scenario_object_folder<struct scenario_light_fixture_datum>::scenario_object_folder<struct scenario_light_fixture_datum>(void)",                                                                                                                                                    0x406447, 0x40644B},
-
-	{"j_nullsub_325",                                                                                                                                                                                                                                                                                        0x406474, 0x406478},
-
-	{"j_nullsub_258",                                                                                                                                                                                                                                                                                        0x406587, 0x406590},
-
-	{"j_nullsub_189",                                                                                                                                                                                                                                                                                        0x4065FA, 0x406612},
 
 	{"j_editor_4E0BE0",                                                                                                                                                                                                                                                                                      0x4066D6, 0x4066DA},
 
@@ -633,25 +435,25 @@ FUNCTIONMAP = {
 
 	{"j_sapien_GetAsyncKeyState",                                                                                                                                                                                                                                                                            0x4067C6, 0x4067CF},
 
-	{"j_nullsub_188",                                                                                                                                                                                                                                                                                        0x4067D5, 0x4067D9},
+
 
 	{"public: virtual void * __thiscall COutputView::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                            0x406807, 0x40680B},
 	{"public: virtual void * __thiscall COptionsDialog::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                         0x40680C, 0x406815},
 
 	{"public: virtual __thiscall block_folder<struct scenario_cutscene_title, 1>::~block_folder<struct scenario_cutscene_title, 1>(void)",                                                                                                                                                                   0x406893, 0x40689C},
 
-	{"j_nullsub_212",                                                                                                                                                                                                                                                                                        0x4068DE, 0x4068E7},
+
 
 	{"j__valid_real",                                                                                                                                                                                                                                                                                        0x4068ED, 0x4068F1},
 
-	{"j_nullsub_190",                                                                                                                                                                                                                                                                                        0x406910, 0x406914},
+
 
 	{"public: virtual void * __thiscall CGuerillaView::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                          0x406992, 0x406996},
 
 	{"j_create_clusterpaint_options",                                                                                                                                                                                                                                                                        0x4069F6, 0x4069FA},
-	{"j_nullsub_256",                                                                                                                                                                                                                                                                                        0x4069FB, 0x4069FF},
 
-	{"j_nullsub_222",                                                                                                                                                                                                                                                                                        0x406AA5, 0x406AA9},
+
+
 	{"j_network_error",                                                                                                                                                                                                                                                                                      0x406AAA, 0x406AAE},
 
 	{"j__sound_render",                                                                                                                                                                                                                                                                                      0x406B13, 0x406B21},
@@ -668,7 +470,7 @@ FUNCTIONMAP = {
 
 	{"public: virtual __thiscall structure_block_folder<struct structure_cluster, 1>::~structure_block_folder<struct structure_cluster, 1>(void)",                                                                                                                                                           0x406CFD, 0x406D10},
 
-	{"j_nullsub_240",                                                                                                                                                                                                                                                                                        0x406E6F, 0x406E73},
+
 
 	{"j_block_folder::editor_comment_definition::ctor",                                                                                                                                                                                                                                                      0x406E83, 0x406E96},
 
@@ -691,7 +493,7 @@ FUNCTIONMAP = {
 	{"j__selection_get_count",                                                                                                                                                                                                                                                                               0x4070DB, 0x4070EE},
 
 	{"error",                                                                                                                                                                                                                                                                                                0x40716C, 0x407170},
-	{"j_nullsub_228",                                                                                                                                                                                                                                                                                        0x407171, 0x407175},
+
 
 	{"public: virtual __thiscall CHierarchyMainFrame::~CHierarchyMainFrame(void)",                                                                                                                                                                                                                           0x4071DF, 0x4071E8},
 
@@ -714,7 +516,7 @@ FUNCTIONMAP = {
 	{"j_factory::field_enum_dialog_handler::create",                                                                                                                                                                                                                                                         0x4073CE, 0x4073D2},
 
 	{"public: virtual void * __thiscall block_folder<struct ai_command_definition, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                          0x4073DD, 0x4073E6},
-	{"j_nullsub_252",                                                                                                                                                                                                                                                                                        0x4073E7, 0x4073EB},
+
 
 	{"public: virtual void * __thiscall std::locale::facet::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                     0x407419, 0x40741D},
 
@@ -735,15 +537,12 @@ FUNCTIONMAP = {
 	{"public: virtual __thiscall std::ctype_base::~ctype_base(void)",                                                                                                                                                                                                                                        0x40759A, 0x4075A3},
 	{"public: virtual __thiscall std::codecvt<char, char, int>::~codecvt<char, char, int>(void)",                                                                                                                                                                                                            0x4075A4, 0x4075A8},
 
-	{"j_nullsub_184",                                                                                                                                                                                                                                                                                        0x4075B3, 0x4075BC},
+
 	{"public: virtual void * __thiscall ATL::CSimpleDialog<258, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                             0x4075BD, 0x4075C1},
 
 	{"public: int __thiscall tag_information::filtered_field_count(unsigned char (__cdecl *)(class field_information *))",                                                                                                                                                                                   0x407649, 0x407657},
 
 	{"j__editor_dispose",                                                                                                                                                                                                                                                                                    0x407699, 0x40769D},
-
-	{"j_nullsub_210",                                                                                                                                                                                                                                                                                        0x4076CB, 0x4076CF},
-
 	{"j_on_edit_drop_objects",                                                                                                                                                                                                                                                                               0x407711, 0x407715},
 
 	{"public: virtual __thiscall scenario_block_folder<struct scenario_netgame_flag>::~scenario_block_folder<struct scenario_netgame_flag>(void)",                                                                                                                                                           0x40772A, 0x40772E},
@@ -772,7 +571,7 @@ FUNCTIONMAP = {
 
 	{"j__editor_initialize",                                                                                                                                                                                                                                                                                 0x407996, 0x40799A},
 
-	{"j_nullsub_220",                                                                                                                                                                                                                                                                                        0x4079D7, 0x4079DB},
+
 
 	{"COutputMainFrame_ctor",                                                                                                                                                                                                                                                                                0x4079F0, 0x4079FE},
 
@@ -784,7 +583,7 @@ FUNCTIONMAP = {
 
 	{"j_custom_dialog_factory::ctor",                                                                                                                                                                                                                                                                        0x407AAE, 0x407AB7},
 
-	{"j_nullsub_255",                                                                                                                                                                                                                                                                                        0x407B3A, 0x407B3E},
+
 
 	{"j_factory::field_tag_reference_dialog_handler::ctor",                                                                                                                                                                                                                                                  0x407B71, 0x407B75},
 
@@ -796,7 +595,7 @@ FUNCTIONMAP = {
 
 	{"public: virtual void * __thiscall unit_folder::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                            0x407D1F, 0x407D2D},
 
-	{"j_nullsub_302",                                                                                                                                                                                                                                                                                        0x407D42, 0x407D46},
+
 
 	{"j_clusterpaint_tool_handler_render",                                                                                                                                                                                                                                                                   0x407D51, 0x407D5F},
 
@@ -816,7 +615,7 @@ FUNCTIONMAP = {
 
 	{"public: virtual __thiscall CPropertyMainFrame::~CPropertyMainFrame(void)",                                                                                                                                                                                                                             0x408026, 0x40802F},
 
-	{"j_nullsub_213",                                                                                                                                                                                                                                                                                        0x408067, 0x40806B},
+
 
 	{"public: __thiscall COptionsView::COptionsView(void)",                                                                                                                                                                                                                                                  0x4080DA, 0x4080DE},
 
@@ -832,14 +631,14 @@ FUNCTIONMAP = {
 
 	{"public: virtual __thiscall encounter_block_folder<struct actor_starting_location_definition, 0, 16777344, 3>::~encounter_block_folder<struct actor_starting_location_definition, 0, 16777344, 3>(void)",                                                                                               0x4082B0, 0x4082B4},
 
-	{"j_nullsub_244",                                                                                                                                                                                                                                                                                        0x4082F1, 0x408313},
+
 
 	{"public: virtual void * __thiscall CMdid3dView::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                            0x4083A0, 0x4083A9},
 	{"j_factory::field_enum_dialog_handler::ctor",                                                                                                                                                                                                                                                           0x4083AA, 0x4083AE},
 
 	{"public: virtual void * __thiscall block_folder<struct actor_starting_location_definition, 0>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                             0x4083C8, 0x4083CC},
 
-	{"j_nullsub_234",                                                                                                                                                                                                                                                                                        0x40841D, 0x40842B},
+
 	{"public: virtual void * __thiscall std::num_put<char, class std::ostreambuf_iterator<char, struct std::char_traits<char>>>::`scalar deleting destructor'(unsigned int)",                                                                                                                                0x40842C, 0x408430},
 
 	{"j_on_handle_menu_command",                                                                                                                                                                                                                                                                             0x40844A, 0x408453},
@@ -848,7 +647,7 @@ FUNCTIONMAP = {
 
 	{"public: virtual void * __thiscall block_folder<struct editor_comment_definition, 0>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                      0x4085EE, 0x4085F7},
 
-	{"j_nullsub_242",                                                                                                                                                                                                                                                                                        0x40866B, 0x408679},
+
 
 	{"j_editor_input_activate",                                                                                                                                                                                                                                                                              0x408715, 0x408719},
 	{"public: virtual __thiscall std::ctype<char>::~ctype<char>(void)",                                                                                                                                                                                                                                      0x40871A, 0x40871E},
@@ -875,24 +674,24 @@ FUNCTIONMAP = {
 
 	{"public: virtual void * __thiscall encounter_block_folder<struct actor_starting_location_definition, 0, 16777344, 3>::`scalar deleting destructor'(unsigned int)",                                                                                                                                      0x408C1F, 0x408C23},
 
-	{"j_nullsub_366",                                                                                                                                                                                                                                                                                        0x408C38, 0x408C3C},
+
 
 	{"public: virtual void * __thiscall block_folder<struct structure_weather_palette_entry, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                0x408C6A, 0x408C6E},
 
-	{"j_unknown_libname_884",                                                                                                                                                                                                                                                                                0x408C8D, 0x408C91},
+
 
 	{"public: virtual __thiscall device_folder::~device_folder(void)",                                                                                                                                                                                                                                       0x408CD8, 0x408CDC},
 
 	{"public: virtual void * __thiscall cluster_palettes_folder::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                0x408CF1, 0x408CF5},
-	{"j_unknown_libname_57",                                                                                                                                                                                                                                                                                 0x408CF6, 0x408CFA},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x408D0A, 0x408D0E},
+
+
 
 	{"public: virtual __thiscall block_expandable_folder<struct platoon_definition, class platoon_tree_item>::~block_expandable_folder<struct platoon_definition, class platoon_tree_item>(void)",                                                                                                           0x408D14, 0x408D18},
 
 	{"j_on_main_278",                                                                                                                                                                                                                                                                                        0x408D46, 0x408D4A},
 
-	{"j_nullsub_365",                                                                                                                                                                                                                                                                                        0x408D64, 0x408D68},
+
 
 	{"public: virtual __thiscall WTL::CCommandBarCtrl::~CCommandBarCtrl(void)",                                                                                                                                                                                                                              0x408D78, 0x408D7C},
 
@@ -906,7 +705,7 @@ FUNCTIONMAP = {
 
 	{"j_field_block_index_dialog_handler::is_object_name_editable",                                                                                                                                                                                                                                          0x408F8A, 0x408F8E},
 
-	{"j_nullsub_227",                                                                                                                                                                                                                                                                                        0x408FBC, 0x408FCA},
+
 	{"public: __thiscall scenario_object_folder<struct scenario_weapon_datum>::scenario_object_folder<struct scenario_weapon_datum>(void)",                                                                                                                                                                  0x408FCB, 0x408FCF},
 
 	{"public: virtual __thiscall CMainFrame::~CMainFrame(void)",                                                                                                                                                                                                                                             0x409048, 0x409060},
@@ -916,158 +715,67 @@ FUNCTIONMAP = {
 	{"j_on_file_export_script_names",                                                                                                                                                                                                                                                                        0x409084, 0x40909C},
 
 	{"j_get_local_player0_weapon0x0_del_unexpec417300",                                                                                                                                                                                                                                                      0x4090CA, 0x4090CE},
-
-	{"j_nullsub_185",                                                                                                                                                                                                                                                                                        0x409129, 0x409132},
-
-	{"j_nullsub_250",                                                                                                                                                                                                                                                                                        0x409151, 0x40915A},
 	{"public: virtual void * __thiscall encounter_block_expandable_folder<struct squad_definition, class squad_tree_item, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                   0x40915B, 0x40916E},
-
 	{"public: virtual void * __thiscall scenario_block_with_palette_folder<struct scenario_decal>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                              0x4091AB, 0x4091AF},
-
-	{"j_nullsub_186",                                                                                                                                                                                                                                                                                        0x4091B5, 0x4091C3},
 	{"public: virtual void * __thiscall std::_Ref_count_base::_Get_deleter(class type_info const &)const",                                                                                                                                                                                                   0x4091C4, 0x4091D2},
 	{"public: virtual void * __thiscall WTL::CColorDialog::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x4091D3, 0x4091E6},
-
-	{"protected: virtual char __thiscall std::ctype<char>::do_narrow(char, char)const",                                                                                                                                                                                                                      0x40920F, 0x409218},
-
 	{"public: virtual void * __thiscall platoon_tree_item::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x40925F, 0x409263},
-
 	{"public: virtual void * __thiscall structure_palette_folder<struct structure_sound_environment_palette_entry>::`scalar deleting destructor'(unsigned int)",                                                                                                                                             0x409340, 0x409344},
-
 	{"j_block_folder::scenario_cutscene_title::ctor",                                                                                                                                                                                                                                                        0x409368, 0x409371},
-
 	{"j__editor_render_axis_marker",                                                                                                                                                                                                                                                                         0x4093AE, 0x4093B7},
-
 	{"public: virtual __thiscall block_folder<struct ai_animation_reference_definition, 1>::~block_folder<struct ai_animation_reference_definition, 1>(void)",                                                                                                                                               0x4093D6, 0x4093DA},
-
 	{"public: virtual __thiscall structure_palette_folder<struct structure_fog_palette_entry>::~structure_palette_folder<struct structure_fog_palette_entry>(void)",                                                                                                                                         0x4093FE, 0x409402},
-
 	{"public: virtual __thiscall item_folder::~item_folder(void)",                                                                                                                                                                                                                                           0x409494, 0x409498},
-
 	{"public: __thiscall CModelDlg::CModelDlg(void)",                                                                                                                                                                                                                                                        0x4094DA, 0x4094DE},
-
-	{"j_nullsub_215",                                                                                                                                                                                                                                                                                        0x40953E, 0x409542},
-
 	{"public: virtual void * __thiscall std::logic_error::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                       0x409548, 0x40954C},
-
-	{"j_unknown_libname_503",                                                                                                                                                                                                                                                                                0x409557, 0x40955B},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x40955C, 0x409565},
-
 	{"public: virtual void * __thiscall scenario_object_folder<struct scenario_biped_datum>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                    0x40959D, 0x4095A6},
-
 	{"public: virtual __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::~basic_streambuf<char, struct std::char_traits<char>>(void)",                                                                                                                                                    0x409642, 0x40964B},
-
 	{"j__editor_has_focus",                                                                                                                                                                                                                                                                                  0x409679, 0x409682},
-
 	{"public: virtual __thiscall block_folder<struct structure_sound_environment_palette_entry, 1>::~block_folder<struct structure_sound_environment_palette_entry, 1>(void)",                                                                                                                               0x4096BA, 0x4096CD},
-
 	{"public: virtual __thiscall encounter_tree_item::~encounter_tree_item(void)",                                                                                                                                                                                                                           0x4096D3, 0x4096D7},
 	{"j_squad_tree_item::ctor",                                                                                                                                                                                                                                                                              0x4096D8, 0x4096E6},
-
 	{"public: virtual __thiscall structure_block_folder<struct structure_cluster, 0>::~structure_block_folder<struct structure_cluster, 0>(void)",                                                                                                                                                           0x409728, 0x40972C},
-
 	{"public: virtual void * __thiscall CAboutDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                              0x409732, 0x409740},
-
-	{"j_nullsub_254",                                                                                                                                                                                                                                                                                        0x409755, 0x409759},
-
-	{"j_nullsub_251",                                                                                                                                                                                                                                                                                        0x409764, 0x409772},
-
 	{"public: virtual void * __thiscall device_folder::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                          0x409787, 0x409790},
-	{"j_nullsub_147",                                                                                                                                                                                                                                                                                        0x409791, 0x4097AE},
-
-	{"j_nullsub_260",                                                                                                                                                                                                                                                                                        0x4097BE, 0x4097C2},
-
-	{"j_unknown_libname_66",                                                                                                                                                                                                                                                                                 0x4097CD, 0x4097E5},
-
 	{"j_sapien_utility_wrappers_init_492710",                                                                                                                                                                                                                                                                0x409827, 0x40982B},
 	{"public: virtual __thiscall COutputView::~COutputView(void)",                                                                                                                                                                                                                                           0x40982C, 0x409830},
-
 	{"j_on_window_cascade_windows",                                                                                                                                                                                                                                                                          0x409845, 0x40984E},
-
-	{"j_nullsub_300",                                                                                                                                                                                                                                                                                        0x40985E, 0x409862},
-
 	{"public: virtual __thiscall CGuerillaView::~CGuerillaView(void)",                                                                                                                                                                                                                                       0x4098E0, 0x4098E4},
-
 	{"public: virtual void * __thiscall block_expandable_folder<struct ai_conversation, class conversation_tree_item>::`scalar deleting destructor'(unsigned int)",                                                                                                                                          0x409912, 0x409916},
-
 	{"j_factory::field_block_dialog_handler::ctor",                                                                                                                                                                                                                                                          0x409962, 0x409966},
-
 	{"public: virtual void * __thiscall std::_Ref_count_base::_Get_deleter(class type_info const &)const",                                                                                                                                                                                                   0x409980, 0x409984},
-
 	{"j___beep_0",                                                                                                                                                                                                                                                                                           0x4099EE, 0x4099F2},
-
-	{"j_unknown_libname_69",                                                                                                                                                                                                                                                                                 0x409A02, 0x409A06},
-
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x409A43, 0x409A47},
-
 	{"j__selection_get_marker_type",                                                                                                                                                                                                                                                                         0x409A89, 0x409A8D},
-
 	{"public: virtual __thiscall object_folder::~object_folder(void)",                                                                                                                                                                                                                                       0x409ACF, 0x409AD3},
-
-	{"j_nullsub_376",                                                                                                                                                                                                                                                                                        0x409AFC, 0x409B00},
 	{"j_trigger_volume_picker_rel",                                                                                                                                                                                                                                                                          0x409B01, 0x409B05},
-
 	{"public: virtual void * __thiscall cluster_properties_folder::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                              0x409B15, 0x409B19},
-
-	{"j_nullsub_354",                                                                                                                                                                                                                                                                                        0x409B42, 0x409B46},
-
 	{"public: virtual void * __thiscall CClusterpaintDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                       0x409BAB, 0x409BBE},
-
 	{"j_display_save_animation_dlg",                                                                                                                                                                                                                                                                         0x409C41, 0x409C54},
-
 	{"public: virtual void * __thiscall block_folder<struct structure_cluster, 0>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                              0x409C9B, 0x409C9F},
 	{"public: virtual __thiscall block_folder<struct actor_starting_location_definition, 0>::~block_folder<struct actor_starting_location_definition, 0>(void)",                                                                                                                                             0x409CA0, 0x409CA4},
-
 	{"public: virtual void * __thiscall CPropertyChildFrame::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                    0x409D54, 0x409D58},
-
 	{"j_block_folder::scenario_cutscene_camera_point::ctor",                                                                                                                                                                                                                                                 0x409D6D, 0x409D71},
-
 	{"public: __thiscall CClusterpaintDlg::CClusterpaintDlg(void)",                                                                                                                                                                                                                                          0x409D8B, 0x409D94},
-
-	{"j_nullsub_224",                                                                                                                                                                                                                                                                                        0x409DB8, 0x409DC6},
-
 	{"public: virtual __thiscall block_folder<struct structure_weather_palette_entry, 1>::~block_folder<struct structure_weather_palette_entry, 1>(void)",                                                                                                                                                   0x409DE5, 0x409DE9},
-
 	{"j_device_folder::ctor",                                                                                                                                                                                                                                                                                0x409E3F, 0x409E43},
-
 	{"j_on_file_import_sound_scenery",                                                                                                                                                                                                                                                                       0x409E58, 0x409E61},
 	{"public: virtual __thiscall block_folder<struct scenario_device_group, 1>::~block_folder<struct scenario_device_group, 1>(void)",                                                                                                                                                                       0x409E62, 0x409E6B},
-
-	{"j_nullsub_219",                                                                                                                                                                                                                                                                                        0x409E99, 0x409E9D},
 	{"errors_dispose",                                                                                                                                                                                                                                                                                       0x409E9E, 0x409EA2},
-
 	{"public: __thiscall block_expandable_folder<struct squad_definition, class squad_tree_item>::block_expandable_folder<struct squad_definition, class squad_tree_item>(void)",                                                                                                                            0x409EDF, 0x409EE8},
-
-	{"j_nullsub_239",                                                                                                                                                                                                                                                                                        0x409F4D, 0x409F51},
-
 	{"public: virtual __thiscall block_folder<struct scenario_trigger_volume, 0>::~block_folder<struct scenario_trigger_volume, 0>(void)",                                                                                                                                                                   0x409FD9, 0x409FDD},
-
 	{"public: virtual __thiscall block_folder<struct scenario_cutscene_flag, 0>::~block_folder<struct scenario_cutscene_flag, 0>(void)",                                                                                                                                                                     0x40A001, 0x40A00A},
 	{"j__unk_stack_walk_success_sub_417900",                                                                                                                                                                                                                                                                 0x40A00B, 0x40A023},
-
 	{"public: virtual void * __thiscall encounter_block_expandable_folder<struct platoon_definition, class platoon_tree_item, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                               0x40A042, 0x40A046},
 	{"public: virtual bool __thiscall Concurrency::_Order_node_base<enum  Concurrency::agent_status>::reserve_message(int)",                                                                                                                                                                                 0x40A047, 0x40A04B},
-
 	{"public: virtual __thiscall block_folder<struct editor_comment_definition, 0>::~block_folder<struct editor_comment_definition, 0>(void)",                                                                                                                                                               0x40A092, 0x40A0A0},
-
 	{"j_editor_main_status_bar_get",                                                                                                                                                                                                                                                                         0x40A0D8, 0x40A0DC},
-
 	{"j_ai_command_list_item::ctor",                                                                                                                                                                                                                                                                         0x40A128, 0x40A12C},
-
 	{"j_CHierarchyMainFrame_ctor",                                                                                                                                                                                                                                                                           0x40A15F, 0x40A168},
-
-	{"j_nullsub_353",                                                                                                                                                                                                                                                                                        0x40A196, 0x40A1A4},
 	{"public: virtual __thiscall block_folder<struct structure_cluster, 0>::~block_folder<struct structure_cluster, 0>(void)",                                                                                                                                                                               0x40A1A5, 0x40A1A9},
-
 	{"public: __thiscall scenario_object_folder<struct scenario_control_datum>::scenario_object_folder<struct scenario_control_datum>(void)",                                                                                                                                                                0x40A1E1, 0x40A1EA},
-
 	{"public: virtual __thiscall conversation_tree_item::~conversation_tree_item(void)",                                                                                                                                                                                                                     0x40A213, 0x40A217},
-	{"j_nullsub_217",                                                                                                                                                                                                                                                                                        0x40A218, 0x40A226},
-
 	{"public: virtual void * __thiscall CPropertyMainFrame::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                     0x40A236, 0x40A23A},
-
 	{"public: virtual bool __thiscall Concurrency::_Order_node_base<enum  Concurrency::agent_status>::reserve_message(int)",                                                                                                                                                                                 0x4135AC, 0x4135BF},
-
 	{"public: static unsigned char __cdecl tags_interface::initialize(void)",                                                                                                                                                                                                                                0x4141E0, 0x4141EF},
 	{"public: static void __cdecl tags_interface::dispose(void)",                                                                                                                                                                                                                                            0x4141F0, 0x4141FF},
 	{"public: static struct tag_group const * __cdecl tags_interface::find_tag_group(char const *)",                                                                                                                                                                                                         0x414200, 0x41426F},
@@ -1077,12 +785,9 @@ FUNCTIONMAP = {
 	{"public: unsigned char __thiscall tag_information::reset_address(void *)",                                                                                                                                                                                                                              0x414520, 0x4145FF},
 	{"public: int __thiscall tag_information::filtered_field_count(unsigned char (__cdecl *)(class field_information *))",                                                                                                                                                                                   0x414600, 0x41463F},
 	{"private: void __thiscall tag_information::delete_element_recursive(struct tag_block *, struct tag_field *, void *, long)",                                                                                                                                                                             0x414640, 0x41481F},
-
 	{"public: virtual void __thiscall CHtmlStream::Abort(void)",                                                                                                                                                                                                                                             0x414847, 0x41485F},
-
 	{"j__stack_walk_dispose",                                                                                                                                                                                                                                                                                0x417200, 0x41720F},
 	{"network_error",                                                                                                                                                                                                                                                                                        0x417210, 0x4172DF},
-
 	{"get_local_player0_weapon0x0_del_unexpec417300",                                                                                                                                                                                                                                                        0x417300, 0x41730F},
 	{"write_to_error_file",                                                                                                                                                                                                                                                                                  0x417310, 0x4174BF},
 
@@ -1090,8 +795,8 @@ FUNCTIONMAP = {
 
 	{"unk_stack_walk_success_sub_417900",                                                                                                                                                                                                                                                                    0x417900, 0x41798F},
 
-	{"nullsub_376",                                                                                                                                                                                                                                                                                          0x418910, 0x41891F},
-	{"nullsub_375",                                                                                                                                                                                                                                                                                          0x418920, 0x41892F},
+
+
 	{"shell_initialize",                                                                                                                                                                                                                                                                                     0x418930, 0x418AEF},
 	{"shell_dispose",                                                                                                                                                                                                                                                                                        0x418AF0, 0x418B3F},
 
@@ -1118,35 +823,35 @@ FUNCTIONMAP = {
 	{"sound_manager_sound_idle",                                                                                                                                                                                                                                                                             0x4209F0, 0x420C3F},
 
 	{"sound_render",                                                                                                                                                                                                                                                                                         0x4210E0, 0x421DDF},
-	{"unknown_libname_1",                                                                                                                                                                                                                                                                                    0x421DE0, 0x421E0F},
+
 
 	{"public: long __thiscall ATL::CComCriticalSection::Lock(void)",                                                                                                                                                                                                                                         0x421E30, 0x421E3F},
 	{"public: long __thiscall ATL::CComCriticalSection::Unlock(void)",                                                                                                                                                                                                                                       0x421E40, 0x421E4F},
 
 	{"public: long __thiscall ATL::CComCriticalSection::Term(void)",                                                                                                                                                                                                                                         0x421EF0, 0x421F6F},
-	{"unknown_libname_822",                                                                                                                                                                                                                                                                                  0x421F70, 0x421F9F},
+
 
 	{"public: virtual bool __thiscall Concurrency::_Order_node_base<enum  Concurrency::agent_status>::reserve_message(int)",                                                                                                                                                                                 0x42249A, 0x4224AF},
 
-	{"unknown_libname_2",                                                                                                                                                                                                                                                                                    0x4225D0, 0x4225DF},
-	{"unknown_libname_3",                                                                                                                                                                                                                                                                                    0x4225E0, 0x42260F},
-	{"unknown_libname_4",                                                                                                                                                                                                                                                                                    0x422610, 0x42261F},
-	{"unknown_libname_5",                                                                                                                                                                                                                                                                                    0x422620, 0x42262F},
-	{"unknown_libname_6",                                                                                                                                                                                                                                                                                    0x422630, 0x42263F},
-	{"unknown_libname_7",                                                                                                                                                                                                                                                                                    0x422640, 0x42264F},
-	{"unknown_libname_8",                                                                                                                                                                                                                                                                                    0x422650, 0x4227EF},
+
+
+
+
+
+
+
 
 	{"_beep",                                                                                                                                                                                                                                                                                                0x4228B0, 0x4228DF},
 	{"public: int __thiscall CRect::Width(void)const",                                                                                                                                                                                                                                                       0x4228E0, 0x4228EF},
-	{"unknown_libname_9",                                                                                                                                                                                                                                                                                    0x4228F0, 0x4229CF},
+
 	{"public: __thiscall COleControlSiteOrWnd::COleControlSiteOrWnd(void)",                                                                                                                                                                                                                                  0x4229D0, 0x422A4F},
 
-	{"unknown_libname_10",                                                                                                                                                                                                                                                                                   0x422C10, 0x422C7F},
+
 	{"public: static bool __cdecl std::char_traits<char>::eq_int_type(int const &, int const &)",                                                                                                                                                                                                            0x422C80, 0x422C9F},
 
 	{"void * __cdecl operator new(unsigned int, void *)",                                                                                                                                                                                                                                                    0x422CE0, 0x422CFF},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x42345B, 0x42346F},
+
 
 	{"public: static bool __cdecl std::char_traits<char>::eq_int_type(int const &, int const &)",                                                                                                                                                                                                            0x4234B0, 0x4235AF},
 
@@ -1159,146 +864,146 @@ FUNCTIONMAP = {
 
 	{"DialogFunc_0",                                                                                                                                                                                                                                                                                         0x424BA0, 0x424BFF},
 
-	{"nullsub_206",                                                                                                                                                                                                                                                                                          0x424CC0, 0x424CCF},
+
 
 	{"public: virtual void * __thiscall CScenarioTypeListDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                   0x424E20, 0x424EBF},
 
-	{"unknown_libname_11",                                                                                                                                                                                                                                                                                   0x426660, 0x42666F},
 
-	{"unknown_libname_12",                                                                                                                                                                                                                                                                                   0x4266F0, 0x4266FF},
 
-	{"unknown_libname_13",                                                                                                                                                                                                                                                                                   0x426780, 0x42678F},
 
-	{"unknown_libname_14",                                                                                                                                                                                                                                                                                   0x4268A0, 0x4268AF},
+
+
+
+
 
 	{"public: void __thiscall CAtlTraceSettings::MarkValid(long)",                                                                                                                                                                                                                                           0x428B70, 0x428B7F},
 
-	{"nullsub_370",                                                                                                                                                                                                                                                                                          0x428F50, 0x4291FF},
 
-	{"unknown_libname_15",                                                                                                                                                                                                                                                                                   0x429340, 0x42934F},
 
-	{"unknown_libname_16",                                                                                                                                                                                                                                                                                   0x429B40, 0x429B8F},
-	{"unknown_libname_17",                                                                                                                                                                                                                                                                                   0x429B90, 0x429B9F},
 
-	{"unknown_libname_18",                                                                                                                                                                                                                                                                                   0x429CB0, 0x429D0F},
 
-	{"unknown_libname_19",                                                                                                                                                                                                                                                                                   0x42A310, 0x42A31F},
+
+
+
+
+
+
 
 	{"valid_real_vector3d?",                                                                                                                                                                                                                                                                                 0x42A420, 0x42A49F},
 
-	{"unknown_libname_20",                                                                                                                                                                                                                                                                                   0x42A4D0, 0x42A4DF},
-	{"unknown_libname_497",                                                                                                                                                                                                                                                                                  0x42A4E0, 0x42A4EF},
 
-	{"unknown_libname_21",                                                                                                                                                                                                                                                                                   0x42A6B0, 0x42A6BF},
 
-	{"unknown_libname_22",                                                                                                                                                                                                                                                                                   0x42A7C0, 0x42A85F},
-	{"unknown_libname_23",                                                                                                                                                                                                                                                                                   0x42A860, 0x42A8AF},
-	{"unknown_libname_24",                                                                                                                                                                                                                                                                                   0x42A8B0, 0x42A93F},
 
-	{"unknown_libname_25",                                                                                                                                                                                                                                                                                   0x42A980, 0x42A9CF},
-	{"unknown_libname_26",                                                                                                                                                                                                                                                                                   0x42A9D0, 0x42AA1F},
-	{"unknown_libname_27",                                                                                                                                                                                                                                                                                   0x42AA20, 0x42AA6F},
-	{"unknown_libname_28",                                                                                                                                                                                                                                                                                   0x42AA70, 0x42AABF},
-	{"unknown_libname_29",                                                                                                                                                                                                                                                                                   0x42AAC0, 0x42AACF},
 
-	{"unknown_libname_30",                                                                                                                                                                                                                                                                                   0x42AB10, 0x42AB5F},
-	{"unknown_libname_31",                                                                                                                                                                                                                                                                                   0x42AB60, 0x42ABCF},
-	{"unknown_libname_32",                                                                                                                                                                                                                                                                                   0x42ABD0, 0x42AC2F},
-	{"unknown_libname_33",                                                                                                                                                                                                                                                                                   0x42AC30, 0x42AC6F},
-	{"unknown_libname_34",                                                                                                                                                                                                                                                                                   0x42AC70, 0x42ACAF},
-	{"unknown_libname_35",                                                                                                                                                                                                                                                                                   0x42ACB0, 0x42ACEF},
-	{"unknown_libname_36",                                                                                                                                                                                                                                                                                   0x42ACF0, 0x42AD7F},
-	{"unknown_libname_37",                                                                                                                                                                                                                                                                                   0x42AD80, 0x42ADBF},
-	{"unknown_libname_38",                                                                                                                                                                                                                                                                                   0x42ADC0, 0x42ADFF},
-	{"unknown_libname_39",                                                                                                                                                                                                                                                                                   0x42AE00, 0x42AE3F},
-	{"unknown_libname_40",                                                                                                                                                                                                                                                                                   0x42AE40, 0x42AE4F},
 
-	{"unknown_libname_41",                                                                                                                                                                                                                                                                                   0x42AE80, 0x42AEBF},
-	{"unknown_libname_42",                                                                                                                                                                                                                                                                                   0x42AEC0, 0x42AEFF},
-	{"unknown_libname_43",                                                                                                                                                                                                                                                                                   0x42AF00, 0x42B03F},
-	{"unknown_libname_44",                                                                                                                                                                                                                                                                                   0x42B040, 0x42B06F},
-	{"unknown_libname_45",                                                                                                                                                                                                                                                                                   0x42B070, 0x42B0FF},
-	{"unknown_libname_46",                                                                                                                                                                                                                                                                                   0x42B100, 0x42B1BF},
-	{"unknown_libname_47",                                                                                                                                                                                                                                                                                   0x42B1C0, 0x42B27F},
 
-	{"unknown_libname_48",                                                                                                                                                                                                                                                                                   0x42B2B0, 0x42B33F},
-	{"unknown_libname_49",                                                                                                                                                                                                                                                                                   0x42B340, 0x42B37F},
-	{"unknown_libname_50",                                                                                                                                                                                                                                                                                   0x42B380, 0x42B3BF},
-	{"unknown_libname_51",                                                                                                                                                                                                                                                                                   0x42B3C0, 0x42B4DF},
-	{"unknown_libname_52",                                                                                                                                                                                                                                                                                   0x42B4E0, 0x42B56F},
-	{"unknown_libname_53",                                                                                                                                                                                                                                                                                   0x42B570, 0x42B5FF},
-	{"unknown_libname_54",                                                                                                                                                                                                                                                                                   0x42B600, 0x42B6BF},
-	{"unknown_libname_55",                                                                                                                                                                                                                                                                                   0x42B6C0, 0x42B6CF},
 
-	{"unknown_libname_56",                                                                                                                                                                                                                                                                                   0x42BC40, 0x42BC4F},
-	{"unknown_libname_57",                                                                                                                                                                                                                                                                                   0x42BC50, 0x42BC5F},
-	{"unknown_libname_58",                                                                                                                                                                                                                                                                                   0x42BC60, 0x42BC6F},
-	{"unknown_libname_59",                                                                                                                                                                                                                                                                                   0x42BC70, 0x42BC7F},
-	{"unknown_libname_60",                                                                                                                                                                                                                                                                                   0x42BC80, 0x42BDBF},
 
-	{"nullsub_204",                                                                                                                                                                                                                                                                                          0x42C4D0, 0x42C4EF},
 
-	{"nullsub_184",                                                                                                                                                                                                                                                                                          0x42CBD0, 0x42CC5F},
 
-	{"nullsub_187",                                                                                                                                                                                                                                                                                          0x42D2F0, 0x42D3FF},
 
-	{"nullsub_325",                                                                                                                                                                                                                                                                                          0x42DD40, 0x42DD4F},
 
-	{"nullsub_189",                                                                                                                                                                                                                                                                                          0x42DF50, 0x42DF6F},
 
-	{"nullsub_190",                                                                                                                                                                                                                                                                                          0x42E160, 0x42E20F},
 
-	{"nullsub_205",                                                                                                                                                                                                                                                                                          0x42E6E0, 0x42E6EF},
 
-	{"nullsub_353",                                                                                                                                                                                                                                                                                          0x42E8F0, 0x42E98F},
 
-	{"nullsub_188",                                                                                                                                                                                                                                                                                          0x42EE70, 0x42F02F},
 
-	{"nullsub_354",                                                                                                                                                                                                                                                                                          0x42F3F0, 0x42F60F},
 
-	{"nullsub_185",                                                                                                                                                                                                                                                                                          0x430570, 0x43057F},
 
-	{"nullsub_186",                                                                                                                                                                                                                                                                                          0x4309E0, 0x4309EF},
 
-	{"nullsub_207",                                                                                                                                                                                                                                                                                          0x434EE0, 0x434EEF},
 
-	{"nullsub_208",                                                                                                                                                                                                                                                                                          0x434F00, 0x434F0F},
-	{"nullsub_209",                                                                                                                                                                                                                                                                                          0x434F10, 0x434F1F},
-	{"nullsub_210",                                                                                                                                                                                                                                                                                          0x434F20, 0x434F2F},
-	{"nullsub_211",                                                                                                                                                                                                                                                                                          0x434F30, 0x434F3F},
-	{"nullsub_213",                                                                                                                                                                                                                                                                                          0x434F40, 0x434F4F},
-	{"nullsub_212",                                                                                                                                                                                                                                                                                          0x434F50, 0x434F5F},
-	{"nullsub_214",                                                                                                                                                                                                                                                                                          0x434F60, 0x434F6F},
-	{"nullsub_215",                                                                                                                                                                                                                                                                                          0x434F70, 0x434F7F},
 
-	{"nullsub_216",                                                                                                                                                                                                                                                                                          0x434F90, 0x434F9F},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	{"public: virtual bool __thiscall Concurrency::_Order_node_base<enum  Concurrency::agent_status>::reserve_message(int)",                                                                                                                                                                                 0x434FB0, 0x434FCF},
 
 	{"hierarchy_items_434FF0",                                                                                                                                                                                                                                                                               0x434FF0, 0x43509F},
 
-	{"nullsub_369",                                                                                                                                                                                                                                                                                          0x435250, 0x43534F},
 
-	{"nullsub_365",                                                                                                                                                                                                                                                                                          0x4359D0, 0x435ACF},
 
-	{"unknown_libname_61",                                                                                                                                                                                                                                                                                   0x435D80, 0x435D8F},
-	{"unknown_libname_62",                                                                                                                                                                                                                                                                                   0x435D90, 0x435D9F},
-	{"unknown_libname_63",                                                                                                                                                                                                                                                                                   0x435DA0, 0x435DAF},
-	{"unknown_libname_64",                                                                                                                                                                                                                                                                                   0x435DB0, 0x435DBF},
-	{"unknown_libname_65",                                                                                                                                                                                                                                                                                   0x435DC0, 0x435F4F},
+
+
+
+
+
+
+
 
 	{"hierarchy_base::ctor",                                                                                                                                                                                                                                                                                 0x439100, 0x43916F},
 
-	{"nullsub_217",                                                                                                                                                                                                                                                                                          0x4391C0, 0x4391CF},
-	{"nullsub_218",                                                                                                                                                                                                                                                                                          0x4391D0, 0x4391DF},
 
-	{"nullsub_219",                                                                                                                                                                                                                                                                                          0x439220, 0x43922F},
+
+
+
 	{"hierarchy_items_439230",                                                                                                                                                                                                                                                                               0x439230, 0x43925F},
 	{"hierarchy_items_439260",                                                                                                                                                                                                                                                                               0x439260, 0x43928F},
 	{"hierarchy_items_439290",                                                                                                                                                                                                                                                                               0x439290, 0x4392CF},
-	{"nullsub_220",                                                                                                                                                                                                                                                                                          0x4392D0, 0x4392DF},
 
-	{"nullsub_221",                                                                                                                                                                                                                                                                                          0x4392F0, 0x4392FF},
+
+
 
 	{"public: virtual bool __thiscall Concurrency::_Order_node_base<enum  Concurrency::agent_status>::reserve_message(int)",                                                                                                                                                                                 0x439310, 0x43931F},
 
@@ -1312,65 +1017,65 @@ FUNCTIONMAP = {
 
 	{"block_tree_item_ai_command_list_definition_ai_command_list_item_::ctor",                                                                                                                                                                                                                               0x43A3F0, 0x43A42F},
 
-	{"nullsub_222",                                                                                                                                                                                                                                                                                          0x43AF00, 0x43AF0F},
 
-	{"nullsub_223",                                                                                                                                                                                                                                                                                          0x43C250, 0x43C25F},
 
-	{"nullsub_224",                                                                                                                                                                                                                                                                                          0x43EF50, 0x43EF5F},
 
-	{"nullsub_225",                                                                                                                                                                                                                                                                                          0x43F870, 0x43F87F},
 
-	{"nullsub_226",                                                                                                                                                                                                                                                                                          0x4402F0, 0x4402FF},
 
-	{"nullsub_227",                                                                                                                                                                                                                                                                                          0x440C50, 0x440C5F},
+
+
+
+
+
+
 
 	{"hierarchy_item_impl__block_folder__scenario_cutscene_flag::ctor",                                                                                                                                                                                                                                      0x4414C0, 0x44155F},
 
-	{"nullsub_228",                                                                                                                                                                                                                                                                                          0x441570, 0x44157F},
 
-	{"nullsub_229",                                                                                                                                                                                                                                                                                          0x441ED0, 0x441EDF},
 
-	{"nullsub_230",                                                                                                                                                                                                                                                                                          0x442830, 0x44283F},
 
-	{"nullsub_231",                                                                                                                                                                                                                                                                                          0x443150, 0x44315F},
 
-	{"nullsub_232",                                                                                                                                                                                                                                                                                          0x443BA0, 0x443BAF},
 
-	{"nullsub_233",                                                                                                                                                                                                                                                                                          0x4445C0, 0x4445CF},
 
-	{"nullsub_234",                                                                                                                                                                                                                                                                                          0x444EE0, 0x444EEF},
 
-	{"nullsub_235",                                                                                                                                                                                                                                                                                          0x4457C0, 0x4457CF},
 
-	{"nullsub_236",                                                                                                                                                                                                                                                                                          0x4460E0, 0x4460EF},
 
-	{"nullsub_237",                                                                                                                                                                                                                                                                                          0x446A00, 0x446A0F},
 
-	{"nullsub_238",                                                                                                                                                                                                                                                                                          0x447340, 0x44734F},
 
-	{"nullsub_239",                                                                                                                                                                                                                                                                                          0x447CC0, 0x447CCF},
 
-	{"nullsub_240",                                                                                                                                                                                                                                                                                          0x4486E0, 0x4486EF},
 
-	{"nullsub_241",                                                                                                                                                                                                                                                                                          0x448E80, 0x448E8F},
 
-	{"nullsub_242",                                                                                                                                                                                                                                                                                          0x4495E0, 0x4495EF},
 
-	{"nullsub_243",                                                                                                                                                                                                                                                                                          0x449F40, 0x449F4F},
 
-	{"nullsub_244",                                                                                                                                                                                                                                                                                          0x44A8A0, 0x44A8AF},
 
-	{"nullsub_245",                                                                                                                                                                                                                                                                                          0x44B1C0, 0x44B1CF},
 
-	{"nullsub_246",                                                                                                                                                                                                                                                                                          0x44BA60, 0x44BA6F},
 
-	{"nullsub_247",                                                                                                                                                                                                                                                                                          0x44C0D0, 0x44C0DF},
 
-	{"nullsub_248",                                                                                                                                                                                                                                                                                          0x44CAB0, 0x44CABF},
 
-	{"nullsub_249",                                                                                                                                                                                                                                                                                          0x44D490, 0x44D49F},
 
-	{"nullsub_250",                                                                                                                                                                                                                                                                                          0x44DE70, 0x44DE7F},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	{"utility_wrappers_44FC30",                                                                                                                                                                                                                                                                              0x44FC30, 0x44FC8F},
 
@@ -1436,7 +1141,7 @@ FUNCTIONMAP = {
 	{"public: virtual void * __thiscall scenario_object_folder<struct sound_scenery_definition>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                0x459170, 0x4591CF},
 
 	{"public: virtual __thiscall std::logic_error::~logic_error(void)",                                                                                                                                                                                                                                      0x45AAF0, 0x45AB2F},
-	{"unknown_libname_66",                                                                                                                                                                                                                                                                                   0x45AB30, 0x45AB4F},
+
 	{"public: virtual void * __thiscall std::logic_error::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                       0x45AB50, 0x45AB7F},
 
 	{"public: virtual __thiscall block_folder<struct firing_position_definition, 0>::~block_folder<struct firing_position_definition, 0>(void)",                                                                                                                                                             0x45ABE0, 0x45AC2F},
@@ -1446,8 +1151,6 @@ FUNCTIONMAP = {
 	{"public: virtual __thiscall object_folder::~object_folder(void)",                                                                                                                                                                                                                                       0x45ADE0, 0x45AE7F},
 	{"public: virtual __thiscall encounter_block_folder<struct move_position_definition, 0, 128, 3>::~encounter_block_folder<struct move_position_definition, 0, 128, 3>(void)",                                                                                                                             0x45AE80, 0x45AECF},
 	{"public: virtual __thiscall encounter_block_folder<struct actor_starting_location_definition, 0, 16777344, 3>::~encounter_block_folder<struct actor_starting_location_definition, 0, 16777344, 3>(void)",                                                                                               0x45AED0, 0x45AF1F},
-	{"public: virtual __thiscall render_block_folder<struct ai_command_definition, 1, struct ai_command_list_definition, class ai_command_list_item, 48, 1>::~render_block_folder<struct ai_command_definition, 1, struct ai_command_list_definition, class ai_command_list_item, 48, 1>(void)",             0x45AF20, 0x45AF6F},
-	{"public: virtual __thiscall render_block_folder<struct ai_command_point_definition, 0, struct ai_command_list_definition, class ai_command_list_item, 48, 1>::~render_block_folder<struct ai_command_point_definition, 0, struct ai_command_list_definition, class ai_command_list_item, 48, 1>(void)", 0x45AF70, 0x45AFBF},
 	{"public: virtual __thiscall encounter_block_folder<struct scenario_player, 0, 164, 1>::~encounter_block_folder<struct scenario_player, 0, 164, 1>(void)",                                                                                                                                               0x45AFC0, 0x45B00F},
 	{"public: virtual __thiscall structure_palette_folder<struct structure_fog_palette_entry>::~structure_palette_folder<struct structure_fog_palette_entry>(void)",                                                                                                                                         0x45B010, 0x45B05F},
 	{"public: virtual __thiscall structure_palette_folder<struct structure_background_sound_palette_entry>::~structure_palette_folder<struct structure_background_sound_palette_entry>(void)",                                                                                                               0x45B060, 0x45B0AF},
@@ -1460,13 +1163,9 @@ FUNCTIONMAP = {
 	{"public: virtual __thiscall structure_block_folder<struct structure_cluster, 3>::~structure_block_folder<struct structure_cluster, 3>(void)",                                                                                                                                                           0x45B3C0, 0x45B40F},
 	{"public: virtual __thiscall cluster_properties_folder::~cluster_properties_folder(void)",                                                                                                                                                                                                               0x45B410, 0x45B59F},
 	{"public: __thiscall scenario_object_folder<struct scenario_machine_datum>::scenario_object_folder<struct scenario_machine_datum>(void)",                                                                                                                                                                0x45B5A0, 0x45B82F},
-
 	{"public: __thiscall scenario_object_folder<struct scenario_control_datum>::scenario_object_folder<struct scenario_control_datum>(void)",                                                                                                                                                                0x45BC00, 0x45BE8F},
-
 	{"public: __thiscall scenario_object_folder<struct scenario_light_fixture_datum>::scenario_object_folder<struct scenario_light_fixture_datum>(void)",                                                                                                                                                    0x45C0C0, 0x45C35F},
-
 	{"block_folder::scenario_device_group::ctor",                                                                                                                                                                                                                                                            0x45C5B0, 0x45C62F},
-
 	{"public: virtual void * __thiscall block_folder<struct scenario_device_group, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                          0x45C6F0, 0x45C71F},
 	{"public: __thiscall scenario_object_folder<struct scenario_equipment_datum>::scenario_object_folder<struct scenario_equipment_datum>(void)",                                                                                                                                                            0x45C720, 0x45C99F},
 
@@ -1581,11 +1280,11 @@ FUNCTIONMAP = {
 	{"public: virtual void * __thiscall encounter_block_folder<struct scenario_player, 0, 164, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                              0x462A50, 0x462A7F},
 	{"public: virtual __thiscall block_expandable_folder<struct squad_definition, class squad_tree_item>::~block_expandable_folder<struct squad_definition, class squad_tree_item>(void)",                                                                                                                   0x462A80, 0x462B8F},
 
-	{"nullsub_251",                                                                                                                                                                                                                                                                                          0x462BF0, 0x462BFF},
+
 
 	{"public: virtual __thiscall block_expandable_folder<struct platoon_definition, class platoon_tree_item>::~block_expandable_folder<struct platoon_definition, class platoon_tree_item>(void)",                                                                                                           0x462D60, 0x462E6F},
 
-	{"nullsub_252",                                                                                                                                                                                                                                                                                          0x462ED0, 0x462EDF},
+
 
 	{"public: virtual void * __thiscall structure_palette_folder<struct structure_fog_palette_entry>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                           0x463150, 0x4631CF},
 
@@ -1596,15 +1295,15 @@ FUNCTIONMAP = {
 	{"public: virtual void * __thiscall structure_palette_folder<struct structure_weather_palette_entry>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                       0x463510, 0x46353F},
 	{"public: virtual __thiscall block_expandable_folder<struct encounter_definition, class encounter_tree_item>::~block_expandable_folder<struct encounter_definition, class encounter_tree_item>(void)",                                                                                                   0x463540, 0x46364F},
 
-	{"nullsub_253",                                                                                                                                                                                                                                                                                          0x463700, 0x46370F},
+
 
 	{"public: virtual __thiscall block_expandable_folder<struct ai_command_list_definition, class ai_command_list_item>::~block_expandable_folder<struct ai_command_list_definition, class ai_command_list_item>(void)",                                                                                     0x463820, 0x46391F},
 
-	{"nullsub_254",                                                                                                                                                                                                                                                                                          0x4639D0, 0x4639DF},
+
 
 	{"public: virtual __thiscall block_expandable_folder<struct ai_conversation, class conversation_tree_item>::~block_expandable_folder<struct ai_conversation, class conversation_tree_item>(void)",                                                                                                       0x463AE0, 0x463BEF},
 
-	{"nullsub_255",                                                                                                                                                                                                                                                                                          0x463C50, 0x463C5F},
+
 
 	{"public: virtual void * __thiscall encounter_block_folder<struct firing_position_definition, 0, 152, 1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                   0x463DC0, 0x463DEF},
 	{"public: virtual void * __thiscall block_expandable_folder<struct squad_definition, class squad_tree_item>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                0x463DF0, 0x463E1F},
@@ -1664,42 +1363,42 @@ FUNCTIONMAP = {
 
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x470D00, 0x470DAF},
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x470DB0, 0x470DFF},
-	{"unknown_libname_67",                                                                                                                                                                                                                                                                                   0x470E00, 0x470E6F},
 
-	{"unknown_libname_823",                                                                                                                                                                                                                                                                                  0x470F90, 0x470F9F},
-	{"unknown_libname_824",                                                                                                                                                                                                                                                                                  0x470FA0, 0x470FAF},
-	{"unknown_libname_68",                                                                                                                                                                                                                                                                                   0x470FB0, 0x47101F},
+
+
+
+
 
 	{"void * __cdecl operator new(unsigned int, void *)",                                                                                                                                                                                                                                                    0x471460, 0x47146F},
-	{"nullsub_202",                                                                                                                                                                                                                                                                                          0x471470, 0x47147F},
 
-	{"unknown_libname_69",                                                                                                                                                                                                                                                                                   0x471670, 0x47169F},
 
-	{"unknown_libname_825",                                                                                                                                                                                                                                                                                  0x471760, 0x47176F},
-	{"unknown_libname_826",                                                                                                                                                                                                                                                                                  0x471770, 0x47177F},
-	{"unknown_libname_70",                                                                                                                                                                                                                                                                                   0x471780, 0x47179F},
 
-	{"unknown_libname_827",                                                                                                                                                                                                                                                                                  0x471890, 0x47189F},
-	{"unknown_libname_828",                                                                                                                                                                                                                                                                                  0x4718A0, 0x4718AF},
-	{"unknown_libname_829",                                                                                                                                                                                                                                                                                  0x4718B0, 0x4718BF},
-	{"unknown_libname_830",                                                                                                                                                                                                                                                                                  0x4718C0, 0x4718CF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4718D0, 0x47190F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x471910, 0x471A4F},
-	{"unknown_libname_831",                                                                                                                                                                                                                                                                                  0x471A50, 0x471A5F},
-	{"unknown_libname_832",                                                                                                                                                                                                                                                                                  0x471A60, 0x471A6F},
-	{"unknown_libname_833",                                                                                                                                                                                                                                                                                  0x471A70, 0x471A7F},
-	{"unknown_libname_834",                                                                                                                                                                                                                                                                                  0x471A80, 0x471A8F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x471AE0, 0x471AEF},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x471B40, 0x471B8F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x471D00, 0x471D0F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x471D10, 0x471D5F},
 
-	{"nullsub_256",                                                                                                                                                                                                                                                                                          0x471EB0, 0x471EBF},
 
-	{"nullsub_257",                                                                                                                                                                                                                                                                                          0x4722B0, 0x4722BF},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	{"public: virtual void * __thiscall std::out_of_range::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x472DE0, 0x472E0F},
 	{"public: virtual __thiscall std::out_of_range::~out_of_range(void)",                                                                                                                                                                                                                                    0x472E10, 0x472E4F},
@@ -1708,71 +1407,40 @@ FUNCTIONMAP = {
 
 	{"public: int __thiscall CRect::Height(void)const",                                                                                                                                                                                                                                                      0x474700, 0x47470F},
 	{"public: static bool __cdecl std::char_traits<char>::eq_int_type(int const &, int const &)",                                                                                                                                                                                                            0x474710, 0x47472F},
-	{"unknown_libname_71",                                                                                                                                                                                                                                                                                   0x474730, 0x47473F},
-	{"unknown_libname_498",                                                                                                                                                                                                                                                                                  0x474740, 0x47476F},
 
-	{"nullsub_301",                                                                                                                                                                                                                                                                                          0x474B80, 0x474B8F},
+
+
+
 
 	{"public: virtual __thiscall CTagStringEdit::~CTagStringEdit(void)",                                                                                                                                                                                                                                     0x474D10, 0x474D2F},
 
 	{"public: virtual void * __thiscall std::_Ref_count_base::_Get_deleter(class type_info const &)const",                                                                                                                                                                                                   0x474D50, 0x474D5F},
-	{"nullsub_258",                                                                                                                                                                                                                                                                                          0x474D60, 0x474D6F},
+
 
 	{"public: virtual void * __thiscall CTagStringEdit::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                         0x474F20, 0x474F4F},
 
 	{"public: virtual __thiscall CFieldDialog::~CFieldDialog(void)",                                                                                                                                                                                                                                         0x474FD0, 0x47505F},
 	{"public: virtual void * __thiscall CFieldDialog::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                           0x475060, 0x47508F},
-
-	{"unknown_libname_72",                                                                                                                                                                                                                                                                                   0x4755D0, 0x47566F},
-
-	{"unknown_libname_73",                                                                                                                                                                                                                                                                                   0x4758E0, 0x4758EF},
-	{"unknown_libname_499",                                                                                                                                                                                                                                                                                  0x4758F0, 0x47597F},
-
-	{"unknown_libname_74",                                                                                                                                                                                                                                                                                   0x476520, 0x47665F},
-
-	{"unknown_libname_75",                                                                                                                                                                                                                                                                                   0x476910, 0x47691F},
-
-	{"nullsub_300",                                                                                                                                                                                                                                                                                          0x476B10, 0x476B4F},
-	{"unknown_libname_76",                                                                                                                                                                                                                                                                                   0x476B50, 0x476B5F},
-	{"unknown_libname_77",                                                                                                                                                                                                                                                                                   0x476B60, 0x476B6F},
-
-	{"unknown_libname_78",                                                                                                                                                                                                                                                                                   0x476BF0, 0x476C7F},
-
 	{"public: virtual __thiscall WTL::CColorDialog::~CColorDialog(void)",                                                                                                                                                                                                                                    0x477150, 0x47717F},
 
-	{"nullsub_259",                                                                                                                                                                                                                                                                                          0x479A80, 0x479A8F},
+
 
 	{"public: virtual void * __thiscall WTL::CColorDialog::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x479C00, 0x479C2F},
 
-	{"nullsub_292",                                                                                                                                                                                                                                                                                          0x47A280, 0x47A39F},
+
 
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x47A680, 0x47A6FF},
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x47A700, 0x47A73F},
-	{"unknown_libname_79",                                                                                                                                                                                                                                                                                   0x47A740, 0x47A7FF},
-
-	{"unknown_libname_80",                                                                                                                                                                                                                                                                                   0x47A910, 0x47A93F},
-
-	{"unknown_libname_81",                                                                                                                                                                                                                                                                                   0x47ABD0, 0x47AC4F},
-
-	{"unknown_libname_82",                                                                                                                                                                                                                                                                                   0x47AD30, 0x47ADDF},
-
-	{"unknown_libname_83",                                                                                                                                                                                                                                                                                   0x47AEC0, 0x47AECF},
-
-	{"unknown_libname_835",                                                                                                                                                                                                                                                                                  0x47AFB0, 0x47AFBF},
-	{"unknown_libname_836",                                                                                                                                                                                                                                                                                  0x47AFC0, 0x47AFCF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x47AFD0, 0x47B00F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x47B010, 0x47B03F},
-
 	{"factory::field_info_hack::ctor",                                                                                                                                                                                                                                                                       0x47B440, 0x47B48F},
 	{"factory::field_tag_reference_dialog_handler::ctor",                                                                                                                                                                                                                                                    0x47B490, 0x47B4DF},
 	{"factory::field_block_dialog_handler::ctor",                                                                                                                                                                                                                                                            0x47B4E0, 0x47B52F},
 	{"factory::field_enum_dialog_handler::ctor",                                                                                                                                                                                                                                                             0x47B530, 0x47B57F},
 	{"factory::field_block_index_dialog_handler::ctor",                                                                                                                                                                                                                                                      0x47B580, 0x47B5CF},
 
-	{"unknown_libname_837",                                                                                                                                                                                                                                                                                  0x47C310, 0x47C31F},
-	{"unknown_libname_838",                                                                                                                                                                                                                                                                                  0x47C320, 0x47C32F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x47C330, 0x47C33F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x47C340, 0x47C38F},
+
+
+
+
 
 	{"factory::field_info_hack::create",                                                                                                                                                                                                                                                                     0x47D620, 0x47D82F},
 
@@ -1783,8 +1451,8 @@ FUNCTIONMAP = {
 	{"field_block_index_dialog_handler::is_object_name_editable",                                                                                                                                                                                                                                            0x47EC20, 0x47EC8F},
 
 	{"public: virtual __thiscall CGuerillaView::~CGuerillaView(void)",                                                                                                                                                                                                                                       0x47FA50, 0x47FADF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x47FAE0, 0x47FAEF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x47FAF0, 0x47FB3F},
+
+
 
 	{"public: virtual __thiscall CGuerillaView::~CGuerillaView(void)",                                                                                                                                                                                                                                       0x47FBF0, 0x47FBFF},
 	{"public: virtual __thiscall CGuerillaView::~CGuerillaView(void)",                                                                                                                                                                                                                                       0x47FC00, 0x47FC8F},
@@ -1813,13 +1481,13 @@ FUNCTIONMAP = {
 
 	{"public: virtual void * __thiscall CDialogScrollView::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x486B40, 0x486E6F},
 
-	{"unknown_libname_839",                                                                                                                                                                                                                                                                                  0x488990, 0x48899F},
 
-	{"unknown_libname_500",                                                                                                                                                                                                                                                                                  0x488AB0, 0x488B4F},
-	{"unknown_libname_501",                                                                                                                                                                                                                                                                                  0x488B50, 0x488C4F},
+
+
+
 	{"void * __cdecl operator new(unsigned int, void *)",                                                                                                                                                                                                                                                    0x488C50, 0x488C6F},
 
-	{"unknown_libname_84",                                                                                                                                                                                                                                                                                   0x488CE0, 0x488CEF},
+
 
 	{"public: virtual void * __thiscall CTypeListDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                           0x488FA0, 0x488FCF},
 
@@ -1842,18 +1510,15 @@ FUNCTIONMAP = {
 	{"selection_get_marker_type",                                                                                                                                                                                                                                                                            0x491A40, 0x491A6F},
 
 	{"selection_method_active",                                                                                                                                                                                                                                                                              0x491AC0, 0x491C1F},
-	{"unknown_libname_502",                                                                                                                                                                                                                                                                                  0x491C20, 0x491C2F},
-	{"unknown_libname_503",                                                                                                                                                                                                                                                                                  0x491C30, 0x491C3F},
+
+
 
 	{"sapien_utility_wrappers_init_492710",                                                                                                                                                                                                                                                                  0x492710, 0x4927BF},
 	{"void * __stdcall InterlockedExchangePointer(void * *, void *)",                                                                                                                                                                                                                                        0x4927C0, 0x4927CF},
-
-	{"unknown_libname_85",                                                                                                                                                                                                                                                                                   0x4928F0, 0x49292F},
-
 	{"shell_platform_initialize",                                                                                                                                                                                                                                                                            0x492990, 0x492AAF},
-	{"nullsub_145",                                                                                                                                                                                                                                                                                          0x492AB0, 0x492ABF},
+
 	{"shell_platform_dispose",                                                                                                                                                                                                                                                                               0x492AC0, 0x492ACF},
-	{"nullsub_182",                                                                                                                                                                                                                                                                                          0x492AD0, 0x492ADF},
+
 	{"shell_get_command_line",                                                                                                                                                                                                                                                                               0x492AE0, 0x492AEF},
 
 	{"GetDoubleClickTime",                                                                                                                                                                                                                                                                                   0x492BB0, 0x492BBF},
@@ -1862,26 +1527,26 @@ FUNCTIONMAP = {
 	{"public: __thiscall COleControlSiteOrWnd::COleControlSiteOrWnd(void)",                                                                                                                                                                                                                                  0x492F30, 0x492F3F},
 	{"public: __thiscall COleControlSiteOrWnd::COleControlSiteOrWnd(void)",                                                                                                                                                                                                                                  0x492F40, 0x492F5F},
 
-	{"unknown_libname_86",                                                                                                                                                                                                                                                                                   0x4931D0, 0x4931DF},
+
 	{"public: __thiscall COleControlSiteOrWnd::COleControlSiteOrWnd(void)",                                                                                                                                                                                                                                  0x4931E0, 0x4931EF},
 	{"_beep_0",                                                                                                                                                                                                                                                                                              0x4931F0, 0x4932BF},
-	{"unknown_libname_87",                                                                                                                                                                                                                                                                                   0x4932C0, 0x4932CF},
+
 
 	{"public: __thiscall COleControlSiteOrWnd::COleControlSiteOrWnd(void)",                                                                                                                                                                                                                                  0x493640, 0x49364F},
 	{"public: __thiscall COleControlSiteOrWnd::COleControlSiteOrWnd(void)",                                                                                                                                                                                                                                  0x493650, 0x49369F},
 	{"public: __thiscall COleControlSiteOrWnd::COleControlSiteOrWnd(void)",                                                                                                                                                                                                                                  0x4936A0, 0x4936AF},
-	{"unknown_libname_88",                                                                                                                                                                                                                                                                                   0x4936B0, 0x4936BF},
+
 	{"public: __thiscall COleControlSiteOrWnd::COleControlSiteOrWnd(void)",                                                                                                                                                                                                                                  0x4936C0, 0x4936FF},
 
-	{"unknown_libname_89",                                                                                                                                                                                                                                                                                   0x493960, 0x49396F},
+
 	{"void * __cdecl operator new(unsigned int, void *)",                                                                                                                                                                                                                                                    0x493970, 0x49398F},
 	{"void * __cdecl operator new(unsigned int, void *)",                                                                                                                                                                                                                                                    0x493990, 0x493ACF},
 
 	{"public: virtual __thiscall ATL::CComModule::~CComModule(void)",                                                                                                                                                                                                                                        0x493B30, 0x493B3F},
 	{"public: virtual __thiscall WTL::CAppModule::~CAppModule(void)",                                                                                                                                                                                                                                        0x493B40, 0x493BBF},
-	{"unknown_libname_90",                                                                                                                                                                                                                                                                                   0x493BC0, 0x493BCF},
 
-	{"unknown_libname_91",                                                                                                                                                                                                                                                                                   0x493EA0, 0x49416F},
+
+
 
 	{"public: virtual void * __thiscall ATL::CComModule::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                        0x494300, 0x4943EF},
 	{"public: virtual __thiscall COptionsDialog::~COptionsDialog(void)",                                                                                                                                                                                                                                     0x4943F0, 0x49444F},
@@ -1906,7 +1571,7 @@ FUNCTIONMAP = {
 	{"public: virtual __thiscall WTL::CSplitterWindowT<1>::~CSplitterWindowT<1>(void)",                                                                                                                                                                                                                      0x495B20, 0x495B6F},
 	{"public: virtual void * __thiscall std::_Ref_count_base::_Get_deleter(class type_info const &)const",                                                                                                                                                                                                   0x495B70, 0x495B7F},
 
-	{"nullsub_260",                                                                                                                                                                                                                                                                                          0x495B90, 0x495B9F},
+
 
 	{"public: virtual __thiscall CInstanceListView::~CInstanceListView(void)",                                                                                                                                                                                                                               0x495D10, 0x495D5F},
 	{"public: virtual void * __thiscall CInstanceListView::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x495D60, 0x495EAF},
@@ -1921,7 +1586,7 @@ FUNCTIONMAP = {
 	{"public: virtual void * __thiscall WTL::CSplitterWindowT<1>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                               0x496520, 0x49654F},
 	{"public: __thiscall CDialogScrollView::CDialogScrollView(void)",                                                                                                                                                                                                                                        0x496550, 0x49662F},
 
-	{"nullsub_261",                                                                                                                                                                                                                                                                                          0x4966A0, 0x4966AF},
+
 
 	{"public: virtual void * __thiscall CChildFrame::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                            0x496820, 0x49684F},
 	{"public: __thiscall COptionsView::COptionsView(void)",                                                                                                                                                                                                                                                  0x496850, 0x4968FF},
@@ -1948,11 +1613,11 @@ FUNCTIONMAP = {
 	{"public: virtual void * __thiscall COptionsMainFrame::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                      0x49BE50, 0x49BE7F},
 	{"public: virtual __thiscall CMainFrame::~CMainFrame(void)",                                                                                                                                                                                                                                             0x49BE80, 0x49BFDF},
 
-	{"nullsub_262",                                                                                                                                                                                                                                                                                          0x49D490, 0x49D49F},
+
 
 	{"public: virtual void * __thiscall WTL::CCommandBarCtrl::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                   0x49D610, 0x49D63F},
 
-	{"nullsub_302",                                                                                                                                                                                                                                                                                          0x49F840, 0x49F84F},
+
 
 	{"CPropertyMainFrame_ctor",                                                                                                                                                                                                                                                                              0x4A2DA0, 0x4A2E5F},
 
@@ -1963,7 +1628,7 @@ FUNCTIONMAP = {
 	{"public: virtual void * __thiscall CHierarchyMainFrame::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                    0x4A4300, 0x4A432F},
 
 	{"CMainFrame_ctor",                                                                                                                                                                                                                                                                                      0x4A6C30, 0x4A6E2F},
-	{"nullsub_263",                                                                                                                                                                                                                                                                                          0x4A6E30, 0x4A6E3F},
+
 
 	{"on_handle_menu_command",                                                                                                                                                                                                                                                                               0x4A7140, 0x4A778F},
 
@@ -1972,30 +1637,16 @@ FUNCTIONMAP = {
 	{"WinMain@16_0",                                                                                                                                                                                                                                                                                         0x4A81D0, 0x4A82DF},
 	{"editor_input_active_set",                                                                                                                                                                                                                                                                              0x4A82E0, 0x4A833F},
 	{"editor_camera_point_proxy::dtor",                                                                                                                                                                                                                                                                      0x4A8340, 0x4A835F},
-
 	{"editor_has_focus",                                                                                                                                                                                                                                                                                     0x4A83A0, 0x4A83AF},
 	{"editor_console_is_active",                                                                                                                                                                                                                                                                             0x4A83B0, 0x4A83BF},
 	{"editor_main_status_bar_get",                                                                                                                                                                                                                                                                           0x4A83C0, 0x4A83CF},
 	{"editor_main_status_bar_set",                                                                                                                                                                                                                                                                           0x4A83D0, 0x4A842F},
-
 	{"editor_input_active",                                                                                                                                                                                                                                                                                  0x4A84B0, 0x4A852F},
 	{"editor_input_activate",                                                                                                                                                                                                                                                                                0x4A8530, 0x4A859F},
 	{"editor_input_deactivate",                                                                                                                                                                                                                                                                              0x4A85A0, 0x4A85FF},
 	{"editor_translate_message",                                                                                                                                                                                                                                                                             0x4A8600, 0x4A881F},
 
 	{"shell_idle",                                                                                                                                                                                                                                                                                           0x4A8CB0, 0x4A91DF},
-
-	{"unknown_libname_92",                                                                                                                                                                                                                                                                                   0x4A94E0, 0x4A94FF},
-
-	{"unknown_libname_93",                                                                                                                                                                                                                                                                                   0x4A9520, 0x4A962F},
-	{"unknown_libname_94",                                                                                                                                                                                                                                                                                   0x4A9630, 0x4A963F},
-	{"unknown_libname_95",                                                                                                                                                                                                                                                                                   0x4A9640, 0x4A966F},
-
-	{"unknown_libname_96",                                                                                                                                                                                                                                                                                   0x4A9CF0, 0x4A9D2F},
-	{"unknown_libname_97",                                                                                                                                                                                                                                                                                   0x4A9D30, 0x4A9E9F},
-	{"unknown_libname_98",                                                                                                                                                                                                                                                                                   0x4A9EA0, 0x4A9EAF},
-	{"unknown_libname_99",                                                                                                                                                                                                                                                                                   0x4A9EB0, 0x4A9F3F},
-
 	{"public: virtual __thiscall CSapienSimpleDialog<1>::~CSapienSimpleDialog<1>(void)",                                                                                                                                                                                                                     0x4AA340, 0x4AA41F},
 
 	{"public: virtual __thiscall CCinemaDlg::~CCinemaDlg(void)",                                                                                                                                                                                                                                             0x4AA6B0, 0x4AA6EF},
@@ -2023,201 +1674,175 @@ FUNCTIONMAP = {
 	{"create_cinematic_tool",                                                                                                                                                                                                                                                                                0x4AECA0, 0x4AED6F},
 
 	{"public: virtual void __thiscall CDC::ReleaseAttribDC(void)",                                                                                                                                                                                                                                           0x4AFA9C, 0x4AFB7F},
-
-	{"unknown_libname_100",                                                                                                                                                                                                                                                                                  0x4B0280, 0x4B028F},
-	{"unknown_libname_101",                                                                                                                                                                                                                                                                                  0x4B0290, 0x4B02BF},
-	{"unknown_libname_102",                                                                                                                                                                                                                                                                                  0x4B02C0, 0x4B02CF},
-
-	{"unknown_libname_103",                                                                                                                                                                                                                                                                                  0x4B0400, 0x4B04CF},
-	{"unknown_libname_104",                                                                                                                                                                                                                                                                                  0x4B04D0, 0x4B05FF},
-
-	{"unknown_libname_105",                                                                                                                                                                                                                                                                                  0x4B07F0, 0x4B07FF},
-	{"unknown_libname_106",                                                                                                                                                                                                                                                                                  0x4B0800, 0x4B08EF},
-
-	{"unknown_libname_107",                                                                                                                                                                                                                                                                                  0x4B0BA0, 0x4B0BFF},
-
 	{"clusterpaint_tool_handler_render",                                                                                                                                                                                                                                                                     0x4B0C40, 0x4B0D4F},
-
-	{"unknown_libname_108",                                                                                                                                                                                                                                                                                  0x4B0EC0, 0x4B102F},
-	{"unknown_libname_109",                                                                                                                                                                                                                                                                                  0x4B1030, 0x4B103F},
-	{"unknown_libname_110",                                                                                                                                                                                                                                                                                  0x4B1040, 0x4B119F},
-
 	{"create_clusterpaint_options",                                                                                                                                                                                                                                                                          0x4B1DE0, 0x4B1E3F},
-
 	{"public: virtual __thiscall CClusterpaintDlg::~CClusterpaintDlg(void)",                                                                                                                                                                                                                                 0x4B31C0, 0x4B320F},
-
 	{"public: virtual void * __thiscall CClusterpaintDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                       0x4B3240, 0x4B326F},
 	{"public: __thiscall CClusterpaintDlg::CClusterpaintDlg(void)",                                                                                                                                                                                                                                          0x4B3270, 0x4B347F},
-
 	{"editor_get_marker_under_cursor",                                                                                                                                                                                                                                                                       0x4B5740, 0x4B57FF},
-
 	{"sapien_GetAsyncKeyState",                                                                                                                                                                                                                                                                              0x4B5AD0, 0x4B5AEF},
-
-	{"unknown_libname_505",                                                                                                                                                                                                                                                                                  0x4B5CF0, 0x4B5D0F},
-
 	{"create_create_tool",                                                                                                                                                                                                                                                                                   0x4B6860, 0x4B6C1F},
-
 	{"public: virtual __thiscall COptionsDlg::~COptionsDlg(void)",                                                                                                                                                                                                                                           0x4B8EA0, 0x4B8EEF},
 
 	{"public: virtual void * __thiscall COptionsDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                            0x4B8F20, 0x4B8F4F},
 	{"public: __thiscall COptionsDlg::COptionsDlg(void)",                                                                                                                                                                                                                                                    0x4B8F50, 0x4B8FDF},
 
-	{"unknown_libname_111",                                                                                                                                                                                                                                                                                  0x4B9810, 0x4B981F},
 
-	{"unknown_libname_840",                                                                                                                                                                                                                                                                                  0x4B98E0, 0x4B99AF},
 
-	{"unknown_libname_112",                                                                                                                                                                                                                                                                                  0x4B9A20, 0x4B9A2F},
-	{"unknown_libname_841",                                                                                                                                                                                                                                                                                  0x4B9A30, 0x4B9A4F},
+
+
+
+
 
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4BA160, 0x4BA18F},
 
-	{"unknown_libname_113",                                                                                                                                                                                                                                                                                  0x4BA200, 0x4BA2DF},
 
-	{"unknown_libname_842",                                                                                                                                                                                                                                                                                  0x4BA3C0, 0x4BA3CF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4BA3D0, 0x4BA3FF},
 
-	{"unknown_libname_843",                                                                                                                                                                                                                                                                                  0x4BAF80, 0x4BAFCF},
-	{"unknown_libname_844",                                                                                                                                                                                                                                                                                  0x4BAFD0, 0x4BAFDF},
-	{"unknown_libname_845",                                                                                                                                                                                                                                                                                  0x4BAFE0, 0x4BAFEF},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4BB040, 0x4BB0BF},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4BB330, 0x4BB33F},
+
+
+
+
+
+
+
+
 
 	{"AtlTraceSnapshotProcess@4_0",                                                                                                                                                                                                                                                                          0x4BB3E0, 0x4BB42F},
 
 	{"editor_render_center_marker",                                                                                                                                                                                                                                                                          0x4BCAD0, 0x4BCC4F},
 	{"editor_render_axis_marker",                                                                                                                                                                                                                                                                            0x4BCC50, 0x4BCE7F},
 	{"editor_render_plane_marker",                                                                                                                                                                                                                                                                           0x4BCE80, 0x4BD2FF},
-	{"unknown_libname_114",                                                                                                                                                                                                                                                                                  0x4BD300, 0x4BD37F},
-	{"unknown_libname_115",                                                                                                                                                                                                                                                                                  0x4BD380, 0x4BD3DF},
 
-	{"unknown_libname_116",                                                                                                                                                                                                                                                                                  0x4BD870, 0x4BD90F},
-	{"unknown_libname_117",                                                                                                                                                                                                                                                                                  0x4BD910, 0x4BD93F},
 
-	{"unknown_libname_846",                                                                                                                                                                                                                                                                                  0x4BDA90, 0x4BDACF},
 
-	{"unknown_libname_847",                                                                                                                                                                                                                                                                                  0x4BDB40, 0x4BDB5F},
 
-	{"unknown_libname_848",                                                                                                                                                                                                                                                                                  0x4BE020, 0x4BE0DF},
 
-	{"unknown_libname_118",                                                                                                                                                                                                                                                                                  0x4BEF60, 0x4BEFBF},
-	{"unknown_libname_119",                                                                                                                                                                                                                                                                                  0x4BEFC0, 0x4BEFCF},
 
-	{"unknown_libname_120",                                                                                                                                                                                                                                                                                  0x4BF090, 0x4BF16F},
 
-	{"unknown_libname_121",                                                                                                                                                                                                                                                                                  0x4BF1F0, 0x4BF1FF},
 
-	{"unknown_libname_122",                                                                                                                                                                                                                                                                                  0x4BF360, 0x4BF36F},
 
-	{"unknown_libname_123",                                                                                                                                                                                                                                                                                  0x4BF480, 0x4BF48F},
 
-	{"unknown_libname_124",                                                                                                                                                                                                                                                                                  0x4BF5A0, 0x4BF5AF},
 
-	{"unknown_libname_125",                                                                                                                                                                                                                                                                                  0x4BF6C0, 0x4BF6CF},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4BF910, 0x4BF92F},
 
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4BFB20, 0x4BFB3F},
 
-	{"unknown_libname_126",                                                                                                                                                                                                                                                                                  0x4BFD70, 0x4BFD8F},
-	{"unknown_libname_849",                                                                                                                                                                                                                                                                                  0x4BFD90, 0x4BFDDF},
+
+
 
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4BFE10, 0x4BFE2F},
 
-	{"unknown_libname_850",                                                                                                                                                                                                                                                                                  0x4BFF80, 0x4C007F},
 
-	{"unknown_libname_127",                                                                                                                                                                                                                                                                                  0x4C00A0, 0x4C021F},
+
+
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4C0220, 0x4C023F},
 
-	{"unknown_libname_128",                                                                                                                                                                                                                                                                                  0x4C0280, 0x4C029F},
 
-	{"unknown_libname_129",                                                                                                                                                                                                                                                                                  0x4C0340, 0x4C034F},
-	{"unknown_libname_130",                                                                                                                                                                                                                                                                                  0x4C0350, 0x4C044F},
-	{"unknown_libname_851",                                                                                                                                                                                                                                                                                  0x4C0450, 0x4C045F},
 
-	{"unknown_libname_852",                                                                                                                                                                                                                                                                                  0x4C0780, 0x4C078F},
-	{"unknown_libname_131",                                                                                                                                                                                                                                                                                  0x4C0790, 0x4C079F},
-	{"unknown_libname_132",                                                                                                                                                                                                                                                                                  0x4C07A0, 0x4C08CF},
 
-	{"nullsub_366",                                                                                                                                                                                                                                                                                          0x4C0D50, 0x4C0D6F},
 
-	{"unknown_libname_133",                                                                                                                                                                                                                                                                                  0x4C1440, 0x4C152F},
 
-	{"unknown_libname_853",                                                                                                                                                                                                                                                                                  0x4C2140, 0x4C218F},
-	{"unknown_libname_854",                                                                                                                                                                                                                                                                                  0x4C2190, 0x4C21EF},
 
-	{"unknown_libname_134",                                                                                                                                                                                                                                                                                  0x4C22E0, 0x4C231F},
+
+
+
+
+
+
+
+
+
+
+
+
 
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4C23B0, 0x4C23FF},
-	{"unknown_libname_135",                                                                                                                                                                                                                                                                                  0x4C2400, 0x4C242F},
-	{"unknown_libname_136",                                                                                                                                                                                                                                                                                  0x4C2430, 0x4C244F},
-	{"unknown_libname_855",                                                                                                                                                                                                                                                                                  0x4C2450, 0x4C246F},
 
-	{"unknown_libname_137",                                                                                                                                                                                                                                                                                  0x4C25B0, 0x4C25BF},
-	{"unknown_libname_138",                                                                                                                                                                                                                                                                                  0x4C25C0, 0x4C263F},
 
-	{"unknown_libname_856",                                                                                                                                                                                                                                                                                  0x4C2700, 0x4C270F},
-	{"unknown_libname_857",                                                                                                                                                                                                                                                                                  0x4C2710, 0x4C275F},
 
-	{"unknown_libname_858",                                                                                                                                                                                                                                                                                  0x4C2A30, 0x4C2A5F},
 
-	{"unknown_libname_859",                                                                                                                                                                                                                                                                                  0x4C2AC0, 0x4C2ACF},
-	{"unknown_libname_860",                                                                                                                                                                                                                                                                                  0x4C2AD0, 0x4C2ADF},
-	{"unknown_libname_861",                                                                                                                                                                                                                                                                                  0x4C2AE0, 0x4C2AEF},
-	{"unknown_libname_139",                                                                                                                                                                                                                                                                                  0x4C2AF0, 0x4C2AFF},
-	{"unknown_libname_140",                                                                                                                                                                                                                                                                                  0x4C2B00, 0x4C2B4F},
-	{"unknown_libname_862",                                                                                                                                                                                                                                                                                  0x4C2B50, 0x4C2B5F},
 
-	{"unknown_libname_863",                                                                                                                                                                                                                                                                                  0x4C2D90, 0x4C2D9F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C2E30, 0x4C2E5F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C2E60, 0x4C2E6F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C2E70, 0x4C2E9F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C2EA0, 0x4C2EAF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C2EB0, 0x4C2EBF},
-	{"unknown_libname_864",                                                                                                                                                                                                                                                                                  0x4C2EC0, 0x4C2ECF},
 
-	{"unknown_libname_865",                                                                                                                                                                                                                                                                                  0x4C3B00, 0x4C3B1F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C3B20, 0x4C3B3F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C3B40, 0x4C3B4F},
-	{"unknown_libname_866",                                                                                                                                                                                                                                                                                  0x4C3B50, 0x4C3C2F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C3C30, 0x4C3C4F},
-	{"protected: __thiscall DNameNode::DNameNode(void)",                                                                                                                                                                                                                                                     0x4C3C50, 0x4C3C6F},
-	{"unknown_libname_867",                                                                                                                                                                                                                                                                                  0x4C3C70, 0x4C3C7F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C3D50, 0x4C3D6F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C3D70, 0x4C3DCF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C3DD0, 0x4C3DDF},
-	{"unknown_libname_868",                                                                                                                                                                                                                                                                                  0x4C3DE0, 0x4C3E2F},
-	{"unknown_libname_869",                                                                                                                                                                                                                                                                                  0x4C3E30, 0x4C3E5F},
-	{"unknown_libname_870",                                                                                                                                                                                                                                                                                  0x4C3E60, 0x4C3E7F},
-	{"unknown_libname_871",                                                                                                                                                                                                                                                                                  0x4C3E80, 0x4C3E9F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C3EA0, 0x4C3EBF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C3EC0, 0x4C3ECF},
 
-	{"unknown_libname_872",                                                                                                                                                                                                                                                                                  0x4C3FB0, 0x4C3FBF},
-	{"unknown_libname_873",                                                                                                                                                                                                                                                                                  0x4C3FC0, 0x4C3FCF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C3FD0, 0x4C3FFF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C4000, 0x4C400F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C4010, 0x4C401F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C4070, 0x4C407F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C4160, 0x4C416F},
-	{"unknown_libname_874",                                                                                                                                                                                                                                                                                  0x4C4170, 0x4C421F},
 
-	{"unknown_libname_875",                                                                                                                                                                                                                                                                                  0x4C49F0, 0x4C4ABF},
 
-	{"unknown_libname_876",                                                                                                                                                                                                                                                                                  0x4C4DA0, 0x4C4DAF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C4DB0, 0x4C4DBF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C4DC0, 0x4C4DCF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C4DD0, 0x4C4E1F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C4E20, 0x4C4E2F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4C4EE0, 0x4C4F0F},
 
-	{"unknown_libname_877",                                                                                                                                                                                                                                                                                  0x4C5C70, 0x4C5DCF},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	{"AtlTraceSnapshotProcess@4_1",                                                                                                                                                                                                                                                                          0x4C6820, 0x4C69AF},
 
@@ -2249,9 +1874,9 @@ FUNCTIONMAP = {
 
 	{"public: static int __cdecl std::char_traits<char>::to_int_type(char const &)",                                                                                                                                                                                                                         0x4D3160, 0x4D316F},
 	{"public: static bool __cdecl std::char_traits<char>::eq_int_type(int const &, int const &)",                                                                                                                                                                                                            0x4D3170, 0x4D320F},
-	{"unknown_libname_141",                                                                                                                                                                                                                                                                                  0x4D3210, 0x4D326F},
 
-	{"protected: __thiscall std::locale::facet::facet(unsigned int)",                                                                                                                                                                                                                                        0x4D3300, 0x4D331F},
+
+
 	{"public: __thiscall std::locale::locale(class std::locale const &)",                                                                                                                                                                                                                                    0x4D3320, 0x4D333F},
 	{"public: __thiscall std::locale::~locale(void)",                                                                                                                                                                                                                                                        0x4D3340, 0x4D335F},
 	{"public: virtual void * __thiscall std::locale::facet::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                     0x4D3360, 0x4D338F},
@@ -2267,40 +1892,40 @@ FUNCTIONMAP = {
 	{"public: int __thiscall std::ios_base::precision(int)",                                                                                                                                                                                                                                                 0x4D3560, 0x4D357F},
 	{"public: int __thiscall std::ios_base::width(int)",                                                                                                                                                                                                                                                     0x4D3580, 0x4D358F},
 
-	{"protected: __thiscall std::ios_base::ios_base(void)",                                                                                                                                                                                                                                                  0x4D35E0, 0x4D35EF},
+
 	{"public: virtual void * __thiscall std::ios_base::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                          0x4D35F0, 0x4D361F},
 	{"public: virtual __thiscall basic_ostream<char, struct char_traits<char>>::~basic_ostream<char, struct char_traits<char>>(void)",                                                                                                                                                                       0x4D3620, 0x4D363F},
 	{"public: virtual __thiscall std::basic_ios<char, struct std::char_traits<char>>::~basic_ios<char, struct std::char_traits<char>>(void)",                                                                                                                                                                0x4D3640, 0x4D369F},
 	{"public: virtual void * __thiscall std::basic_ios<char, struct std::char_traits<char>>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                    0x4D36A0, 0x4D36FF},
-	{"protected: __thiscall std::basic_ios<char, struct std::char_traits<char>>::basic_ios<char, struct std::char_traits<char>>(void)",                                                                                                                                                                      0x4D3700, 0x4D373F},
-	{"protected: void __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::setg(char *, char *, char *)",                                                                                                                                                                                   0x4D3740, 0x4D376F},
-	{"protected: char * __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::epptr(void)const",                                                                                                                                                                                             0x4D3770, 0x4D377F},
-	{"protected: char * __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::_Pninc(void)",                                                                                                                                                                                                 0x4D3780, 0x4D38AF},
 
-	{"protected: void __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::setp(char *, char *)",                                                                                                                                                                                           0x4D3980, 0x4D39EF},
-	{"unknown_libname_142",                                                                                                                                                                                                                                                                                  0x4D39F0, 0x4D39FF},
+
+
+
+
+
+
 	{"public: virtual void __thiscall Concurrency::details::ExternalContextBase::SpinYield(void)",                                                                                                                                                                                                           0x4D3A00, 0x4D3A0F},
-	{"unknown_libname_143",                                                                                                                                                                                                                                                                                  0x4D3A10, 0x4D3A6F},
+
 
 	{"public: __thiscall std::ctype<char>::ctype<char>(void)",                                                                                                                                                                                                                                               0x4D43B0, 0x4D44CF},
 
-	{"protected: virtual char __thiscall std::ctype<char>::do_widen(char)const",                                                                                                                                                                                                                             0x4D4590, 0x4D459F},
 
-	{"protected: virtual char __thiscall std::ctype<char>::do_narrow(char, char)const",                                                                                                                                                                                                                      0x4D45D0, 0x4D45DF},
+
+
 
 	{"public: virtual void * __thiscall std::ctype<char>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                       0x4D4690, 0x4D46BF},
 	{"public: virtual __thiscall std::ctype<char>::~ctype<char>(void)",                                                                                                                                                                                                                                      0x4D46C0, 0x4D478F},
 	{"public: virtual __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::~basic_streambuf<char, struct std::char_traits<char>>(void)",                                                                                                                                                    0x4D4790, 0x4D481F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4D4860, 0x4D486F},
 
-	{"nullsub_264",                                                                                                                                                                                                                                                                                          0x4D4880, 0x4D488F},
-	{"protected: virtual int __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::uflow(void)",                                                                                                                                                                                             0x4D4890, 0x4D48BF},
-	{"unknown_libname_144",                                                                                                                                                                                                                                                                                  0x4D48C0, 0x4D48DF},
+
+
+
+
 
 	{"public: virtual void * __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::`scalar deleting destructor'(unsigned int)",                                                                                                                                                              0x4D4B20, 0x4D4BAF},
 
-	{"unknown_libname_145",                                                                                                                                                                                                                                                                                  0x4D4C90, 0x4D4C9F},
+
 
 	{"public: virtual void * __thiscall std::num_put<char, class std::ostreambuf_iterator<char, struct std::char_traits<char>>>::`scalar deleting destructor'(unsigned int)",                                                                                                                                0x4D56D0, 0x4D56FF},
 	{"public: virtual __thiscall std::num_put<char, class std::ostreambuf_iterator<char, struct std::char_traits<char>>>::~num_put<char, class std::ostreambuf_iterator<char, struct std::char_traits<char>>>(void)",                                                                                        0x4D5700, 0x4D570F},
@@ -2311,7 +1936,7 @@ FUNCTIONMAP = {
 
 	{"public: __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::basic_streambuf<char, struct std::char_traits<char>>(void)",                                                                                                                                                             0x4D6CA0, 0x4D6D2F},
 
-	{"protected: char * __thiscall std::basic_streambuf<char, struct std::char_traits<char>>::_Gndec(void)",                                                                                                                                                                                                 0x4D7140, 0x4D715F},
+
 
 	{"recorded_animation_compress_4D7BB0",                                                                                                                                                                                                                                                                   0x4D7BB0, 0x4D7C2F},
 	{"recorded_animation_compress_4D7C30",                                                                                                                                                                                                                                                                   0x4D7C30, 0x4D7CAF},
@@ -2341,7 +1966,7 @@ FUNCTIONMAP = {
 
 	{"public: virtual void * __thiscall CSpraypaintDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                         0x4DC390, 0x4DC3EF},
 	{"public: virtual void * __thiscall std::_Ref_count_base::_Get_deleter(class type_info const &)const",                                                                                                                                                                                                   0x4DC3F0, 0x4DC3FF},
-	{"nullsub_265",                                                                                                                                                                                                                                                                                          0x4DC400, 0x4DC40F},
+
 
 	{"public: virtual void * __thiscall CColorButton::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                           0x4DC580, 0x4DC5AF},
 
@@ -2368,28 +1993,28 @@ FUNCTIONMAP = {
 	{"editor_window_register",                                                                                                                                                                                                                                                                               0x4E1560, 0x4E15EF},
 	{"j_j__selection_get_count",                                                                                                                                                                                                                                                                             0x4E15F0, 0x4E15FF},
 
-	{"unknown_libname_146",                                                                                                                                                                                                                                                                                  0x4E1CF0, 0x4E1D4F},
-	{"unknown_libname_878",                                                                                                                                                                                                                                                                                  0x4E1D50, 0x4E1E2F},
 
-	{"unknown_libname_879",                                                                                                                                                                                                                                                                                  0x4E1EA0, 0x4E1EAF},
-	{"unknown_libname_147",                                                                                                                                                                                                                                                                                  0x4E1EB0, 0x4E1EFF},
+
+
+
+
 
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4E2150, 0x4E216F},
-	{"unknown_libname_148",                                                                                                                                                                                                                                                                                  0x4E2170, 0x4E218F},
 
-	{"unknown_libname_880",                                                                                                                                                                                                                                                                                  0x4E23A0, 0x4E23AF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4E23B0, 0x4E23DF},
 
-	{"unknown_libname_881",                                                                                                                                                                                                                                                                                  0x4E2500, 0x4E255F},
-	{"unknown_libname_882",                                                                                                                                                                                                                                                                                  0x4E2560, 0x4E256F},
-	{"unknown_libname_883",                                                                                                                                                                                                                                                                                  0x4E2570, 0x4E257F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4E25D0, 0x4E262F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4E26C0, 0x4E26CF},
+
+
+
+
+
+
+
+
 	{"AtlTraceSnapshotProcess@4_5",                                                                                                                                                                                                                                                                          0x4E26D0, 0x4E26DF},
 
-	{"unknown_libname_149",                                                                                                                                                                                                                                                                                  0x4E4340, 0x4E437F},
+
 
 	{"try_save_sapien_config",                                                                                                                                                                                                                                                                               0x4E49B0, 0x4E4B7F},
 
@@ -2397,56 +2022,20 @@ FUNCTIONMAP = {
 
 	{"query_registry_value",                                                                                                                                                                                                                                                                                 0x4E5D70, 0x4E5DEF},
 	{"registry_set_value",                                                                                                                                                                                                                                                                                   0x4E5DF0, 0x4E5E1F},
-
-	{"nullsub_148",                                                                                                                                                                                                                                                                                          0x4E6100, 0x4E610F},
-	{"nullsub_147",                                                                                                                                                                                                                                                                                          0x4E6110, 0x4E611F},
-	{"unknown_libname_150",                                                                                                                                                                                                                                                                                  0x4E6120, 0x4E612F},
-
-	{"nullsub_146",                                                                                                                                                                                                                                                                                          0x4E6660, 0x4E666F},
-
-	{"unknown_libname_151",                                                                                                                                                                                                                                                                                  0x4E6840, 0x4E687F},
-	{"unknown_libname_884",                                                                                                                                                                                                                                                                                  0x4E6880, 0x4E68AF},
-
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4E6AA0, 0x4E6ABF},
-	{"unknown_libname_152",                                                                                                                                                                                                                                                                                  0x4E6AC0, 0x4E6B3F},
-	{"unknown_libname_885",                                                                                                                                                                                                                                                                                  0x4E6B40, 0x4E6B5F},
 
-	{"unknown_libname_886",                                                                                                                                                                                                                                                                                  0x4E6C40, 0x4E6C4F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4E6CC0, 0x4E6D3F},
-
-	{"unknown_libname_887",                                                                                                                                                                                                                                                                                  0x4E6DE0, 0x4E6DEF},
-	{"unknown_libname_888",                                                                                                                                                                                                                                                                                  0x4E6DF0, 0x4E6DFF},
-
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4E6E50, 0x4E6EBF},
-
-	{"unknown_libname_889",                                                                                                                                                                                                                                                                                  0x4E6F50, 0x4E6F5F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4E6F60, 0x4E6F6F},
-
-	{"unknown_libname_890",                                                                                                                                                                                                                                                                                  0x4E7030, 0x4E703F},
 
 	{"public: virtual __thiscall CMainDlg::~CMainDlg(void)",                                                                                                                                                                                                                                                 0x4E8740, 0x4E879F},
 	{"public: virtual void * __thiscall CMainDlg::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                               0x4E87A0, 0x4E880F},
-
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4E9500, 0x4E956F},
-
-	{"unknown_libname_153",                                                                                                                                                                                                                                                                                  0x4E96B0, 0x4E96DF},
-
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4E98C0, 0x4E98DF},
 
-	{"unknown_libname_154",                                                                                                                                                                                                                                                                                  0x4E9950, 0x4E996F},
 
-	{"unknown_libname_155",                                                                                                                                                                                                                                                                                  0x4E9C00, 0x4E9C0F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4E9C10, 0x4E9C3F},
-	{"unknown_libname_891",                                                                                                                                                                                                                                                                                  0x4E9C40, 0x4E9C7F},
-	{"unknown_libname_156",                                                                                                                                                                                                                                                                                  0x4E9C80, 0x4E9C8F},
 
-	{"unknown_libname_892",                                                                                                                                                                                                                                                                                  0x4E9D10, 0x4E9D4F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4E9D50, 0x4E9D7F},
-	{"unknown_libname_893",                                                                                                                                                                                                                                                                                  0x4E9D80, 0x4E9DBF},
 
-	{"unknown_libname_894",                                                                                                                                                                                                                                                                                  0x4E9E10, 0x4E9E1F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4E9E20, 0x4E9E2F},
+
+
 
 	{"AtlTraceSnapshotProcess@4_6",                                                                                                                                                                                                                                                                          0x4EA570, 0x4EA57F},
 
@@ -2456,45 +2045,45 @@ FUNCTIONMAP = {
 
 	{"editor_d3dview_mouse_handler",                                                                                                                                                                                                                                                                         0x4EBF70, 0x4EC20F},
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4EC210, 0x4EC25F},
-	{"unknown_libname_157",                                                                                                                                                                                                                                                                                  0x4EC260, 0x4EC2CF},
+
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4EC2D0, 0x4EC30F},
 
-	{"unknown_libname_895",                                                                                                                                                                                                                                                                                  0x4EC3D0, 0x4EC3DF},
-	{"unknown_libname_158",                                                                                                                                                                                                                                                                                  0x4EC3E0, 0x4EC47F},
 
-	{"unknown_libname_159",                                                                                                                                                                                                                                                                                  0x4EC680, 0x4EC6BF},
+
+
+
 
 	{"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                                                                                                                                                                                  0x4EC940, 0x4EC95F},
 
-	{"unknown_libname_160",                                                                                                                                                                                                                                                                                  0x4EC9D0, 0x4EC9EF},
 
-	{"unknown_libname_161",                                                                                                                                                                                                                                                                                  0x4ECBD0, 0x4ECC5F},
 
-	{"unknown_libname_896",                                                                                                                                                                                                                                                                                  0x4ECCF0, 0x4ECCFF},
 
-	{"unknown_libname_162",                                                                                                                                                                                                                                                                                  0x4ECD70, 0x4ECDAF},
 
-	{"unknown_libname_897",                                                                                                                                                                                                                                                                                  0x4ECE20, 0x4ECE2F},
-	{"unknown_libname_163",                                                                                                                                                                                                                                                                                  0x4ECE30, 0x4ECE3F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4ECE40, 0x4ECE6F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4ECE70, 0x4ECE9F},
-	{"unknown_libname_898",                                                                                                                                                                                                                                                                                  0x4ECEA0, 0x4ECEBF},
 
-	{"unknown_libname_164",                                                                                                                                                                                                                                                                                  0x4ECF80, 0x4ECF8F},
 
-	{"unknown_libname_899",                                                                                                                                                                                                                                                                                  0x4ED010, 0x4ED0FF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4ED100, 0x4ED10F},
-	{"unknown_libname_900",                                                                                                                                                                                                                                                                                  0x4ED110, 0x4ED1BF},
-	{"unknown_libname_901",                                                                                                                                                                                                                                                                                  0x4ED1C0, 0x4ED1CF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4ED1D0, 0x4ED1DF},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4ED1E0, 0x4ED22F},
-	{"unknown_libname_902",                                                                                                                                                                                                                                                                                  0x4ED230, 0x4ED2CF},
 
-	{"unknown_libname_903",                                                                                                                                                                                                                                                                                  0x4ED3C0, 0x4ED3DF},
-	{"unknown_libname_904",                                                                                                                                                                                                                                                                                  0x4ED3E0, 0x4ED42F},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4ED470, 0x4ED47F},
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4ED480, 0x4ED48F},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	{"AtlTraceSnapshotProcess@4_7",                                                                                                                                                                                                                                                                          0x4ED810, 0x4ED89F},
 
@@ -2516,7 +2105,7 @@ FUNCTIONMAP = {
 	{"sapien_EnableMenuItem",                                                                                                                                                                                                                                                                                0x4F0140, 0x4F015F},
 	{"sapien_DestroyWindow",                                                                                                                                                                                                                                                                                 0x4F0160, 0x4F036F},
 
-	{"unknown_libname_165",                                                                                                                                                                                                                                                                                  0x4F0A80, 0x4F0B1F},
+
 	{"void * __cdecl operator new(unsigned int, void *)",                                                                                                                                                                                                                                                    0x4F0B20, 0x4F0B3F},
 	{"void * __cdecl operator new(unsigned int, void *)",                                                                                                                                                                                                                                                    0x4F0B40, 0x4F0B5F},
 
@@ -2527,7 +2116,7 @@ FUNCTIONMAP = {
 	{"on_window_arrange_icons",                                                                                                                                                                                                                                                                              0x4F0EF0, 0x4F0F0F},
 	{"on_file_import_sound_scenery",                                                                                                                                                                                                                                                                         0x4F0F10, 0x4F13AF},
 
-	{"protected: virtual class std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>> * __thiscall std::basic_streambuf<wchar_t, struct std::char_traits<wchar_t>>::setbuf(wchar_t *, int)",                                                                                                        0x4F1584, 0x4F15DF},
+
 
 	{"on_main_278",                                                                                                                                                                                                                                                                                          0x4F1EA0, 0x4F212F},
 	{"on_view_toolbar",                                                                                                                                                                                                                                                                                      0x4F2130, 0x4F218F},
@@ -2605,7 +2194,7 @@ FUNCTIONMAP = {
 	{"references_path",                                                                                                                                                                                                                                                                                      0x4F8250, 0x4F829F},
 	{"init_cseries_profiling",                                                                                                                                                                                                                                                                               0x4F82A0, 0x4F82CF},
 
-	{"nullsub_1",                                                                                                                                                                                                                                                                                            0x4F8330, 0x4F833F},
+
 	{"tag_get_group_tag",                                                                                                                                                                                                                                                                                    0x4F8340, 0x4F837F},
 	{"tag_get_name",                                                                                                                                                                                                                                                                                         0x4F8380, 0x4F83BF},
 	{"tag_loaded",                                                                                                                                                                                                                                                                                           0x4F83C0, 0x4F847F},
@@ -2739,7 +2328,7 @@ FUNCTIONMAP = {
 	{"j_sv_banlist_print",                                                                                                                                                                                                                                                                                   0x502A60, 0x502A6F},
 	{"network_sv_func_initialize",                                                                                                                                                                                                                                                                           0x502A70, 0x502A7F},
 	{"network_sv_func_dispose",                                                                                                                                                                                                                                                                              0x502A80, 0x502AEF},
-	{"nullsub_2",                                                                                                                                                                                                                                                                                            0x502AF0, 0x502AFF},
+
 
 	{"rcon_response_to_network",                                                                                                                                                                                                                                                                             0x503980, 0x503A3F},
 	{"rcon_response_from_network",                                                                                                                                                                                                                                                                           0x503A40, 0x503BDF},
@@ -2759,7 +2348,7 @@ FUNCTIONMAP = {
 
 	{"terminal_printf",                                                                                                                                                                                                                                                                                      0x506B20, 0x506C4F},
 	{"terminal_printf_info",                                                                                                                                                                                                                                                                                 0x506C50, 0x506DAF},
-	{"nullsub_181",                                                                                                                                                                                                                                                                                          0x506DB0, 0x506DBF},
+
 
 	{"input_flush",                                                                                                                                                                                                                                                                                          0x506E10, 0x506E9F},
 
@@ -2772,8 +2361,8 @@ FUNCTIONMAP = {
 	{"input_get_gamepad_state",                                                                                                                                                                                                                                                                              0x507270, 0x5072DF},
 	{"input_gamepad_button_is_down",                                                                                                                                                                                                                                                                         0x5072E0, 0x50733F},
 	{"was_rasterizer_reset_state",                                                                                                                                                                                                                                                                           0x507340, 0x50734F},
-	{"nullsub_374",                                                                                                                                                                                                                                                                                          0x507350, 0x50735F},
-	{"nullsub_4",                                                                                                                                                                                                                                                                                            0x507360, 0x50736F},
+
+
 	{"render_return?",                                                                                                                                                                                                                                                                                       0x507370, 0x50737F},
 
 	{"set_gamepad_control",                                                                                                                                                                                                                                                                                  0x5078B0, 0x5079CF},
@@ -2789,7 +2378,7 @@ FUNCTIONMAP = {
 	{"input_activate_joy",                                                                                                                                                                                                                                                                                   0x5081E0, 0x5082CF},
 
 	{"input_dispose_gamepad",                                                                                                                                                                                                                                                                                0x5084C0, 0x50853F},
-	{"nullsub_6",                                                                                                                                                                                                                                                                                            0x508540, 0x50854F},
+
 
 	{"input_error",                                                                                                                                                                                                                                                                                          0x5086D0, 0x50895F},
 	{"input_dispose",                                                                                                                                                                                                                                                                                        0x508960, 0x5089DF},
@@ -2805,7 +2394,7 @@ FUNCTIONMAP = {
 	{"input_initialize",                                                                                                                                                                                                                                                                                     0x509DC0, 0x509E6F},
 
 	{"rasterizer_initialize",                                                                                                                                                                                                                                                                                0x509EB0, 0x509EEF},
-	{"j_nullsub_149",                                                                                                                                                                                                                                                                                        0x509EF0, 0x509EFF},
+
 	{"rasterizer_frame_begin",                                                                                                                                                                                                                                                                               0x509F00, 0x509F8F},
 	{"rasterizer_windows_begin",                                                                                                                                                                                                                                                                             0x509F90, 0x509F9F},
 	{"rasterizer_window_begin",                                                                                                                                                                                                                                                                              0x509FA0, 0x509FBF},
@@ -2819,12 +2408,12 @@ FUNCTIONMAP = {
 	{"rasterizer_dynamic_triangles_new",                                                                                                                                                                                                                                                                     0x50A040, 0x50A04F},
 	{"rasterizer_dynamic_triangles_lock",                                                                                                                                                                                                                                                                    0x50A050, 0x50A05F},
 	{"rasterizer_dynamic_triangles_unlock",                                                                                                                                                                                                                                                                  0x50A060, 0x50A08F},
-	{"j_nullsub_150",                                                                                                                                                                                                                                                                                        0x50A090, 0x50A09F},
+
 	{"rasterizer_dynamic_vertices_new",                                                                                                                                                                                                                                                                      0x50A0A0, 0x50A0AF},
 
-	{"j_nullsub_151",                                                                                                                                                                                                                                                                                        0x50A0E0, 0x50A0EF},
 
-	{"j_nullsub_152",                                                                                                                                                                                                                                                                                        0x50A290, 0x50A29F},
+
+
 
 	{"game_state_lruv_cache_new",                                                                                                                                                                                                                                                                            0x50A2B0, 0x50A2BF},
 
@@ -2849,20 +2438,20 @@ FUNCTIONMAP = {
 
 	{"j__rasterizer_environment_diffuse_light_begin",                                                                                                                                                                                                                                                        0x50AC90, 0x50AC9F},
 	{"j__rasterizer_environment_diffuse_light_draw",                                                                                                                                                                                                                                                         0x50ACA0, 0x50ACAF},
-	{"j_nullsub_154",                                                                                                                                                                                                                                                                                        0x50ACB0, 0x50ACBF},
+
 
 	{"j__rasterizer_environment_shadow_begin",                                                                                                                                                                                                                                                               0x50ACE0, 0x50ACEF},
 
 	{"j___rasterizer_environment_shadow_model_draw",                                                                                                                                                                                                                                                         0x50AD00, 0x50AD0F},
 
 	{"j__rasterizer_environment_specular_light_draw",                                                                                                                                                                                                                                                        0x50ADA0, 0x50ADAF},
-	{"j_nullsub_155",                                                                                                                                                                                                                                                                                        0x50ADB0, 0x50ADBF},
+
 
 	{"j__rasterizer_environment_specular_lightmap_draw",                                                                                                                                                                                                                                                     0x50ADF0, 0x50ADFF},
-	{"j_nullsub_309",                                                                                                                                                                                                                                                                                        0x50AE00, 0x50AE0F},
+
 
 	{"j__rasterizer_environment_reflection_lightmap_mask_draw",                                                                                                                                                                                                                                              0x50AE40, 0x50AE4F},
-	{"j_nullsub_310",                                                                                                                                                                                                                                                                                        0x50AE50, 0x50AE6F},
+
 
 	{"j__rasterizer_environment_reflection_mirror_draw",                                                                                                                                                                                                                                                     0x50AE80, 0x50AE9F},
 
@@ -2871,8 +2460,8 @@ FUNCTIONMAP = {
 	{"j__rasterizer_environment_fog_begin",                                                                                                                                                                                                                                                                  0x50AF00, 0x50AF0F},
 	{"j__rasterizer_environment_fog_draw",                                                                                                                                                                                                                                                                   0x50AF10, 0x50AF1F},
 
-	{"j_nullsub_156",                                                                                                                                                                                                                                                                                        0x50AF40, 0x50AF5F},
-	{"j_nullsub_157",                                                                                                                                                                                                                                                                                        0x50AF60, 0x50AF6F},
+
+
 
 	{"j___rasterizer_dynamic_screen_geometry_draw",                                                                                                                                                                                                                                                          0x50AFB0, 0x50AFCF},
 	{"j__rasterizer_dynamic_screen_geometry_draw",                                                                                                                                                                                                                                                           0x50AFD0, 0x50AFDF},
@@ -2883,11 +2472,11 @@ FUNCTIONMAP = {
 	{"rasterizer_hud_motion_sensor_blip_draw",                                                                                                                                                                                                                                                               0x50B0A0, 0x50B0AF},
 	{"rasterizer_hud_motion_sensor_blip_end",                                                                                                                                                                                                                                                                0x50B0B0, 0x50B0BF},
 
-	{"nullsub_7",                                                                                                                                                                                                                                                                                            0x50B0D0, 0x50B11F},
 
-	{"nullsub_8",                                                                                                                                                                                                                                                                                            0x50B1D0, 0x50B1DF},
 
-	{"nullsub_9",                                                                                                                                                                                                                                                                                            0x50B250, 0x50B26F},
+
+
+
 
 	{"game_state_malloc",                                                                                                                                                                                                                                                                                    0x50B510, 0x50B61F},
 	{"saved_game_game_state_rel",                                                                                                                                                                                                                                                                            0x50B620, 0x50B72F},
@@ -2909,8 +2498,8 @@ FUNCTIONMAP = {
 
 	{"main_want_exit",                                                                                                                                                                                                                                                                                       0x5115C0, 0x5115EF},
 
-	{"nullsub_363",                                                                                                                                                                                                                                                                                          0x511690, 0x51169F},
-	{"nullsub_362",                                                                                                                                                                                                                                                                                          0x5116A0, 0x5116AF},
+
+
 	{"create_local_players",                                                                                                                                                                                                                                                                                 0x5116B0, 0x51170F},
 
 	{"game_editor_check_511A50",                                                                                                                                                                                                                                                                             0x511A50, 0x511A6F},
@@ -2919,7 +2508,7 @@ FUNCTIONMAP = {
 
 	{"map_name_sp_map_to_idx",                                                                                                                                                                                                                                                                               0x511B10, 0x511D1F},
 
-	{"nullsub_10",                                                                                                                                                                                                                                                                                           0x511D50, 0x511D5F},
+
 
 	{"splitscreen_render?",                                                                                                                                                                                                                                                                                  0x511DD0, 0x511FBF},
 	{"main_pregame_render",                                                                                                                                                                                                                                                                                  0x511FC0, 0x51221F},
@@ -2981,12 +2570,12 @@ FUNCTIONMAP = {
 	{"unlock_global_random_seed",                                                                                                                                                                                                                                                                            0x51C610, 0x51C63F},
 
 	{"get_global_local_random_seed_address",                                                                                                                                                                                                                                                                 0x51C690, 0x51C69F},
-	{"nullsub_11",                                                                                                                                                                                                                                                                                           0x51C6A0, 0x51C6CF},
+
 
 	{"seed_random",                                                                                                                                                                                                                                                                                          0x51C820, 0x51C83F},
 
 	{"sound_classes_initialize",                                                                                                                                                                                                                                                                             0x51CB60, 0x51CB7F},
-	{"nullsub_12",                                                                                                                                                                                                                                                                                           0x51CB80, 0x51CB8F},
+
 
 	{"data_allocation_size",                                                                                                                                                                                                                                                                                 0x51CED0, 0x51CEEF},
 	{"data_initialize",                                                                                                                                                                                                                                                                                      0x51CEF0, 0x51CFBF},
@@ -3027,7 +2616,7 @@ FUNCTIONMAP = {
 	{"_sound_cache_sound_request",                                                                                                                                                                                                                                                                           0x51E960, 0x51EB3F},
 	{"game_time_initialize",                                                                                                                                                                                                                                                                                 0x51EB40, 0x51EB6F},
 
-	{"nullsub_13",                                                                                                                                                                                                                                                                                           0x51EBE0, 0x51EC2F},
+
 	{"game_time_get",                                                                                                                                                                                                                                                                                        0x51EC30, 0x51EC6F},
 
 	{"game_predicting",                                                                                                                                                                                                                                                                                      0x51ED70, 0x51EDAF},
@@ -3061,7 +2650,7 @@ FUNCTIONMAP = {
 
 	{"game_sound_update",                                                                                                                                                                                                                                                                                    0x525A60, 0x5260AF},
 
-	{"nullsub_367",                                                                                                                                                                                                                                                                                          0x526140, 0x52614F},
+
 	{"players_initialize",                                                                                                                                                                                                                                                                                   0x526150, 0x5261BF},
 	{"players_initialize_for_new_map",                                                                                                                                                                                                                                                                       0x5261C0, 0x52626F},
 	{"players_dispose_from_old_map",                                                                                                                                                                                                                                                                         0x526270, 0x52628F},
@@ -3102,7 +2691,7 @@ FUNCTIONMAP = {
 	{"player_spawn_to_network",                                                                                                                                                                                                                                                                              0x527C50, 0x527E8F},
 
 	{"player_count_related_stub",                                                                                                                                                                                                                                                                            0x527FC0, 0x527FDF},
-	{"nullsub_372",                                                                                                                                                                                                                                                                                          0x527FE0, 0x527FEF},
+
 
 	{"player_handle_weapon_swap",                                                                                                                                                                                                                                                                            0x5282E0, 0x52844F},
 	{"player_handle_weapon_swap_client",                                                                                                                                                                                                                                                                     0x528450, 0x5285DF},
@@ -3130,17 +2719,17 @@ FUNCTIONMAP = {
 
 	{"players_update_after_game",                                                                                                                                                                                                                                                                            0x52DC70, 0x52E08F},
 	{"cinematic_initialize",                                                                                                                                                                                                                                                                                 0x52E090, 0x52E0CF},
-	{"nullsub_14",                                                                                                                                                                                                                                                                                           0x52E0D0, 0x52E0DF},
+
 
 	{"cinematic_in_progress",                                                                                                                                                                                                                                                                                0x52EAC0, 0x52EACF},
 	{"_mkgmtime",                                                                                                                                                                                                                                                                                            0x52EAD0, 0x52EADF},
 
 	{"player_effect_initialize",                                                                                                                                                                                                                                                                             0x52EB50, 0x52EB8F},
-	{"nullsub_15",                                                                                                                                                                                                                                                                                           0x52EB90, 0x52EB9F},
 
-	{"nullsub_16",                                                                                                                                                                                                                                                                                           0x52EBE0, 0x52EBEF},
 
-	{"j_nullsub_195",                                                                                                                                                                                                                                                                                        0x52ED80, 0x52ED8F},
+
+
+
 
 	{"player_effect_update",                                                                                                                                                                                                                                                                                 0x52F330, 0x52F4DF},
 
@@ -3148,7 +2737,7 @@ FUNCTIONMAP = {
 
 	{"observer_initialize",                                                                                                                                                                                                                                                                                  0x532010, 0x53201F},
 
-	{"nullsub_18",                                                                                                                                                                                                                                                                                           0x532160, 0x53218F},
+
 
 	{"observer_get_camera",                                                                                                                                                                                                                                                                                  0x5321E0, 0x53226F},
 
@@ -3163,24 +2752,16 @@ FUNCTIONMAP = {
 	{"profile_enter_private",                                                                                                                                                                                                                                                                                0x535490, 0x53550F},
 	{"profile_exit_private",                                                                                                                                                                                                                                                                                 0x535510, 0x5355AF},
 	{"unk_framedump_splitscren",                                                                                                                                                                                                                                                                             0x5355B0, 0x535C1F},
-
 	{"unk_framedump_screen",                                                                                                                                                                                                                                                                                 0x536180, 0x53627F},
-
 	{"game_tix_per_frame_pre_validate_536DF0",                                                                                                                                                                                                                                                               0x536DF0, 0x536E7F},
 	{"game_tix_per_frame_related_536E80",                                                                                                                                                                                                                                                                    0x536E80, 0x536F1F},
-
 	{"unk_local_splitscreen_asserts",                                                                                                                                                                                                                                                                        0x5371F0, 0x53766F},
-
 	{"game_engine_update_purge",                                                                                                                                                                                                                                                                             0x537D60, 0x537E7F},
-
 	{"game_engine_update_weapons",                                                                                                                                                                                                                                                                           0x537F20, 0x53807F},
-
 	{"netgame_equipment_new_to_network",                                                                                                                                                                                                                                                                     0x538140, 0x5382BF},
-
 	{"game_engine_running",                                                                                                                                                                                                                                                                                  0x5388F0, 0x5388FF},
 	{"game_engine_can_score",                                                                                                                                                                                                                                                                                0x538900, 0x53891F},
 
-	{"nullsub_19",                                                                                                                                                                                                                                                                                           0x5393D0, 0x5393DF},
 	{"game_engine_get_variant",                                                                                                                                                                                                                                                                              0x5393E0, 0x5393EF},
 
 	{"game_engine_has_shield",                                                                                                                                                                                                                                                                               0x5395A0, 0x5395BF},
@@ -3189,7 +2770,7 @@ FUNCTIONMAP = {
 
 	{"game_engine_get_vehicle_set",                                                                                                                                                                                                                                                                          0x53A410, 0x53A47F},
 
-	{"nullsub_159",                                                                                                                                                                                                                                                                                          0x53D3D5, 0x53D42F},
+
 	{"game_engine_to_network",                                                                                                                                                                                                                                                                               0x53D430, 0x53D49F},
 	{"game_engine_from_network",                                                                                                                                                                                                                                                                             0x53D4A0, 0x53D4BF},
 	{"game_engine_player_score_get_slot_index_for_player",                                                                                                                                                                                                                                                   0x53D4C0, 0x53D54F},
@@ -3310,9 +2891,9 @@ FUNCTIONMAP = {
 	{"object_iterator_new",                                                                                                                                                                                                                                                                                  0x561320, 0x56135F},
 	{"object_iterator_next",                                                                                                                                                                                                                                                                                 0x561360, 0x56141F},
 	{"object_get_ultimate_parent",                                                                                                                                                                                                                                                                           0x561420, 0x56149F},
-	{"nullsub_199",                                                                                                                                                                                                                                                                                          0x5614A0, 0x5614AF},
 
-	{"nullsub_21",                                                                                                                                                                                                                                                                                           0x5619E0, 0x5619EF},
+
+
 
 	{"objects_initialize",                                                                                                                                                                                                                                                                                   0x563700, 0x56383F},
 
@@ -3363,10 +2944,10 @@ FUNCTIONMAP = {
 
 	{"physical_memory_map_initialize",                                                                                                                                                                                                                                                                       0x570630, 0x5707DF},
 
-	{"nullsub_198",                                                                                                                                                                                                                                                                                          0x571440, 0x57144F},
+
 
 	{"director_initialize",                                                                                                                                                                                                                                                                                  0x576740, 0x57675F},
-	{"nullsub_22",                                                                                                                                                                                                                                                                                           0x576760, 0x57676F},
+
 
 	{"validate_player_index_576860",                                                                                                                                                                                                                                                                         0x576860, 0x5768AF},
 
@@ -3400,10 +2981,10 @@ FUNCTIONMAP = {
 
 	{"scripted_camera_update",                                                                                                                                                                                                                                                                               0x578B60, 0x5791EF},
 
-	{"nullsub_165",                                                                                                                                                                                                                                                                                          0x57922D, 0x57922F},
-	{"nullsub_167",                                                                                                                                                                                                                                                                                          0x579230, 0x57923F},
+
+
 	{"first_person_weapons_initialize_for_new_map",                                                                                                                                                                                                                                                          0x579240, 0x57926F},
-	{"nullsub_166",                                                                                                                                                                                                                                                                                          0x579270, 0x57927F},
+
 
 	{"first_person_weapon_set_visibility",                                                                                                                                                                                                                                                                   0x5795F0, 0x57968F},
 
@@ -3425,7 +3006,7 @@ FUNCTIONMAP = {
 	{"reload_shader_transparent_chicago_evaluate",                                                                                                                                                                                                                                                           0x581470, 0x58148F},
 	{"rasterizer_reload_effects_evaluate",                                                                                                                                                                                                                                                                   0x581490, 0x5814EF},
 
-	{"nullsub_373",                                                                                                                                                                                                                                                                                          0x581696, 0x58169F},
+
 
 	{"hs_input_is_joy_active",                                                                                                                                                                                                                                                                               0x581B80, 0x581BCF},
 	{"hs_input_joy_activate",                                                                                                                                                                                                                                                                                0x581BD0, 0x581C1F},
@@ -3496,14 +3077,14 @@ FUNCTIONMAP = {
 
 	{"rasterizer_debug_initialize",                                                                                                                                                                                                                                                                          0x595750, 0x5957DF},
 
-	{"nullsub_23",                                                                                                                                                                                                                                                                                           0x595800, 0x59580F},
+
 
 	{"rasterizer_debug_draw",                                                                                                                                                                                                                                                                                0x595960, 0x595D6F},
 
 	{"structures_initialize",                                                                                                                                                                                                                                                                                0x596340, 0x59634F},
 
 	{"rasterizer_geometry_get_vertex_size",                                                                                                                                                                                                                                                                  0x597560, 0x59759F},
-	{"nullsub_191",                                                                                                                                                                                                                                                                                          0x5975A0, 0x5975AF},
+
 
 	{"bitmap_group_get_bitmap_from_sequence",                                                                                                                                                                                                                                                                0x5989D0, 0x598ABF},
 
@@ -3529,15 +3110,15 @@ FUNCTIONMAP = {
 
 	{"ui_load_tags_for_scenario",                                                                                                                                                                                                                                                                            0x5A37E0, 0x5A397F},
 
-	{"nullsub_347",                                                                                                                                                                                                                                                                                          0x5A5C80, 0x5A5C8F},
-	{"nullsub_349",                                                                                                                                                                                                                                                                                          0x5A5C90, 0x5A5C9F},
-	{"nullsub_350",                                                                                                                                                                                                                                                                                          0x5A5CA0, 0x5A5CAF},
-	{"nullsub_348",                                                                                                                                                                                                                                                                                          0x5A5CB0, 0x5A5CBF},
-	{"nullsub_351",                                                                                                                                                                                                                                                                                          0x5A5CC0, 0x5A5CCF},
 
-	{"nullsub_352",                                                                                                                                                                                                                                                                                          0x5A5CE0, 0x5A62BF},
 
-	{"nullsub_24",                                                                                                                                                                                                                                                                                           0x5A62F0, 0x5A636F},
+
+
+
+
+
+
+
 
 	{"unit_definition_get_active_hud_index",                                                                                                                                                                                                                                                                 0x5A91A0, 0x5A91EF},
 	{"unit_definition_get_seat_active_hud_index",                                                                                                                                                                                                                                                            0x5A91F0, 0x5A951F},
@@ -3841,7 +3422,7 @@ FUNCTIONMAP = {
 
 	{"local_player_index_to_player_number",                                                                                                                                                                                                                                                                  0x5D0B60, 0x5D0BAF},
 
-	{"nullsub_25",                                                                                                                                                                                                                                                                                           0x5D0C20, 0x5D0C2F},
+
 
 	{"hud_chat_initialize",                                                                                                                                                                                                                                                                                  0x5D0C40, 0x5D0C8F},
 
@@ -4080,9 +3661,9 @@ FUNCTIONMAP = {
 	{"rasterizer_environment_lightmap_draw_ff",                                                                                                                                                                                                                                                              0x5FCFF0, 0x5FD2EF},
 	{"rasterizer_environment_diffuse_light_begin",                                                                                                                                                                                                                                                           0x5FD5C0, 0x5FD9CF},
 	{"rasterizer_environment_diffuse_light_draw",                                                                                                                                                                                                                                                            0x5FD9D0, 0x5FDCFF},
-	{"nullsub_154",                                                                                                                                                                                                                                                                                          0x5FDD00, 0x5FDD0F},
 
-	{"nullsub_45",                                                                                                                                                                                                                                                                                           0x5FDD20, 0x5FDD2F},
+
+
 	{"rasterizer_shadow_convolve",                                                                                                                                                                                                                                                                           0x5FDD30, 0x5FE55F},
 
 	{"rasterizer_environment_shadow_begin",                                                                                                                                                                                                                                                                  0x5FE570, 0x5FE9BF},
@@ -4096,27 +3677,27 @@ FUNCTIONMAP = {
 	{"rasterizer_environment_diffuse_texture_draw_single_stream",                                                                                                                                                                                                                                            0x600110, 0x60046F},
 
 	{"rasterizer_environment_specular_light_draw",                                                                                                                                                                                                                                                           0x601080, 0x60145F},
-	{"nullsub_155",                                                                                                                                                                                                                                                                                          0x601460, 0x60146F},
+
 
 	{"rasterizer_environment_specular_lightmap_draw",                                                                                                                                                                                                                                                        0x601820, 0x601B9F},
-	{"nullsub_309",                                                                                                                                                                                                                                                                                          0x601BA0, 0x601BAF},
+
 
 	{"rasterizer_environment_reflection_lightmap_mask_draw",                                                                                                                                                                                                                                                 0x601E10, 0x6020AF},
-	{"nullsub_310",                                                                                                                                                                                                                                                                                          0x6020B0, 0x6020DF},
+
 
 	{"rasterizer_environment_reflection_mirror_draw",                                                                                                                                                                                                                                                        0x6023B0, 0x60288F},
 
 	{"rasterizer_environment_reflection_draw",                                                                                                                                                                                                                                                               0x602B60, 0x60302F},
 
 	{"rasterizer_environment_fog_screen_initialize",                                                                                                                                                                                                                                                         0x6033C0, 0x6033EF},
-	{"nullsub_46",                                                                                                                                                                                                                                                                                           0x6033F0, 0x6033FF},
+
 	{"rasterizer_environment_fog_begin",                                                                                                                                                                                                                                                                     0x603400, 0x60383F},
 	{"rasterizer_environment_fog_draw",                                                                                                                                                                                                                                                                      0x603840, 0x6039AF},
 
-	{"nullsub_156",                                                                                                                                                                                                                                                                                          0x6039D0, 0x6039EF},
-	{"nullsub_157",                                                                                                                                                                                                                                                                                          0x6039F0, 0x6039FF},
 
-	{"nullsub_47",                                                                                                                                                                                                                                                                                           0x603A20, 0x603A9F},
+
+
+
 
 	{"_rasterizer_dynamic_screen_geometry_draw",                                                                                                                                                                                                                                                             0x603D10, 0x603D3F},
 	{"rasterizer_dynamic_screen_geometry_draw",                                                                                                                                                                                                                                                              0x603D40, 0x604D0F},
@@ -4129,8 +3710,8 @@ FUNCTIONMAP = {
 	{"_rasterizer_hud_motion_sensor_blip_end",                                                                                                                                                                                                                                                               0x606AE0, 0x60742F},
 	{"hud_add_item_message_from_network",                                                                                                                                                                                                                                                                    0x609C30, 0x609E4F},
 
-	{"nullsub_161",                                                                                                                                                                                                                                                                                          0x60A000, 0x60A00F},
-	{"nullsub_162",                                                                                                                                                                                                                                                                                          0x60A010, 0x60A01F},
+
+
 
 	{"paths_initialize",                                                                                                                                                                                                                                                                                     0x60A9F0, 0x60AAFF},
 
@@ -4175,9 +3756,9 @@ FUNCTIONMAP = {
 	{"game_state_free_buffer",                                                                                                                                                                                                                                                                               0x617040, 0x61706F},
 
 	{"some_zero",                                                                                                                                                                                                                                                                                            0x6170C0, 0x6170CF},
-	{"nullsub_49",                                                                                                                                                                                                                                                                                           0x6170D0, 0x6170DF},
 
-	{"nullsub_368",                                                                                                                                                                                                                                                                                          0x6170F0, 0x6170FF},
+
+
 	{"game_initialize",                                                                                                                                                                                                                                                                                      0x617100, 0x6171FF},
 
 	{"game_dispose_from_old_map",                                                                                                                                                                                                                                                                            0x617360, 0x61741F},
@@ -4194,7 +3775,7 @@ FUNCTIONMAP = {
 
 	{"lruv_has_locked_proc",                                                                                                                                                                                                                                                                                 0x618AE0, 0x618B3F},
 
-	{"nullsub_173",                                                                                                                                                                                                                                                                                          0x61A614, 0x61A61F},
+
 	{"periodic_function_evaluate",                                                                                                                                                                                                                                                                           0x61A620, 0x61A75F},
 	{"transition_function_evaluate",                                                                                                                                                                                                                                                                         0x61A760, 0x61A88F},
 
@@ -4293,7 +3874,7 @@ FUNCTIONMAP = {
 	{"cheats_initialize_nsub",                                                                                                                                                                                                                                                                               0x6354E0, 0x6354EF},
 
 	{"bink_playback_initialize_nsub",                                                                                                                                                                                                                                                                        0x635A40, 0x635A4F},
-	{"nullsub_59",                                                                                                                                                                                                                                                                                           0x635A50, 0x635A5F},
+
 	{"bink_playback_active",                                                                                                                                                                                                                                                                                 0x635A60, 0x635A6F},
 
 	{"should_render_player?",                                                                                                                                                                                                                                                                                0x635AB0, 0x635ABF},
@@ -4325,7 +3906,7 @@ FUNCTIONMAP = {
 	{"build_cache_file_error",                                                                                                                                                                                                                                                                               0x645F90, 0x645FBF},
 	{"cache_file_read",                                                                                                                                                                                                                                                                                      0x645FC0, 0x6460BF},
 	{"cache_file_read_threaded",                                                                                                                                                                                                                                                                             0x6460C0, 0x6461BF},
-	{"nullsub_74",                                                                                                                                                                                                                                                                                           0x6461C0, 0x6461CF},
+
 
 	{"build_cache_file_write",                                                                                                                                                                                                                                                                               0x646210, 0x6462DF},
 	{"build_cache_file_begin",                                                                                                                                                                                                                                                                               0x6462E0, 0x6463DF},
@@ -4392,7 +3973,7 @@ FUNCTIONMAP = {
 	{"player_update_history_play_update",                                                                                                                                                                                                                                                                    0x64F500, 0x64F5FF},
 
 	{"biped_64F660",                                                                                                                                                                                                                                                                                         0x64F660, 0x64F68F},
-	{"nullsub_308",                                                                                                                                                                                                                                                                                          0x64F690, 0x64F69F},
+
 	{"biped_64F6A0",                                                                                                                                                                                                                                                                                         0x64F6A0, 0x64F75F},
 	{"biped_64F760",                                                                                                                                                                                                                                                                                         0x64F760, 0x64F7BF},
 	{"biped_64F7C0",                                                                                                                                                                                                                                                                                         0x64F7C0, 0x64F7EF},
@@ -4500,7 +4081,7 @@ FUNCTIONMAP = {
 	{"hud_get_nav_point_render_type",                                                                                                                                                                                                                                                                        0x676850, 0x67695F},
 	{"custom_render_nav_point",                                                                                                                                                                                                                                                                              0x676960, 0x676F6F},
 	{"game_allegiance_initialize",                                                                                                                                                                                                                                                                           0x6772D0, 0x6772FF},
-	{"nullsub_97",                                                                                                                                                                                                                                                                                           0x677300, 0x67730F},
+
 	{"game_allegiance_update",                                                                                                                                                                                                                                                                               0x6777B0, 0x67794F},
 	{"ctf_engine_to_network",                                                                                                                                                                                                                                                                                0x6787E0, 0x67893F},
 	{"ctf_engine_from_network",                                                                                                                                                                                                                                                                              0x678940, 0x678B1F},
@@ -4556,7 +4137,7 @@ FUNCTIONMAP = {
 	{"apply_multi_vector",                                                                                                                                                                                                                                                                                   0x6C8660, 0x6C875F},
 	{"recorded_animation_initialize_event_stream_v1",                                                                                                                                                                                                                                                        0x6C8760, 0x6C877F},
 	{"recorded_animation_apply_event_stream_v1",                                                                                                                                                                                                                                                             0x6C8780, 0x6C888F},
-	{"nullsub_200",                                                                                                                                                                                                                                                                                          0x6C8890, 0x6C889F},
+
 	{"apply_animation_state",                                                                                                                                                                                                                                                                                0x6C88A0, 0x6C892F},
 	{"apply_aiming_speed",                                                                                                                                                                                                                                                                                   0x6C8930, 0x6C89BF},
 	{"apply_control_flags",                                                                                                                                                                                                                                                                                  0x6C89C0, 0x6C8A4F},
@@ -4580,15 +4161,15 @@ FUNCTIONMAP = {
 
 	{"rasterizer_reload_effects",                                                                                                                                                                                                                                                                            0x6D19D0, 0x6D1A1F},
 
-	{"nullsub_178",                                                                                                                                                                                                                                                                                          0x6D382C, 0x6D382F},
 
-	{"nullsub_177",                                                                                                                                                                                                                                                                                          0x6D3A50, 0x6D3A5F},
+
+
 
 	{"rasterizer_frame_statistics_initialize",                                                                                                                                                                                                                                                               0x6D3A90, 0x6D3ACF},
 
 	{"_cfltcvt_init_9",                                                                                                                                                                                                                                                                                      0x6D4970, 0x6D49CF},
 	{"rasterizer_frame_statistics_draw",                                                                                                                                                                                                                                                                     0x6D49D0, 0x6D5DBF},
-	{"nullsub_115",                                                                                                                                                                                                                                                                                          0x6D5DC0, 0x6D5DCF},
+
 
 	{"saved_game_files_initialize_nsub",                                                                                                                                                                                                                                                                     0x6D5DF0, 0x6D5DFF},
 	{"splitscreen_pregame_status_screen_update",                                                                                                                                                                                                                                                             0x6DAAA0, 0x6DAEBF},
@@ -4676,15 +4257,13 @@ FUNCTIONMAP = {
 	{"create_transport_endpoint",                                                                                                                                                                                                                                                                            0x6E8020, 0x6E80CF},
 	{"get_endpoint_address",                                                                                                                                                                                                                                                                                 0x6E80D0, 0x6E823F},
 	{"gt2ReceivedCallback_IMPL",                                                                                                                                                                                                                                                                             0x6E8260, 0x6E831F},
-	{"nullsub_128",                                                                                                                                                                                                                                                                                          0x6E8320, 0x6E832F},
+
 	{"disconnect_endpoint",                                                                                                                                                                                                                                                                                  0x6E8330, 0x6E83DF},
 	{"disconnect_endpoint_hard",                                                                                                                                                                                                                                                                             0x6E83E0, 0x6E848F},
 	{"gt2ConnectAttemptCallback_IMPL",                                                                                                                                                                                                                                                                       0x6E8490, 0x6E85FF},
-
 	{"listen_endpoint",                                                                                                                                                                                                                                                                                      0x6E8650, 0x6E86EF},
 	{"reject_endpoint",                                                                                                                                                                                                                                                                                      0x6E86F0, 0x6E875F},
 	{"get_endpoint_rejection_code",                                                                                                                                                                                                                                                                          0x6E8760, 0x6E878F},
-
 	{"write_endpoint",                                                                                                                                                                                                                                                                                       0x6E8850, 0x6E890F},
 	{"endpoint_readable",                                                                                                                                                                                                                                                                                    0x6E8910, 0x6E896F},
 	{"delete_transport_endpoint",                                                                                                                                                                                                                                                                            0x6E92E0, 0x6E939F},
@@ -4737,7 +4316,6 @@ FUNCTIONMAP = {
 	{"rasterizer_memory_pool_end",                                                                                                                                                                                                                                                                           0x6F5D10, 0x6F5D1F},
 	{"rasterizer_memory_pool_dispose",                                                                                                                                                                                                                                                                       0x6F5D20, 0x6F5D4F},
 	{"_err_print_unk_sub_6F5D50",                                                                                                                                                                                                                                                                            0x6F5D50, 0x6F5F9F},
-
 	{"rasterizer_render_targets_initialize",                                                                                                                                                                                                                                                                 0x6F6040, 0x6F636F},
 	{"dx9_release_surface_check_supported_render_targets",                                                                                                                                                                                                                                                   0x6F6370, 0x6F648F},
 	{"rasterizer_set_target",                                                                                                                                                                                                                                                                                0x6F6490, 0x6F667F},
@@ -4784,7 +4362,7 @@ FUNCTIONMAP = {
 	{"rasterizer_transparent_geometry_initialize_aux_buffer",                                                                                                                                                                                                                                                0x6FD650, 0x6FD7AF},
 	{"rasterizer_transparent_geometry_dispose_aux_buffer",                                                                                                                                                                                                                                                   0x6FD7B0, 0x6FD7CF},
 	{"render_debug_obstacles",                                                                                                                                                                                                                                                                               0x700500, 0x70071F},
-	{"nullsub_268",                                                                                                                                                                                                                                                                                          0x70A350, 0x70A35F},
+
 	{"sound_effect_object_eax1_pc::SetEnvironment",                                                                                                                                                                                                                                                          0x70AA20, 0x70AA9F},
 	{"AtlTraceSnapshotProcess@4_9",                                                                                                                                                                                                                                                                          0x70E8E0, 0x70E8EF},
 	{"AtlTraceSnapshotProcess@4_10",                                                                                                                                                                                                                                                                         0x70E9F0, 0x70E9FF},
@@ -4798,7 +4376,7 @@ FUNCTIONMAP = {
 	{"ui_gamespy_screen_713EA0",                                                                                                                                                                                                                                                                             0x713EA0, 0x7141BF},
 	{"ui_gamespy_screen_7141C0",                                                                                                                                                                                                                                                                             0x7141C0, 0x71423F},
 	{"ui_gamespy_screen_714240",                                                                                                                                                                                                                                                                             0x714240, 0x71425F},
-	{"nullsub_360",                                                                                                                                                                                                                                                                                          0x714260, 0x71426F},
+
 	{"ui_gamespy_screen_714270",                                                                                                                                                                                                                                                                             0x714270, 0x71427F},
 	{"ui_gamespy_screen_714280",                                                                                                                                                                                                                                                                             0x714280, 0x7142CF},
 	{"ui_gamespy_screen_7142D0",                                                                                                                                                                                                                                                                             0x7142D0, 0x7142FF},
@@ -4830,12 +4408,11 @@ FUNCTIONMAP = {
 	{"ov_read",                                                                                                                                                                                                                                                                                              0x716A84, 0x716A89},
 	{"ov_crosslap",                                                                                                                                                                                                                                                                                          0x716A8A, 0x716A8F},
 	{"ov_open_callbacks",                                                                                                                                                                                                                                                                                    0x716A90, 0x716A9F},
-	{"nullsub_323",                                                                                                                                                                                                                                                                                          0x718D30, 0x718D3F},
-	{"nullsub_324",                                                                                                                                                                                                                                                                                          0x718D40, 0x718D4F},
 
-	{"nullsub_322",                                                                                                                                                                                                                                                                                          0x719260, 0x71926F},
+
+
 	{"ball_available",                                                                                                                                                                                                                                                                                       0x71C1E0, 0x71C67F},
-	{"nullsub_298",                                                                                                                                                                                                                                                                                          0x726320, 0x72632F},
+
 	{"u_unk_1_1_3",                                                                                                                                                                                                                                                                                          0x72B170, 0x72B23F},
 	{"circular_queue_reset",                                                                                                                                                                                                                                                                                 0x735AC0, 0x735ACF},
 	{"circular_queue_verify",                                                                                                                                                                                                                                                                                0x735AD0, 0x735B3F},
@@ -4845,24 +4422,17 @@ FUNCTIONMAP = {
 	{"circular_queue_free_space",                                                                                                                                                                                                                                                                            0x735BE0, 0x735BFF},
 	{"circular_queue_queue_data",                                                                                                                                                                                                                                                                            0x735C00, 0x735CDF},
 	{"circular_queue_dequeue_data",                                                                                                                                                                                                                                                                          0x735CE0, 0x735DCF},
-
 	{"gti2CreateSocket",                                                                                                                                                                                                                                                                                     0x735EB0, 0x73618F},
-
 	{"set_gt2ConnectAttemptCallback_IMPL",                                                                                                                                                                                                                                                                   0x7361D0, 0x7361EF},
-
 	{"gti2NewSocketConnection",                                                                                                                                                                                                                                                                              0x736290, 0x7365DF},
 	{"gti2FreeSocketConnection",                                                                                                                                                                                                                                                                             0x7365E0, 0x73666F},
-
 	{"gti2NewOutgoingConnection",                                                                                                                                                                                                                                                                            0x7368A0, 0x7368EF},
 	{"gti2NewIncomingConnection",                                                                                                                                                                                                                                                                            0x7368F0, 0x73694F},
 	{"gti2StartConnectionAttempt",                                                                                                                                                                                                                                                                           0x736950, 0x736A6F},
 	{"gti2AcceptConnection",                                                                                                                                                                                                                                                                                 0x736A70, 0x736AFF},
 	{"gti2RejectConnection",                                                                                                                                                                                                                                                                                 0x736B00, 0x736B6F},
-
 	{"gti2ConnectionClosed",                                                                                                                                                                                                                                                                                 0x736C80, 0x736CFF},
-
 	{"gti2CheckTimeout",                                                                                                                                                                                                                                                                                     0x736D90, 0x736DEF},
-
 	{"gti2CloseConnection",                                                                                                                                                                                                                                                                                  0x736E70, 0x736F1F},
 	{"GetTickCount",                                                                                                                                                                                                                                                                                         0x736F20, 0x736F2F},
 	{"gti2CreateSocketConnection",                                                                                                                                                                                                                                                                           0x737A60, 0x737ACF},
@@ -4899,8 +4469,8 @@ FUNCTIONMAP = {
 	{"_getdrives",                                                                                                                                                                                                                                                                                           0x74D55C, 0x74DB61},
 	{"public: virtual __thiscall type_info::~type_info(void)",                                                                                                                                                                                                                                               0x74DB62, 0x74DBA7},
 	{"public: virtual void * __thiscall type_info::`scalar deleting destructor'(unsigned int)",                                                                                                                                                                                                              0x74DBA8, 0x74DBC3},
-	{"unknown_libname_171",                                                                                                                                                                                                                                                                                  0x74DBC4, 0x74DBDE},
-	{"unknown_libname_172",                                                                                                                                                                                                                                                                                  0x74DBDF, 0x74DBFA},
+
+
 	{"public: int __thiscall type_info::before(class type_info const &)const",                                                                                                                                                                                                                               0x74DBFB, 0x74DC1D},
 	{"private: __thiscall type_info::type_info(class type_info const &)",                                                                                                                                                                                                                                    0x74DC1E, 0x74DC2F},
 	{"strrchr",                                                                                                                                                                                                                                                                                              0x74DC30, 0x74DC5C},
@@ -4927,9 +4497,9 @@ FUNCTIONMAP = {
 	{"j__atol",                                                                                                                                                                                                                                                                                              0x74E0E5, 0x74E0E9},
 	{"_atoi64",                                                                                                                                                                                                                                                                                              0x74E0EA, 0x74E190},
 	{"atof",                                                                                                                                                                                                                                                                                                 0x74E191, 0x74E1C8},
-	{"nullsub_299",                                                                                                                                                                                                                                                                                          0x74E1C9, 0x74E1C9},
+
 	{"_cfltcvt_init_12",                                                                                                                                                                                                                                                                                     0x74E1CA, 0x74E201},
-	{"unknown_libname_702",                                                                                                                                                                                                                                                                                  0x74E202, 0x74E211},
+
 	{"_fpmath",                                                                                                                                                                                                                                                                                              0x74E212, 0x74E22F},
 	{"sprintf",                                                                                                                                                                                                                                                                                              0x74E230, 0x74E287},
 	{"_scprintf",                                                                                                                                                                                                                                                                                            0x74E288, 0x74E2B8},
@@ -4975,12 +4545,12 @@ FUNCTIONMAP = {
 	{"_except_handler3",                                                                                                                                                                                                                                                                                     0x74F60C, 0x74F6F1},
 	{"_stdcall _seh_longjmp_unwind(x)",                                                                                                                                                                                                                                                                      0x74F6F2, 0x74F70C},
 	{"_purecall",                                                                                                                                                                                                                                                                                            0x74F70D, 0x74F720},
-	{"unknown_libname_703",                                                                                                                                                                                                                                                                                  0x74F721, 0x74F730},
+
 	{"free",                                                                                                                                                                                                                                                                                                 0x74F731, 0x74F7A1},
 	{"realloc",                                                                                                                                                                                                                                                                                              0x74F7A2, 0x74F94E},
 	{"int __cdecl ArrayUnwindFilter(struct _EXCEPTION_POINTERS *)",                                                                                                                                                                                                                                          0x74F94F, 0x74F960},
 	{"void __stdcall __ArrayUnwind(void *, unsigned int, int, void (__thiscall *)(void *))",                                                                                                                                                                                                                 0x74F961, 0x74F9BE},
-	{"unknown_libname_173",                                                                                                                                                                                                                                                                                  0x74F9BF, 0x74FA1E},
+
 	{"void __stdcall _JumpToContinuation(void *, struct EHRegistrationNode *)",                                                                                                                                                                                                                              0x74FA1F, 0x74FA4E},
 	{"_stdcall __CxxLongjmpUnwind(x)",                                                                                                                                                                                                                                                                       0x74FAEC, 0x74FB05},
 	{"enum  _EXCEPTION_DISPOSITION __cdecl CatchGuardHandler(struct EHExceptionRecord *, struct CatchGuardRN *, void *, void *)",                                                                                                                                                                            0x74FB06, 0x74FB40},
@@ -4991,7 +4561,7 @@ FUNCTIONMAP = {
 	{"int __cdecl IsExceptionObjectToBeDestroyed(void *)",                                                                                                                                                                                                                                                   0x74FD5C, 0x74FD7C},
 	{"void __cdecl _FindAndUnlinkFrame(struct FrameInfo *)",                                                                                                                                                                                                                                                 0x74FD7D, 0x74FDC8},
 	{"void * __cdecl _CallCatchBlock2(struct EHRegistrationNode *, struct _s_FuncInfo const *, void *, int, unsigned long)",                                                                                                                                                                                 0x74FDC9, 0x74FE21},
-	{"unknown_libname_176",                                                                                                                                                                                                                                                                                  0x74FE22, 0x74FE83},
+
 	{"_onexit_lk",                                                                                                                                                                                                                                                                                           0x74FE84, 0x74FF03},
 	{"__onexitinit",                                                                                                                                                                                                                                                                                         0x74FF04, 0x74FF2B},
 	{"_onexit",                                                                                                                                                                                                                                                                                              0x74FF2C, 0x74FF63},
