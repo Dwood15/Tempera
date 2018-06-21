@@ -5,12 +5,21 @@
 
 //I recognize this isn't ideal constexpr setup.
 
-static const char* DEBUG_FILENAME = "tempera.1_10.debug.log";
+namespace feature_management::engines {
 
-namespace current_engine {
-	constexpr engines::major ENGINE_TARGET = engines::major::CE;
-	constexpr engines::minor GAME_MINOR = engines::minor::halo_1_10;
+	class CE110 : public CustomEd {
+		static const uint supportedFeats = features::LUA_HOOKS | features::DX_PROXY | features::FORGE_MODE;
+	public:
+
+		const char* DEBUG_FILENAME = "tempera.hce.1_10.debug.log";
+
+		static major MajorVersion() {
+			return major::CE;
+		}
+
+		static minor MinorVersion() {
+			return minor::nope;
+		}
+	};
 };
 //TODO: Something like "GetGameRegistryPath"
-static const char * GAME_REGISTRY_PATH =  R"(Software\Microsoft\Microsoft Games\Halo CE)";
-// constexpr bool supported_target() { return true; }

@@ -25,7 +25,7 @@ static int l_GetEngineContext(lua_State * L) {
 
 		using namespace feature_management::engines;
 
-		const char * MAJSTR = GetCurrentMajorVerString(CurrentMajorVer);
+		const char * MAJSTR = GetCurrentMajorVerString(CurrentEngine.MajorVersion());
 
 		//TODO More refactor.
 		if (strcmp(MAJSTR, "") == 0)
@@ -34,7 +34,7 @@ static int l_GetEngineContext(lua_State * L) {
 		lua_pushstring(L, MAJSTR);
 
 
-		lua_pushinteger(L, CurrentMinorVer);
+		lua_pushinteger(L, CurrentEngine.MinorVersion());
 		lua_pushboolean(L, true);
 		return 3;
 

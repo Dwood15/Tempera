@@ -89,6 +89,9 @@ void PrintHelp() {
 #include <filesystem>
 #include <versions.h>
 
+/**
+ * Initialize the Debug log file.
+ */
 void InitAddLog(HMODULE hModule) {
 	GetModuleFileNameA(hModule, dlldir, 512);
 
@@ -98,10 +101,11 @@ void InitAddLog(HMODULE hModule) {
 			break;
 		}
 	}
-	//why in hell is it still experimental???
+
+	//why in hell is filesystem still experimental???
 	auto myPath = std::experimental::filesystem::current_path();
 
-	myPath = myPath /=   DEBUG_FILENAME;
+	myPath = myPath /=   CurrentEngine.DEBUG_FILENAME;
 
 	printf("Initializing log. Path: %ls", myPath.c_str());
 

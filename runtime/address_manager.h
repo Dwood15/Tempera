@@ -5,6 +5,7 @@
 #pragma once
 
 #include <engine_functions.h>
+#include <string>
 #include "memory_map.h"
 
 constexpr bool equal(const char *lhs, const char *rhs) {
@@ -37,6 +38,23 @@ static uintptr_t getFunctionBegin(const char *needle) {
 	return (uintptr_t) -1;
 }
 
+// template<std::basic_string SL>
+template<const char ... LC>
+constexpr uintptr_t lcGetFunctionBegin() {
+	const char myStr[] = {LC};
+
+	const auto * list = supersecret_hax::function_map;
+
+	for (auto itm = list; itm; itm++) {
+		if (equal(myStr, itm->funcName)) {
+			return itm->begin;
+		}
+	}
+
+	return (uintptr_t) -1;
+}
+
+
 /**
  * Compile-time lookup of function address beginnings.
  * 	While positive results are (often) correct, take guesses
@@ -52,7 +70,7 @@ constexpr uintptr_t cgetFunctionBegin(const char *needle) {
 
 	const dfr* funcList = supersecret_hax::function_map;
 
-	for (dfr * item = const_cast<dfr *>(funcList); item++;  item) {
+	for (dfr * item = const_cast<dfr *>(funcList); item;  item++) {
 		if (equal(needle, item->funcName)) {
 			return item->begin;
 		}

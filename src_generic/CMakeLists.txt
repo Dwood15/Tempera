@@ -81,5 +81,4 @@ set(CEINTERNAL_CPP
 	#	${INTERFACE_H}
 	${CMAKE_CURRENT_SOURCE_DIR}/function_rewrite.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/exceptions/exception_handler.cpp
-
 	PARENT_SCOPE)

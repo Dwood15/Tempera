@@ -133,7 +133,8 @@ set(GLOBAL_H
 	include/lua_headers/luawrapperutil.h
 	src_generic/lua/players_interface.h
 	runtime/address_manager.h
-	src_generic/lua/gamestate_interface.h runtime/memory_map.h)
+	src_generic/lua/gamestate_interface.h
+	runtime/memory_map.h)
 
 #EXTERNAL LIBS
 file(GLOB LUA53_GLOB ./libs/lua53.lib)

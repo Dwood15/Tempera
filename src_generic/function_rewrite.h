@@ -94,7 +94,6 @@ namespace spcore {
 			memory::patchValue<uint32>(loc[1], size);
 		}
 
-		void post_dll_load();
 
 		void get_mem_and_patch();
 #define GET_OFFSET_FROM_FUNC(func, reference) calc_offset((uintptr_t)(func), reference)

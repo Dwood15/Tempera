@@ -37,7 +37,6 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 
-
 #include <precompile.h>
 #include "src_generic/ceinternal.h"
 #include "src_generic/lua/script_manager.h"
@@ -71,42 +70,76 @@ static inline MYSQL *ConnectToSqlDB(const char *host, const char *usr, const cha
 	return con;
 }
 
-
-
 static inline void *init(HMODULE *reason) {
 	h = AddVectoredExceptionHandler(CALL_FIRST, CEInternalExceptionHandler);
 
-	Print(true, "Attempting to initialize luascript manager\n");
+	using feats = feature_management::features;
+#define SUPPORTSFEAT(FEAT) CurrentEngine.SupportsFeature(feats::FEAT)
+#define SUPPORTSFEATS(FEATA, FEATB) CurrentEngine.SupportsFeature((uint)(feats::FEATA | feats::FEATB))
+	if (auto eng = GetCurrentEngine()) {
+		CurrentEngine = *eng;
 
-	char path[MAX_PATH];
-	GetSystemDirectoryA(path, sizeof(path));
-	strcat(path, "\\dinput8.dll");
+		// Dbg output before we get any further (initializes the console)
+		if (::AllocConsole() != 0) {
+			freopen_s(&debug_out, "CONOUT$", "w", stdout);
+		}
 
-	*reason = LoadLibraryA(path);
+		//Initializes the file log for debug output.
+		InitAddLog(*reason);
 
-	if (!*reason) return false;
+		if (!CurrentEngine.HasSupport()) {
+			Print(true, "Tempera could not detect that the current runtime has any feature support.");
+			return false;
+		}
 
-	orig_DirectInput8Create = GetProcAddress(*reason, "DirectInput8Create");
+		Print(true, "Current runtime was detected!");
 
-	InitAddLog(*reason);
+		//TODO: dinput-agnostic tempera.
+		char path[MAX_PATH];
+		GetSystemDirectoryA(path, sizeof(path));
+		strcat(path, "\\dinput8.dll");
 
-	// some debug outputz
-	if (::AllocConsole() != 0) {
-		freopen_s(&debug_out, "CONOUT$", "w", stdout);
+		*reason = LoadLibraryA(path);
+
+		if (!*reason) {
+			Print(true, "Failed to load the real dinput8 library!");
+			return false;
+		}
+
+		if(SUPPORTSFEAT(LUA_HOOKS)) {
+			InitializeLua();
+		}
+
+		orig_DirectInput8Create = GetProcAddress(*reason, "DirectInput8Create");
+
+		DWORD old;
+		VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);
+		spcore::memory::get_mem_and_patch();
+		//We need to protect memory, I suppose.
+		VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READ, &old);
+
+		//run the post_dll_load lua hook
+		if(SUPPORTSFEAT(LUA_HOOKS)) {
+			post_dll_load();
+		}
+
+		//Don't setup and run a forge thread for an unsupported runtime target.
+		if (SUPPORTSFEATS(DX_PROXY, FORGE_MODE)) {
+			DisableThreadLibraryCalls(*reason);
+			CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
+			Print(true, "Created Forge Thread!\n");
+		}
+
+		if (SUPPORTSFEAT(MARIADB_LOGGING)) {
+			//auto sqlCon = ConnectToSqlDB("localhost" );
+			// if (sqlCon != NULL) {
+			// 	Print(true, "Successfully Connected to Database!");
+			// 	mysql_close(sqlCon);
+			// }
+		}
+
+		return orig_DirectInput8Create;
 	}
-
-	LuaState = new LuaScriptManager("init.lua");
-	LuaState->beginLua();
-
-	DWORD old;
-	VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);
-	spcore::memory::get_mem_and_patch();
-	//We need to protect memory, I suppose.
-	VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READ, &old);
-
-	spcore::memory::post_dll_load();
-
-	return orig_DirectInput8Create;
 }
 
 static inline void detach(HMODULE reason) {
@@ -121,19 +154,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 			Print(true, "Failed to Initialize properly, I guess. Exiting");
 			return false;
 		}
-		DisableThreadLibraryCalls(hinstDLL);
 
-		//Don't setup and run a forge thread for an unsupported build target.
-		if constexpr (current_engine::ENGINE_TARGET == engines::major::CE && current_engine::GAME_MINOR == engines::minor::halo_1_10) {
-			CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
-			Print(true, "Created Forge Thread!\n");
-		}
-
-		//auto sqlCon = ConnectToSqlDB("localhost" );
-		// if (sqlCon != NULL) {
-		// 	Print(true, "Successfully Connected to Database!");
-		// 	mysql_close(sqlCon);
-		// }
 		loaded = true;
 
 	} else if (fdwReason == DLL_PROCESS_DETACH && loaded) {

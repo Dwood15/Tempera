@@ -4,8 +4,10 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <precompile.h>
 #include "../extended/addlog.h"
 #include "../function_rewrite.h"
+#include <engine_interface.h>
 #include "memory_interface.h"
 #include "players_interface.h"
 #include "gamestate_interface.h"
@@ -19,7 +21,7 @@ extern "C" {
 enum LuaCallbackId {
 	invalid                   = -1,
 	//not working, but still available to hook into.
-	on_load						  = 0,
+	on_load                   = 0,
 	on_map_load               = 1,
 	before_scenario_tags_load = 2,
 	after_scenario_tags_load  = 3,
@@ -66,6 +68,7 @@ private:
 	std::string                           filename;
 
 public:
+
 	/**
  * Tells our class to call this function when the associated CB id is triggered.
  * @param cb_name Name of Lua func to call.
@@ -326,6 +329,48 @@ public:
 
 static LuaScriptManager *LuaState;
 
+/**
+ * Called before VirtualProtect is run.
+ */
+static void InitializeLua() {
+	Print(true, "Attempting to initialize luascript manager\n");
+	LuaState = new LuaScriptManager(CurrentEngine.DEBUG_FILENAME);
+	LuaState->beginLua();
+}
+
 static void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
 	LuaState->registerLuaCallback(cb_name, cb_type);
 }
+
+//Compile-time function & macro, yip yip.
+#define FUNC_GET(funcName)       cgetFunctionBegin<true>(#funcName)
+//Calls every registered lua function by that event.
+#define CALL_LUA_BY_EVENT(event) LuaState->call_lua_event_by_type<LuaCallbackId::##event>()
+
+/**
+ * Called variably based on fps
+ * @param current_frame_tick - ticks remaining before rendering the next frame
+ */
+static void game_tick(int current_frame_tick) {
+	CALL_LUA_BY_EVENT(before_game_tick);
+	constexpr auto got = FUNC_GET(game_tick);
+	if constexpr (got != (uintptr_t) -1) {
+		calls::DoCall<got, Convention::m_cdecl, void, int>(current_frame_tick);
+	}
+	CALL_LUA_BY_EVENT(after_game_tick);
+}
+
+/**
+ * Called right before game loop starts, memory has already been initialized
+ */
+static void parse_for_connect_invert() {
+	// calls::DoCall<cgetFunctionBegin<true>("parse_for_connect_invert"), Convention::m_cdecl>();
+	CALL_LUA_BY_EVENT(post_initialize);
+}
+
+static void post_dll_load() {
+	CALL_LUA_BY_EVENT(post_dll_init);
+}
+//don't pollute the global macro space.
+#undef CALL_LUA_BY_EVENT
+#undef FUNC_GET
