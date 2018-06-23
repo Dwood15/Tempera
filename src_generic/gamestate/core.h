@@ -14,6 +14,7 @@ class Core;
 #pragma once
 
 #include <precompile.h>
+#include <memory_map.h>
 #include "detours.h"
 #include "halo_types.h"
 #include "objectcontroller.h"
@@ -31,88 +32,10 @@ class Core;
 #define CONSOLE_HOOK_ADDRESS 0x004C9DC0 //CE + 1
 #define DEVMODE_HOOK_ADDRESS 0x004836DB
 #define CONSOLE_TEXT_HOOK_ADDRESS 0x00499AB0 //CE + 1
-struct lruv_cache;
-struct lruv_cache_block;
-struct memory_pool_block;
-struct memory_pool;
-struct _core_0;
-struct _core_1;
-struct _core_2;
-struct _core_3;
-struct _core_4;
-struct _core_5;
-struct _core_6;
-struct _core_7;
 
 static Core *core;
 static CD3D cd3d;
 
-void SetCore(Core *core);
-
-Core *GetCore();
-
-////////////////////////////////////////
-// The Core Class of HaloForge
-////////////////////////////////////////
-class Core {
-public:
-	_core_0 *core_0;
-	_core_1 *core_1;
-	_core_2 *core_2;
-	_core_3 *core_3;
-	_core_4 *core_4;
-	_core_5 *core_5;
-	_core_6 *core_6;
-	_core_7 *core_7;
-
-	map_header       *MapHeader;
-	tag_index_header *TagIndexHeader;
-
-	CMyCamera *MyCamera;
-	_camera   *camera;
-
-	ObjectController *ObjectControl;
-
-	Core();
-
-	~Core();
-
-	player *GetPlayer(short index);
-
-	bool IsPlayerSpawned(short index);
-
-	bool IsPlayerValid(short index);
-
-	void TryLogPlayer(short index, bool toConsole = false);
-
-	wchar_t *GetPlayerName(short player_index);
-
-	long GetPlayerTeam(short player_index);
-
-	ident GetPlayerObjectIdent(short player_index);
-
-	biped_data *GetBiped(short player_index);
-
-	object_header *GetObjectHeader(short object_index);
-
-	object_data *GetGenericObject(short object_index);
-
-	vect3 &GetObjectCoord(short object_index);
-
-	const char *GetObjectName(short object_index);
-
-	const char *GetObjectName(object_data *obj);
-
-	char *GetMapName();
-
-	// Console Methods
-	void ToggleConsole(bool bSwitch); // Toggles Console on / off
-	void ToggleDevmode(bool bSwitch); // Toggles Devmode on / off
-	void ConsoleCMD(char *command);   // Calls a console / devcommand
-	void ConsoleText(HaloColor fColor, const char *cFmt, ...);
-
-	void ToggleFlycam(char = -1);
-};
 
 ////////////////////////////////////////
 // Generic Halo Structures
@@ -145,6 +68,17 @@ struct data_header {
 
 STAT_ASSRT(data_header<void>, 0x38);
 
+
+struct lruv_cache_block {
+	long  unk0;
+	long  page_count;
+	ident first_page_index;
+	ident next_block_index;
+	ident previous_block_index;
+	long  unk14;
+	long  unk18;
+};
+
 struct lruv_cache {
 	char                          name[32];
 	void                          *Functions[2];
@@ -155,16 +89,6 @@ struct lruv_cache {
 	ident                         last_block_index;
 	data_header<lruv_cache_block> *data;
 	unsigned long                 signature; // weee
-};
-
-struct lruv_cache_block {
-	long  unk0;
-	long  page_count;
-	ident first_page_index;
-	ident next_block_index;
-	ident previous_block_index;
-	long  unk14;
-	long  unk18;
 };
 
 struct memory_pool_block {
@@ -283,4 +207,67 @@ struct _core_6 {
 
 struct _core_7 {
 	lruv_cache *DecalVertexCache;
+};
+
+////////////////////////////////////////
+// The Core Class of HaloForge
+////////////////////////////////////////
+class Core {
+public:
+	_core_0 *core_0;
+	_core_1 *core_1;
+	_core_2 *core_2;
+	_core_3 *core_3;
+	_core_4 *core_4;
+	_core_5 *core_5;
+	_core_6 *core_6;
+	_core_7 *core_7;
+
+	map_header       *MapHeader;
+	tag_index_header *TagIndexHeader;
+
+	CMyCamera *MyCamera;
+	_camera   *camera;
+
+	ObjectController *ObjectControl;
+
+	Core(LPCoreAddressList list);
+
+	~Core();
+
+	player *GetPlayer(short index);
+
+	bool IsPlayerSpawned(short index);
+
+	bool IsPlayerValid(short index);
+
+	void TryLogPlayer(short index, bool toConsole = false);
+
+	wchar_t *GetPlayerName(short player_index);
+
+	long GetPlayerTeam(short player_index);
+
+	ident GetPlayerObjectIdent(short player_index);
+
+	biped_data *GetBiped(short player_index);
+
+	object_header *GetObjectHeader(short object_index);
+
+	object_data *GetGenericObject(short object_index);
+
+	vect3 &GetObjectCoord(short object_index);
+
+	const char *GetObjectName(short object_index);
+
+	const char *GetObjectName(object_data *obj);
+
+	char *GetMapName();
+
+	// Console Methods
+	void ToggleConsole(bool bSwitch); // Toggles Console on / off
+	void ToggleDevmode(bool bSwitch); // Toggles Devmode on / off
+	void ConsoleCMD(char *command);   // Calls a console / devcommand
+	void ConsoleText(HaloColor fColor, const char *cFmt, ...);
+
+	void ToggleFlycam(char = -1);
 };

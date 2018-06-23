@@ -73,7 +73,7 @@ struct _camera {
 
 class CMyCamera {
 public:
-	CMyCamera(_camera *cam = (_camera *) CAMERA_ADDRESS);
+	CMyCamera(_camera *cam);
 
 	~CMyCamera();
 

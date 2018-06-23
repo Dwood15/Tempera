@@ -1,9 +1,9 @@
 #pragma once
-#include <precompile.h>
 #include <lua.h>
-#include <versions.h>
 #include "../gamestate/core.h"
 #include "../gamestate/forge.h"
+#include <precompile.h>
+#include <versions.h>
 
 /**
  * Tells the lua script whether or not the player is in the main menu.
@@ -15,6 +15,7 @@ static int l_InMainMenu(lua_State * L) {
 	return 1;
 }
 
+
 /**
  * Returns (to Lua) the engine state this dll was compiled with targets for.
  * Sapien as a compiler target will shortly arrive.
@@ -23,9 +24,7 @@ static int l_InMainMenu(lua_State * L) {
  */
 static int l_GetEngineContext(lua_State * L) {
 
-		using namespace feature_management::engines;
-
-		const char * MAJSTR = GetCurrentMajorVerString(CurrentEngine.MajorVersion());
+		const char * MAJSTR = CurrentEngine.GetCurrentMajorVerString();
 
 		//TODO More refactor.
 		if (strcmp(MAJSTR, "") == 0)
@@ -34,7 +33,7 @@ static int l_GetEngineContext(lua_State * L) {
 		lua_pushstring(L, MAJSTR);
 
 
-		lua_pushinteger(L, CurrentEngine.MinorVersion());
+		lua_pushinteger(L, CurrentEngine.GetMinorVersion());
 		lua_pushboolean(L, true);
 		return 3;
 

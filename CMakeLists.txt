@@ -134,7 +134,7 @@ set(GLOBAL_H
 	src_generic/lua/players_interface.h
 	runtime/address_manager.h
 	src_generic/lua/gamestate_interface.h
-	runtime/memory_map.h)
+	runtime/memory_map.h src_generic/lua/script_manager.cpp)
 
 #EXTERNAL LIBS
 file(GLOB LUA53_GLOB ./libs/lua53.lib)

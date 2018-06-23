@@ -5,7 +5,7 @@
 typedef unsigned int uintptr_t;
 
 struct defined_functionrange {
-	const char funcName [80];
+	const char funcName [140];
 	const uintptr_t                               begin;
 	const uintptr_t                               end;
 
@@ -26,19 +26,18 @@ struct defined_functionrange {
 	constexpr bool contains(const uintptr_t &other) const { return (other <= begin && other >= end); }
 };
 
-/*
- * This array is generated via the funcdump.idc file, and provides handy lookup
- * of various engine functions. This should not be interacted with directly, but through
- * the interface provided by address_manager.h.
- */
-namespace supersecret_hax {
-#define FUNCTIONMAP constexpr defined_functionrange function_map[]
-	//THIS FILE WILL MAKE YOUR IDE SLOOOOOOW
-	//some  garbage data was removed. should be slightly faster now.
-	//.txt hax CLion to spend a little bit less time parsing the file.
-	//Can't really tell if better or not.
-#include <function_map.inl>
-/***** (without any cleanup...) TOTAL ELEMENTS: 7033 *****/
-#undef FUNCTIONMAP
+struct LPCoreAddressList {
+	uint core_0;
+	uint core_1;
+	uint core_2;
+	uint core_3;
+	uint core_4;
+	uint core_5;
+	uint core_6;
+	uint core_7;
+	uint CAMERA;
+	uint MAP_HEADER_ADDRESS;
+	uint TAG_INDEX_HEADER_ADDRESS;
 };
-//constexpr auto knownFunctionList = getKnownFunctionList();
+
+

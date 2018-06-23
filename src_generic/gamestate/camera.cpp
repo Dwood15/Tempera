@@ -32,10 +32,6 @@ CMyCamera::CMyCamera(_camera *cam) {
 CMyCamera::~CMyCamera() {
 }
 
-_camera *CMyCamera::GetCameraStaticAddress() {
-	return (_camera *) CAMERA_ADDRESS;
-}
-
 void CMyCamera::CreateViewMatrix(vect3 Eye, vect3 LookAt, vect3 Up) {
 	vEye    = Eye;
 	vLookAt = LookAt;
@@ -56,7 +52,7 @@ float CMyCamera::GetAspectRatio() {
 }
 
 vect3 CMyCamera::ScreenPos(vect3 coord, bool log) {
-	_camera *pCamera = GetCameraStaticAddress();
+	_camera *pCamera = Camera;
 	if (log) {
 		DEBUG("\nCam Look: %f, %f, %f\nObj coord: %f, %f, %f\nCam coord: %f, %f, %f", pCamera->vLookAt.x, pCamera->vLookAt.y, pCamera->vLookAt.z, coord.x, coord.y, coord.z, pCamera->vWorld.x,
 				pCamera->vWorld.y, pCamera->vWorld.z);

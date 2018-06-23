@@ -11,7 +11,7 @@
 #include "addlog.h"
 
 std::ofstream ofile;
-char          dlldir[320];
+static char          dlldir[320];
 
 char *GetDirectoryFile(char *filename) {
 	static char path[320];
@@ -107,9 +107,10 @@ void InitAddLog(HMODULE hModule) {
 
 	myPath = myPath /=   CurrentEngine.DEBUG_FILENAME;
 
-	printf("Initializing log. Path: %ls", myPath.c_str());
-
 	ofile.open(myPath, std::ios::app);
+
+	printf("Initializing log. Path: %ls\n", myPath.c_str());
+
 	std::time_t time = std::time(nullptr);
 	DEBUG("*-*-*-*-*-*-*-*-*-*-*-*-*-*");
 	DEBUG("Tempera Injected, live_projekt initialized");

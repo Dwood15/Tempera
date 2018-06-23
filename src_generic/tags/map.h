@@ -21,20 +21,14 @@
 */
 
 #pragma once
-//#include <windows.h>
+#include <precompile.h>
 #include "tags.h"
 #include "scenario.h"
 #include "bsp.h"
 
 // 2 Map Headers are loaded into static memory. 2 differences -
 // few bytes before and after the header ( Index Header pointer and bps pointer? )
-// Either of these should work though
-#define MAP_HEADER_ADDRESS 0x643044
-//0x006A807C 108 - PC
-#define MapHeaderAltAddy	0x006AAB80
-#define TAG_INDEX_HEADER_ADDRESS 0x40440000
-
-class Filler;
+// Either should work
 
 // **** MAP HEADER STUFF ****
 

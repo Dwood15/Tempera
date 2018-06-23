@@ -101,13 +101,18 @@ set(R_ENGINELAYOUT_INL
 #	${GAME_DIR}/enginelayout/TagGroups.inl
 	)
 
+set(SUPPORTED_RUNTIMES_H
+	${RUNTIME_DIR}/halo1/windows/full/ce/1_10/hce110_func_map.inl
+	${RUNTIME_DIR}/hek/sapien/sapien_func_map.inl
+	)
+
 set(RUNTIME_H
+	${SUPPORTED_RUNTIMES_H}
+	${R_ENGINELAYOUT_INL}
 	${RUNTIME_DIR}/address_manager.h
 	${VERSIONS_DIR}/versions.h
 	${GAME_DIR}/memory_locations.h
-	${GAME_DIR}/current_engine.h
 	${LEVELS_DIR}/levels.h
-	${R_ENGINELAYOUT_INL}
 	PARENT_SCOPE)
 
 set(GAME_LIB_DIRS  ${VERSIONS_DIR} ${RUNTIME_DIR} ${GAME_DIR} ${LEVELS_DIR} CACHE INTERNAL "")

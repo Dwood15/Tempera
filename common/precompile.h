@@ -24,13 +24,19 @@
 
 #include <d3dx9math.h>
 
+#include <filesystem>
+#include <lua.h>
 #include <fstream>
 #include <functional>
-
 #include <handleapi.h>
 
+#include <iostream>
+
+#include <map>
 #include <minwindef.h>
 #include <minwinbase.h>
+
+#include <optional>
 
 #include <rpc.h>
 
@@ -59,3 +65,4 @@ typedef unsigned int uintptr_t;
 #include "macros_generic.h"
 #include <dbghelp.h>
 #include <mysql.h>
+#include <versions.h>

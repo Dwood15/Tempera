@@ -15,10 +15,7 @@
 //2) static -> the address _should not_ change.
 #define STATIC_PTR(type) [[maybe_unused]] static type
 
-static const unsigned int calc_addr_offset(const uintptr_t dest, int real_address) {
-	int real_address_offset = (real_address) - ((int) dest) - 4;
-	return static_cast<unsigned int>(real_address_offset);
-}
+
 
 //yolo coding at its finest.
 namespace spcore {
@@ -95,7 +92,6 @@ namespace spcore {
 		}
 
 
-		void get_mem_and_patch();
 #define GET_OFFSET_FROM_FUNC(func, reference) calc_offset((uintptr_t)(func), reference)
 
 		//signature: "81 EC B4 00 00 00 8B 0D ?? ?? ?? ?? 53 8B D8"

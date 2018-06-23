@@ -13,12 +13,11 @@
 
 #include <Windows.h>
 #include <fstream>
+#include <versions.h>
 #include "d3d9hook.h"
 #include "textures.h"
 #include "../gamestate/core.h"
 #include "../gamestate/camera.h"
-
-CD3D d3d;
 
 CD3D::CD3D() {
 	Font = NULL;
@@ -107,8 +106,21 @@ bool isOffScreen(vect3 screenpos) {
 	return ((screenpos.x < (-FOV_XBOUND)) || screenpos.x > (1 + FOV_XBOUND) || (screenpos.y < (-FOV_YBOUND)) || screenpos.y > (1 + FOV_YBOUND) || screenpos.z > OBJECT_CLIP);
 }
 
+extern Core * core;
+
 void PrintObjectTags(IDirect3DDevice9 *pDevice) {
-	Core *core = GetCore();
+	if(!core) {
+		core = CurrentEngine.GetCore();
+
+		if (!core) {
+			static bool printOnce = true;
+			if(printOnce) {
+				Print(true, "Tried to get core for PrintObjects, couldn't.");
+				printOnce = false;
+			}
+			return;
+		}
+	}
 
 	object_data   *obj          = NULL;
 	object_header *objh         = NULL;
@@ -147,8 +159,8 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 			temp_nearest  = objh;
 		}
 
-		screenpos.x *= d3d.pViewport.Width;
-		screenpos.y *= d3d.pViewport.Height;
+		screenpos.x *= cd3d.pViewport.Width;
+		screenpos.y *= cd3d.pViewport.Height;
 
 		D3DCOLOR color = tGreen;
 
@@ -167,18 +179,18 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 			color = tBlue;
 		}
 
-		d3d.myDrawText(pDevice, d3d.Font, true, (int) screenpos.x, (int) screenpos.y, 1000, 1000, color, tBlack, ObjName);
+		cd3d.myDrawText(pDevice, cd3d.Font, true, (int) screenpos.x, (int) screenpos.y, 1000, 1000, color, tBlack, ObjName);
 	}
 
 	core->ObjectControl->SetNearest(temp_nearest);
 }
 
 long __stdcall hkEndScene(IDirect3DDevice9 *pDevice) {
-	if (!d3d.Font) {
-		D3DXCreateFont(pDevice, 15, 0, FW_BOLD, 1, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Ariel", &d3d.Font);
+	if (!cd3d.Font) {
+		D3DXCreateFont(pDevice, 15, 0, FW_BOLD, 1, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Ariel", &cd3d.Font);
 	}
 
-	pDevice->GetViewport(&d3d.pViewport);
+	pDevice->GetViewport(&cd3d.pViewport);
 
 	PrintObjectTags(pDevice);
 
@@ -191,13 +203,13 @@ pReset oReset;
 
 long __stdcall hkReset(IDirect3DDevice9 *pDevice, D3DPRESENT_PARAMETERS *pPresentationParameters) {
 
-	if (d3d.Font)
-		d3d.Font->OnLostDevice();
+	if (cd3d.Font)
+		cd3d.Font->OnLostDevice();
 
 	HRESULT hResult = oReset(pDevice, pPresentationParameters);
 
-	if (d3d.Font)
-		d3d.Font->OnResetDevice();
+	if (cd3d.Font)
+		cd3d.Font->OnResetDevice();
 
 	return hResult;
 }

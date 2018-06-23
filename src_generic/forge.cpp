@@ -10,6 +10,7 @@
 
 #include <Windows.h>
 #include <stdio.h>
+#include <versions.h>
 
 #include "gamestate/forge.h"
 #include "gamestate/camera.h"
@@ -50,26 +51,19 @@ static void handleMainMenuOptions() {
 	}
 }
 
-static void handleSPInput() {
-
-}
-
-static void handleMPInput() {
-
-}
-
-static void handleMPSPInput() {
-
-}
 
 //TODO: Launch thread later on in the load cycle (via game hook, perhaps?)
 int __stdcall forgeMain() {
-	Sleep(1000);
+	Sleep(1400);
 	//automatically spawn the maximum number of local players at the beginning of the game.
 	//*(short *) 0x624A9C = (short)MAX_PLAYER_COUNT_LOCAL;
 	if(!core) {
-		core = new Core();
-		SetCore(core);
+		core = CurrentEngine.GetCore();
+
+		if (!core) {
+			Print(true, "Core not detected, can't run haloforge");
+			return 0;
+		}
 	}
 
 	cd3d.hkD3DHook(NULL);

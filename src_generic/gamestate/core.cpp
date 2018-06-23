@@ -27,45 +27,34 @@ pConsoleText oConsoleText;
 ////////////////////////////////////////
 // Global Core Class Def
 ////////////////////////////////////////
-Core *gCore;
-
-// Gets the global Core class address
-Core *GetCore() {
-	return gCore;
-}
-
-// Sets the global Core class address
-void SetCore(Core *core) {
-	gCore = core;
-}
 
 ////////////////////////////////////////
 // Core Constructor / Deconstructor
 ////////////////////////////////////////
-Core::Core() {
+Core::Core(LPCoreAddressList list) {
 	//110 HCE:
-	core_0 = (_core_0 *) 0x815900;//0x008154C0; //00 00 00 00 18 7C 3D 40 90 7E 3D 40 00 9D 3F 40 add [eax], al
+	core_0 = (_core_0 *) list.core_0;//0x008154C0; //00 00 00 00 18 7C 3D 40 90 7E 3D 40 00 9D 3F 40 add [eax], al
 
 	//110 HCE: 00
-	core_1 = (_core_1 *) 0x7FB6F8;//0x007FB2B8; //18 2E 01 40 00 00 00 00 08 80 01 40 20 93 01 40 (PC) add [ebp-7b37bfc1], bl -CE sbb [esi], ch
+	core_1 = (_core_1 *) list.core_1;//0x007FB2B8; //18 2E 01 40 00 00 00 00 08 80 01 40 20 93 01 40 (PC) add [ebp-7b37bfc1], bl -CE sbb [esi], ch
 
 	//110 HCE
-	core_2 = (_core_2 *) 0x7FBE70; //0x007FBA30; //00 00 00 00 08 8C 02 40 00 00 00 00 00 00 00 00 add [eax], al -PC is the same
+	core_2 = (_core_2 *) list.core_2; //0x007FBA30; //00 00 00 00 08 8C 02 40 00 00 00 00 00 00 00 00 add [eax], al -PC is the same
 
 	//PC ONLY ???
-	core_3 = (_core_3 *) 0x87A76C; //08 00 69 08 5C F9 2B 40 04 2E 2F 40 3C 84 2F 40 or [eax], al -PC address
+	core_3 = (_core_3 *) list.core_3; //08 00 69 08 5C F9 2B 40 04 2E 2F 40 3C 84 2F 40 or [eax], al -PC address
 
 	//110 HCE 0x81B800
-	core_4 = (_core_4 *) 0x81B800; //0x0081B3C0; //C8 D8 38 40 38 37 3D 40 00 81 3C 40 38 B7 3C 40 enter 38d8, 40 -PC is same
+	core_4 = (_core_4 *) list.core_4; //0x0081B3C0; //C8 D8 38 40 38 37 3D 40 00 81 3C 40 38 B7 3C 40 enter 38d8, 40 -PC is same
 
 	//110 HCE:
-	core_5 = (_core_5 *) 0x81B894; //0x0081B454; //44 58 31 40 90 98 38 40 58 85 38 40 20 61 31 40 inc esp -PC same
+	core_5 = (_core_5 *) list.core_5; //0x0081B454; //44 58 31 40 90 98 38 40 58 85 38 40 20 61 31 40 inc esp -PC same
 
 	//110 HCE:
-	core_6 = (_core_6 *) 0x653BE4; //0x00653B1C; //EC 66 05 40 BC 67 25 40 24 67 25 40 00 00 00 00 in al, dx -PC same
+	core_6 = (_core_6 *) list.core_6; //0x00653B1C; //EC 66 05 40 BC 67 25 40 24 67 25 40 00 00 00 00 in al, dx -PC same
 
 	//heyo:
-	core_7 = (_core_7 *) 0x71D0E8; //18 CF 29 40 00 00 00 00 00 5F 3F 07 00 00 00 00 sbb bh, cl -'Nothing Found' is still PC address
+	core_7 = (_core_7 *) list.core_7; //18 CF 29 40 00 00 00 00 00 5F 3F 07 00 00 00 00 sbb bh, cl -'Nothing Found' is still PC address
 
 	// Initialize all the core structures
 	// Currently only Halo PC 1.08 compatible addresses
@@ -78,11 +67,11 @@ Core::Core() {
 	//	core_6 = (_core_6*)0x006B8BDC;
 	//	core_7 = (_core_7*)0x0071D0E8;
 	// Map
-	MapHeader      = (map_header *) MAP_HEADER_ADDRESS;
-	TagIndexHeader = (tag_index_header *) TAG_INDEX_HEADER_ADDRESS;
+	MapHeader      = (map_header *) list.MAP_HEADER_ADDRESS;
+	TagIndexHeader = (tag_index_header *) list.TAG_INDEX_HEADER_ADDRESS;
 
 	// Camera
-	MyCamera = new CMyCamera;
+	MyCamera = new CMyCamera((_camera *)list.CAMERA);
 	camera   = (_camera *) MyCamera->Camera;
 
 	// Object Control

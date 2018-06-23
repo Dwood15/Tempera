@@ -21,9 +21,22 @@ namespace Enums {
 typedef Enums::CallingConventions Convention;
 
 namespace calls {
-	/**********
-	 * Tempera
-	 */
+
+	template <typename T>
+	void patchValue(uintptr_t to_patch, T replace_with) {
+		*(T *) to_patch = replace_with;
+	}
+
+	static const unsigned int calc_addr_offset(const uintptr_t dest, int real_address) {
+		int real_address_offset = (real_address) - ((int) dest) - 4;
+		return static_cast<unsigned int>(real_address_offset);
+	}
+
+	template<typename T>
+	inline void WriteSimpleHook(uintptr_t loc, T newLoc) {
+		uintptr_t addr = calc_addr_offset(loc, (int)newLoc);
+		patchValue<uintptr_t>(loc, addr);
+	};
 
 	/**
 	 * Do a competent function call against the engine
@@ -36,6 +49,40 @@ namespace calls {
 	 */
 	template <uintptr_t addr, Convention conv = Convention::m_cdecl, typename retType = void, typename ...argTypes>
 	inline retType DoCall(argTypes... args) {
+		// typedef retType (__stdcall *function_t)(argTypes...);
+		using ufunc_t = retType(__cdecl *)(argTypes...);
+
+		if constexpr(conv == Convention::m_stdcall) {
+			using ufunc_t = retType(__stdcall *)(argTypes...);
+
+		} else if constexpr(conv == Convention::m_fastcall) {
+			using ufunc_t = retType(__fastcall *)(argTypes...);
+
+		} else if constexpr(conv == Convention::m_thiscall) {
+			using ufunc_t = retType(__thiscall *)(argTypes...);
+
+		} else if constexpr(conv == Convention::m_cdecl) {
+			using ufunc_t = retType(__cdecl *)(argTypes...);
+
+		} else {
+			throw "Invalid return type specified!";
+		}
+
+		static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
+		return func_to_call(args...);
+	};
+
+	/**
+	 * Do a competent function call against the engine
+	 * @tparam conv
+	 * @tparam retType
+	 * @tparam argTypes
+	 * @param addr
+	 * @param args
+	 * @return
+	 */
+	template <Convention conv = Convention::m_cdecl, typename retType = void, typename ...argTypes>
+	inline retType DoCall(uintptr_t addr, argTypes... args) {
 		// typedef retType (__stdcall *function_t)(argTypes...);
 		using ufunc_t = retType(__cdecl *)(argTypes...);
 

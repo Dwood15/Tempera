@@ -1,9 +1,5 @@
 #pragma once
 
-#include <map>
-#include <string>
-#include <vector>
-#include <iostream>
 #include <precompile.h>
 #include "../extended/addlog.h"
 #include "../function_rewrite.h"
@@ -66,8 +62,13 @@ private:
 	int                                   level;
 	std::vector<std::vector<std::string>> callbacks;
 	std::string                           filename;
+	bool                                  loaded = false;
 
 public:
+
+	bool IsLoaded() {
+		return this->loaded;
+	}
 
 	/**
  * Tells our class to call this function when the associated CB id is triggered.
@@ -86,7 +87,7 @@ public:
 	}
 
 	void beginLua() {
-		Print(true, "Trying to run the script file: %s", this->filename.c_str());
+		Print(true, "Trying to run the script file: %s\n", this->filename.c_str());
 
 		if (lua_pcall(L, 0, 0, 0)) {
 			Print(true, "Error: script failed to run! (%s)\n", this->filename.c_str());
@@ -109,6 +110,7 @@ public:
 		luaL_openlibs(L);
 		if (luaL_loadfile(L, filename.c_str())) {
 			Print(true, "Error: script failed to load: (%s)\n\tDoes it exist?\n", filename.c_str());
+			this->loaded = false;
 			L = 0;
 			return;
 		}
@@ -137,6 +139,7 @@ public:
 		registerGlobalLuaFunction("GetEngineContext", l_GetEngineContext);
 
 		this->filename = filename;
+		this->loaded   = true;
 	}
 
 	~LuaScriptManager() {
@@ -279,8 +282,10 @@ public:
 	}
 
 	void call_void_lua_func(const std::string_view &funcName) {
-		lua_getglobal(L, std::string(funcName).c_str());
-		lua_pcall(L, 0, 0, 0);
+		if (this->IsLoaded()) {
+			lua_getglobal(L, std::string(funcName).c_str());
+			lua_pcall(L, 0, 0, 0);
+		}
 	}
 
 	// void call_void_lua_func(const std::string_view &funcName, float arg) {
@@ -290,13 +295,13 @@ public:
 
 	template <LuaCallbackId eventType>
 	void call_lua_event_by_type() {
-		if (!this || this->callbacks.empty()) {
+		if (!this || this->callbacks.empty() || !this->IsLoaded()) {
 			return;
 		}
 
 		std::vector<std::string> cb_list = this->callbacks.at(eventType);
 
-		Print(true, "Begin calling lua event by type");
+		Print(true, "Begin calling lua event by type: %d", eventType);
 
 		if (cb_list.empty()) {
 			return;
@@ -332,45 +337,21 @@ static LuaScriptManager *LuaState;
 /**
  * Called before VirtualProtect is run.
  */
-static void InitializeLua() {
+inline static void InitializeLua() {
 	Print(true, "Attempting to initialize luascript manager\n");
-	LuaState = new LuaScriptManager(CurrentEngine.DEBUG_FILENAME);
-	LuaState->beginLua();
+	LuaState = new LuaScriptManager(CurrentEngine.LUA_FILENAME);
+
+	if (LuaState->IsLoaded()) {
+		LuaState->beginLua();
+	} else {
+		Print(true, "Lua Failed to initialize!\n");
+	}
 }
 
-static void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
+inline static void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
 	LuaState->registerLuaCallback(cb_name, cb_type);
 }
 
-//Compile-time function & macro, yip yip.
-#define FUNC_GET(funcName)       cgetFunctionBegin<true>(#funcName)
-//Calls every registered lua function by that event.
-#define CALL_LUA_BY_EVENT(event) LuaState->call_lua_event_by_type<LuaCallbackId::##event>()
-
-/**
- * Called variably based on fps
- * @param current_frame_tick - ticks remaining before rendering the next frame
- */
-static void game_tick(int current_frame_tick) {
-	CALL_LUA_BY_EVENT(before_game_tick);
-	constexpr auto got = FUNC_GET(game_tick);
-	if constexpr (got != (uintptr_t) -1) {
-		calls::DoCall<got, Convention::m_cdecl, void, int>(current_frame_tick);
-	}
-	CALL_LUA_BY_EVENT(after_game_tick);
-}
-
-/**
- * Called right before game loop starts, memory has already been initialized
- */
-static void parse_for_connect_invert() {
-	// calls::DoCall<cgetFunctionBegin<true>("parse_for_connect_invert"), Convention::m_cdecl>();
-	CALL_LUA_BY_EVENT(post_initialize);
-}
-
-static void post_dll_load() {
-	CALL_LUA_BY_EVENT(post_dll_init);
-}
-//don't pollute the global macro space.
-#undef CALL_LUA_BY_EVENT
-#undef FUNC_GET
+void game_tick(int current_frame_tick);
+void parse_for_connect_invert();
+void post_dll_load();

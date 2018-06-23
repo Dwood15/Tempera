@@ -13,6 +13,7 @@
 #include "exception_handler.h"
 #include "../ceinternal.h"
 #include <memory_map.h>
+#include <versions.h>
 
 //Not sure we need to guarantee we're in MSVC any more...
 #if defined(_MSC_VER)
@@ -104,7 +105,7 @@ LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo
 	auto eirecord = ExceptionInfo->ExceptionRecord;
 	auto eCode = eirecord->ExceptionCode;
 
-	DEBUG("Error Code: 0x%X - %s @ 0x%X (%s)", eCode, seDescription(eCode), eirecord->ExceptionAddress, getMemoryRegionDescriptor((uintptr_t)eirecord->ExceptionAddress));
+	DEBUG("Error Code: 0x%X - %s @ 0x%X (%s)", eCode, seDescription(eCode), eirecord->ExceptionAddress, CurrentEngine.getMemoryRegionDescriptor((uintptr_t)eirecord->ExceptionAddress));
 
 	auto info = eirecord->ExceptionRecord;
 	if (info != 0x0) {
