@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="tempera"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="msvc8"/>
+		<Option virtualFolders="CMake Files\;CMake Files\runtime\;CMake Files\runtime\cmake\;CMake Files\cmake\;CMake Files\src\;CMake Files\src\math\;CMake Files\src\exceptions\;CMake Files\src\lua\;CMake Files\src\gamestate\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 all"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="dinput8">
+				<Option output="C:/Program Files (x86)/Halo Custom Edition/dinput8.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-D_WINDOWS"/>
+					<Add option="-D_USRDLL"/>
+					<Add directory="C:/Program Files (x86)/MariaDB/MariaDB Connector C/include"/>
+					<Add directory="C:/Users/Dwood/Documents/GitHub/TemperaRedux/include/lua"/>
+					<Add directory="C:/Users/Dwood/Documents/GitHub/TemperaRedux/include/detours"/>
+					<Add directory="D:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Include"/>
+					<Add directory="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime"/>
+					<Add directory="C:/Users/Dwood/Documents/GitHub/TemperaRedux/common"/>
+					<Add directory="D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.13.26128\ATLMFC\include"/>
+					<Add directory="D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.13.26128\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="D:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\ucrt"/>
+					<Add directory="D:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\shared"/>
+					<Add directory="D:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\um"/>
+					<Add directory="D:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\winrt"/>
+					<Add directory="D:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 dinput8"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="dinput8/fast">
+				<Option output="C:/Program Files (x86)/Halo Custom Edition/dinput8.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-D_WINDOWS"/>
+					<Add option="-D_USRDLL"/>
+					<Add directory="C:/Program Files (x86)/MariaDB/MariaDB Connector C/include"/>
+					<Add directory="C:/Users/Dwood/Documents/GitHub/TemperaRedux/include/lua"/>
+					<Add directory="C:/Users/Dwood/Documents/GitHub/TemperaRedux/include/detours"/>
+					<Add directory="D:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Include"/>
+					<Add directory="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime"/>
+					<Add directory="C:/Users/Dwood/Documents/GitHub/TemperaRedux/common"/>
+					<Add directory="D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.13.26128\ATLMFC\include"/>
+					<Add directory="D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.13.26128\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="D:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\ucrt"/>
+					<Add directory="D:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\shared"/>
+					<Add directory="D:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\um"/>
+					<Add directory="D:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\winrt"/>
+					<Add directory="D:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 dinput8/fast"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 edit_cache"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Dwood\Documents\GitHub\TemperaRedux\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/CurrentEngine.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/CurrentEngine.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/common/addlog.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/common/addlog.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/include/lua">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/main.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/main.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/ce/1_10/110EngineManager.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/ce/1_10/110EngineManager.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/ce/1_10/function_map.inl">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/ce/1_10/function_rewrite.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/ce/1_10/function_rewrite.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/hek/sapien/function_map.inl">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/hek/sapien/sapienEngineManager.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/hek/sapien/sapienEngineManager.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/memory_map.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/versions.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/Direct3D/d3d9hook.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/Direct3D/d3d9hook.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/Direct3D/textures.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/ce_base_types.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/core.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/core.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/exceptions/exception_handler.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/exceptions/exception_handler.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/camera.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/camera.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/controls.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/controls.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/game_globals.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/objectcontroller.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/objectcontroller.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/objects.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/objects.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/player_types.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/players.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/lua/gamestate_interface.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/lua/memory_interface.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/lua/memory_interface.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/lua/players_interface.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/lua/script_manager.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/lua/script_manager.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/math/animations.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/math/colors.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/math/enums_generic.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/math/int_math.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/math/math.cpp">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/math/real_math.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/math/weapons.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/tags/map.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/tags/tags.h">
+			<Option target="dinput8"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\runtime\"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/cmake/FindHaloCE.cmake">
+			<Option virtualFolder="CMake Files\runtime\cmake\"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake/FindDirectX.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake/FindLua.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake/FindMariaDB.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/math/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\math\"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/exceptions/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\exceptions\"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/lua/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\lua\"/>
+		</Unit>
+		<Unit filename="C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\gamestate\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

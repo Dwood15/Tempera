@@ -1,0 +1,114 @@
+[
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\CurrentEngine.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\CurrentEngine.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/CurrentEngine.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\runtime\\ce\\1_10\\110EngineManager.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime\\ce\\1_10\\110EngineManager.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/ce/1_10/110EngineManager.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\runtime\\hek\\sapien\\sapienEngineManager.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime\\hek\\sapien\\sapienEngineManager.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/hek/sapien/sapienEngineManager.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\runtime\\ce\\1_10\\function_rewrite.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime\\ce\\1_10\\function_rewrite.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/runtime/ce/1_10/function_rewrite.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\src\\Direct3D\\d3d9hook.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\src\\Direct3D\\d3d9hook.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/Direct3D/d3d9hook.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\src\\core.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\src\\core.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/core.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\src\\math\\math.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\src\\math\\math.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/math/math.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\src\\exceptions\\exception_handler.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\src\\exceptions\\exception_handler.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/exceptions/exception_handler.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\src\\lua\\memory_interface.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\src\\lua\\memory_interface.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/lua/memory_interface.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\src\\lua\\script_manager.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\src\\lua\\script_manager.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/lua/script_manager.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\src\\gamestate\\objects.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\src\\gamestate\\objects.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/objects.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\src\\gamestate\\camera.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\src\\gamestate\\camera.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/camera.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\src\\gamestate\\objectcontroller.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\src\\gamestate\\objectcontroller.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/objectcontroller.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\src\\gamestate\\controls.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\src\\gamestate\\controls.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/src/gamestate/controls.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\common\\addlog.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common\\addlog.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/common/addlog.cpp"
+},
+{
+  "directory": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/cmake-build-debug",
+  "command": "D:\\PROGRA~2\\MICROS~1\\2017\\ENTERP~1\\VC\\Tools\\MSVC\\1413~1.261\\bin\\Hostx86\\x86\\cl.exe @<<
+ /nologo /TP -D_USRDLL -D_WINDOWS -Ddinput8_EXPORTS -IC:\\PROGRA~2\\MariaDB\\MARIAD~1\\include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\lua -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\include\\detours -ID:\\PROGRA~2\\MICROS~2\\Include -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\runtime -IC:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\common  /std:c++latest /MTd  /MTd /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast /std:c++latest /arch:SSE2 /D \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\" /D_CRT_SECURE_NO_WARNINGS   /FoCMakeFiles\\dinput8.dir\\main.cpp.obj /FdCMakeFiles\\dinput8.dir\\ /FS -c C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\main.cpp
+<<",
+  "file": "C:/Users/Dwood/Documents/GitHub/TemperaRedux/main.cpp"
+}
+]

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../precompile.h"
+#include "precompile.h"
 
 /**
  * @brief MPP == MAX PLAYER PATCH _B == BYTE
@@ -32,6 +32,16 @@ namespace calls {
 		return static_cast<unsigned int>(real_address_offset);
 	}
 
+	void __inline nopBytes(uintptr_t location, unsigned short numNops) {
+		for (unsigned short i = 0; i < numNops; i++) {
+			patchValue<byte>(location + i, 0x90);
+		}
+	}
+
+	void __inline adjustNPatch32(uintptr_t *loc, uint32 size) {
+		patchValue<uint32>(loc[0], size);
+		patchValue<uint32>(loc[1], size);
+	}
 	template<typename T>
 	inline void WriteSimpleHook(uintptr_t loc, T newLoc) {
 		uintptr_t addr = calc_addr_offset(loc, (int)newLoc);
@@ -105,31 +115,6 @@ namespace calls {
 		static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
 		return func_to_call(args...);
 	};
-
-	// template <uintptr_t addr, Convention conv>
-	// inline void DoCall() {
-	// 	// typedef retType (__stdcall *function_t)(argTypes...);
-	// 	using ufunc_t = void(__cdecl *)();
-	//
-	// 	if constexpr(conv == Convention::m_stdcall) {
-	// 		using ufunc_t = void(__stdcall *)();
-	//
-	// 	} else if constexpr(conv == Convention::m_fastcall) {
-	// 		using ufunc_t = void(__fastcall *)();
-	//
-	// 	} else if constexpr(conv == Convention::m_thiscall) {
-	// 		using ufunc_t = void(__thiscall *)();
-	//
-	// 	} else if constexpr(conv == Convention::m_cdecl) {
-	// 		using ufunc_t = void(__cdecl *)();
-	//
-	// 	} else {
-	// 		throw "Invalid return type specified!";
-	// 	}
-	//
-	// 	static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
-	// 	func_to_call();
-	// };
 };
 
 

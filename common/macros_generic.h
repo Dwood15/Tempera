@@ -34,7 +34,6 @@ STAT_ASSRT(double, 0x8);
 #pragma region functional
 #define FLAG(bit)               ( 1<<(bit) )
 #define UNK_TYPE(type) pad_##type
-#define PAD8(name) char name;
 #define PAD24(name) unsigned char name[24];
 
 #pragma region pad/unknown/unused macros
@@ -67,6 +66,8 @@ STAT_ASSRT(double, 0x8);
 // Add a field to a structure that markups a unused field of type [type]
 #define UNUSED_32(type) unsigned long : 32;
 
+//potentially unused static ptr
+#define STATIC_PTR(type) [[maybe_unused]] static type
 #pragma endregion
 
 #pragma endregion

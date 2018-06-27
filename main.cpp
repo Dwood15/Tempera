@@ -1,3 +1,9 @@
+#include "main.h"
+#include "CurrentEngine.h"
+#include "src/exceptions/exception_handler.h"
+#include "src/lua/script_manager.h"
+#include <iostream>
+
 /**
  *	Project: Tempera
  *	File: main.cpp
@@ -38,8 +44,6 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <precompile.h>
-#include "src_generic/ceinternal.h"
-#include "src_generic/lua/script_manager.h"
 
 //For some unknown reason, dll_load is not getting recognized on the main.cpp compile step.
 // extern void spcore::memory::post_dll_load();
@@ -75,9 +79,6 @@ using feats = feature_management::features;
 static inline void *init(HMODULE *reason) {
 	h        = AddVectoredExceptionHandler(CALL_FIRST, CEInternalExceptionHandler);
 
-#define SUPPORTSFEAT(FEAT) CurrentEngine.SupportsFeature(feats::FEAT)
-#define SUPPORTSFEATS(FEATA, FEATB) CurrentEngine.SupportsFeature((uint)(feats::FEATA | feats::FEATB))
-
 	// Dbg output before we get any further (initializes the console)
 	if (::AllocConsole() != 0) {
 		freopen_s(&debug_out, "CONOUT$", "w", stdout);
@@ -107,8 +108,11 @@ static inline void *init(HMODULE *reason) {
 		return false;
 	}
 
+#define SUPPORTSFEAT(FEAT) CurrentEngine.SupportsFeature(feats::FEAT)
+#define SUPPORTSFEATS(FEATA, FEATB) CurrentEngine.SupportsFeature((uint)(feats::FEATA | feats::FEATB))
 	if (SUPPORTSFEAT(LUA_HOOKS)) {
-		InitializeLua();
+		CurrentEngine.InitializeLuaState();
+		CurrentEngine.LuaFirstRun();
 	}
 
 	orig_DirectInput8Create = GetProcAddress(*reason, "DirectInput8Create");
@@ -116,7 +120,8 @@ static inline void *init(HMODULE *reason) {
 	DWORD old;
 	VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);
 
-	core = CurrentEngine.GetCore();
+	CurrentEngine.WriteHooks();
+
 	//We need to protect memory, I suppose.
 	// VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READ, &old);
 
@@ -128,24 +133,18 @@ static inline void *init(HMODULE *reason) {
 	return orig_DirectInput8Create;
 }
 
-static inline void detach(HMODULE reason) {
-	ExitAddLog();
-	RemoveVectoredExceptionHandler(h);
-	FreeLibrary(reason);
-}
-
 extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
 	if (fdwReason == DLL_PROCESS_ATTACH && !loaded) {
 		if (!init(&hinstDLL)) {
-			Print(true, "Failed to Initialize properly, I guess. Exiting");
+			Print(true, "Failed to Initialize properly. Exiting");
 			return false;
 		}
 
 		//Don't setup and run a forge thread for an unsupported runtime target.
 		if (SUPPORTSFEATS(DX_PROXY, FORGE_MODE)) {
-			DisableThreadLibraryCalls(hinstDLL);
-			CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
-			Print(true, "Created Forge Thread!\n");
+			//DisableThreadLibraryCalls(hinstDLL);
+			//CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
+			//Print(true, "Created Forge Thread!\n");
 		}
 
 		if (SUPPORTSFEAT(MARIADB_LOGGING)) {
@@ -159,7 +158,9 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 		loaded = true;
 
 	} else if (fdwReason == DLL_PROCESS_DETACH && loaded) {
-		detach(hinstDLL);
+		ExitAddLog();
+		RemoveVectoredExceptionHandler(h);
+		FreeLibrary(hinstDLL);
 		loaded = false;
 	}
 	return true;
