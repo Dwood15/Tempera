@@ -21,7 +21,7 @@
 */
 
 #pragma once
-#include <precompile.h>
+#include "../../precompile.h"
 #include "tags.h"
 #include "scenario.h"
 #include "bsp.h"

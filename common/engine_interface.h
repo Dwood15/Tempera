@@ -1,6 +1,6 @@
 #pragma once
 
-#include <precompile.h>
+#include "../precompile.h"
 
 /**
  * @brief MPP == MAX PLAYER PATCH _B == BYTE

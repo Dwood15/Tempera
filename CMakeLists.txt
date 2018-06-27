@@ -129,12 +129,11 @@ set(GLOBAL_H
 	common/macros_generic.h
 	common/engine_interface.h
 	common/struct_helper.h
-	common/precompile.h
 	include/lua_headers/luawrapperutil.h
 	src_generic/lua/players_interface.h
 	runtime/address_manager.h
 	src_generic/lua/gamestate_interface.h
-	runtime/memory_map.h src_generic/lua/script_manager.cpp)
+	runtime/memory_map.h)
 
 #EXTERNAL LIBS
 file(GLOB LUA53_GLOB ./libs/lua53.lib)
@@ -158,14 +157,27 @@ if (MARIADB_FOUND)
 	set_target_properties(mdb PROPERTIES IMPORTED_LOCATION ${MARIADB_LIBRARY})
 endif ()
 
+include(PrecompiledHeader.cmake)
+
 add_library(dinput8 SHARED
-			${RUNTIME_H}
+			main.cpp
+			src_generic/lua/script_manager.cpp
+			runtime/versions/versions.cpp
+			src_generic/lua/memory_interface.cpp			${RUNTIME_H}
 			${GLOBAL_INCLUDE_H}
 			${CEINTERNAL_CPP}
 			${GLOBAL_INCLUDE_H}
 			${GLOBAL_H}
-			main.cpp
+			precompile.cpp
+			precompile.h
 			)
+
+add_precompiled_header(dinput8 ${CMAKE_CURRENT_SOURCE_DIR}/precompile.h FORCEINCLUDE)
+
+
+
+
+
 
 target_link_libraries(dinput8 ${DETOURS_GLOB} ${LUA53_GLOB} ${MARIADB_LIBRARY} ${CAPSTONE_STATIC_GLOB} ${DirectX_LIBRARIES})
 

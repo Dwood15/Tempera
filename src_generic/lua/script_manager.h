@@ -1,12 +1,13 @@
 #pragma once
 
-#include <precompile.h>
+#include "../../precompile.h"
 #include "../extended/addlog.h"
 #include "../function_rewrite.h"
 #include <engine_interface.h>
 #include "memory_interface.h"
 #include "players_interface.h"
 #include "gamestate_interface.h"
+#include <versions.h>
 
 extern "C" {
 #include "../../include/lua_headers/lua.h"
@@ -54,6 +55,23 @@ static int l_registerLuaCallback(lua_State *L) {
 	return 0;
 }
 
+/**
+ * Tells the lua script whether or not the player is in the main menu.
+ * @param L Lua state.
+ * @return (In C) # args for lua.
+ */
+int l_InMainMenu(lua_State * L);
+
+
+/**
+ * Returns (to Lua) the engine state this dll was compiled with targets for.
+ * Sapien as a compiler target will shortly arrive.
+ * @param L Lua state.
+ * @return (In C) Num args for lua.
+ */
+int l_GetEngineContext(lua_State * L);
+
+
 //This code was (for the most part) copy-pasted from
 //The tutorial series here: https://eliasdaler.wordpress.com/2013/10/20/lua_and_cpp_pt2/
 class LuaScriptManager {
@@ -94,7 +112,7 @@ public:
 		}
 	}
 
-	explicit LuaScriptManager(const std::string &filename = "init.txt") {
+	LuaScriptManager(const std::string &filename = "init.txt") {
 		this->callbacks = std::vector<std::vector<std::string>>();
 		this->callbacks.resize(LuaCallbackId::max_callback_id);
 
@@ -337,16 +355,7 @@ static LuaScriptManager *LuaState;
 /**
  * Called before VirtualProtect is run.
  */
-inline static void InitializeLua() {
-	Print(true, "Attempting to initialize luascript manager\n");
-	LuaState = new LuaScriptManager(CurrentEngine.LUA_FILENAME);
-
-	if (LuaState->IsLoaded()) {
-		LuaState->beginLua();
-	} else {
-		Print(true, "Lua Failed to initialize!\n");
-	}
-}
+void InitializeLua();
 
 inline static void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
 	LuaState->registerLuaCallback(cb_name, cb_type);

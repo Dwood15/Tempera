@@ -42,3 +42,14 @@ void post_dll_load() {
 //don't pollute the global macro space.
 #undef CALL_LUA_BY_EVENT
 #undef FUNC_GET
+
+void InitializeLua() {
+	Print(true, "Attempting to initialize luascript manager\n");
+	LuaState = new LuaScriptManager(CurrentEngine.LUA_FILENAME);
+
+	if (LuaState->IsLoaded()) {
+		LuaState->beginLua();
+	} else {
+		Print(true, "Lua Failed to initialize!\n");
+	}
+}

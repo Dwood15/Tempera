@@ -1,3 +1,12 @@
+#include <memory_map.h>
+#include "../Direct3D/d3d9hook.h"
+#include "halo_types.h"
+#include "players.h"
+#include "objects.h"
+#include "../tags/map.h"
+#include "camera.h"
+#include "objectcontroller.h"
+
 /*
 	Project: tempera
 	File: forge.cpp
@@ -13,18 +22,7 @@ class Core;
 
 #pragma once
 
-#include <precompile.h>
-#include <memory_map.h>
-#include "detours.h"
-#include "halo_types.h"
-#include "objectcontroller.h"
-#include "camera.h"
-#include "players.h"
-#include "../tags/map.h"
-#include "../tags/tags.h"
-#include "math.h"
-#include "../Direct3D/d3d9hook.h"
-#include "objects.h"
+
 //using namespace std;
 ////////////////////////////////////////
 // Defines
@@ -35,92 +33,6 @@ class Core;
 
 static Core *core;
 static CD3D cd3d;
-
-
-////////////////////////////////////////
-// Generic Halo Structures
-////////////////////////////////////////
-template <typename T>
-struct data_header {
-	char          name[32];
-	short         max;      // Max number of <things> possible
-	short         size;      // Size of each <thing> class instance
-	bool          is_valid;
-	bool          identifier_zero_invalid;
-	short         padding;
-	unsigned long signature; // d@t@
-	short         next_index;
-	short         last_index;
-	ident         next;         // the next <thing> to be initialized
-	T             *first;         // Pointer to the first <thing> class instance
-
-	void DumpData(bool toConsole = true) {
-		Print(toConsole, "Header Name: %s", name);
-
-		char data[4];
-		std::memcpy(data, &this->signature, 4);
-
-		Print(toConsole, "memcpy Signature: %s\n", data);
-		Print(toConsole, "String Signature: %s\n", std::string(reinterpret_cast<const char *>(&this->signature), sizeof(unsigned long)));
-
-	}
-};
-
-STAT_ASSRT(data_header<void>, 0x38);
-
-
-struct lruv_cache_block {
-	long  unk0;
-	long  page_count;
-	ident first_page_index;
-	ident next_block_index;
-	ident previous_block_index;
-	long  unk14;
-	long  unk18;
-};
-
-struct lruv_cache {
-	char                          name[32];
-	void                          *Functions[2];
-	long                          page_count;
-	long                          page_size_bits;
-	long                          unknown;
-	ident                         first_block_index;
-	ident                         last_block_index;
-	data_header<lruv_cache_block> *data;
-	unsigned long                 signature; // weee
-};
-
-struct memory_pool_block {
-	// 'head'
-	unsigned long     head;
-	long              size;
-	// the pointer to the beginning of this block
-	void              *block_address;
-	// the pool block that follows this one
-	memory_pool_block *next;
-	// the pool block the comes before this one
-	memory_pool_block *prev;
-	// 'tail'
-	unsigned long     tail;
-};
-
-struct memory_pool {
-	// 'head'
-	unsigned long     signature;
-	// 32 character string
-	char              name[32];
-	// next address to allocate a block at
-	void              *base_address;
-	// total size of the pool
-	long              size;
-	// total size left in the pool thats not own'd by anything
-	long              free_size;
-	// pointer to the first pool item
-	memory_pool_block *first;
-	// pointer to the last pool item
-	memory_pool_block *last;
-};
 
 ////////////////////////////////////////
 // Core Halo Structures
@@ -208,6 +120,8 @@ struct _core_6 {
 struct _core_7 {
 	lruv_cache *DecalVertexCache;
 };
+
+class ObjectController;
 
 ////////////////////////////////////////
 // The Core Class of HaloForge

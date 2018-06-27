@@ -14,7 +14,7 @@ class ObjectController;
 
 #pragma once
 
-#include <precompile.h>
+#include "../../precompile.h"
 #include "core.h"
 #include "objects.h"
 

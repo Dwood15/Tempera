@@ -1,6 +1,6 @@
 #pragma once
 
-#include <precompile.h>
+#include <macros_generic.h>
 
 typedef unsigned int uintptr_t;
 

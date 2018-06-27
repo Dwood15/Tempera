@@ -105,8 +105,6 @@ struct s_main_globals
 	PAD32;
 };
 
-
-
 */
 	// struct s_game_globals_tag {
 	// enum {

@@ -181,6 +181,16 @@ struct s_player_control_globals_data {
 	s_player_control local_players[MAX_PLAYER_COUNT_LOCAL]; //0x10
 };
 STAT_ASSRT(s_player_control_globals_data, (0x10 + sizeof(s_player_control) * MAX_PLAYER_COUNT_LOCAL));
+static_assert(sizeof(s_player_control_globals_data) < (unsigned int) 0xFF);
+
+
+
+
+
+
+
+
+
 
 
 

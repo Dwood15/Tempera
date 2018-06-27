@@ -117,7 +117,6 @@ static inline void *init(HMODULE *reason) {
 	VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);
 
 	core = CurrentEngine.GetCore();
-	spcore::memory::get_mem_and_patch();
 	//We need to protect memory, I suppose.
 	// VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READ, &old);
 
