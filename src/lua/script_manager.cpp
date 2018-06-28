@@ -23,6 +23,59 @@ int l_registerLuaCallback(lua_State *L) {
 }
 
 
+/**
+ * Tells lua if the player is spawned or not.
+ * @param L
+ * @return
+ */
+int l_IsPlayerSpawned(lua_State *L) {
+	if (!CurrentEngine.IsCoreInitialized()) {
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	auto Core = CurrentEngine.GetCore();
+
+	const auto idx = lua_tointeger(L, 1);
+
+	if (idx >= 0 && idx <= 15) {
+		lua_pushboolean(L, Core->IsPlayerSpawned(idx));
+		return 1;
+	}
+
+	lua_pushboolean(L, false);
+	return 1;
+}
+
+/**
+ * Gives the calling lua function the address of the player by index..
+ * @param L
+ * @return
+ */
+int l_GetPlayerAddress(lua_State *L) {
+	if (!CurrentEngine.IsCoreInitialized()) {
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+
+	auto Core = CurrentEngine.GetCore();
+
+	const auto idx = lua_tointeger(L, 1);
+
+	if (idx >= 0 && idx <= 15) {
+		if (!Core->IsPlayerSpawned(idx)) {
+			lua_pushinteger(L, -1);
+			return 1;
+		}
+
+		lua_pushinteger(L, (int) Core->GetPlayer(idx));
+		return 1;
+	}
+
+	lua_pushinteger(L, -1);
+	return 1;
+}
+
 int l_MakePlayerGoForward(lua_State *L) {
 	CurrentEngine.MakePlayerGoForward();
 	return 0;
@@ -59,6 +112,26 @@ int l_InMainMenu(lua_State *L) {
 }
 
 /**
+ * Checks the function map for a function name, then Calls it if it's found.
+ * @param L
+ * @return (In Lua) Whether or not the function was found and called.
+ *
+ */
+int l_CallVoidEngineFunctionByFunctionMapName(lua_State *L) {
+	auto str = lua_tostring(L, 1);
+	auto got = CurrentEngine.getFunctionBegin(str);
+
+	if (got != static_cast<uint>(-1)) {
+		calls::DoCall<Convention::m_cdecl>(got);
+		lua_pushboolean(L, true);
+		return 1;
+	}
+
+	lua_pushboolean(L, false);
+	return 1;
+}
+
+/**
  * Returns (to Lua) the engine state this dll was compiled with targets for.
  * Sapien as a compiler target will shortly arrive.
  * @param L Lua state.
@@ -79,6 +152,11 @@ int l_GetEngineContext(lua_State *L) {
 	return 2;
 }
 
+/**
+ * Something something lua and callbacks.
+ * @param cb_name
+ * @param cb_type
+ */
 void LuaScriptManager::registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
 	if (!this) {
 		Print(false, "\tRegisterLuaCallback exiting b/c of invalid context. :(\n");
@@ -103,6 +181,9 @@ void LuaScriptManager::registerLuaCallback(const std::string &cb_name, LuaCallba
 	}
 }
 
+/**
+ * Something something Lua and void function call by functionName
+ */
 void LuaScriptManager::call_void_lua_func(const std::string &funcName) {
 	if (!this->IsLoaded()) {
 		Print(false, "Can't call lua func: %s - Lua isn't loaded?!?.\n", funcName.c_str());
@@ -119,6 +200,10 @@ void LuaScriptManager::call_void_lua_func(const std::string &funcName) {
 	lua_pcall(L, 0, 0, 0);
 }
 
+/**
+ * Initialize Lua, look for file filename.
+ * @param filename
+ */
 void LuaScriptManager::InitializeLua(const std::string &filename) {
 	Print(true, "Trying To load: \n\t%s\n", filename.c_str());
 
@@ -154,8 +239,15 @@ void LuaScriptManager::InitializeLua(const std::string &filename) {
 	registerGlobalLuaFunction("AreWeInMainMenu", l_InMainMenu);
 	registerGlobalLuaFunction("GetEngineContext", l_GetEngineContext);
 
+	registerGlobalLuaFunction("CallVoidEngineFunctionByFunctionMapName", l_CallVoidEngineFunctionByFunctionMapName);
+
 	registerGlobalLuaFunction("MakePlayerGoForward", l_MakePlayerGoForward);
+
 	registerGlobalLuaFunction("IsCoreInitialized", l_IsCoreInitialized);
+
+	registerGlobalLuaFunction("GetPlayerAddress", l_GetPlayerAddress);
+	registerGlobalLuaFunction("IsPlayerSpawned", l_IsPlayerSpawned);
+
 	registerGlobalLuaFunction("IsCustomEd", l_IsCustomEd);
 	registerGlobalLuaFunction("IsSapien", l_IsSapien);
 	registerGlobalLuaFunction("IsHek", l_IsHek);

@@ -108,7 +108,7 @@ struct _core_0 {
 	data_header<void>   *HSGlobals;
 	data_header<void>   *HSThread;
 	data_header<void>   *ScriptNode;
-	local_player        *PlayersGlobals;
+	s_players_globals_data       *PlayersGlobals;
 	data_header<void>   *Teams;
 	data_header<player> *Players;
 };

@@ -75,20 +75,6 @@ struct player {
 	}
 };
 
-//The local player structure does not actually affect anything. More lke it just gets updated.
-struct local_player {
-	ident iplayer;
-	BYTE  Unknown00[160];
-	ident object;
-	BYTE  Unknown01[8];
-	vect3 rot;
-
-	void DumpData(bool toConsole = false) {
-		Print(toConsole, "Begin Local Player Dump!\n");
-		Print(toConsole, "Address: 0x%x\n", (int) this);
-		rot.DumpData(toConsole, "Local Player Rot: ");
-	}
-};
 
 struct machine // Struct is from haloceded; i'm not sure if it's the same in other versions.
 {

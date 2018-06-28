@@ -104,8 +104,7 @@ Core::~Core() {
 
 // Returns a player structure address, by player index
 player *Core::GetPlayer(short index) {
-	player *newplayer = (player *) ((unsigned long) core_0->Players->first + (index * core_0->Players->size));
-	return newplayer;
+	return reinterpret_cast<player *>((unsigned long) core_0->Players->first + (index * core_0->Players->size));
 }
 
 // Check to see if a player is spawned && biped object is valid?

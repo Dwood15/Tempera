@@ -140,5 +140,4 @@ namespace spcore {
 			}
 		} while (player_datum > 0);
 	}
-
 };

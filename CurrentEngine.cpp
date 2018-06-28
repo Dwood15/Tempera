@@ -209,7 +209,7 @@ void GlobalEngine::RefreshCore() {
 			this->eCore->core_0 = new _core_0;
 			this->eCore->core_1 = new _core_1;
 
-			this->eCore->core_0->PlayersGlobals = *(local_player **) 0x1057538;
+			this->eCore->core_0->PlayersGlobals = *(s_players_globals_data **) 0x1057538;
 			this->eCore->core_0->Teams          = *(data_header<void> **) 0x1057548;
 			this->eCore->core_0->Players        = *(data_header<player> **) 0x105754C;
 
@@ -286,7 +286,6 @@ void GlobalEngine::MakePlayerGoForward() {
 		this->eCore->player_control_globals_data->local_players[0].throttle.x = 2.0f;
 		if (this->eCore->player_control_globals_data->local_players[0].unit_index.handle != -1) {
 			auto plyr = this->eCore->GetPlayer(0);
-
 		}
 	}
 }
