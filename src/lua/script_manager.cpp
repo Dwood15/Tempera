@@ -68,7 +68,7 @@ int l_GetPlayerAddress(lua_State *L) {
 			return 1;
 		}
 
-		lua_pushinteger(L, (int) Core->GetPlayer(idx));
+		lua_pushinteger(L, reinterpret_cast<int>(Core->GetPlayer(idx)));
 		return 1;
 	}
 

@@ -283,10 +283,23 @@ bool GlobalEngine::HasSupport() {
 void GlobalEngine::MakePlayerGoForward() {
 	if (this->IsCoreInitialized() && (this->IsSapien() || this->IsCustomEd())) {
 		Print(true, "Should be making player go forward.");
-		this->eCore->player_control_globals_data->local_players[0].throttle.x = 2.0f;
-		if (this->eCore->player_control_globals_data->local_players[0].unit_index.handle != -1) {
-			auto plyr = this->eCore->GetPlayer(0);
-		}
+		this->eCore->player_control_globals_data->local_players[0].throttle.x = 11.0f;
+		this->eCore->player_control_globals_data->local_players[0].throttle.y = 11.0f;
+
+		auto plyr = this->eCore->GetPlayer(0);
+
+		auto su = reinterpret_cast<s_unit_datum *>(plyr);
+
+		su->unit.throttle.x = 11.0f;
+		su->unit.throttle.y = 11.0f;
+		su->unit.throttle.z = 11.0f;
+
+		su->unit.control_data.throttle.x = 11.0f;
+		su->unit.control_data.throttle.y = 11.0f;
+		su->unit.control_data.throttle.z = 11.0f;
+
+		su->unit.control_flags.control_flags.jump_button = 1;
+
 	}
 }
 
