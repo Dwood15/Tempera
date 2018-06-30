@@ -2,19 +2,19 @@
 
 #include "macros_generic.h"
 #include "../ce_base_types.h"
+#include "objects.h"
 
 namespace Input {
 	struct ControlSettings {
-		bool Initialized;
-		char pad0;
+		bool  Initialized;
+		char  pad0;
 		int16 Device; // ControlDevice
 		int16 pad1;
 		int16 Type; // ControlType
 		int16 Index; // Key / GamepadButton / GamepadAxis / MouseButton / MouseAxis
 		int16 Direction; // GamepadAxisDirection / GamepadDpadDirection / MouseAxisDirection
 	};
-	static auto *const Settings           = (reinterpret_cast<Input::ControlSettings *>(0x6AD802));
-
+	static auto *const Settings = (reinterpret_cast<Input::ControlSettings *>(0x6AD802));
 
 	struct GamepadAxisState {
 		byte  Speed; // not even used
@@ -49,7 +49,6 @@ namespace Input {
 	// Returns >0 if [control] is active on any input devices currently being used
 	// API_INLINE int32 GetControlState(enums::PlayerControl control) { return GetControlState(SettingsGetDevice(control), SettingsGetType(control), SettingsGetIndex(control), SettingsGetDirection(control) );
 }
-
 
 struct s_unit_control_data {
 	byte           animation_state;

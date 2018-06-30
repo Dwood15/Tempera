@@ -119,6 +119,41 @@ constexpr std::pair<uintptr_t, short> short_patches[] {
 #include "../../../src/lua/script_manager.h"
 #include "../../../CurrentEngine.h"
 
+//Doesn't work ? inlining into OnPlayerActionupdate works tho
+void PlayerActionUpdate(s_player_action * current) {
+	if (CurrentEngine.ShouldOverrideAction()) {
+		auto override = CurrentEngine.GetPlayerActionOverride(0);
+		Print(true, "Should see action update now!");
+
+		current->throttle_forwardback = override.throttle_forwardback;
+		current->control_flagsA       = override.control_flagsA;
+		current->control_flagsA.control_flags.jump_button = 1;
+		current->control_flagsB       = override.control_flagsB;
+		current->control_flagsB.control_flags.jump_button = 1;
+
+		CurrentEngine.ResetOverride();
+	}
+}
+
+void __declspec(naked) OnPlayerActionUpdate() {
+
+	s_player_action * current_action;
+
+	__asm mov     dword ptr [esp+18h], -1
+	__asm mov current_action, ebp
+
+	if (CurrentEngine.ShouldOverrideAction()) {
+		Print(true, "Should see action update now!");
+
+		current_action->control_flagsA.control_flags.jump_button = 1;
+		// current_action->control_flagsB.control_flags.jump_button = 1;
+		CurrentEngine.ResetOverride();
+	}
+
+	__asm retn
+
+}
+
 void CE110::WriteHooks() {
 	//TODO: Coneceptually separate these out..
 	//Function call
@@ -162,7 +197,6 @@ void CE110::WriteHooks() {
 
 	calls::WriteSimpleHook(player_control_init_new_map_hook, &spcore::player_control::player_control_initialize_for_new_map);
 
-
 	//Lua Hooks
 	constexpr uintptr_t post_initialize_hook = 0x4CAABA;
 	calls::WriteSimpleHook(post_initialize_hook, &main_setup_connection_init);
@@ -171,6 +205,13 @@ void CE110::WriteHooks() {
 	Print(true, "\nWriting the game_tick hook now!\n");
 
 	calls::WriteSimpleHook(game_tick_hook, &game_tick);
+
+	//Originally: C7 44 24 18 FF FF FF FF
+	//Basically just sets some random value to -1. Couldn't tell if it was being used or not.
+	calls::patchValue<byte>(0x476CF2, 0xE8); //call
+	calls::WriteSimpleHook(0x476CF3, &OnPlayerActionUpdate); //6 bytes off.
+	calls::patchValue<byte>(0x476CF7, 0x90); //
+	calls::patchValue<unsigned short>(0x476CF8, 0x9090); //
 	// patchValue<uintptr_t>(player_control_init_new_map_hook, addr); //Gotta be able to loop over all the players + input devices, no?.
 
 	// constexpr uintptr_t scenario_load_hookA = 0x4CC9AD; //inside main_new_map

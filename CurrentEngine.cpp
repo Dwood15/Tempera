@@ -89,7 +89,7 @@ bool GlobalEngine::IsCustomEd() {
 }
 
 bool GlobalEngine::IsCoreInitialized() {
-	return this->eCore != (Core *) -1;
+	return this->eCore != reinterpret_cast<Core *>(-1);
 }
 
 features GlobalEngine::GetSupported() {
@@ -259,9 +259,33 @@ const char *GlobalEngine::GetCurrentMajorVerString() {
 	}
 }
 
+bool GlobalEngine::SupportsFeature(features feat) {
+	return (this->GetSupported() & feat) == feat;
+}
+
+bool GlobalEngine::SupportsFeature(uint feat) {
+	return (this->GetSupported() & feat) == feat;
+}
+
 void GlobalEngine::registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
 	Print(false, "Should be registering callback: %s", cb_name.c_str());
 	LuaState->registerLuaCallback(cb_name, cb_type);
+}
+
+bool GlobalEngine::ShouldOverrideAction() {
+	return ShouldOverride;
+}
+
+void GlobalEngine::LuaFirstRun() {
+	if (LuaState) {
+		LuaState->DoFirstRun();
+	} else {
+		Print(true, "Lua Failed to initialize & run!\n");
+	}
+}
+
+void GlobalEngine::ResetOverride() {
+	ShouldOverride = false;
 }
 
 bool GlobalEngine::HasSupport() {
@@ -280,26 +304,24 @@ bool GlobalEngine::HasSupport() {
 	return false;
 }
 
-void GlobalEngine::MakePlayerGoForward() {
-	if (this->IsCoreInitialized() && (this->IsSapien() || this->IsCustomEd())) {
-		Print(true, "Should be making player go forward.");
-		this->eCore->player_control_globals_data->local_players[0].throttle.x = 11.0f;
-		this->eCore->player_control_globals_data->local_players[0].throttle.y = 11.0f;
+s_player_action &GlobalEngine::GetPlayerActionOverride(unsigned short idx) {
+	Print(true, "Getting Player Action Override.\n");
+	if (idx > MAX_PLAYER_COUNT_LOCAL) {
+		idx = 0;
+	}
 
-		auto plyr = this->eCore->GetPlayer(0);
+	return this->ActionOverrides[idx];
+}
 
-		auto su = reinterpret_cast<s_unit_datum *>(plyr);
+Core *GlobalEngine::GetCore() {
+	return this->eCore;
+}
 
-		su->unit.throttle.x = 11.0f;
-		su->unit.throttle.y = 11.0f;
-		su->unit.throttle.z = 11.0f;
-
-		su->unit.control_data.throttle.x = 11.0f;
-		su->unit.control_data.throttle.y = 11.0f;
-		su->unit.control_data.throttle.z = 11.0f;
-
-		su->unit.control_flags.control_flags.jump_button = 1;
-
+void GlobalEngine::MakePlayerJump() {
+	if (IsSapien() || IsCustomEd()) {
+		ShouldOverride = true;
+	} else {
+		Print(true, "Can't make player go forward because the version is unsupported");
 	}
 }
 

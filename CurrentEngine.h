@@ -7,17 +7,20 @@
 
 class LuaScriptManager;
 
+static bool ShouldOverride;
+
 namespace feature_management::engines {
 	class GlobalEngine {
 		features              CurrentSupported = features::NOPE;
 		major                 CurrentMajor     = major::NO;
 		minor                 CurrentMinor     = minor::nope;
 		defined_functionrange *current_map;
-		Core                  *eCore = (Core *)-1;
-
+		Core                  *eCore;
+		s_player_action	ActionOverrides[MAX_PLAYER_COUNT_LOCAL];
 		//Support Attempted
 		// std::string GetCurrentFileName(char * args) {
 		std::string GetCurrentFileName();
+
 
 		bool VerSupported();
 
@@ -32,6 +35,7 @@ namespace feature_management::engines {
 
 		LuaScriptManager * GetLuaState();
 
+		s_player_action& GetPlayerActionOverride(unsigned short idx);
 
 		bool IsHek();
 
@@ -45,26 +49,19 @@ namespace feature_management::engines {
 
 		bool HasSupport();
 
-		bool SupportsFeature(features feat) {
-			return (this->GetSupported() & feat) == feat;
-		}
+		bool ShouldOverrideAction();
+		void ResetOverride();
 
-		bool SupportsFeature(uint feat) {
-			return (this->GetSupported() & feat) == feat;
-		}
+		bool SupportsFeature(features feat);
 
-		void MakePlayerGoForward();
+		bool SupportsFeature(uint feat);
+
+		void MakePlayerJump();
 
 
 		void InitializeLuaState();
 
-		void LuaFirstRun() {
-			if (LuaState) {
-				LuaState->DoFirstRun();
-			} else {
-				Print(true, "Lua Failed to initialize & run!\n");
-			}
-		}
+		void LuaFirstRun();
 
 		GlobalEngine();
 
@@ -76,9 +73,7 @@ namespace feature_management::engines {
 
 		const char *GetCurrentMajorVerString();
 
-		Core *GetCore() {
-			return this->eCore;
-		}
+		Core *GetCore();
 
 		/**
  		* Called before VirtualProtect is run.

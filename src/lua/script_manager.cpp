@@ -76,8 +76,8 @@ int l_GetPlayerAddress(lua_State *L) {
 	return 1;
 }
 
-int l_MakePlayerGoForward(lua_State *L) {
-	CurrentEngine.MakePlayerGoForward();
+int l_MakePlayerJump(lua_State *L) {
+	CurrentEngine.MakePlayerJump();
 	return 0;
 }
 
@@ -241,7 +241,7 @@ void LuaScriptManager::InitializeLua(const std::string &filename) {
 
 	registerGlobalLuaFunction("CallVoidEngineFunctionByFunctionMapName", l_CallVoidEngineFunctionByFunctionMapName);
 
-	registerGlobalLuaFunction("MakePlayerGoForward", l_MakePlayerGoForward);
+	registerGlobalLuaFunction("MakePlayerJump", l_MakePlayerJump);
 
 	registerGlobalLuaFunction("IsCoreInitialized", l_IsCoreInitialized);
 

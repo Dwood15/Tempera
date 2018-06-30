@@ -426,6 +426,20 @@ union unit_control_flags {
 };
 static_assert(sizeof(unit_control_flags) == sizeof(short));
 
+struct s_player_action {
+	unit_control_flags control_flagsA;
+	unit_control_flags control_flagsB;
+	int                desired_facing[2];
+	float              throttle_forwardback;
+	float              throttle_leftright;
+	int                primary_trigger;
+	__int16            desired_weapon_index;
+	__int16            desired_grenade_index;
+	__int16            desired_zoom_index;
+	__int16            field_1E;
+};
+
+
 struct s_unit_data {
 	datum_index actor_index;                              // 0x1F4 //0x0
 	datum_index swarm_actor_index;                           // 0x1F8 //0x4

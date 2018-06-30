@@ -198,16 +198,6 @@ STAT_ASSRT(s_player_control_globals_data, (0x10 + sizeof(s_player_control) * MAX
 static_assert(sizeof(s_player_control_globals_data) < (unsigned int) 0xFF);
 
 
-
-
-
-
-
-
-
-
-
-
 // struct s_player_datum {
 // 	short salt;
 //
