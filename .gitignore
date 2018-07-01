@@ -1,5 +1,6 @@
 .idea/
 bin/
+cmake-build-debug/
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
@@ -57,3 +58,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+cmake-build-debug/compile_commands.json
