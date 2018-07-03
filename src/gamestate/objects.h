@@ -426,19 +426,39 @@ union unit_control_flags {
 };
 static_assert(sizeof(unit_control_flags) == sizeof(short));
 
+struct s_unit_control_data {
+	byte               animation_state;
+	byte               aiming_speed;
+	unit_control_flags control_flags;
+	int16              weapon_index;
+	int16              grenade_index;
+	int16              zoom_index;
+	PAD16;
+	real_vector3d throttle;
+	real          primary_trigger;
+	real_vector3d facing_vector;
+	real_vector3d aiming_vector;
+	real_euler_angles3d looking_vector;
+};
+
+static_assert(sizeof(s_unit_control_data) == 0x40);
+
 struct s_player_action {
 	unit_control_flags control_flagsA;
 	unit_control_flags control_flagsB;
-	int                desired_facing[2];
+	float              desired_facing_yaw;
+	float              desired_facing_pitch;
 	float              throttle_forwardback;
 	float              throttle_leftright;
-	int                primary_trigger;
+	float               primary_trigger;
 	__int16            desired_weapon_index;
 	__int16            desired_grenade_index;
 	__int16            desired_zoom_index;
 	__int16            field_1E;
 };
 
+//If it's not here, it won't ever update...
+static s_player_action	ActionOverrides[MAX_PLAYER_COUNT_LOCAL];
 
 struct s_unit_data {
 	datum_index actor_index;                              // 0x1F4 //0x0

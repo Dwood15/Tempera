@@ -1,7 +1,8 @@
 #pragma once
 
 #include "script_manager.h"
-#include "../../CurrentEngine.h"
+#include "../CurrentEngine.h"
+#include "../Dinput/dinput.h"
 
 int l_print(lua_State *L) {
 	const bool tocmd = lua_toboolean(L, 1);
@@ -22,7 +23,6 @@ int l_registerLuaCallback(lua_State *L) {
 	return 0;
 }
 
-
 /**
  * Tells lua if the player is spawned or not.
  * @param L
@@ -30,6 +30,8 @@ int l_registerLuaCallback(lua_State *L) {
  */
 int l_IsPlayerSpawned(lua_State *L) {
 	if (!CurrentEngine.IsCoreInitialized()) {
+		Print(false, "\tCan't spawn player because core is not initialized!\n");
+
 		lua_pushboolean(L, false);
 		return 1;
 	}
@@ -54,6 +56,8 @@ int l_IsPlayerSpawned(lua_State *L) {
  */
 int l_GetPlayerAddress(lua_State *L) {
 	if (!CurrentEngine.IsCoreInitialized()) {
+		Print(false, "\tCan't get player address because core is not initialized!\n");
+
 		lua_pushinteger(L, -1);
 		return 1;
 	}
@@ -76,39 +80,23 @@ int l_GetPlayerAddress(lua_State *L) {
 	return 1;
 }
 
-int l_MakePlayerJump(lua_State *L) {
-	CurrentEngine.MakePlayerJump();
+template <typename F>
+int LuaSetPlayerFunctionNoArg(lua_State *L, F func) {
+	const auto idx = static_cast<ushort>(lua_tointeger(L, 1));
+
+	func(idx);
+
 	return 0;
 }
 
-int l_IsCoreInitialized(lua_State *L) {
-	lua_pushboolean(L, CurrentEngine.IsCoreInitialized());
-	return 1;
-}
+template <typename F>
+int LuaSetPlayerFunctionWithArg(lua_State *L, F func) {
+	const auto idx = static_cast<ushort>(lua_tointeger(L, 1));
+	const auto x   = static_cast<float>(lua_tonumber(L, 2));
 
-int l_IsCustomEd(lua_State *L) {
-	lua_pushboolean(L, CurrentEngine.IsCustomEd());
-	return 1;
-}
+	func(idx, x);
 
-int l_IsSapien(lua_State *L) {
-	lua_pushboolean(L, CurrentEngine.IsSapien());
-	return 1;
-}
-
-int l_IsHek(lua_State *L) {
-	lua_pushboolean(L, CurrentEngine.IsHek());
-	return 1;
-}
-
-/**
- * Tells the lua script whether or not the player is in the main menu.
- * @param L Lua state.
- * @return (In C) # args for lua.
- */
-int l_InMainMenu(lua_State *L) {
-	lua_pushboolean(L, CurrentEngine.GetCore()->AreWeInMainMenu());
-	return 1;
+	return 0;
 }
 
 /**
@@ -210,7 +198,7 @@ void LuaScriptManager::InitializeLua(const std::string &filename) {
 	L = luaL_newstate();
 	luaL_openlibs(L);
 	if (luaL_loadfile(L, filename.c_str())) {
-		Print(true, "Error: script failed to load: (%s)\n\tDoes it exist?\n", filename.c_str());
+		Print(true, "Error: script failed to load: (%s)\n\tDoes it exist?\n\tIf it does exist, there may be a syntax error.\n\tDwood is still learning how to add features to Lua.\n", filename.c_str());
 		this->loaded = false;
 		L = 0;
 		return;
@@ -234,23 +222,89 @@ void LuaScriptManager::InitializeLua(const std::string &filename) {
 
 	//2 Params
 	registerGlobalLuaFunction("RegisterCallBack", l_registerLuaCallback);
-	registerGlobalLuaFunction("GetMaxLocalPlayers", l_GetMaxLocalPlayers);
 
-	registerGlobalLuaFunction("AreWeInMainMenu", l_InMainMenu);
+	registerGlobalLuaFunction("GetMaxLocalPlayers", [](lua_State* L) {
+		lua_pushinteger(L, MAX_PLAYER_COUNT_LOCAL);
+		return 1;
+	});
+
+	registerGlobalLuaFunction("AreWeInMainMenu", [](lua_State *L) {
+		lua_pushboolean(L, CurrentEngine.GetCore()->AreWeInMainMenu());
+		return 1;
+	});
+
 	registerGlobalLuaFunction("GetEngineContext", l_GetEngineContext);
 
 	registerGlobalLuaFunction("CallVoidEngineFunctionByFunctionMapName", l_CallVoidEngineFunctionByFunctionMapName);
 
-	registerGlobalLuaFunction("MakePlayerJump", l_MakePlayerJump);
+	//Some helpers for controlling the player.
+	registerGlobalLuaFunction("SetPlayerPrimaryTriggerFlag", [](lua_State *L) {
+		return LuaSetPlayerFunctionNoArg(L, [](ushort idx) {
+			CurrentEngine.SetPlayerPrimaryTriggerFlag(idx);
+		});
+	});
 
-	registerGlobalLuaFunction("IsCoreInitialized", l_IsCoreInitialized);
+	registerGlobalLuaFunction("SetPlayerTriggerPressure", [](lua_State *L) {
+		return LuaSetPlayerFunctionWithArg(L, [](ushort idx, float t) {
+			CurrentEngine.SetPlayerTriggerPressure(t, idx);
+		});
+	});
+
+	registerGlobalLuaFunction("SetPlayerXLook", [](lua_State *L) {
+		return LuaSetPlayerFunctionWithArg(L, [](ushort idx, float t) {
+			CurrentEngine.SetPlayerLookX(t, idx);
+		});
+	});
+
+	registerGlobalLuaFunction("SetPlayerYLook", [](lua_State *L) {
+		return LuaSetPlayerFunctionWithArg(L, [](ushort idx, float t) {
+			CurrentEngine.SetPlayerLookY(t, idx);
+		});
+	});
+
+	registerGlobalLuaFunction("SetPlayerXVelocity", [](lua_State *L) {
+		return LuaSetPlayerFunctionWithArg(L, [](ushort idx, float t) {
+			CurrentEngine.SetPlayerXVelocity(t, idx);
+		});
+	});
+
+	registerGlobalLuaFunction("SetPlayerYVelocity", [](lua_State *L) {
+		return LuaSetPlayerFunctionWithArg(L, [](ushort idx, float t) {
+			CurrentEngine.SetPlayerYVelocity(t, idx);
+		});
+	});
+
+	registerGlobalLuaFunction("MakePlayerJump", [](lua_State *L) {
+		return LuaSetPlayerFunctionNoArg(L, [](ushort idx) {
+			CurrentEngine.MakePlayerJump(idx);
+		});
+	});
+
+	registerGlobalLuaFunction("IsCoreInitialized", [](lua_State *L) {
+		lua_pushboolean(L, CurrentEngine.IsCoreInitialized());
+		return 1;
+	});
 
 	registerGlobalLuaFunction("GetPlayerAddress", l_GetPlayerAddress);
+
 	registerGlobalLuaFunction("IsPlayerSpawned", l_IsPlayerSpawned);
 
-	registerGlobalLuaFunction("IsCustomEd", l_IsCustomEd);
-	registerGlobalLuaFunction("IsSapien", l_IsSapien);
-	registerGlobalLuaFunction("IsHek", l_IsHek);
+	Input::DInput::RegisterLuaFunctions(this);
+
+	registerGlobalLuaFunction("IsCustomEd", [](lua_State *L) {
+		lua_pushboolean(L, CurrentEngine.IsCustomEd());
+		return 1;
+	});
+
+	registerGlobalLuaFunction("IsSapien", [](lua_State *L) {
+		lua_pushboolean(L, CurrentEngine.IsSapien());
+		return 1;
+	});
+
+	registerGlobalLuaFunction("IsHek", [](lua_State *L) {
+		lua_pushboolean(L, CurrentEngine.IsHek());
+		return 1;
+	});
 
 	this->fileName = filename;
 	this->loaded   = true;
@@ -273,7 +327,7 @@ void LuaScriptManager::call_lua_event_by_type(LuaCallbackId eventType) {
 
 	if (itm.empty()) {
 		if (!printedInvalid[eventType]) {
-			Print(false, "Can't call lua hook for event id: %d b/c there are no functions registered!\n", eventType);
+			//Print(false, "Can't call lua hook for event id: %d b/c there are no functions registered!\n", eventType);
 			printedInvalid[eventType] = true;
 		}
 		return;

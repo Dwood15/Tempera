@@ -17,6 +17,8 @@ namespace feature_management::engines {
 			return sapien_function_map;
 		}
 
+		static void OnPlayerActionUpdate();
+
 		static Core GetCoreAddressList();
 
 		static inline char *DEBUG_FILENAME = const_cast<char*>("tempera.hek.sapien.debug.log");

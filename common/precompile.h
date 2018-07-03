@@ -12,7 +12,9 @@
 #define _X86_
 #endif
 
+#ifndef DIRECTINPUT_VERSION
 #define DIRECTINPUT_VERSION 0x0800
+#endif
 
 #include <algorithm>
 #include <array>

@@ -201,6 +201,10 @@ char *Core::GetMapName() {
 }
 
 bool Core::AreWeInMainMenu() {
+	if (CurrentEngine.IsSapien()) {
+		return false;
+	}
+
 	return *at_main_menu;
 }
 

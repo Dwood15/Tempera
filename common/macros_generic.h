@@ -16,7 +16,9 @@ typedef unsigned char byte;
 typedef unsigned int  *uintptr;
 typedef unsigned int  uint32;
 typedef unsigned int  uint;
+typedef unsigned short ushort;
 
+//sanity checks.
 STAT_ASSRT(bool, 0x1);
 STAT_ASSRT(char, 0x1);
 STAT_ASSRT(short, 0x2);
@@ -26,6 +28,9 @@ STAT_ASSRT(long, 0x4);
 STAT_ASSRT(float, 0x4);
 STAT_ASSRT(long long, 0x8);
 STAT_ASSRT(double, 0x8);
+
+//Typedef'd sanity checks
+STAT_ASSRT(ushort, 0x2);
 #pragma endregion
 #define INTELLISENSE_HACK(item) //int a[sizeof(item)] = 0;
 

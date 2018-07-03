@@ -19,7 +19,7 @@
 #include "textures.h"
 #include "../core.h"
 #include "../gamestate/camera.h"
-#include "../../CurrentEngine.h"
+#include "../CurrentEngine.h"
 #include "../gamestate/objectcontroller.h"
 
 CD3D::CD3D() {

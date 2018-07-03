@@ -115,21 +115,26 @@ endif ()
 
 add_subdirectory(src)
 
+set(COMMON_H
+	common/macros_generic.h
+	common/struct_helper.h
+	common/addlog.h
+	)
+
 add_library(dinput8 SHARED
-			CurrentEngine.h
+			${COMMON_H}
 			${LUA_INCLUDE_DIR}
 			${SRC_H}
 			${RUNTIME_H}
-			CurrentEngine.cpp
+			common/addlog.cpp
 			${RUNTIME_CXX}
 			${SRC_CXX}
-			common/addlog.cpp
 			main.cpp
 			)
 
 #D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
 #Version.Lib is required for looking up current EXE's runtime information.
-target_link_libraries(dinput8 ${MARIADB_LIBRARY} ${LUA_GLOB} ${DirectX_LIBRARIES} Version.Lib ${DETOURS_GLOB})
+target_link_libraries(dinput8 ${MARIADB_LIBRARY} ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib Version.Lib ${DETOURS_GLOB})
 
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")

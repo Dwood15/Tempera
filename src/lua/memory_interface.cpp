@@ -6,15 +6,6 @@
 
 typedef unsigned int uint;
 
- auto getLuaInt(lua_State *L) {
-	if (!lua_isinteger(L, 1)) {
-		lua_pushliteral(L, "incorrect argument! needed integer!");
-		lua_error(L);
-	}
-
-	return (uintptr_t) lua_tointeger(L, 1);
-}
-
 template <typename T>
  bool inBounds(T val) {
 	return val >= (int) std::numeric_limits<T>::min && (int) std::numeric_limits<T>::max >= val;

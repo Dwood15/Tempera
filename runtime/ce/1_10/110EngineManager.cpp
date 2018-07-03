@@ -117,45 +117,35 @@ constexpr std::pair<uintptr_t, short> short_patches[] {
 };
 
 #include "../../../src/lua/script_manager.h"
-#include "../../../CurrentEngine.h"
+#include "../../../src/CurrentEngine.h"
 
-//Doesn't work ? inlining into OnPlayerActionupdate works tho
-void PlayerActionUpdate(s_player_action * current) {
-	if (CurrentEngine.ShouldOverrideAction()) {
-		auto override = CurrentEngine.GetPlayerActionOverride(0);
-		Print(true, "Should see action update now!");
 
-		current->throttle_forwardback = override.throttle_forwardback;
-		current->control_flagsA       = override.control_flagsA;
-		current->control_flagsA.control_flags.jump_button = 1;
-		current->control_flagsB       = override.control_flagsB;
-		current->control_flagsB.control_flags.jump_button = 1;
-
-		CurrentEngine.ResetOverride();
-	}
-}
-
-void __declspec(naked) OnPlayerActionUpdate() {
+void __declspec(naked) CE110::OnPlayerActionUpdate() {
 
 	s_player_action * current_action;
 
 	__asm mov     dword ptr [esp+18h], -1
 	__asm mov current_action, ebp
 
-	if (CurrentEngine.ShouldOverrideAction()) {
-		Print(true, "Should see action update now!");
-
-		current_action->control_flagsA.control_flags.jump_button = 1;
-		// current_action->control_flagsB.control_flags.jump_button = 1;
-		CurrentEngine.ResetOverride();
-	}
 
 	__asm retn
-
 }
 
+void __declspec(naked) CE110::OnUnitControlUpdate(int client_update_idx) {
+	unsigned short unit_idx;
+	s_unit_control_data * from_control_data;
+
+	__asm mov unit_idx, ax
+	__asm mov from_control_data, edx
+
+	Control::UnitControl(unit_idx, from_control_data, client_update_idx);
+
+	__asm retn
+}
+
+
 void CE110::WriteHooks() {
-	//TODO: Coneceptually separate these out..
+	//TODO: Conceptually separate these out..
 	//Function call
 	// 			signature: "8B 35 20 59 81 00 57 8B FA B9 .26 00 00 00 F3 AB 83 CF FF"
 	//constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
@@ -209,9 +199,12 @@ void CE110::WriteHooks() {
 	//Originally: C7 44 24 18 FF FF FF FF
 	//Basically just sets some random value to -1. Couldn't tell if it was being used or not.
 	calls::patchValue<byte>(0x476CF2, 0xE8); //call
-	calls::WriteSimpleHook(0x476CF3, &OnPlayerActionUpdate); //6 bytes off.
+	calls::WriteSimpleHook(0x476CF3, &CE110::OnPlayerActionUpdate); //6 bytes off.
 	calls::patchValue<byte>(0x476CF7, 0x90); //
-	calls::patchValue<unsigned short>(0x476CF8, 0x9090); //
+	calls::patchValue<unsigned short>(0x476CF8, 0x9090);
+
+	calls::WriteSimpleHook(0x4770CF, &CE110::OnUnitControlUpdate);
+
 	// patchValue<uintptr_t>(player_control_init_new_map_hook, addr); //Gotta be able to loop over all the players + input devices, no?.
 
 	// constexpr uintptr_t scenario_load_hookA = 0x4CC9AD; //inside main_new_map

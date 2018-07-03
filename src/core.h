@@ -102,15 +102,15 @@ struct memory_pool {
 // Core Halo Structures
 ////////////////////////////////////////
 struct _core_0 {
-	data_header<void>   *Unknown;
-	data_header<void>   *ObjectListHeader;
-	data_header<void>   *ListObjectReference;
-	data_header<void>   *HSGlobals;
-	data_header<void>   *HSThread;
-	data_header<void>   *ScriptNode;
-	s_players_globals_data       *PlayersGlobals;
-	data_header<void>   *Teams;
-	data_header<player> *Players;
+	data_header<void>      *Unknown;
+	data_header<void>      *ObjectListHeader;
+	data_header<void>      *ListObjectReference;
+	data_header<void>      *HSGlobals;
+	data_header<void>      *HSThread;
+	data_header<void>      *ScriptNode;
+	s_players_globals_data *PlayersGlobals;
+	data_header<void>      *Teams;
+	data_header<player>    *Players;
 };
 
 struct object_header;
@@ -191,6 +191,7 @@ struct object_data;
 struct object_header;
 
 class ObjectController;
+
 ////////////////////////////////////////
 // The Core Class of HaloForge
 ////////////////////////////////////////
@@ -208,27 +209,28 @@ public:
 	map_header       *MapHeader;
 	tag_index_header *TagIndexHeader;
 
-	short * to_respawn_count;
-	short * spawn_count;
-	short * render_window_count;
-	bool * at_main_menu;
+	short *to_respawn_count;
+	short *spawn_count;
+	short *render_window_count;
+	bool  *at_main_menu;
 
 	void **hud_scripted_globals;
 	void **hud_messaging_state;
 
-	s_player_control_globals_data * player_control_globals_data;
-	s_players_globals_data *players_globals;
-	s_motion_sensor *motion_sensor;
-	uintptr game_state_globals_location_ptr;
-	uintptr game_state_globals_ptr;
-	void    **crc_checksum_buffer;
+	ushort                        *main_globals_game_connection_type;
+	s_player_control_globals_data *player_control_globals_data;
+	s_players_globals_data        *players_globals;
+	s_motion_sensor               *motion_sensor;
+	uintptr                       game_state_globals_location_ptr;
+	uintptr                       game_state_globals_ptr;
+	void                          **crc_checksum_buffer;
 
 	////////////////////////////////////////
 	// Defines
 	////////////////////////////////////////
- uintptr_t CONSOLE_HOOK_ADDRESS; //CE + 1
- uintptr_t DEVMODE_HOOK_ADDRESS;
- uintptr_t CONSOLE_TEXT_HOOK_ADDRESS; //CE + 1
+	uintptr_t CONSOLE_HOOK_ADDRESS; //CE + 1
+	uintptr_t DEVMODE_HOOK_ADDRESS;
+	uintptr_t CONSOLE_TEXT_HOOK_ADDRESS; //CE + 1
 
 	CMyCamera *MyCamera;
 	_camera   *camera;
@@ -236,6 +238,7 @@ public:
 	ObjectController *ObjectControl;
 
 	Core() = default;
+
 	Core(LPCoreAddressList list);
 
 	~Core();
@@ -280,3 +283,4 @@ public:
 };
 
 static CD3D cd3d;
+static Core *eCore = reinterpret_cast<Core *> (-1);

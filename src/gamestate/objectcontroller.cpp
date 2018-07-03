@@ -20,7 +20,7 @@
 */
 #include "../core.h"
 #include "objectcontroller.h"
-#include "../../CurrentEngine.h"
+#include "../CurrentEngine.h"
 
 void ObjectController::SetHoldDistance(float dist) {
 	HoldDistance = dist;

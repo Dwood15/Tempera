@@ -15,20 +15,6 @@ int l_print(lua_State *L);
 
 int l_registerLuaCallback(lua_State *L);
 
-int l_MakePlayerGoForward(lua_State *L);
-
-int l_IsCoreInitialized(lua_State *L);
-int l_IsCustomEd(lua_State *L);
-int l_IsSapien(lua_State *L);
-int l_IsHek(lua_State *L);
-
-/**
- * Tells the lua script whether or not the player is in the main menu.
- * @param L Lua state.
- * @return (In C) # args for lua.
- */
-int l_InMainMenu(lua_State *L);
-
 /**
  * Returns (to Lua) the engine state this dll was compiled with targets for.
  * Sapien as a compiler target will shortly arrive.
@@ -71,6 +57,7 @@ public:
  * @param cb_type On which event this func is called.
  */
 	void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type);
+
 
 	void registerGlobalLuaFunction(const std::string &funcName, lua_CFunction funcAddr) {
 		lua_pushcclosure(L, funcAddr, 0);

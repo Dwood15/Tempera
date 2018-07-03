@@ -1,6 +1,5 @@
 #pragma once
 
-#include "macros_generic.h"
 #include "../ce_base_types.h"
 #include "objects.h"
 
@@ -50,17 +49,9 @@ namespace Input {
 	// API_INLINE int32 GetControlState(enums::PlayerControl control) { return GetControlState(SettingsGetDevice(control), SettingsGetType(control), SettingsGetIndex(control), SettingsGetDirection(control) );
 }
 
-struct s_unit_control_data {
-	byte           animation_state;
-	byte           aiming_speed;
-	unsigned short control_flags;
-	int16          weapon_index;
-	int16          grenade_index;
-	int16          zoom_index;
-	PAD16;
-	real_vector3d throttle;
-	real          primary_trigger;
-	real_vector3d facing_vector;
-	real_vector3d aiming_vector;
-	real_vector3d looking_vector;
-}; static_assert(sizeof(s_unit_control_data) == 0x40);
+#include "../CurrentEngine.h"
+struct s_unit_control_data;
+namespace Control {
+	extern void HandleActionOverride(ushort idx, s_unit_control_data * from);
+	extern void UnitControl(ushort unit_idx, s_unit_control_data *from, int client_update_idx);
+}

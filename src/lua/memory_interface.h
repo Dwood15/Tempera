@@ -6,7 +6,14 @@ extern "C" {
 #include "../../include/lua/lualib.h"
 }
 
-auto getLuaInt(lua_State *L);
+static auto getLuaInt(lua_State *L, int idx = 1) {
+	if (!lua_isinteger(L, idx)) {
+		lua_pushliteral(L, "incorrect argument! needed integer!");
+		lua_error(L);
+	}
+
+	return (uintptr_t) lua_tointeger(L, idx);
+}
 
 template <typename T>
 bool inBounds(T val);

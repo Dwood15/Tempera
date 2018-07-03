@@ -9,7 +9,7 @@
 */
 #include <ctime>
 #include "addlog.h"
-#include "../CurrentEngine.h"
+#include "../src/CurrentEngine.h"
 
 std::ofstream ofile;
 static char          dlldir[320];

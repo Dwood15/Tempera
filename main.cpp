@@ -1,5 +1,5 @@
 #include "main.h"
-#include "CurrentEngine.h"
+#include "src/CurrentEngine.h"
 #include "src/exceptions/exception_handler.h"
 #include "src/lua/script_manager.h"
 #include <iostream>
