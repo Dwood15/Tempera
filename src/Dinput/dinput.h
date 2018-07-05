@@ -4,6 +4,10 @@
 
 namespace Input {
 	namespace DInput {
+		static IDirectInput8 * GetDInput() {
+			return CurrentEngine.GetDInput8Device();
+		}
+
 		static IDirectInputDevice8A *GetJoystick(unsigned int idx = 0) {
 			if (idx > 7) {
 				return NULL;

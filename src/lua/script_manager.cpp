@@ -1,5 +1,6 @@
 #pragma once
 
+#include <addlog.h>
 #include "script_manager.h"
 #include "../CurrentEngine.h"
 #include "../Dinput/dinput.h"
@@ -7,7 +8,13 @@
 int l_print(lua_State *L) {
 	const bool tocmd = lua_toboolean(L, 1);
 	const char *str  = lua_tostring(L, 2);
-	Print(tocmd, str);
+
+	if (!tocmd) {
+		PrintLn<false>(str);
+	} else {
+		PrintLn<true>(str);
+	}
+
 	return 0;
 }
 
@@ -15,7 +22,7 @@ int l_registerLuaCallback(lua_State *L) {
 	const int  id   = lua_tointeger(L, 1);
 	const char *str = lua_tostring(L, 2);
 	if (!isValidCbId(id)) {
-		Print(true, "\tCan't register hook id: %d for: %s Invalid hook id!\n", id, str);
+		PrintLn("\tCan't register hook id: %d for: %s Invalid hook id!", id, str);
 	}
 
 	CurrentEngine.registerLuaCallback(str, (LuaCallbackId) id);
@@ -30,7 +37,7 @@ int l_registerLuaCallback(lua_State *L) {
  */
 int l_IsPlayerSpawned(lua_State *L) {
 	if (!CurrentEngine.IsCoreInitialized()) {
-		Print(false, "\tCan't spawn player because core is not initialized!\n");
+		PrintLn<false>("\tCan't spawn player because core is not initialized!\n");
 
 		lua_pushboolean(L, false);
 		return 1;
@@ -56,7 +63,7 @@ int l_IsPlayerSpawned(lua_State *L) {
  */
 int l_GetPlayerAddress(lua_State *L) {
 	if (!CurrentEngine.IsCoreInitialized()) {
-		Print(false, "\tCan't get player address because core is not initialized!\n");
+		PrintLn<false>("\tCan't get player address because core is not initialized!\n");
 
 		lua_pushinteger(L, -1);
 		return 1;
@@ -147,7 +154,7 @@ int l_GetEngineContext(lua_State *L) {
  */
 void LuaScriptManager::registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
 	if (!this) {
-		Print(false, "\tRegisterLuaCallback exiting b/c of invalid context. :(\n");
+		PrintLn<false>("\tRegisterLuaCallback exiting b/c of invalid context. :(");
 		return;
 	}
 
@@ -156,16 +163,16 @@ void LuaScriptManager::registerLuaCallback(const std::string &cb_name, LuaCallba
 		return;
 	}
 
-	Print(false, "Checking if Hook valid inside script_manager.h\n");
+	PrintLn<false>("Checking if Hook valid inside script_manager.h");
 
 	if (isValidCbId((uint) cb_type)) {
-		Print(false, "\tPushing down the cb: %s\n", cb_name.c_str());
+		PrintLn<false>("\tPushing down the cb: %s", cb_name.c_str());
 
 		callbacks[cb_type].push_back(cb_name);
 
-		Print(false, "\tHook %s should register now! # Hooks now registered: %d\n", cb_name.c_str(), callbacks[cb_type].size());
+		PrintLn<false>("\tHook %s should register now! # Hooks now registered: %d", cb_name.c_str(), callbacks[cb_type].size());
 	} else {
-		Print(true, "Rejected callback: %s with id: %d because the id is invalid.\n", cb_name, cb_type);
+		PrintLn("Rejected callback: %s with id: %d because the id is invalid.", cb_name, cb_type);
 	}
 }
 
@@ -174,18 +181,61 @@ void LuaScriptManager::registerLuaCallback(const std::string &cb_name, LuaCallba
  */
 void LuaScriptManager::call_void_lua_func(const std::string &funcName) {
 	if (!this->IsLoaded()) {
-		Print(false, "Can't call lua func: %s - Lua isn't loaded?!?.\n", funcName.c_str());
+		PrintLn<false>("Can't call lua func: %s - Lua isn't loaded?!?.", funcName.c_str());
 		return;
 	}
 
-	// Print(false, "\t***Attempting to call lua hook func name: %s\n", funcName.c_str());
+	// PrintLn<false>("\t***Attempting to call lua hook func name: %s", funcName.c_str());
 	lua_getglobal(L, funcName.c_str()); /* function to be called */
 
 	if (!lua_isfunction(L, -1)) {
-		Print(false, "\t***Can't call lua function: %s Because it's not a function?\n", funcName.c_str());
+		PrintLn<false>("\t***Can't call lua function: %s Because it's not a function?", funcName.c_str());
 	}
 
 	lua_pcall(L, 0, 0, 0);
+}
+
+void LuaScriptManager::DoFirstRun() {
+	if (!this->IsLoaded()) {
+		PrintLn("Unable to run script- Lua State isn't loaded!");
+	}
+
+	auto result = lua_pcall(L, 0, 0, 0);
+	if (result != LUA_OK) {
+		PrintLn("Error: script failed on first run! (%s)", GetFileName());
+
+		HandleLuaError(result);
+	}
+}
+
+void LuaScriptManager::HandleLuaError(int result) {
+	switch (result) {
+		case LUA_ERRRUN:
+			PrintLn("\t* Runtime error occurred.");
+			break;
+		case LUA_ERRSYNTAX:
+			PrintLn("\t* Syntax Error!");
+
+			if(lua_isstring(L, 1)) {
+				PrintLn("\t#->%s<-#", lua_tostring(L, 1));
+			} else {
+				PrintLn("\t** unreadable error!");
+			}
+			break;
+		case LUA_ERRMEM:
+			PrintLn("\t* Unable to allocate enough memory for Lua! What are you doing?!?");
+			break;
+		case LUA_ERRERR:
+			PrintLn("\t* Err while running the message handler...");
+			break;
+		case LUA_ERRGCMM:
+			PrintLn("\t* Err while running the GC Metamethod. How does this even happen?");
+			break;
+		case LUA_ERRFILE:
+			PrintLn("\t* Err - cannot open/read file.");
+		default:
+			PrintLn("Congratulations, your script has come across a never before seen error! :V");
+	}
 }
 
 /**
@@ -193,12 +243,15 @@ void LuaScriptManager::call_void_lua_func(const std::string &funcName) {
  * @param filename
  */
 void LuaScriptManager::InitializeLua(const std::string &filename) {
-	Print(true, "Trying To load: \n\t%s\n", filename.c_str());
+	PrintLn("Trying To load: \n\t%s", filename.c_str());
 
 	L = luaL_newstate();
 	luaL_openlibs(L);
-	if (luaL_loadfile(L, filename.c_str())) {
-		Print(true, "Error: script failed to load: (%s)\n\tDoes it exist?\n\tIf it does exist, there may be a syntax error.\n\tDwood is still learning how to add features to Lua.\n", filename.c_str());
+	auto result = luaL_loadfilex(L, filename.c_str(), 0);
+
+	if (result != LUA_OK) {
+		PrintLn("Error: script failed to load: (%s)\n\tDwood is still learning how to add features to Lua.", filename.c_str());
+		HandleLuaError(result);
 		this->loaded = false;
 		L = 0;
 		return;
@@ -312,12 +365,12 @@ void LuaScriptManager::InitializeLua(const std::string &filename) {
 
 void LuaScriptManager::call_lua_event_by_type(LuaCallbackId eventType) {
 	if (!this) {
-		Print(false, "Can't call lua event: %d b/c we're in an invalid context.\n", eventType);
+		PrintLn<false>("Can't call lua event: %d b/c we're in an invalid context.", eventType);
 		return;
 	}
 
 	if (!this->IsLoaded()) {
-		Print(false, "Can't call lua event: %d b/c we're not even loaded!\n", eventType);
+		PrintLn<false>("Can't call lua event: %d b/c we're not even loaded!", eventType);
 		return;
 	}
 
@@ -327,7 +380,7 @@ void LuaScriptManager::call_lua_event_by_type(LuaCallbackId eventType) {
 
 	if (itm.empty()) {
 		if (!printedInvalid[eventType]) {
-			//Print(false, "Can't call lua hook for event id: %d b/c there are no functions registered!\n", eventType);
+			//PrintLn<false>("Can't call lua hook for event id: %d b/c there are no functions registered!", eventType);
 			printedInvalid[eventType] = true;
 		}
 		return;

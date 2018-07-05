@@ -1,5 +1,5 @@
 #pragma once
-#include <precompile.h>
+
 #include "objects.h"
 // namespace obj {
 // 		size_t PredictMemoryPoolUsage(const object_type type, const int32 node_count, const bool include_yelo_upgrades) {

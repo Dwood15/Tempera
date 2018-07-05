@@ -1,6 +1,6 @@
 #pragma once
 
-#include <precompile.h>
+
 #include <dinput.h>
 #include "versions.h"
 #include "gamestate/objects.h"

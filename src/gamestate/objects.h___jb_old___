@@ -380,44 +380,45 @@ struct s_recent_damage {
 	datum_index responsible_player;   // would be NONE if killed by AI
 };
 
+typedef unsigned short uint;
 struct control_state {
 	/** Unit is pressing the crouch button. */
-	ushort crouch_button : 1;
+	uint crouch_button : 1;
 
 	/** Unit is pressing the jump button. */
-	ushort jump_button : 1;
+	uint jump_button : 1;
 
-	ushort unkA : 2;
+	uint unkA : 2;
 
 	/** Unit is pressing the flashlight button. */
-	ushort flashlight_button : 1;
+	uint flashlight_button : 1;
 
-	ushort unkB : 1;
+	uint unkB : 1;
 
 	/** Unit is pressing the action button. */
-	ushort action_button : 1;
+	uint action_button : 1;
 
 	/** Unit is pressing the melee button. */
-	ushort melee_button : 1;
+	uint melee_button : 1;
 
-	ushort unkC :  2;
+	uint unkC :  2;
 
 	/** Unit is pressing the reload button. */
-	ushort reload_button : 1;
+	uint reload_button : 1;
 
 	/** Unit is pressing the primary fire button. */
-	ushort primary_fire_button : 1;
+	uint primary_fire_button : 1;
 
 	/** Unit is pressing the primary fire button. */
-	ushort secondary_fire_button : 1;
+	uint secondary_fire_button : 1;
 
 	/** Unit is pressing the grenade button. */
-	ushort grenade_button : 1;
+	uint grenade_button : 1;
 
 	/** Unit is holding the exchange weapon button or is holding down the action button. */
-	ushort exchange_weapon_button : 1;
+	uint exchange_weapon_button : 1;
 
-	ushort unkD : 1;
+	uint unkD : 1;
 };
 static_assert(sizeof(control_state) == sizeof(short));
 

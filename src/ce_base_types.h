@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include <precompile.h>
-#include "math/real_math.h"
+#include <macros_generic.h>
 
 typedef short                     int16;
 typedef unsigned int              uintptr_t;
@@ -16,15 +15,14 @@ typedef const char                *cstring;
 
 /// <summary>	Handle to data allocated by the engine's data-array construct. </summary>
 struct datum_index {
-	typedef short t_index;
-	typedef short t_salt;
+
 
 	union {
 		signed long handle;
 
 		struct {
-			t_index index;
-			t_salt  salt;
+			short index;
+			short salt;
 		};
 	};
 

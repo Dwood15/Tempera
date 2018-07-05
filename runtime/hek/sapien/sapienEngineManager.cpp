@@ -1,6 +1,6 @@
 #pragma once
 
-#include <precompile.h>
+
 #include "sapienEngineManager.h"
 #include "../../../src/lua/script_manager.h"
 #include "../../../src/CurrentEngine.h"
@@ -39,7 +39,5 @@ void Sapien::WriteHooks() {
 }
 
 Core Sapien::GetCoreAddressList() {
-	Core CurrentCore;
-
-	return CurrentCore;
+	return Core();
 }

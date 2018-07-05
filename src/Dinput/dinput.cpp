@@ -1,8 +1,10 @@
 #pragma once
 
+#include <Windows.h>
 #include "dinput.h"
-#include <precompile.h>
+
 #include <strsafe.h>
+#include <addlog.h>
 
 namespace Input::DInput {
 
@@ -68,6 +70,38 @@ namespace Input::DInput {
 		return mbstring;
 	}
 
+	static int DINPUTERRTOLUA(HRESULT hr) {
+		int errVal = 1;
+
+		switch (hr) {
+			case DIERR_INPUTLOST:
+				PrintLn(" DINPUT: (LOST INPUT)");
+				errVal = 2;
+				break;
+			case DIERR_INVALIDPARAM:
+				PrintLn(" DINPUT: (INVALID PARAM)");
+				errVal = 3;
+				break;
+			case DIERR_NOTACQUIRED:
+				PrintLn(" DINPUT: (NOT ACQUIRED)");
+				errVal = 4;
+				break;
+			case DIERR_NOTINITIALIZED:
+				PrintLn(" DINPUT: (NOT INITIALIZED)");
+				errVal = 5;
+				break;
+			case E_POINTER:
+				PrintLn(" DINPUT: (E_POINTER) ");
+				errVal = 6;
+				break;
+			case E_PENDING:
+				PrintLn(" DINPUT: (PENDING? HUH?)");
+				errVal = 7;
+				break;
+		}
+
+		return errVal;
+	}
 
 	static int l_GetDeviceState(lua_State *L) {
 		auto idx = getLuaInt(L);
@@ -79,44 +113,54 @@ namespace Input::DInput {
 			return 2;
 		}
 
-		DIJOYSTATE dijs;
+
+		PrintLn("Attempting to Poll Controller!");
+
+		auto hr = joy->Poll();
+
+		if (hr != 0) {
+			PrintLn("Polling failed!");
+			DINPUTERRTOLUA(hr);
+
+			lua_pushinteger(L, -1);
+			lua_pushinteger(L, -1);
+			return 2;
+		}
+
+		DIJOYSTATE2 dijs2 = DIJOYSTATE2();
+
+		hr = joy->GetDeviceState(sizeof(DIJOYSTATE2), &dijs2);
 
 
-		auto hr = joy->GetDeviceState(sizeof(DIJOYSTATE), &dijs);
+		if (hr != 0) {
+			DINPUTERRTOLUA(hr);
+			lua_pushinteger(L, -1);
+			// return 2;
+			PrintLn("Trying with state2 instead.");
 
-		if (hr != DI_OK) {
-			int errVal = 1;
+			DIJOYSTATE pdijs;
 
-			switch (hr) {
-				case DIERR_INPUTLOST:
-					Print(true, "Could not get controller b/c we lost input");
-					errVal = 2;
-					break;
-				case DIERR_INVALIDPARAM:
-					Print(true, " Because Dwood can't into Dinput. (INVALID PARAM)\n");
-					errVal = 3;
-					break;
-				case DIERR_NOTACQUIRED:
-					Print(true, " Because You can't into Dinput. (NOT ACQUIRED)\n");
-					errVal = 4;
-					break;
-				case DIERR_NOTINITIALIZED:
-					Print(true, " Because You can't into Dinput. (NOT INITIALIZED)\n");
-					errVal = 5;
-					break;
-				case E_PENDING:
-					Print(true, " Because wait... what? (PENDING? HUH?)\n");
-					errVal = 5;
-					break;
+			hr = joy->GetDeviceState(sizeof(DIJOYSTATE), &pdijs);
+
+
+
+			if (hr != 0) {
+				DINPUTERRTOLUA(hr);
+				PrintLn("State2 Failed. RIP.");
+			} else {
+				PrintLn("DIJS2 success!");
 			}
 
 			lua_pushinteger(L, -1);
-			lua_pushinteger(L, errVal);
 			return 2;
+		} else {
+			PrintLn("state2 success!.");
+
 		}
 
 		lua_createtable(L, 0, 44);
 
+		auto dijs = dijs2;
 		lua_pushinteger(L, dijs.lX);
 		lua_setfield(L, -2, "lX");
 
@@ -163,65 +207,65 @@ namespace Input::DInput {
 		lua_setfield(L, -3, "1");
 
 		lua_pushinteger(L, dijs.rgbButtons[2]);
-				lua_setfield(L, -3, "2");
+		lua_setfield(L, -3, "2");
 		lua_pushinteger(L, dijs.rgbButtons[3]);
-				lua_setfield(L, -3, "3");
+		lua_setfield(L, -3, "3");
 		lua_pushinteger(L, dijs.rgbButtons[4]);
-				lua_setfield(L, -3, "4");
+		lua_setfield(L, -3, "4");
 		lua_pushinteger(L, dijs.rgbButtons[5]);
-				lua_setfield(L, -3, "5");
+		lua_setfield(L, -3, "5");
 		lua_pushinteger(L, dijs.rgbButtons[6]);
-				lua_setfield(L, -3, "6");
+		lua_setfield(L, -3, "6");
 		lua_pushinteger(L, dijs.rgbButtons[7]);
-				lua_setfield(L, -3, "7");
+		lua_setfield(L, -3, "7");
 		lua_pushinteger(L, dijs.rgbButtons[8]);
-				lua_setfield(L, -3, "8");
+		lua_setfield(L, -3, "8");
 		lua_pushinteger(L, dijs.rgbButtons[9]);
-				lua_setfield(L, -3, "9");
+		lua_setfield(L, -3, "9");
 		lua_pushinteger(L, dijs.rgbButtons[10]);
-				lua_setfield(L, -3, "10");
+		lua_setfield(L, -3, "10");
 		lua_pushinteger(L, dijs.rgbButtons[11]);
-				lua_setfield(L, -3, "11");
+		lua_setfield(L, -3, "11");
 		lua_pushinteger(L, dijs.rgbButtons[12]);
-				lua_setfield(L, -3, "12");
+		lua_setfield(L, -3, "12");
 		lua_pushinteger(L, dijs.rgbButtons[13]);
-				lua_setfield(L, -3, "13");
+		lua_setfield(L, -3, "13");
 		lua_pushinteger(L, dijs.rgbButtons[14]);
-				lua_setfield(L, -3, "14");
+		lua_setfield(L, -3, "14");
 		lua_pushinteger(L, dijs.rgbButtons[15]);
-				lua_setfield(L, -3, "15");
+		lua_setfield(L, -3, "15");
 		lua_pushinteger(L, dijs.rgbButtons[16]);
-				lua_setfield(L, -3, "16");
+		lua_setfield(L, -3, "16");
 		lua_pushinteger(L, dijs.rgbButtons[17]);
-				lua_setfield(L, -3, "17");
+		lua_setfield(L, -3, "17");
 		lua_pushinteger(L, dijs.rgbButtons[18]);
-				lua_setfield(L, -3, "18");
+		lua_setfield(L, -3, "18");
 		lua_pushinteger(L, dijs.rgbButtons[19]);
-				lua_setfield(L, -3, "19");
+		lua_setfield(L, -3, "19");
 		lua_pushinteger(L, dijs.rgbButtons[20]);
-				lua_setfield(L, -3, "20");
+		lua_setfield(L, -3, "20");
 		lua_pushinteger(L, dijs.rgbButtons[21]);
-				lua_setfield(L, -3, "21");
+		lua_setfield(L, -3, "21");
 		lua_pushinteger(L, dijs.rgbButtons[22]);
-				lua_setfield(L, -3, "22");
+		lua_setfield(L, -3, "22");
 		lua_pushinteger(L, dijs.rgbButtons[23]);
-				lua_setfield(L, -3, "23");
+		lua_setfield(L, -3, "23");
 		lua_pushinteger(L, dijs.rgbButtons[24]);
-				lua_setfield(L, -3, "24");
+		lua_setfield(L, -3, "24");
 		lua_pushinteger(L, dijs.rgbButtons[25]);
-				lua_setfield(L, -3, "25");
+		lua_setfield(L, -3, "25");
 		lua_pushinteger(L, dijs.rgbButtons[26]);
-				lua_setfield(L, -3, "26");
+		lua_setfield(L, -3, "26");
 		lua_pushinteger(L, dijs.rgbButtons[27]);
-				lua_setfield(L, -3, "27");
+		lua_setfield(L, -3, "27");
 		lua_pushinteger(L, dijs.rgbButtons[28]);
-				lua_setfield(L, -3, "28");
+		lua_setfield(L, -3, "28");
 		lua_pushinteger(L, dijs.rgbButtons[29]);
-				lua_setfield(L, -3, "29");
+		lua_setfield(L, -3, "29");
 		lua_pushinteger(L, dijs.rgbButtons[30]);
-				lua_setfield(L, -3, "30");
+		lua_setfield(L, -3, "30");
 		lua_pushinteger(L, dijs.rgbButtons[31]);
-				lua_setfield(L, -3, "31");
+		lua_setfield(L, -3, "31");
 
 		lua_setfield(L, -2, "RGBBUTTONS");
 		lua_pushinteger(L, 0);
@@ -243,7 +287,15 @@ namespace Input::DInput {
 
 		auto hr = joy->GetCapabilities(&didoi);
 
-		lua_pushboolean(L, (hr != DIERR_OBJECTNOTFOUND && hr != DIERR_DEVICENOTREG));
+		if (hr == 0) {
+			// hr = joy->SetDataFormat(&c_dfDIJoystick2);
+			// if(FAILED(hr)) {
+			// 	PrintLn("Could not set device format.");
+			// 	DINPUTERRTOLUA(hr);
+			// }
+		}
+
+		lua_pushboolean(L, hr == 0);
 
 		return 1;
 	}
@@ -252,33 +304,26 @@ namespace Input::DInput {
 		auto idx = getLuaInt(L);
 		auto joy = Input::DInput::GetJoystick(idx);
 
-		Print(true, "\tGot Joystick. Getting Device.\n");
+		PrintLn("\tGot Joystick.");
 
-		DIDEVICEINSTANCE didi;
+		PrintLn("\tGetting DeviceINFO.");
+
+		static DIDEVICEINSTANCE didi;
 		didi.dwSize = sizeof(DIDEVICEINSTANCE);
 
-		auto hr = joy->GetDeviceInfo(&didi);
+		int hr = joy->GetDeviceInfo(&didi);
+
+		PrintLn("\tValidating DeviceInfo result.");
 
 		if (hr != DI_OK) {
-			Print(true, "\tFailed to get device. ");
+			Print("\tFailed to get device. ");
 			lua_pushinteger(L, -1);
 
-			switch (hr) {
-				case DIERR_INVALIDPARAM:
-					Print(true, " Because Dwood can't into Dinput. (INVALID PARAM)\n");
-					break;
-
-				case DIERR_NOTINITIALIZED:
-					Print(true, " Because You can't into Dinput. (NOT INITIALIZED)\n");
-					break;
-
-				case E_POINTER:
-					Print(true, "\tBecause WTF? (E_POINTER) Whatever that means.\n");
-					break;
-			}
-
+			DINPUTERRTOLUA(hr);
 			return 1;
 		}
+
+		PrintLn("\t****Got Device.");
 
 		lua_createtable(L, 0, 6);
 
@@ -302,6 +347,8 @@ namespace Input::DInput {
 		lua_pushstring(L, didi.tszProductName);
 		lua_setfield(L, -2, "friendlyProductName");
 
+		PrintLn("\tReturning Table...");
+
 		return 1;
 	}
 
@@ -320,17 +367,11 @@ namespace Input::DInput {
 
 		auto hr = joy->GetCapabilities(&didc);
 
-		switch (hr) {
-			case DI_OK:
-				break;
-			case DIERR_INVALIDPARAM:
-				Print(true, "Unable to enumerate device: Invalid param.");
-			case DIERR_NOTINITIALIZED:
-				Print(true, "Unable to enumerate device: Not Initialized");
-			default:
-				lua_pushinteger(L, -1);
-				lua_pushinteger(L, hr);
-				return 2;
+		if (hr != 0) {
+			DINPUTERRTOLUA(hr);
+			lua_pushinteger(L, -1);
+			lua_pushinteger(L, hr);
+			return 2;
 		}
 
 		lua_createtable(L, 0, 4);
@@ -354,13 +395,54 @@ namespace Input::DInput {
 		return 2;
 	}
 
+#include <xinput.h>
 	void RegisterLuaFunctions(::LuaScriptManager *mgr) {
-		mgr->registerGlobalLuaFunction("GamePadExists", l_GamePadExists);
+		mgr->registerGlobalLuaFunction("GetControllerState", [](lua_State * L) {
+			auto idx = getLuaInt(L);
+			XINPUT_STATE state;
 
-		mgr->registerGlobalLuaFunction("GetGamePadDetails", l_GetGamePadDetails);
-		mgr->registerGlobalLuaFunction("GetDeviceState", l_GetDeviceState);
+			ZeroMemory(&state, sizeof(XINPUT_STATE));
 
-		mgr->registerGlobalLuaFunction("GetGamePadCapabilities", l_GetGamePadCapabilities);
+			auto result = XInputGetState(idx, &state);
+
+			if(result != ERROR_SUCCESS) {
+				lua_pushinteger(L, -1);
+				lua_pushinteger(L, -1);
+				return 2;
+			}
+
+			lua_createtable(L, 0, 7);
+
+			lua_pushinteger(L, state.dwPacketNumber);
+			lua_setfield(L, -2, "dwPacketNumber");
+
+			lua_pushinteger(L, state.Gamepad.wButtons);
+			lua_setfield(L, -2, "buttons");
+
+			lua_pushinteger(L, state.Gamepad.bLeftTrigger);
+			lua_setfield(L, -2, "leftTrigger");
+
+			//The std::string might seem redundant, and it probably is. But, I'm pretty sure std string will prune uninterpretable characters.
+			lua_pushinteger(L, state.Gamepad.bRightTrigger);
+			lua_setfield(L, -2, "rightTrigger");
+
+			lua_pushinteger(L, state.Gamepad.sThumbLX);
+			lua_setfield(L, -2, "thumbLX");
+
+			lua_pushinteger(L, state.Gamepad.sThumbLY);
+			lua_setfield(L, -2, "thumbLY");
+
+			lua_pushinteger(L, state.Gamepad.sThumbRX);
+			lua_setfield(L, -2, "thumbRX");
+
+			lua_pushinteger(L, state.Gamepad.sThumbRY);
+			lua_setfield(L, -2, "thumbRY");
+
+			lua_pushinteger(L, 0);
+
+			return 2;
+
+		});
 
 	}
 };

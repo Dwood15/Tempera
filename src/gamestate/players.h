@@ -1,6 +1,5 @@
 #pragma once
 
-#include <precompile.h>
 #include "objects.h"
 #include "../tags/tags.h"
 
@@ -51,27 +50,27 @@ struct player {
 	BYTE    Unknown16;
 
 	void DumpData(bool toConsole = false) {
-		Print(toConsole, "*** Player Data Dump! ***\n");
-		Print(toConsole, "Address: 0x%x\n", (int) this);
-		Print(toConsole, "Player Id: %x\n", playerid);
-		Print(toConsole, "Host: %d\n", host);
-		Print(toConsole, "PlayerName 0: %ls\n", PlayerName0);
-		Print(toConsole, "Unknown 0: %d\n", Unknown0);
-		Print(toConsole, "Team: %d\n", Team);
-		Print(toConsole, "SwapId: %d\n", SwapID);
-		Print(toConsole, "SwapType: %d\n", SwapType);
-		Print(toConsole, "Last Interaction Id: %d\n", PlayerLastObjectId);
-		Print(toConsole, "Bullet Count: %d\n", BulletCount);
-		Print(toConsole, "Player Name 1: %ls\n", PlayerName1);
-		Print(toConsole, "Color: %d\n", Color);
-		Print(toConsole, "MachIndex: %x\n", MachineIndex);
-		Print(toConsole, "Controller Index: %x\n", ControllerIndex);
-
-		Print(toConsole, "unk 1: %x\n", unk);
-		Print(toConsole, "unk 2: %x\n", unk2);
-		Print(toConsole, "unk 3: %x\n", unk3);
-		Print(toConsole, "unk 16: %x\n", &Unknown16);
-		Print(toConsole, "*** End Player Data Dump! ***\n");
+		// Print<false>("*** Player Data Dump! ***\n\t~~Data Dumping disabled as Dwood reworks debug data recording.\n");
+		// Print(toConsole, "Address: 0x%x\n", (int) this);
+		// Print(toConsole, "Player Id: %x\n", playerid);
+		// Print(toConsole, "Host: %d\n", host);
+		// Print(toConsole, "PlayerName 0: %ls\n", PlayerName0);
+		// Print(toConsole, "Unknown 0: %d\n", Unknown0);
+		// Print(toConsole, "Team: %d\n", Team);
+		// Print(toConsole, "SwapId: %d\n", SwapID);
+		// Print(toConsole, "SwapType: %d\n", SwapType);
+		// Print(toConsole, "Last Interaction Id: %d\n", PlayerLastObjectId);
+		// Print(toConsole, "Bullet Count: %d\n", BulletCount);
+		// Print(toConsole, "Player Name 1: %ls\n", PlayerName1);
+		// Print(toConsole, "Color: %d\n", Color);
+		// Print(toConsole, "MachIndex: %x\n", MachineIndex);
+		// Print(toConsole, "Controller Index: %x\n", ControllerIndex);
+		//
+		// Print(toConsole, "unk 1: %x\n", unk);
+		// Print(toConsole, "unk 2: %x\n", unk2);
+		// Print(toConsole, "unk 3: %x\n", unk3);
+		// Print(toConsole, "unk 16: %x\n", &Unknown16);
+		// Print(toConsole, "*** End Player Data Dump! ***\n");
 	}
 };
 

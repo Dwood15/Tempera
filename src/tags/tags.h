@@ -8,7 +8,7 @@
 */
 
 #pragma once
-#include <precompile.h>
+
 #ifndef TAGS_H
 #define TAGS_H
 #include "map.h"

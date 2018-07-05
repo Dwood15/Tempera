@@ -1,6 +1,6 @@
 #pragma once
 
-#include <precompile.h>
+
 
 /*
 	This file is part of tempera.

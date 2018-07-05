@@ -11,10 +11,9 @@
 */
 #define WIN32_LEAN_AND_MEAN
 
-#include <precompile.h>
+
 #include <fstream>
-#include <versions.h>
-#include <detours.h>
+#include <addlog.h>
 #include "d3d9hook.h"
 #include "textures.h"
 #include "../core.h"
@@ -117,7 +116,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 		if (!core) {
 			static bool printOnce = true;
 			if(printOnce) {
-				Print(true, "Tried to get core for PrintObjects, couldn't.");
+				Print("Tried to get core for PrintObjects, couldn't.");
 				printOnce = false;
 			}
 			return;
@@ -251,6 +250,7 @@ long __stdcall hkSetStreamSource(IDirect3DDevice9 *pDevice, UINT StreamNumber, I
 
 // vTable is just a huge table of pointers to every d3d9 function
 
+#include "../../include/detours/detours.h"
 DWORD __stdcall CD3D::hkD3DHook(void *lpVoid) {
 	vTable_D3D9 *vD3D9; // Create instance of d3d9 Virtual Method Table
 

@@ -116,25 +116,30 @@ endif ()
 add_subdirectory(src)
 
 set(COMMON_H
+	common/addlog.h
+	common/engine_interface.h
 	common/macros_generic.h
 	common/struct_helper.h
-	common/addlog.h
 	)
 
 add_library(dinput8 SHARED
+			common/addlog.cpp
 			${COMMON_H}
 			${LUA_INCLUDE_DIR}
 			${SRC_H}
 			${RUNTIME_H}
-			common/addlog.cpp
 			${RUNTIME_CXX}
 			${SRC_CXX}
 			main.cpp
 			)
 
+#The compiler is defaulting to the Windows 10 SDK, which requires external DLL's (xinput1_4.dll is not found error)
+#I manually force it to use my directx sdk xinput.
+#TODO: Use DX_LIBS or whatever the variable is, to specify the 2010 dx XInput.lib explicitly.
+set(XINPUTLIB D:\\Program\ Files\ \(x86\)\\Microsoft\ DirectX\ SDK\ \(June\ 2010\)\\Lib\\x86\\XInput.lib)
 #D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
 #Version.Lib is required for looking up current EXE's runtime information.
-target_link_libraries(dinput8 ${MARIADB_LIBRARY} ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib Version.Lib ${DETOURS_GLOB})
+target_link_libraries(dinput8 ${MARIADB_LIBRARY} ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
 
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")

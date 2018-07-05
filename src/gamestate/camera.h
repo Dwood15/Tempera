@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <precompile.h>
+
 #include "math.h"
 #include "../math/colors.h"
 

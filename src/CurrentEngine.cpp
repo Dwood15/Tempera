@@ -4,6 +4,8 @@
 #include "lua/script_manager.h"
 #include <ce/1_10/110EngineManager.h>
 #include <hek/sapien/sapienEngineManager.h>
+#include <addlog.h>
+#include <filesystem>
 
 using namespace feature_management;
 using namespace feature_management::engines;
@@ -126,7 +128,7 @@ constexpr bool GlobalEngine::equal(const char *lhs, const char *rhs) {
 }
 
 void GlobalEngine::InitializeLuaState() {
-	Print(true, "Attempting to initialize LuaScript manager\n");
+	PrintLn("Attempting to initialize LuaScript manager");
 	LuaState->InitializeLua(LUA_FILENAME);
 }
 
@@ -167,7 +169,7 @@ IDirectInputDevice8A **GlobalEngine::GetJoystickInputs() {
 }
 
 void GlobalEngine::WriteHooks() {
-	Print(true, "\nWriting the game hooks now!");
+	PrintLn("\nWriting the game hooks now!");
 	switch (this->CurrentMajor) {
 		case major::CE:
 			switch (this->CurrentMinor) {
@@ -301,7 +303,7 @@ bool GlobalEngine::SupportsFeature(uint feat) {
 }
 
 void GlobalEngine::registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
-	Print(false, "Should be registering callback: %s", cb_name.c_str());
+	PrintLn<false>("Should be registering callback: %s", cb_name.c_str());
 	LuaState->registerLuaCallback(cb_name, cb_type);
 }
 
@@ -313,13 +315,13 @@ void GlobalEngine::LuaFirstRun() {
 	if (LuaState) {
 		LuaState->DoFirstRun();
 	} else {
-		Print(true, "Lua Failed to initialize & run!\n");
+		PrintLn("Lua Failed to initialize & run!");
 	}
 }
 
 static void ClampIndex(ushort &idx) {
 	if (idx > MAX_PLAYER_COUNT_LOCAL) {
-		Print(true, "Forced player to 0 b/c it %d > %d", idx, MAX_PLAYER_COUNT_LOCAL);
+		Print("Forced player to 0 b/c it %d > %d", idx, MAX_PLAYER_COUNT_LOCAL);
 		idx = 0;
 	}
 }
@@ -436,7 +438,7 @@ void GlobalEngine::SetPlayerYVelocity(float y, ushort idx = 0) {
 
 void GlobalEngine::MakePlayerJump(ushort idx = 0) {
 	if (!IsSapien() && !IsCustomEd()) {
-		Print(true, "Can't make player go forward because the version is unsupported");
+		Print("Can't make player go forward because the version is unsupported");
 		return;
 	}
 	ClampIndex(idx);
@@ -491,7 +493,7 @@ const char *GlobalEngine::getMemoryRegionDescriptor(const uintptr_t addr) {
 }
 
 void post_dll_load() {
-	// Print(true, "Postdll-load\n");
+	// Print("Postdll-load\n");
 	CurrentEngine.GetLuaState()->call_lua_event_by_type(LuaCallbackId::post_dll_init);
 }
 
@@ -535,14 +537,14 @@ void game_tick(int current_frame_tick) {
 		got = FUNC_GET(game_tick);
 	}
 	if (got != (uint) -1) {
-		// Print(true, "Game_tick call\n");
+		// PrintLn("Game_tick call");
 		calls::DoCall<Convention::m_cdecl, void, int>(got, current_frame_tick);
-		// Print(true, "Post-Game_tick call\n");
+		// PrintLn("Post-Game_tick call");
 	}
 
-	// Print(true, "Lua_post_tick call\n");
+	// PrintLn("Lua_post_tick call");
 	CALL_LUA_BY_EVENT(after_game_tick);
-	// Print(true, "Post-Lua-post-tick call\n");
+	// PrintLn("Post-Lua-post-tick call");
 }
 
 #undef CALL_LUA_BY_EVENT

@@ -5,7 +5,8 @@
 
 #pragma once
 
-#include <precompile.h>
+#include <macros_generic.h>
+#include <d3dx9math.h>
 
 //TODO: Investigate why this is the way it is.
 struct argb_color;
@@ -44,14 +45,14 @@ STAT_ASSRT(real_argb_color, 0x10);
 struct vect2 : public D3DXVECTOR2 {
 	using D3DXVECTOR2::D3DXVECTOR2;
 
-	void DumpData(bool toConsole, const char *Preceding = nullptr) {
-		if (Preceding) {
-			Print(toConsole, "%s\tx: %.3f, y: %.3f\n", Preceding, this->x, this->y);
-			return;
-		}
-
-		Print(toConsole, "\tx: %.3f, y: %.3f\n", this->x, this->y);
-	}
+	// void DumpData(bool toConsole, const char *Preceding = nullptr) {
+	// 	if (Preceding) {
+	// 		Print(toConsole, "%s\tx: %.3f, y: %.3f\n", Preceding, this->x, this->y);
+	// 		return;
+	// 	}
+	//
+	// 	Print(toConsole, "\tx: %.3f, y: %.3f\n", this->x, this->y);
+	// }
 };
 
 STAT_ASSRT(vect2, sizeof(D3DXVECTOR2));
@@ -64,14 +65,14 @@ struct vect3 : public D3DXVECTOR3 {
 	//
 	// vect3(float x, float y, float z) : D3DXVECTOR3(x, y, z) {}
 
-	void DumpData(bool toConsole, const char *Preceding = nullptr) {
-		if (Preceding) {
-			Print(toConsole, "%s\tx: %.3f, y: %.3f z: %.3f\n", Preceding, this->x, this->y, this->z);
-			return;
-		}
-
-		Print(toConsole, "\tx: %.3f, y: %.3f z: %.3f\n", this->x, this->y, this->z);
-	}
+	// void DumpData(bool toConsole, const char *Preceding = nullptr) {
+	// 	if (Preceding) {
+	// 		Print(toConsole, "%s\tx: %.3f, y: %.3f z: %.3f\n", Preceding, this->x, this->y, this->z);
+	// 		return;
+	// 	}
+	//
+	// 	Print(toConsole, "\tx: %.3f, y: %.3f z: %.3f\n", this->x, this->y, this->z);
+	// }
 
 };
 

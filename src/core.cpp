@@ -9,6 +9,7 @@
    You should have received a copy of the GNU General Public License
    along with tempera.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include <addlog.h>
 #include "core.h"
 #include "math.h"
 #include "gamestate/objectcontroller.h"
@@ -298,7 +299,7 @@ void Core::ConsoleText(HaloColor fColor, const char *cFmt, ...) {
 	va_list mvalist;
 	char    cBuffer[256] = {0};
 
-	Print(true, "Atttempting to print to Console!");
+	Print("Atttempting to print to Console!");
 	DWORD dwOldProtect = 0;
 	BYTE  bOrig[6]     = {0x83, 0xEC, 0x10, 0x57, 0x8B, 0xF8};
 

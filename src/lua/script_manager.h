@@ -3,6 +3,8 @@
 #include <versions.h>
 #include <engine_interface.h>
 #include <lua.hpp>
+#include <string>
+#include <vector>
 #include "players_interface.h"
 #include "memory_interface.h"
 #include "../math/enums_generic.h"
@@ -32,8 +34,15 @@ class LuaScriptManager {
 	std::string fileName;
 	bool        loaded = false;
 public:
+	LuaScriptManager() = default;
 
-	const char * GetFileName() {
+	~LuaScriptManager() {
+		if (L) {
+			lua_close(L);
+		}
+	}
+
+	const char *GetFileName() {
 		return this->fileName.c_str();
 	}
 
@@ -41,35 +50,20 @@ public:
 		return this->loaded;
 	}
 
-	void DoFirstRun() {
-		if(!this->IsLoaded()) {
-			Print(true, "Unable to run script- Lua State isn't loaded!\n");
-		}
+	void HandleLuaError(int result);
 
-		if (lua_pcall(L, 0, 0, 0)) {
-			Print(true, "Error: script failed to run! (%s)\n", GetFileName());
-		}
-	}
+	void DoFirstRun();
 
 	/**
- * Tells our class to call this function when the associated CB id is triggered.
- * @param cb_name Name of Lua func to call.
- * @param cb_type On which event this func is called.
- */
+ 	* Tells our class to call this function when the associated CB id is triggered.
+ 	* @param cb_name Name of Lua func to call.
+ 	* @param cb_type On which event this func is called.
+ 	*/
 	void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type);
-
 
 	void registerGlobalLuaFunction(const std::string &funcName, lua_CFunction funcAddr) {
 		lua_pushcclosure(L, funcAddr, 0);
 		lua_setglobal(L, funcName.c_str());
-	}
-
-	LuaScriptManager() {}
-
-	~LuaScriptManager() {
-		if (L) {
-			lua_close(L);
-		}
 	}
 
 	void InitializeLua(const std::string &filename = "tempera.init.lua");

@@ -21,6 +21,7 @@
 */
 
 #include <Windows.h>
+#include "../../common/addlog.h"
 #include "camera.h"
 
 float g_Aspect = 4.0f / 3.0f;
@@ -93,10 +94,10 @@ vect3 CMyCamera::ScreenPos(vect3 coord, bool log) {
 	float dist_to_object = sqrt(cam_to_obj.x * cam_to_obj.x + cam_to_obj.y * cam_to_obj.y + cam_to_obj.z * cam_to_obj.z);
 
 	if (log) {
-		Print(log, "Cam yaw/pitch: %f,  %f\n", cam_yaw, cam_pitch);
-		Print(log, "Obj yaw/pitch: %f,  %f\n", obj_yaw, obj_pitch);
-		Print(log, "Rel yaw/pitch: %f,  %f\n", relative_yaw, relative_pitch);
-		Print(log, "Distance: %f\n", dist_to_object);
+		Print<false>( "Cam yaw/pitch: %f,  %f\n", cam_yaw, cam_pitch);
+		Print<false>( "Obj yaw/pitch: %f,  %f\n", obj_yaw, obj_pitch);
+		Print<false>( "Rel yaw/pitch: %f,  %f\n", relative_yaw, relative_pitch);
+		Print<false>( "Distance: %f\n", dist_to_object);
 	}
 
 	float x_pos = -relative_yaw * 2 / pCamera->Fov; // radian angle measurement cancels here.

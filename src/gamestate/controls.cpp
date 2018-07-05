@@ -25,13 +25,13 @@ static void Control::HandleActionOverride(ushort idx, s_unit_control_data * from
 void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client_update_idx) {
 	auto core = CurrentEngine.GetCore();
 
-	// Print(true, "Updating player: 0x%x", core);
+	// Print("Updating player: 0x%x", core);
 
 	auto to = reinterpret_cast<s_unit_datum *>(core->GetGenericObject(unit_idx));
 
 	if(to->unit.controlling_player_index.handle != -1)	{
 		//will spam the _hell_ out of you.
-		// Print(true, "Detected playeridx test 1: 0x%d\n", to->unit.controlling_player_index.index);
+		// Print("Detected playeridx test 1: 0x%d\n", to->unit.controlling_player_index.index);
 
 		HandleActionOverride(to->unit.controlling_player_index.index, from);
 	}

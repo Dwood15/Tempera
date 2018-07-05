@@ -1,6 +1,5 @@
 #pragma once
 
-#include <common/precompile.h>
 #include "../../../../../../../BlamSauce/math/matrix_math.h"
 #include "../../../../../../../BlamSauce/render/rasterizer/dx9.hpp"
 #include "../../../../../../../BlamSauce/render/render.hpp"

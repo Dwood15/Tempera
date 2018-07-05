@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+#include "../../common/addlog.h"
 #include "110EngineManager.h"
 #include "function_rewrite.h"
 #include "../../../src/gamestate/player_types.h"
@@ -192,7 +194,6 @@ void CE110::WriteHooks() {
 	calls::WriteSimpleHook(post_initialize_hook, &main_setup_connection_init);
 
 	constexpr uintptr_t game_tick_hook = 0x473815;
-	Print(true, "\nWriting the game_tick hook now!\n");
 
 	calls::WriteSimpleHook(game_tick_hook, &game_tick);
 
@@ -245,6 +246,4 @@ void CE110::WriteHooks() {
 	//render player frame
 	calls::nopBytes(0x50F5F0, 0xA); //render_player_frame_cmp_patch
 	//end renderplayerframeclamp
-	Print(false, "Wrapped up the CE hooks.\n");
-
 }

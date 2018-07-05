@@ -3,6 +3,7 @@
  * <GPLv3 License>
  */
 
+#include <macros_generic.h>
 #include "../ce_base_types.h"
 //Yup, guess I'm turning into Kornman...
 #define REAL_ASSRT(name, members) STAT_ASSRT(name, members * sizeof(real))

@@ -3,6 +3,7 @@
 #include "src/exceptions/exception_handler.h"
 #include "src/lua/script_manager.h"
 #include <iostream>
+#include <addlog.h>
 
 /**
  *	Project: Tempera
@@ -43,7 +44,7 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 
-#include <precompile.h>
+
 
 //For some unknown reason, dll_load is not getting recognized on the main.cpp compile step.
 // extern void spcore::memory::post_dll_load();
@@ -57,21 +58,21 @@ __declspec(naked) void WINAPI Tempera_DirectInput8Create() {
 	__asm { jmp orig_DirectInput8Create };
 }
 
-static inline MYSQL *ConnectToSqlDB(const char *host, const char *usr, const char *pwd) {
-	MYSQL *con = mysql_init(NULL);
+static inline void *ConnectToSqlDB(const char *host, const char *usr, const char *pwd) {
+	// MYSQL *con = mysql_init(NULL);
+	//
+	// if (!con) {
+	// 	Print("Failed to init mysql connection.");
+	// 	return NULL;
+	// }
+	//
+	// if (mysql_real_connect(con, host, usr, pwd, NULL, 3309, NULL, 0) == NULL) {
+	// 	PrintLn("Failed to connect. Error: %s", mysql_error(con));
+	// 	mysql_close(con);
+	// 	return NULL;
+	// }
 
-	if (!con) {
-		Print(true, "Failed to init mysql connection.");
-		return NULL;
-	}
-
-	if (mysql_real_connect(con, host, usr, pwd, NULL, 3309, NULL, 0) == NULL) {
-		Print(true, "Failed to connect. Error: %s", mysql_error(con));
-		mysql_close(con);
-		return NULL;
-	}
-
-	return con;
+	return NULL;
 }
 
 using feats = feature_management::features;
@@ -87,14 +88,14 @@ static inline void *init(HMODULE *reason) {
 	CurrentEngine = feature_management::engines::GlobalEngine();
 
 	//Initializes the file log for debug output.
-	InitAddLog(*reason);
+	InitAddLog(*reason, CurrentEngine.DEBUG_FILENAME);
 
 	if (!CurrentEngine.HasSupport()) {
-		Print(true, "Tempera could not detect that the current runtime has any feature support.\n");
+		PrintLn("Tempera could not detect that the current runtime has any feature support.");
 		return false;
 	}
 
-	Print(true, "Current runtime was detected!");
+	Print("Current runtime was detected!");
 
 	//TODO: dinput-agnostic tempera.
 	char path[MAX_PATH];
@@ -104,7 +105,7 @@ static inline void *init(HMODULE *reason) {
 	*reason = LoadLibraryA(path);
 
 	if (!*reason) {
-		Print(true, "Failed to load the real dinput8 library!");
+		Print("Failed to load the real dinput8 library!");
 		return false;
 	}
 
@@ -136,7 +137,7 @@ static inline void *init(HMODULE *reason) {
 extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
 	if (fdwReason == DLL_PROCESS_ATTACH && !loaded) {
 		if (!init(&hinstDLL)) {
-			Print(true, "Failed to Initialize properly. Exiting");
+			Print("Failed to Initialize properly. Exiting");
 			return false;
 		}
 
@@ -144,13 +145,13 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 		if (SUPPORTSFEATS(DX_PROXY, FORGE_MODE)) {
 			//DisableThreadLibraryCalls(hinstDLL);
 			//CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
-			//Print(true, "Created Forge Thread!\n");
+			//PrintLn("Created Forge Thread!");
 		}
 
 		if (SUPPORTSFEAT(MARIADB_LOGGING)) {
 			//auto sqlCon = ConnectToSqlDB("localhost" );
 			// if (sqlCon != NULL) {
-			// 	Print(true, "Successfully Connected to Database!");
+			// 	Print("Successfully Connected to Database!");
 			// 	mysql_close(sqlCon);
 			// }
 		}

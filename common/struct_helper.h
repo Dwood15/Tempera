@@ -1,5 +1,4 @@
 #pragma once
-#include "precompile.h"
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>
 	/// 	Class for defining an interface for blocks of data whose memory layout is not entirely mapped out.

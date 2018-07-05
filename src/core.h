@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include <precompile.h>
+#include "../runtime/memory_map.h"
 #include "gamestate/objects.h"
 #include "gamestate/camera.h"
 #include "gamestate/players.h"
