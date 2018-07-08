@@ -10,6 +10,7 @@
 
 typedef short                     int16;
 typedef unsigned int              uintptr_t;
+typedef unsigned long 				 tag;
 typedef char                      tag_string[32];
 typedef const char                *cstring;
 

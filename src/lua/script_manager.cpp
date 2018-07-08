@@ -5,6 +5,15 @@
 #include "../CurrentEngine.h"
 #include "../Dinput/dinput.h"
 
+
+void LuaScriptManager::PassInteger(int val) {
+	lua_pushinteger(L,val);
+}
+
+static void PassInteger(lua_State * L, int val) {
+	lua_pushinteger(L,val);
+}
+
 int l_print(lua_State *L) {
 	const bool tocmd = lua_toboolean(L, 1);
 	const char *str  = lua_tostring(L, 2);
@@ -176,6 +185,128 @@ void LuaScriptManager::registerLuaCallback(const std::string &cb_name, LuaCallba
 	}
 }
 
+template<int numArg, int numRet>
+void LuaScriptManager::PCall(const char * funcName) {
+	if (lua_pcall(L, numArg, numRet, 0)) {
+		luaL_error(L, "Error in %s: %s", funcName, lua_tostring(L, -1));
+	}
+}
+
+//Returns false if function not found, or if error.
+bool LuaScriptManager::HandleFunctionNameEvent(const char * funcName) {
+	if (!this->IsLoaded()) {
+		PrintLn<false>("Can't call %s event- doesn't exist!", funcName);
+		return false;
+	}
+
+	lua_getglobal(L, funcName);
+	if (!lua_isfunction(L, -1)) {
+		return false;
+	}
+
+	return true;
+}
+
+static void PassPlayerControl(lua_State * L, s_player_action * control) {
+	lua_createtable(L, 0, 6);
+
+	PassInteger(L, control->control_flagsA.control_flags_a);
+	lua_setfield(L, -2, "control_flags");
+
+	lua_pushnumber(L, control->throttle_leftright);
+	lua_setfield(L, -2, "throttle.x");
+
+	lua_pushnumber(L, control->throttle_forwardback);
+	lua_setfield(L, -2, "throttle.y");
+
+	//The std::string might seem redundant, and it probably is. But, I'm pretty sure std string will prune uninterpretable characters.
+	PassInteger(L, control->desired_weapon_index);
+	lua_setfield(L, -2, "desired_weapon_index");
+
+	lua_pushnumber(L, control->primary_trigger);
+	lua_setfield(L, -2, "primary_trigger");
+
+	PassInteger(L,control->desired_grenade_index);
+	lua_setfield(L, -2, "desired_grenade_index");
+}
+
+static void ReadPlayerControl(lua_State * L, s_player_action * control) {
+	lua_settop(L, 1);
+	luaL_checktype(L, 1, LUA_TTABLE);
+
+	lua_getfield(L, 1, "control_flags");
+	uint num = luaL_checkinteger(L, -1);
+	if(num <= (uint)0xFFFF) {
+		control->control_flagsA.control_flags_a = static_cast<ushort>(num);
+	}
+	lua_pop(L, 1);
+
+	lua_getfield(L, 1, "throttle.x");
+	lua_getfield(L, 1, "throttle.y");
+
+	control->throttle_forwardback = luaL_checknumber(L, -1);
+	control->throttle_leftright = luaL_checknumber(L, -2);
+
+	lua_pop(L, 2);
+
+	lua_getfield(L, 1, "desired_weapon_index");
+	lua_getfield(L, 1, "desired_grenade_index");
+
+	num = luaL_checkinteger(L, -1);
+	if(num <= 3) {
+		control->desired_weapon_index = static_cast<ushort>(num);
+	}
+
+	num = luaL_checkinteger(L, -2);
+	if(num <= 1) {
+		control->desired_weapon_index = static_cast<ushort>(num);
+	}
+
+	lua_pop(L, 2);
+
+	lua_getfield(L, 1, "primary_trigger");
+
+	control->primary_trigger = luaL_checknumber(L, -1);
+}
+
+void LuaScriptManager::lua_on_player_update(s_player_action * control, ushort plyrIdx) {
+
+	static bool DebugOnce = false;
+
+	if(!this->HandleFunctionNameEvent("PlayerUpdate")) {
+		if (!DebugOnce) {
+			PrintLn("Cannot call PlayerUpdate b/c it doesn't exist.");
+			DebugOnce = true;
+		}
+		return;
+	}
+
+	if(!DebugOnce) {
+		PrintLn("PlayerControl");
+	}
+
+	PassPlayerControl(L, control);
+
+	PassInteger(plyrIdx);
+
+	PCall<2, 0>("PlayerUpdate");
+
+	ReadPlayerControl(L, control);
+}
+
+void LuaScriptManager::lua_on_tick(ushort remaining, uint32 since_map_begin) {
+	constexpr const char * funcName = "OnTick";
+
+	if(!this->HandleFunctionNameEvent(funcName)) {
+		return;
+	}
+
+	PassInteger(since_map_begin);
+	PassInteger(remaining);
+
+	PCall<2, 0>(funcName);
+}
+
 /**
  * Something something Lua and void function call by functionName
  */
@@ -277,7 +408,7 @@ void LuaScriptManager::InitializeLua(const std::string &filename) {
 	registerGlobalLuaFunction("RegisterCallBack", l_registerLuaCallback);
 
 	registerGlobalLuaFunction("GetMaxLocalPlayers", [](lua_State* L) {
-		lua_pushinteger(L, MAX_PLAYER_COUNT_LOCAL);
+		::PassInteger(L,MAX_PLAYER_COUNT_LOCAL);
 		return 1;
 	});
 

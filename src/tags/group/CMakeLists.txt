@@ -1,0 +1,12 @@
+set(GROUP_H
+	${CMAKE_CURRENT_SOURCE_DIR}/base.h
+	${CMAKE_CURRENT_SOURCE_DIR}/markup.h
+	${CMAKE_CURRENT_SOURCE_DIR}/field_definitions.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/groups_structures.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/loading.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/saving.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/structure_macros.h
+	${CMAKE_CURRENT_SOURCE_DIR}/tag_groups.h
+	${CMAKE_CURRENT_SOURCE_DIR}/tag_groups_base_yelo.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/verification.hpp
+	PARENT_SCOPE)

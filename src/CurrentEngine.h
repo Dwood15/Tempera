@@ -12,6 +12,7 @@ class LuaScriptManager;
 static bool ShouldOverride[MAX_PLAYER_COUNT_LOCAL];
 struct s_player_action;
 class Core;
+struct s_unit_control_data;
 
 namespace feature_management::engines {
 	class GlobalEngine {
@@ -36,7 +37,7 @@ namespace feature_management::engines {
 
 		LuaScriptManager * GetLuaState();
 
-		s_player_action & GetPlayerActionOverride(ushort idx);
+		s_player_action GetPlayerActionOverride(ushort idx, s_unit_control_data * from);
 
 		bool IsHek();
 

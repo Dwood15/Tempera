@@ -13,7 +13,8 @@ namespace Enums {
 		m_cdecl, //Everything goes onto the stack - stack is cleaned up by the caller.
 		m_stdcall, //Everything goes onto the stack, but stack is cleaned up by callee.
 		m_fastcall, //Example: __fastcall void Foo(int iGoInto_ECX, int iGoInto_EDX, int iGetPushed_Last, int iGetPushed_2nd, int iGetPushed_First);
-		m_thiscall
+		m_thiscall,
+		m_custom
 	};
 }
 

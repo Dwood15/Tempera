@@ -101,14 +101,7 @@ STAT_ASSRT(ushort, 0x2);
 #define   k_maximum_nodes_per_model_geometry_part 22
 #define   k_number_of_rows_per_node_matrix      4
 
-#define k_maximum_rendered_objects            256
-
-#define k_maximum_rendered_clusters            0x80
-
-#define k_maximum_rendered_triangles         0x4000
 #define k_maximum_object_names_per_scenario      512
-#define k_maximum_rendered_distant_lights      2
-#define k_maximum_rendered_point_lights         2
 #pragma endregion
 #pragma endregion
 

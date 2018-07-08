@@ -263,8 +263,8 @@ static auto const NETWORK_GAME_SERVER_SEND_MESSAGE_TO_ALL_MACHINES_INGAME = (0x4
 		// ENGINE_PTR(bool, event_type_logging,		PTR_NULL, K_EVENT_TYPE_LOGGING);
 		// ENGINE_PTR(bool, event_type_echoing,		PTR_NULL, K_EVENT_TYPE_ECHOING);
 		//
-		// ENGINE_PTR(wconst char **, log_entry_titles,		PTR_NULL, K_LOG_ENTRY_TITLES);
-		// ENGINE_PTR(wconst char **, log_entry_titles_ref,	PTR_NULL, K_LOG_ENTRY_TITLES_REF);
+		// ENGINE_PTR(wstring*, log_entry_titles,		PTR_NULL, K_LOG_ENTRY_TITLES);
+		// ENGINE_PTR(wstring*, log_entry_titles_ref,	PTR_NULL, K_LOG_ENTRY_TITLES_REF);
 		//
 		// static byte** K_EVENT_ENABLE_LOGGING_0_REFS[] =
 		// {

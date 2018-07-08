@@ -1,0 +1,13 @@
+
+set(CSERIES_H
+	${CMAKE_CURRENT_SOURCE_DIR}/base.h
+	${CMAKE_CURRENT_SOURCE_DIR}/cseries.h
+	${CMAKE_CURRENT_SOURCE_DIR}/enum_wrappers.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/errors.h
+	${CMAKE_CURRENT_SOURCE_DIR}/handle_abi.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/MacrosCpp.h
+	${CMAKE_CURRENT_SOURCE_DIR}/non_pod_container.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/value_conversion.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/yelo_base.h
+	PARENT_SCOPE)
+

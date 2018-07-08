@@ -120,7 +120,10 @@ set(COMMON_H
 	common/engine_interface.h
 	common/macros_generic.h
 	common/struct_helper.h
-	)
+	src/gamestate/game_time/gametime.cpp
+	src/gamestate/game_time/gametime.h
+	src/engine/game.h
+	src/gamestate/objects/units/unit_camera.h)
 
 add_library(dinput8 SHARED
 			common/addlog.cpp

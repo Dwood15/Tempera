@@ -22,6 +22,7 @@
 #include "Direct3D/d3d9hook.h"
 #include "math/colors.h"
 #include "gamestate/player_types.h"
+#include "gamestate/game_time/gametime.h"
 
 
 ////////////////////////////////////////
@@ -98,6 +99,7 @@ struct memory_pool {
 	memory_pool_block *last;
 };
 
+struct s_players_globals_data;
 ////////////////////////////////////////
 // Core Halo Structures
 ////////////////////////////////////////
@@ -191,7 +193,9 @@ struct object_data;
 struct object_header;
 
 class ObjectController;
-
+struct s_player_control_globals_data;
+struct s_players_globals_data;
+struct s_motion_sensor;
 ////////////////////////////////////////
 // The Core Class of HaloForge
 ////////////////////////////////////////
@@ -221,6 +225,7 @@ public:
 	s_player_control_globals_data *player_control_globals_data;
 	s_players_globals_data        *players_globals;
 	s_motion_sensor               *motion_sensor;
+	Time::s_game_time_globals	  *game_time_globals;
 	uintptr                       game_state_globals_location_ptr;
 	uintptr                       game_state_globals_ptr;
 	void                          **crc_checksum_buffer;

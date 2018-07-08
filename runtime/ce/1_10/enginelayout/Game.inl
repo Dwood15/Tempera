@@ -304,7 +304,6 @@ static_assert(PTR_PHYSICAL_MEMORY_ALLOCATION_SIZE != 0);
 
 static auto *const game_state_globals = reinterpret_cast<s_game_state_globals *>(0x67DD88);
 static auto **const game_globals = reinterpret_cast<s_game_globals **>(0x64BAB0);
-static auto **const game_time_globals = reinterpret_cast<s_game_time_globals **>(0x68CD70);
 static auto **const game_allegiance_globals = reinterpret_cast<s_game_allegiance_globals **>(0x64BAB4);
 
 static auto *const global_game_globals = reinterpret_cast<TagGroups::s_game_globals **>(0x6E2260);

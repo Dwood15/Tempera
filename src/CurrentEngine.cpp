@@ -2,6 +2,7 @@
 
 #include "CurrentEngine.h"
 #include "lua/script_manager.h"
+#include "gamestate/game_time/gametime.h"
 #include <ce/1_10/110EngineManager.h>
 #include <hek/sapien/sapienEngineManager.h>
 #include <addlog.h>
@@ -251,8 +252,8 @@ void GlobalEngine::RefreshCore() {
 			eCore->core_1->Object = *(data_header<object_header> **) 0x107F2E4;
 
 			eCore->at_main_menu                = (bool *) 0xDBD909;
-			eCore->player_control_globals_data = *(s_player_control_globals_data **) 0xDF76B0; // = player_control_globals *
-
+			eCore->player_control_globals_data = *reinterpret_cast<s_player_control_globals_data **>(0xDF76B0); // = player_control_globals *
+			eCore->game_time_globals = *reinterpret_cast<Time::s_game_time_globals **>(0xBD8A18);
 			return;
 		}
 
@@ -263,6 +264,8 @@ void GlobalEngine::RefreshCore() {
 			}
 
 			eCore = new Core(CE110::GetCoreAddressList());
+			eCore->game_time_globals = * reinterpret_cast<Time::s_game_time_globals **>(0x68CD70);
+
 			eCore->main_globals_game_connection_type = (ushort *)0x6B47B0;
 		}
 	}
@@ -348,11 +351,21 @@ bool GlobalEngine::HasSupport() {
 	return false;
 }
 
-
-s_player_action &GlobalEngine::GetPlayerActionOverride(ushort idx) {
+s_player_action GlobalEngine::GetPlayerActionOverride(ushort idx, s_unit_control_data * from) {
 	ClampIndex(idx);
 
-	return ActionOverrides[idx];
+	s_player_action newControl;
+
+	newControl.desired_grenade_index  = from->grenade_index;
+	newControl.primary_trigger = from->primary_trigger;
+	newControl.throttle_forwardback = from->throttle.x;
+	newControl.throttle_leftright = from->throttle.y;
+	newControl.desired_weapon_index = from->weapon_index;
+	newControl.control_flagsA = from->control_flags;
+
+	this->LuaState->lua_on_player_update(&newControl, idx);
+
+	return newControl;
 }
 
 Core *GlobalEngine::GetCore() {
@@ -523,6 +536,8 @@ void main_setup_connection_init() {
 	CALL_LUA_BY_EVENT(post_initialize);
 }
 
+static Core * mCore = 0x0;
+
 void game_tick(int current_frame_tick) {
 	static LuaScriptManager *state = 0;
 
@@ -532,6 +547,11 @@ void game_tick(int current_frame_tick) {
 
 	CALL_LUA_BY_EVENT(before_game_tick);
 
+	if (!mCore) {
+	 mCore =	CurrentEngine.GetCore();
+	}
+
+	state->lua_on_tick(current_frame_tick, mCore->game_time_globals->elapsed_time);
 	static uint got = 0;
 	if (got == 0) {
 		got = FUNC_GET(game_tick);

@@ -6,7 +6,7 @@ extern Core * eCore;
 static void Control::HandleActionOverride(ushort idx, s_unit_control_data * from) {
 	if (CurrentEngine.ShouldOverrideAction(idx)) {
 
-		auto override = CurrentEngine.GetPlayerActionOverride(idx);
+		auto override = CurrentEngine.GetPlayerActionOverride(idx, from);
 
 		from->control_flags = override.control_flagsA;
 		from->throttle.x = override.throttle_leftright;
@@ -30,9 +30,6 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 	auto to = reinterpret_cast<s_unit_datum *>(core->GetGenericObject(unit_idx));
 
 	if(to->unit.controlling_player_index.handle != -1)	{
-		//will spam the _hell_ out of you.
-		// Print("Detected playeridx test 1: 0x%d\n", to->unit.controlling_player_index.index);
-
 		HandleActionOverride(to->unit.controlling_player_index.index, from);
 	}
 
