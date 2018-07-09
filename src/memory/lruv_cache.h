@@ -1,6 +1,6 @@
 #pragma once
 
-#include <precompile.h>
+
 #include "datum_index.h"
 #include "../cseries/base.h"
 

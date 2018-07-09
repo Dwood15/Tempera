@@ -9,7 +9,6 @@
 #include "MacrosCpp.h"
 #include <functional>
 
-extern const errno_t k_errnone;
 
 namespace Yelo {
 	namespace Enums {
@@ -39,7 +38,7 @@ namespace Yelo {
 
 #define WIN32_FUNC(func) func
 
-const errno_t k_errnone = 0;
+static const errno_t k_errnone = 0;
 
 namespace Yelo {
 
@@ -120,7 +119,7 @@ namespace Yelo {
 	// is assumed to be null terminated
 	// Returns [string] if successful
 	// If NULL is returned, you can use GetLastError() for error information
-	char *wstring_to_string(char *string, long string_length, wstring wide, long wide_length = -1) {
+	static char *wstring_to_string(char *string, long string_length, wstring wide, long wide_length = -1) {
 		if (!WIN32_FUNC(WideCharToMultiByte)(CP_ACP, 0, wide, wide_length, string, string_length, nullptr, nullptr))
 			return nullptr;
 		else
@@ -128,7 +127,7 @@ namespace Yelo {
 	}
 
 	// [string_length] includes the null terminator
-	char *wstring_to_string_lazy(char *string, long string_length, wstring wide) {
+	static char *wstring_to_string_lazy(char *string, long string_length, wstring wide) {
 
 		string[--string_length] = '\0';
 		for (long x = 0; string_length--; x++) {
@@ -143,7 +142,7 @@ namespace Yelo {
 	// is assumed to be null terminated
 	// Returns [wide] if successful
 	// If NULL is returned, you can use GetLastError() for error information
-	wstring string_to_wstring(wstring wide, long wide_length, const char * string, long string_length = -1) {
+	static wstring string_to_wstring(wstring wide, long wide_length, const char * string, long string_length = -1) {
 		if (!WIN32_FUNC(MultiByteToWideChar)(CP_ACP, 0, string, string_length, wide, wide_length))
 			return nullptr;
 		else
@@ -151,7 +150,7 @@ namespace Yelo {
 	}
 
 	// [string_length] includes the null terminator
-	wstring string_to_wstring_lazy(wstring string, long string_length, const char * ascii) {
+	static wstring string_to_wstring_lazy(wstring string, long string_length, const char * ascii) {
 
 		string[--string_length] = L'\0';
 		for (long x = 0; string_length--; x++) {
@@ -169,7 +168,7 @@ namespace Yelo {
 	/// <param name="suffix">	The string to compare to the substring at the end of this instance. </param>
 	///
 	/// <returns>	true if suffix matches the end of the instance; otherwise, false. </returns>
-	bool EndsWith(const std::string &str, const std::string &suffix) {
+	static bool EndsWith(const std::string &str, const std::string &suffix) {
 		// based on http://stackoverflow.com/a/20447331/444977
 
 		if (suffix.length() > str.length())
@@ -419,7 +418,7 @@ namespace Yelo {
 		}
 	};
 
-	const char * BooleanToString(bool value) {
+	static const char * BooleanToString(bool value) {
 		return value ? "true" : "false";
 	}
 
@@ -551,7 +550,7 @@ namespace Yelo {
 	/// <summary>	Get the current time and format it into [time_str]. </summary>
 	///
 	/// <param name="time_str">	The resulting time string. </param>
-	void GetTimeStampString(_Out_ tag_string time_str) {
+	static void GetTimeStampString(_Out_ tag_string time_str) {
 		const size_t k_time_str_sizeof = sizeof(tag_string);
 
 		memset(time_str, 0, k_time_str_sizeof);
@@ -570,7 +569,7 @@ namespace Yelo {
 	/// <remarks>	The formatting output by this function is YYYY_MM_DD_hh_mm_ss. </remarks>
 	///
 	/// <param name="time_str">	The resulting time string. </param>
-	void GetTimeStampStringForFile(_Out_ tag_string time_str) {
+	static void GetTimeStampStringForFile(_Out_ tag_string time_str) {
 		const size_t k_time_str_sizeof = sizeof(tag_string);
 
 		memset(time_str, 0, k_time_str_sizeof);
@@ -591,24 +590,13 @@ namespace Yelo {
 
 	// Displays a message to the user using the WinAPI
 	// Use this when are probably about to get really messy...
-	void PrepareToDropError(const char * text) {
+	static void PrepareToDropError(const char * text) {
 		if (text == nullptr) text = "(null)";
 
 		MessageBoxA(nullptr, text, "Prepare to Drop!", MB_OK | MB_ICONEXCLAMATION);
 	}
 
 	namespace blam {
-		char g_display_assert_buffer[512];
+		static char g_display_assert_buffer[512];
 	};
 };
-
-// Mostly just useful for debug checking something (eg, game memory) on startup or on the first pass
-#define DebugRunOnce(...)                     \
-   {   static volatile bool iran_once_##__COUNTER__;   \
-      if( iran_once_##__COUNTER__ == false )         \
-      {                                    \
-         iran_once_##__COUNTER__ = true;            \
-         __VA_ARGS__   ;                        \
-   } }
-
-#define HRESULT_ERETURN(p) if(FAILED(p)) return E_FAIL

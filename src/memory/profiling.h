@@ -1,5 +1,5 @@
 #pragma once
-#include <precompile.h>
+
 
 namespace Yelo {
 	namespace Enums {

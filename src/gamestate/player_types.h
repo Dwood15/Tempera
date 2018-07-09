@@ -11,10 +11,9 @@
 #include "../ce_base_types.h"
 #include "../math/enums_generic.h"
 #include "../math/real_math.h"
-#include "objects/units/unit_camera.h"
 
 STAT_ASSRT(sbyte, 1);
-
+using namespace Yelo;
 struct s_player_hud_messages {
 	byte unk[0x460];
 };
@@ -161,14 +160,7 @@ struct s_player_control_globals_data {
 STAT_ASSRT(s_player_control_globals_data, (0x10 + sizeof(s_player_control) * MAX_PLAYER_COUNT_LOCAL));
 static_assert(sizeof(s_player_control_globals_data) < (unsigned int) 0xFF);
 
-struct s_unit_camera_info
-{
-	datum_index unit_index;
-	short seat_index;
-	unsigned short : 16;
-	Yelo::TagGroups::s_unit_camera* unit_camera_definition;
-	real_point3d position;
-}; static_assert( sizeof(s_unit_camera_info) == 0x18 );
+
 
 
 

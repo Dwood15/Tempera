@@ -3,8 +3,7 @@
 #include <limits>
 #include <engine_interface.h>
 #include "memory_interface.h"
-
-typedef unsigned int uint;
+#include <memory_map.h>
 
 template <typename T>
  bool inBounds(T val) {

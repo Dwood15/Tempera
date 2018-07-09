@@ -6,7 +6,6 @@
 // NOTE: NON-STANDARD ENGINE SOURCE FILE
 #pragma once
 
-#include <precompile.h>
 #include "groups_structures.hpp"
 #include "tag_groups.h"
 
@@ -14,7 +13,7 @@ namespace Yelo {
 	namespace TagGroups {
 		// called in the 'verify group fields' initialize step on tag_reference_definitions
 		static void TagGroupMarkAsReferenced(tag group_tag) {
-			SET_FLAG(blam::tag_group_get(group_tag)->flags, Flags::_tag_group_referenced_yelo_bit, true);
+			// SET_FLAG(blam::tag_group_get(group_tag)->flags, Flags::_tag_group_referenced_yelo_bit, true);
 		}
 
 		void CheckForUnreferencedGroups() { /*#if false'd in YeloLib*/  }
@@ -26,7 +25,7 @@ namespace Yelo {
 		// and due to the fact that we call them from elsewhere besides the tag_groups_system code
 
 		static void VerifyStringListDefinition(const string_list *definition,
-															const tag_block_definition *block_definition, const char * field_type_name) {
+															const tag_block_definition *block_definition, const char *field_type_name) {
 			YELO_ASSERT_DISPLAY(definition, "no definition specified for %s field in block %s.",
 									  field_type_name, block_definition->name); // NOTE: added owner block name to info
 			YELO_ASSERT(definition->count >= 0);
@@ -124,7 +123,7 @@ namespace Yelo {
 					YELO_ASSERT_DISPLAY(definition, "no definition specified for block field in block %s.",
 											  block_definition->name); // NOTE: added owner block name to info
 
-					VerifyBlockFieldDefinitions(definition);
+					// VerifyBlockFieldDefinitions(definition);
 				}
 					break;
 
@@ -146,7 +145,7 @@ namespace Yelo {
 					break;
 
 				case Enums::_field_explanation: {
-					const char * definition = field.Definition<const char>();
+					const char *definition = field.Definition<const char>();
 					// NOTE: added owner block name to info
 					YELO_ASSERT_DISPLAY(definition, "no definition specified for explanation field in block %s.", block_definition->name);
 				}
@@ -188,22 +187,19 @@ namespace Yelo {
 				}
 			};
 
-			TagGroups::tag_groups_do_action<verify_no_duplicate_group_tags_action>();
+			// TagGroups::tag_groups_do_action<verify_no_duplicate_group_tags_action>();
 		}
 
 		static void VerifyGroupFieldDefinitions() {
-			struct verify_group_field_definitions_action
-			{
+			struct verify_group_field_definitions_action {
 				bool m_found_group_missing_header_definition;
 
-				verify_group_field_definitions_action() : m_found_group_missing_header_definition(false) { }
+				verify_group_field_definitions_action() : m_found_group_missing_header_definition(false) {}
 
-				void operator()(const tag_group* group)
-				{
-					if(group->header_block_definition != nullptr)
+				void operator ()(const tag_group *group) {
+					if (group->header_block_definition != nullptr)
 						VerifyBlockFieldDefinitions(group->header_block_definition);
-					else
-					{	// NOTE: added this warning
+					else {   // NOTE: added this warning
 						YELO_WARN("tag group '%s' doesn't have a definition", group->name);
 						m_found_group_missing_header_definition = true;
 					}
@@ -211,16 +207,15 @@ namespace Yelo {
 			};
 
 			auto action = verify_group_field_definitions_action();
-			TagGroups::tag_groups_do_action(action);
+			// TagGroups::tag_groups_do_action(action);
 
-			if(action.m_found_group_missing_header_definition)
-			{
-				YELO_ASSERT( !"fix your goddamn tag groups" );
+			if (action.m_found_group_missing_header_definition) {
+				Print<true>("fix your goddamn tag groups");
 			}
 		}
 
 		// Run any checks on the tag groups, after they have been fully initialized (parents linked, byte swap codes, etc).
 		// However, runtime info won't yet be generated at the time of this call
-		void VerifyTagGroupsFinalChecks() { }
+		void VerifyTagGroupsFinalChecks() {}
 	};
 };

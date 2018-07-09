@@ -1,7 +1,7 @@
 #pragma once
 
-typedef unsigned int uintptr_t;
-typedef unsigned int uint;
+#include <windows.h>
+#include <macros_generic.h>
 
 struct defined_functionrange {
 	const char funcName [140];
@@ -38,7 +38,6 @@ struct LPCoreAddressList {
 	uint MAP_HEADER_ADDRESS;
 	uint TAG_INDEX_HEADER_ADDRESS;
 
-
 	uintptr_t CONSOLE_HOOK_ADDRESS;
 	uintptr_t DEVMODE_HOOK_ADDRESS;
 	uintptr_t CONSOLE_TEXT_HOOK_ADDRESS;
@@ -58,7 +57,6 @@ struct LPCoreAddressList {
 	uint crc_checksum_buffer;
 
 	uint players_global_data;
-
 };
 
 

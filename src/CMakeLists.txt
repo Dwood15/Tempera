@@ -16,11 +16,15 @@ add_subdirectory(cache)
 add_subdirectory(cseries)
 add_subdirectory(effects)
 add_subdirectory(exceptions)
-add_subdirectory(lua)
-add_subdirectory(tags)
-add_subdirectory(memory)
+add_subdirectory(game)
 add_subdirectory(gamestate)
+add_subdirectory(hs)
+add_subdirectory(lua)
+add_subdirectory(memory)
+add_subdirectory(models)
 add_subdirectory(render)
+add_subdirectory(scenario)
+add_subdirectory(tags)
 
 set(SRC_CXX
 	src/Direct3D/d3d9hook.cpp
@@ -28,17 +32,24 @@ set(SRC_CXX
 	${CMAKE_CURRENT_SOURCE_DIR}/core.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/CurrentEngine.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/math/math.cpp
+	${SCRIPTING_SRC}
 	${EXCEPTIONS_SRC}
 	${LUA_SRC}
 	${GAMESTATE_SRC}
+	${SCENARIO_SRC}
+	${GAME_SRC}
 	PARENT_SCOPE)
 
 set(SRC_H
+	${GAME_H}
+	${SCRIPTING_H}
+	${SCENARIO_H}
 	${CACHE_H}
 	${CSERIES_H}
 	${EFFECTS_H}
 	${MATH_H}
 	${MEMORY_H}
+	${MODELS_H}
 	${RENDER_H}
 	${D3D}
 	${DINPUT_H}

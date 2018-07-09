@@ -1,6 +1,5 @@
 
 #pragma once
-#include <precompile.h>
 #include "base.h"
 
 namespace Yelo

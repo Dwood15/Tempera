@@ -18,7 +18,6 @@ namespace Yelo {
 #define pad_int16 unsigned short : 16;
 
 	// # from 0 to 4,294,967,295
-	typedef unsigned long uint;
 #define pad_uint unsigned long : 32
 	// # from -2147483648 to 2147483647
 	//Gotta watch out for this sin...

@@ -7,62 +7,33 @@
 #pragma once
 
 #include <macros_generic.h>
+#include "memory/datum_index.h"
 
 typedef short                     int16;
 typedef unsigned int              uintptr_t;
 typedef unsigned long 				 tag;
 typedef char                      tag_string[32];
 typedef const char                *cstring;
+typedef char * tag_reference_name_reference;
 
-/// <summary>	Handle to data allocated by the engine's data-array construct. </summary>
-struct datum_index {
+/// <summary>	The integral type used to represent game ticks. </summary>
+typedef long game_ticks_t;
+/// <summary>	The integral type used to represent (relative) game timers. </summary>
+/// <remarks>	Steps are in ticks. Generally used for countdowns </remarks>
+typedef short game_time_t;
 
 
-	union {
-		signed long handle;
+namespace Yelo::Enums
+{
+	enum {
+		k_maximum_number_of_local_players = 4,
+		k_multiplayer_maximum_players = 16,
 
-		struct {
-			short index;
-			short salt;
-		};
+		// for team_data (which has a maximum of 16 datums) and such.
+		// This is 1 in Stubbs, I'm positive team_data uses k_multiplayer_maximum_players.
+			k_multiplayer_maximum_teams = k_multiplayer_maximum_players,
 	};
-
-	//operator int() { return handle; }
-
-	datum_index(int rhs) {
-		this->handle = rhs;
-	}
-
 };
 
-STAT_ASSRT(datum_index, 0x4);
 
-struct tag_reference {
-	unsigned int group_tag;
-	const char   *name;
-	int          name_length;
-	datum_index  tag_index;
-};
-STAT_ASSRT(tag_reference, 0x10);
-// #define TREF_SIZEOF sizeof(tag_reference);
 
-template <typename T>
-struct tag_block {
-	typedef T *iter;
-
-	//size -> in bytes.
-	long size;
-	union {
-		void *address;
-		T    *definitions;
-	};
-
-	long constexpr Count() { return size / sizeof(T); }
-
-	[[maybe_unused]]
-	iter begin() { return definitions; }
-
-	iter end() { return definitions + Count(); }
-
-	struct tag_block_definition *definition;
-};

@@ -7,7 +7,7 @@
 
 // http://stackoverflow.com/a/7189821/444977
 
-#include <precompile.h>
+
 
 // A POD-type that contains a non-POD type's data
 // http://stackoverflow.com/questions/146452/what-are-pod-types-in-c

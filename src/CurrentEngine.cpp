@@ -253,7 +253,7 @@ void GlobalEngine::RefreshCore() {
 
 			eCore->at_main_menu                = (bool *) 0xDBD909;
 			eCore->player_control_globals_data = *reinterpret_cast<s_player_control_globals_data **>(0xDF76B0); // = player_control_globals *
-			eCore->game_time_globals = *reinterpret_cast<Time::s_game_time_globals **>(0xBD8A18);
+			eCore->game_time_globals = *reinterpret_cast<Yelo::GameState::s_game_time_globals **>(0xBD8A18);
 			return;
 		}
 
@@ -264,7 +264,7 @@ void GlobalEngine::RefreshCore() {
 			}
 
 			eCore = new Core(CE110::GetCoreAddressList());
-			eCore->game_time_globals = * reinterpret_cast<Time::s_game_time_globals **>(0x68CD70);
+			eCore->game_time_globals = * reinterpret_cast<Yelo::GameState::s_game_time_globals **>(0x68CD70);
 
 			eCore->main_globals_game_connection_type = (ushort *)0x6B47B0;
 		}

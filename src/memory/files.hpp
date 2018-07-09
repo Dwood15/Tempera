@@ -5,8 +5,7 @@
 */
 #pragma once
 
-#include <minwindef.h>
-#include <minwinbase.h>
+#include <windows.h>
 #include <fileapi.h>
 #include "../cseries/base.h"
 

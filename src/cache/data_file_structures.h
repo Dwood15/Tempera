@@ -1,9 +1,11 @@
 #pragma once
 
-#include <precompile.h>
+#include <windows.h>
+#include <addlog.h>
 #include "../cseries/base.h"
-#include "data_file.hpp"
 #include "../cseries/errors.h"
+#include "../memory/memory_yelo.hpp"
+#include "cache_enums.h"
 
 namespace Yelo {
 	namespace Cache {
@@ -164,7 +166,7 @@ namespace Yelo {
 				}
 
 				DWORD last_error = GetLastError();
-				printf_s("### FAILED TO OPEN DATA-CACHE FILE: %s.\n\n", this->name);
+				Print<true>("### FAILED TO OPEN DATA-CACHE FILE: %s.\n\n", this->name);
 				return false;
 			}
 
@@ -189,11 +191,8 @@ namespace Yelo {
 			}
 
 			bool ReadItemData(uint position, void *buffer, size_t buffer_size) {
-				assert(file_handle != INVALID_HANDLE_VALUE);
-
 				return Read(position, buffer, buffer_size);
 			}
-
 
 		public:
 			long GetItemDataOffset(long item_index) {
@@ -203,10 +202,6 @@ namespace Yelo {
 
 				return file_index_table.address[item_index].data_offset;
 			}
-
-			void PreprocessForSave() {}
-
-			void Save() {}
 		};
 
 		static_assert(sizeof(s_data_file) == 0x40);

@@ -96,7 +96,7 @@ namespace Yelo {
 
 		static_assert(sizeof(s_data_iterator) == 0x10);
 
-		s_data_array *DataNewAndMakeValid(const char *name, long maximum_count, size_t datum_size) {
+		static s_data_array *DataNewAndMakeValid(const char *name, long maximum_count, size_t datum_size) {
 			//
 			// Memory::s_data_array *data = blam::data_new(name, maximum_count, datum_size);
 			//
@@ -114,12 +114,10 @@ namespace Yelo {
 	namespace blam {
 		using namespace Yelo::Memory;
 
-		void data_verify(const Memory::s_data_array *data) {}
-
-		void data_delete_all(Memory::s_data_array *data);
+		static void data_verify(const Memory::s_data_array *data) {}
 
 		[[deprecated]]
-		s_data_array *data_new(const char *name, long maximum_count, size_t datum_size) {
+		static s_data_array *data_new(const char *name, long maximum_count, size_t datum_size) {
 			static uintptr_t FUNCTION = CurrentEngine.getFunctionBegin("data_new");
 
 			__asm mov      ebx, datum_size
@@ -129,7 +127,7 @@ namespace Yelo {
 		//Intended to be a complete replacement for the in-game data_new :)
 		//TODO: TEST + confirm works. _Looks_ functionally similar to the original data_new.
 		template <typename T, int max_count>
-		s_data_array *data_new(const char *name) {
+		static s_data_array *data_new(const char *name) {
 			constexpr auto size = static_cast<short>(sizeof(T));
 
 			auto allocd = GlobalAlloc(0, max_count * size + sizeof(s_data_array));
@@ -149,7 +147,7 @@ namespace Yelo {
 			return newData;
 		}
 
-		void data_dispose(s_data_array *data) {
+		static void data_dispose(s_data_array *data) {
 			if (data != nullptr) {
 				data_verify(data);
 				reinterpret_cast<s_data_array *>(GlobalFree(data));
@@ -158,7 +156,7 @@ namespace Yelo {
 
 		//This replaces the engine version of data_delete_all
 		//TODO: TEST
-		void data_delete_all(s_data_array *data) {
+		static void data_delete_all(s_data_array *data) {
 			data->last_datum       = 0;
 			data->next_datum.index = 0;
 			data->next_index       = 0;
@@ -174,18 +172,18 @@ namespace Yelo {
 			}
 		}
 
-		void data_make_valid(s_data_array *data) {
+		static void data_make_valid(s_data_array *data) {
 			// data_verify(data);
 			data->is_valid = true;
 			data_delete_all(data);
 		}
 
-		void data_make_invalid(s_data_array *data) {
+		static void data_make_invalid(s_data_array *data) {
 			// data_verify(data);
 			data->is_valid = false;
 		}
 
-		datum_index data_next_index(s_data_array *data, datum_index cursor) {
+		static datum_index data_next_index(s_data_array *data, datum_index cursor) {
 			auto result = datum_index::null();
 
 			if (data == nullptr || cursor.IsNull()) {
@@ -213,7 +211,7 @@ namespace Yelo {
 			return result;
 		}
 
-		void data_iterator_new(s_data_iterator &iterator, s_data_array *data) {
+		static void data_iterator_new(s_data_iterator &iterator, s_data_array *data) {
 			data_verify(data);
 
 			if (!data->is_valid) {
@@ -226,7 +224,7 @@ namespace Yelo {
 			iterator.signature     = reinterpret_cast<uintptr_t>(data) ^ Enums::k_data_iterator_signature;
 		}
 
-		void *data_iterator_next(s_data_iterator &iterator) {
+		static void *data_iterator_next(s_data_iterator &iterator) {
 			if (!(iterator.signature == (reinterpret_cast<uintptr_t>(iterator.data) ^ Enums::k_data_iterator_signature))) {
 				throw std::exception("uninitialized iterator passed to " __FUNCTION__);
 			}
@@ -257,7 +255,7 @@ namespace Yelo {
 			return nullptr;
 		}
 
-		void datum_initialize(s_data_array *data, ushort *location) {
+		static void datum_initialize(s_data_array *data, ushort *location) {
 
 			memset(location, 0, data->datum_size);
 
@@ -270,7 +268,7 @@ namespace Yelo {
 		}
 
 		//TODO: TEST AND VERIFY
-		datum_index datum_new_at_index(s_data_array *data, datum_index index) {
+		static datum_index datum_new_at_index(s_data_array *data, datum_index index) {
 
 			if (data == nullptr || index.IsNull()) {
 				return datum_index::null();
@@ -300,7 +298,7 @@ namespace Yelo {
 
 		// creates a new element in [data] and returns the datum index
 		//TODO: TEST AND VERIFY
-		datum_index datum_new(s_data_array *data) {
+		static datum_index datum_new(s_data_array *data) {
 
 			auto        sz       = data->datum_size;
 			auto        next_idx = data->next_index;
@@ -335,7 +333,7 @@ namespace Yelo {
 
 		// Delete the data associated with the [index] handle in [data]
 		//TODO: TEST AND VERIFY
-		void datum_delete(s_data_array *data, datum_index datum) {
+		static void datum_delete(s_data_array *data, datum_index datum) {
 
 			if (data == nullptr || datum.IsNull()) return;
 
@@ -365,7 +363,7 @@ namespace Yelo {
 		// Get the data associated with [index] from the [data] array
 		//TODO: TEST AND VERIFY
 		template <typename T>
-		void *datum_get(s_data_array *data, datum_index index) {
+		static void *datum_get(s_data_array *data, datum_index index) {
 
 			if (sizeof(T) != data->datum_size) {
 				Print(false, "Datum_get for object size: %d doesn't match engine size: %d", sizeof(T), data->datum_size);
@@ -390,7 +388,7 @@ namespace Yelo {
 		// Get the data associated with [index] from the [data] array
 		// Returns nullptr if the handle is invalid
 		//TODO: TEST AND VERIFY
-		void *datum_try_and_get(s_data_array *data, datum_index index) {
+		static void *datum_try_and_get(s_data_array *data, datum_index index) {
 			if (!index.IsNull() && (index.index & 0x8000u) == 0 && (signed __int16) index.index < data->max_datum) {
 				short *got = reinterpret_cast<short *>((uint) data->base_address + index.index * data->datum_size);
 				if (*got) {

@@ -23,7 +23,7 @@
 #include "math/colors.h"
 #include "gamestate/player_types.h"
 #include "gamestate/game_time/gametime.h"
-
+#include "game/time/time_structures.hpp"
 
 ////////////////////////////////////////
 // Generic Halo Structures
@@ -225,7 +225,7 @@ public:
 	s_player_control_globals_data *player_control_globals_data;
 	s_players_globals_data        *players_globals;
 	s_motion_sensor               *motion_sensor;
-	Time::s_game_time_globals	  *game_time_globals;
+	Yelo::GameState::s_game_time_globals	  *game_time_globals;
 	uintptr                       game_state_globals_location_ptr;
 	uintptr                       game_state_globals_ptr;
 	void                          **crc_checksum_buffer;

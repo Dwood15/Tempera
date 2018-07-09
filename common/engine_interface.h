@@ -8,7 +8,7 @@
 #define MPP_B(value, ...) patchValue<byte>(value, MAX_PLAYER_COUNT_LOCAL);
 #define MPP_ARB(value, arb, ...) patchValue<byte>(value, arb);
 
-namespace Enums {
+namespace Yelo::Enums {
 	enum CallingConventions {
 		m_cdecl, //Everything goes onto the stack - stack is cleaned up by the caller.
 		m_stdcall, //Everything goes onto the stack, but stack is cleaned up by callee.
@@ -18,7 +18,7 @@ namespace Enums {
 	};
 }
 
-typedef Enums::CallingConventions Convention;
+typedef Yelo::Enums::CallingConventions Convention;
 
 namespace calls {
 

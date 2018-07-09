@@ -1,6 +1,6 @@
 #pragma once
 
-#include <precompile.h>
+
 #include "simple_circular_queue.h"
 #include "../cseries/base.h"
 

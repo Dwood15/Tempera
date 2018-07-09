@@ -78,8 +78,8 @@ elseif (MSVC)
 
 	set(COMPILER_REL_FLDR msvc)
 	set(CMAKE_C_FLAGS '')
-	set(CMAKE_CXX_FLAGS /std:c++latest\ /MTd\ )
-	set(CMAKE_CXX_FLAGS_DEBUG "/MTd\ /Gy- /W3 /Od /Zi /MP /EHsc /fp:fast\ /std:c++latest\ /arch:SSE2 /D\ \"WIN32\" /D \"_WINDOWS\" /D \"_USRDLL\" /D \"_WINDLL\"\ /D_CRT_SECURE_NO_WARNINGS")
+	set(CMAKE_CXX_FLAGS /std:c++latest\ /MP\ /MTd\ )
+	set(CMAKE_CXX_FLAGS_DEBUG " /MP\ /MTd\ /Gy- /W3\ /Od\ /Zi\ /MP /EHsc\ /fp:fast\ /std:c++latest\ /arch:SSE2 /D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /D_CRT_SECURE_NO_WARNINGS")
 endif ()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -120,10 +120,8 @@ set(COMMON_H
 	common/engine_interface.h
 	common/macros_generic.h
 	common/struct_helper.h
-	src/gamestate/game_time/gametime.cpp
-	src/gamestate/game_time/gametime.h
 	src/engine/game.h
-	src/gamestate/objects/units/unit_camera.h)
+	)
 
 add_library(dinput8 SHARED
 			common/addlog.cpp

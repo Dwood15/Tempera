@@ -17,6 +17,8 @@ typedef unsigned int  *uintptr;
 typedef unsigned int  uint32;
 typedef unsigned int  uint;
 typedef unsigned short ushort;
+typedef unsigned long long_flags;
+typedef signed char   byte_enum;
 
 //sanity checks.
 STAT_ASSRT(bool, 0x1);

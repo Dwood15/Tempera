@@ -1,6 +1,7 @@
 #pragma once
 #include "../../cseries/base.h"
 #include "../../math/int_math.h"
+#include "../../math/real_math.h"
 
 namespace Yelo
 {

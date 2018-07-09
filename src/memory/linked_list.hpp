@@ -1,6 +1,6 @@
 #pragma once
 
-#include <precompile.h>
+
 namespace Yelo
 {
 	// Use as a base class only

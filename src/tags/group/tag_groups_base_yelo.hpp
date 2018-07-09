@@ -1,12 +1,11 @@
 #pragma once
 
 #include "base.h"
-
+#include "../../ce_base_types.h"
 
 namespace Yelo {
-	typedef char * tag_reference_name_reference;
 	// Template'd tag_reference that is nifty, and allows for better markup in the code
-	template <tag K_TAG>
+	template <unsigned long K_TAG>
 	struct TagReference {
 		// group tag identifier for this reference
 		tag                                      GroupTag;
@@ -64,36 +63,26 @@ namespace Yelo {
 		};
 
 		// definition pointer for this block instance
-		const struct tag_block_definition *BlockDefinition;
+		const class tag_block_definition *BlockDefinition;
 
 		// Using the class's template 'T' parameter, calculates the total
 		// size, in bytes, the elements assume in memory
 		size_t SizeOf() const { return sizeof(T) * Count; }
 
-		tag_block *to_tag_block() { return reinterpret_cast<tag_block *>(&this->Count); }
+		// tag_block *to_tag_block() { return reinterpret_cast<tag_block *>(&this->Count); }
 
-		const tag_block *to_tag_block() const { return reinterpret_cast<const tag_block *>(&this->Count); }
-
-		// Sets this object to equal that of a anonymous tag block object. 
-		TagBlock<T> * Copy(const tag_block &block) {
-			this->Count   = block.count;
-			this->Address = block.address;
-
-			this->BlockDefinition = block.definition;
-
-			return this;
-		}
+		// const tag_block *to_tag_block() const { return reinterpret_cast<const tag_block *>(&this->Count); }
 
 		// Indexer for getting a definition reference via the definition's index in the block
 		T &operator [](long index) {
-			assert(index >= 0 && index < Count);
+			// assert(index >= 0 && index < Count);
 			return this->Definitions[index];
 		}
 
 		// Indexer for getting a (const) definition reference via the definition's index in the block
 		const T &operator [](long index) const {
 
-			assert(index >= 0 && index < Count);
+			// assert(index >= 0 && index < Count);
 			return this->Definitions[index];
 		}
 
@@ -133,41 +122,7 @@ namespace Yelo {
 		size_t size() const { return CAST(size_t, Count); }
 	};
 
-	static_assert(sizeof(TagBlock<byte>) == 0xC);
-
-	namespace blam {
-		template<typename T>
-		T* tag_block_get_element(TagBlock<T>& block, long element)
-		{
-			return reinterpret_cast<T *>(tag_block_get_element(block.to_tag_block(), element));
-		}
-		template<typename T>
-		const T* tag_block_get_element(const TagBlock<T>& block, long element)
-		{
-			return reinterpret_cast<const T *>(tag_block_get_element(block.to_tag_block(), element));
-		}
-		template<typename T>
-		long tag_block_add_element(TagBlock<T>& block)
-		{
-			return tag_block_add_element(block.to_tag_block());
-		}
-		template<typename T>
-		bool tag_block_resize(TagBlock<T>& block, long element_count)
-		{
-			return tag_block_resize(block.to_tag_block(), element_count);
-		}
-		template<typename T>
-		void tag_block_delete_element(TagBlock<T>& block, long element)
-		{
-			tag_block_delete_element(block.to_tag_block(), element);
-		}
-
-		template<typename T>
-		T* tag_block_add_and_get_element(TagBlock<T>& block)
-		{
-			return reinterpret_cast<T *>(tag_block_add_and_get_element(block.to_tag_block()));
-		}
-	};
+	static_assert(sizeof(TagBlock<char>) == 0xC);
 
 	// Template'd tag_data for more robust code dealing with known
 	// sub-structures.
@@ -202,9 +157,9 @@ namespace Yelo {
 		// Sizeof(T)
 		size_t SizeOf() const { return sizeof(T); }
 
-		tag_data *to_tag_data() { return reinterpret_cast<tag_data *>(&this->Size); }
-
-		const tag_data *to_tag_data() const { return reinterpret_cast<const tag_data *>(&this->Size); }
+		// tag_data<T> *to_tag_data() { return reinterpret_cast<tag_data<T> *>(&this->Size); }
+		//
+		// const tag_data *to_tag_data() const { return reinterpret_cast<const tag_data *>(&this->Size); }
 
 		T *operator [](long index) { return &this->Definitions[index]; }
 

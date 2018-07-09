@@ -5,7 +5,7 @@
 */
 #pragma once
 
-#include <precompile.h>
+
 
 namespace Yelo::Memory {
 	// C++ wrapper for blamlib's s_dynamic_array

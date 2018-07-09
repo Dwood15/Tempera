@@ -7,141 +7,16 @@
 
 #include "base.h"
 #include "tag_groups.h"
-
+#include "../tag_enums.h"
 namespace Yelo {
-	namespace Enums {
-		enum {
-			k_maximum_field_byte_swap_codes = 1024,
-
-			// these chars should all match the TAG_FIELD_MARKUP_* defines in tag_groups_structures_macros.hpp
-
-			k_tag_field_markup_character_advanced     = '!',
-			k_tag_field_markup_character_help_prefix  = '#',
-			k_tag_field_markup_character_read_only    = '*',
-			k_tag_field_markup_character_units_prefix = ':',
-			k_tag_field_markup_character_block_name   = '^',
-		};
-		enum field_type : short {
-			_field_string,
-			_field_char_integer,
-			_field_short_integer,
-			_field_long_integer,
-			_field_angle,
-			_field_tag,
-			_field_enum,
-			_field_long_flags,
-			_field_word_flags,
-			_field_byte_flags,
-			_field_point_2d,
-			_field_rectangle_2d,
-			_field_rgb_color,
-			_field_argb_color,
-			_field_real,
-			_field_real_fraction,
-			_field_real_point_2d,
-			_field_real_point_3d,
-			_field_real_vector_2d,
-			_field_real_vector_3d,
-			_field_real_quaternion,
-			_field_real_euler_angles_2d,
-			_field_real_euler_angles_3d,
-			_field_real_plane_2d,
-			_field_real_plane_3d,
-			_field_real_rgb_color,
-			_field_real_argb_color,
-			_field_real_hsv_color,
-			_field_real_ahsv_color,
-			_field_short_bounds,
-			_field_angle_bounds,
-			_field_real_bounds,
-			_field_real_fraction_bounds,
-			_field_tag_reference,
-			_field_block,
-			_field_short_block_index,
-			_field_long_block_index,
-			_field_data,
-			_field_array_start,
-			_field_array_end,
-			_field_pad,
-			_field_skip,
-			_field_explanation,
-			_field_custom,
-			_field_terminator,
-
-			k_number_of_tag_field_types,
-		};
-
-		// Note: AFAICT, the engine code doesn't actually do the postprocess setup this way.
-		// They have what is essentially a boolean parameter that could be considered as 'bool for_editor'
-		enum tag_postprocess_mode : byte_enum {
-			// In this mode, the tag is being postprocessed for runtime values (automatically fill fields, etc)
-				_tag_postprocess_mode_for_runtime = FALSE,
-			// In this mode we're opening for tag editing (eg, tool process or guerilla) and should skip the postprocessing
-			// code which prepares the tag for use in-game (Sapien and when building a cache)
-				_tag_postprocess_mode_for_editor  = TRUE,
-		};
-	};
-
-	namespace Flags {
-		enum {
-			// Never streamed, unless the tag is loaded with _tag_load_for_editor_bit
-			// Used by the sound tag for delay loading the actual sample data. So, eg, when tool goes to build a cache
-			// it has to use tag_data_load on the sound samples. Maybe a better name is just 'lazy_loaded'
-				_tag_data_never_streamed_bit = 0,
-				_tag_data_is_text_data_bit,
-			// ie, 'debug data'
-				_tag_data_not_streamed_to_cache_bit,
-				k_number_of_tag_data_definition_flags,
-
-			// checked in the tag reference solving code.
-			// last condition checked after an assortment of conditionals
-			// and if this is FALSE, it won't resolve
-			// NOTE: I think this a deprecated flag for loading the 'default' definition of a group.
-			// This flag would cause a call of tag_load(group_tag, NULL, 0) to occur. However,
-			// tag_load asserts name != NULL.
-			// Flag isn't checked in H2EK's code (so more than likely deprecated)
-				_tag_reference_unknown0_bit = 0,
-				_tag_reference_non_resolving_bit,
-				k_number_of_tag_group_tag_reference_flags,
-
-			// set when block/data/reference fields are found during initialization
-				_tag_block_has_children_bit = 0,
-				k_number_of_tag_block_definition_flags,
-
-			// tag_instance of the tag group will have their file_checksum CRC'd into the resulting cache tag header's crc field 
-				_tag_group_include_in_tags_checksum_bit = 0,
-			// only seen preferences_network_game use this
-				_tag_group_unknown1_bit,
-			// haven't seen this used at all
-				_tag_group_unknown2_bit,
-			// majority of tags have this set
-				_tag_group_reloadable_bit,
-
-			// YELO ONLY! tag_group is not meant for use in runtime builds
-				_tag_group_debug_only_yelo_bit,
-			// YELO ONLY! tag_group is non-standard (ie, official). This is applied to those defined in CheApe.map
-			// Set at startup.
-				_tag_group_non_standard_yelo_bit,
-			// YELO ONLY! tag_group is referenced in other groups via a tag_reference or as a parent group
-			// doesn't consider tag_references which can reference ANYTHING (eg, tag_collection's field).
-			// Set at startup.
-				_tag_group_referenced_yelo_bit,
-
-			// When this is set, implies _tag_postprocess_mode_for_editor, else _for_runtime
-				_tag_load_for_editor_bit = 0,
-			// Load the tag from the file system, not from a cache/index
-				_tag_load_from_file_system_bit,
-			// If set: child references of the tag being loaded are not loaded themselves
-			// Else, child references are loaded from disk
-				_tag_load_non_resolving_references_bit,
-		};
-	};
-
-	struct tag_field {
-		Enums::field_type type;
+	class tag_field {
+	public:
+		Yelo::Enums::field_type type;
 		unsigned short : 16;
-		const char * name;
-		void    *definition;
+		const char *name;
+		void *definition;
+
+		tag_field() = default;
 
 		// cast the [definition] pointer to a T*
 		template <typename T>
@@ -151,34 +26,7 @@ namespace Yelo {
 		template <typename T>
 		T DefinitionCast() const { return reinterpret_cast<T>(definition); }
 
-		size_t GetSize(_Out_opt_ size_t *runtime_size) const {
-			size_t field_size;
-
-			switch (type) {
-				case Enums::_field_string:
-					field_size = TagGroups::StringFieldGetSize(this);
-					break;
-
-				case Enums::_field_tag_reference:
-					field_size = CAST(int, TagGroups::k_tag_field_definitions[Enums::_field_tag_reference].size);
-
-					//TODO: Uncomment this
-					// if (runtime_size && TagGroups::TagFieldIsStringId(this))
-					// 	*runtime_size = field_size - string_id_yelo::k_debug_data_size;
-					break;
-
-				case Enums::_field_pad:
-				case Enums::_field_skip:
-					field_size = DefinitionCast<long>();
-					break;
-
-				default:
-					field_size = TagGroups::k_tag_field_definitions[type].size;
-					break;
-			}
-
-			return field_size;
-		}
+		size_t GetSize(_Out_opt_ size_t *runtime_size);
 
 		bool IsReadOnly() const {
 			return name && strchr(name, Enums::k_tag_field_markup_character_read_only); // NOTE: engine uses strrchr
@@ -206,15 +54,17 @@ namespace Yelo {
 	typedef bool    (__cdecl *proc_tag_block_postprocess_element)(void *element, Enums::tag_postprocess_mode mode, datum_index tag_index);
 
 	// if [formatted_buffer] returns empty, the default block formatting is done
-	typedef const char * (__cdecl *proc_tag_block_format)(datum_index tag_index, tag_block *block, long element_index, char formatted_buffer[Yelo::Enums::k_tag_block_format_buffer_size]);
+	typedef const char *(__cdecl *proc_tag_block_format)(datum_index tag_index, void *block, long element_index, char formatted_buffer[Yelo::Enums::k_tag_block_format_buffer_size]);
 
 	// Procedure called during tag_block_delete_element, but before all the child data is freed
-	typedef void    (__cdecl *proc_tag_block_delete_element)(tag_block *block, long element_index);
+	typedef void    (__cdecl *proc_tag_block_delete_element)(void *block, long element_index);
 
-	struct tag_block_definition {
-		const char *                            name;
+	class tag_block_definition {
+	public:
+		tag_block_definition() = default;
+		const char *name;
 		long_flags                         flags;
-		long                              maximum_element_count;
+		long                               maximum_element_count;
 		size_t                             element_size;
 		void                               *unused0;
 		tag_field                          *fields;
@@ -227,41 +77,11 @@ namespace Yelo {
 		// Searches the definition for a field of type [field_type] with a name which starts
 		// with [name] characters. Optionally starts at a specific field index.
 		// Returns NONE if this fails.
-		long FindFieldIndex(short field_type, const char * name, long start_index = NONE) const {
-			// YELO_ASSERT(this);
-			// YELO_ASSERT(this->fields);
-			// YELO_ASSERT(IN_RANGE_ENUM(field_type, Enums::k_number_of_tag_field_types));
-			// YELO_ASSERT(name);
+		long FindFieldIndex(short field_type, const char *name, long start_index = NONE);
 
-			if (start_index == NONE) start_index = 0;
+		tag_field *FindField(short field_type, const char *name, long start_index = NONE);
 
-			size_t name_length = strlen(name);
-
-			for (const tag_field *cur = this->fields + start_index; cur->type != Enums::_field_terminator; cur++) {
-				if (cur->type == field_type && !strncmp(cur->name, name, name_length))
-					return cur - this->fields;
-			}
-
-			return NONE;
-		}
-
-		tag_field *FindField(short field_type, const char * name, long start_index = NONE) {
-			long index = FindFieldIndex(field_type, name, start_index);
-
-			if(index == NONE) {
-				Print<false>("failed to find a %s field named %s in %s", TagGroups::k_tag_field_definitions[field_type].name, name, this->name);
-			}
-
-			return &this->fields[index];
-		}
-
-		tag_block_definition *FindBlockField(const char * name, long start_index = NONE) {
-			tag_field *block_field = FindField(Enums::_field_block, name, start_index);
-
-			return block_field->Definition<tag_block_definition>();
-		}
-
-		size_t GetAlignmentBit() const;
+		tag_block_definition *FindBlockField(const char *name, long start_index = NONE);
 
 		// Yelo::TagGroups::s_tag_field_set_runtime_data *GetRuntimeInfo() const;
 
@@ -269,38 +89,14 @@ namespace Yelo {
 
 		// TAction: void operator()([const] tag_block_definition* block, [const] tag_field& field)
 		template <class TAction, bool k_assert_field_type>
-		void FieldsDoAction(TAction &action = TAction()) {
-			for (auto &field : *this) {
-				if (k_assert_field_type) {
-					YELO_ASSERT(field.type >= 0 && field.type < Enums::k_number_of_tag_field_types);
-				}
-
-				action(this, field);
-			}
-		}
+		void FieldsDoAction(TAction &action = TAction());
 
 		// Mainly a visitor for startup/shutdown processes, performs an action (via a functor) on a root block definition
 		// then repeats the action for all child blocks (etc)
 		// Uses CRT assert()'s since it is assumed this is used after the group definitions have been verified
 		// TAction: void operator()([const] tag_block_definition* block_definition)
 		template <class TAction>
-		void DoRecursiveAction(TAction &action = TAction()) {
-			action(this); // perform the action on the root first
-
-			size_t field_index = 0;
-
-			do {
-				const tag_field &field = fields[field_index];
-				// assert(field.type >= 0 && field.type < Enums::k_number_of_tag_field_types);
-
-				if (field.type == Enums::_field_block) {
-					// assert(field.definition != this);
-
-					action(field.Definition<tag_block_definition>());
-				}
-
-			} while (fields[field_index++].type != Enums::_field_terminator);
-		}
+		void DoRecursiveAction(TAction &action = TAction());
 
 		struct s_field_iterator {
 		private:
@@ -347,13 +143,130 @@ namespace Yelo {
 	};
 
 	static_assert(sizeof(tag_block_definition) == 0x2C);
+};
 
+#include "../../math/enums_generic.h"
+namespace byteswaps {
+	using namespace Yelo;
+	using namespace Yelo::Enums;
+
+	static byte_swap_code_t k_string_byte_swap_codes[] = {sizeof(tag_string), 0};
+
+	static byte_swap_code_t k_char_integer_byte_swap_codes[]  = {_bs_code_1byte, 0};
+	static byte_swap_code_t k_short_integer_byte_swap_codes[] = {_bs_code_2byte, 0};
+	static byte_swap_code_t k_long_integer_byte_swap_codes[]  = {_bs_code_4byte, 0};
+
+	static byte_swap_code_t k_point2d_byte_swap_codes[] = {_bs_code_2byte, _bs_code_2byte, 0};
+
+	static byte_swap_code_t k_rectangle2d_byte_swap_codes[] = {_bs_code_2byte, _bs_code_2byte, _bs_code_2byte, _bs_code_2byte, 0};
+
+	static byte_swap_code_t k_real_point2d_byte_swap_codes[] = {_bs_code_4byte, _bs_code_4byte, 0};
+
+	static byte_swap_code_t k_real_point3d_byte_swap_codes[] = {_bs_code_4byte, _bs_code_4byte, _bs_code_4byte, 0};
+
+	static byte_swap_code_t k_real_rgb_color_byte_swap_codes[] = {_bs_code_4byte, _bs_code_4byte, _bs_code_4byte, 0};
+
+	static byte_swap_code_t k_real_argb_color_byte_swap_codes[] = {_bs_code_4byte, _bs_code_4byte, _bs_code_4byte, _bs_code_4byte, 0};
+
+	static byte_swap_code_t k_real_quaternion_byte_swap_codes[] = {_bs_code_4byte, _bs_code_4byte, _bs_code_4byte, _bs_code_4byte, 0};
+
+	static byte_swap_code_t k_real_plane3d_byte_swap_codes[] = {_bs_code_4byte, _bs_code_4byte, _bs_code_4byte, _bs_code_4byte, 0};
+
+	static byte_swap_code_t k_tag_reference_byte_swap_codes[] = {_bs_code_4byte, sizeof(char *), _bs_code_4byte, sizeof(datum_index), 0};
+
+	static byte_swap_code_t k_tag_block_byte_swap_codes[] = {_bs_code_4byte, _bs_code_4byte, sizeof(Yelo::tag_block_definition *), 0};
+
+	static byte_swap_code_t k_tag_data_byte_swap_codes[] = {_bs_code_4byte, sizeof(long) * 2, sizeof(void *) * 2, 0};
+
+	static byte_swap_code_t k_start_array_byte_swap_codes[] = {_bs_code_array_start, 0};
+
+	static byte_swap_code_t k_end_array_byte_swap_codes[] = {_bs_code_array_end, 0};
+
+	static byte_swap_code_t k_pad_byte_swap_codes[] = {0};
+
+	static byte_swap_code_t k_explanation_byte_swap_codes[] = {0};
+
+	static byte_swap_code_t k_custom_byte_swap_codes[] = {0};
+
+	static byte_swap_code_t k_terminator_byte_swap_codes[] = {_bs_code_array_end, 0};
+};
+
+#include "../../math/colors.h"
+namespace Yelo::TagGroups {
+	using namespace Yelo;
+	using namespace byteswaps;
+
+	struct s_tag_field_definition {
+		size_t size;                  /// <summary>	The size of a single instance of this field. </summary>
+		const char *name;                  /// <summary>	The user-friendly name of this field. </summary>
+		byte_swap_code_t *byte_swap_codes;   /// <summary>	The needed for byte swapping an instance of this field. </summary>
+
+		/// <summary>	The C name of this field. Null if it can't be defined in code (eg, _field_custom) </summary>
+		const char *code_name;
+	};
+
+	const Yelo::TagGroups::s_tag_field_definition k_tag_field_definitions[] = {
+		{sizeof(tag_string),           "string",               k_string_byte_swap_codes,          "tag_string"},
+		{sizeof(sbyte),                "char integer",         k_char_integer_byte_swap_codes,    "byte"},
+		{sizeof(short),                "short integer",        k_short_integer_byte_swap_codes,   "short"},
+		{sizeof(long),                 "long integer",         k_long_integer_byte_swap_codes,    "long"},
+		{sizeof(real),                 "angle",                k_long_integer_byte_swap_codes,    "angle"},
+		{sizeof(tag),                  "tag",                  k_long_integer_byte_swap_codes,    "tag"},
+		{sizeof(short),                "enum",                 k_short_integer_byte_swap_codes,   "short"},
+		{sizeof(unsigned long),        "long flags",           k_long_integer_byte_swap_codes,    "long_flags"},
+		{sizeof(unsigned short),       "word flags",           k_short_integer_byte_swap_codes,   "unsigned short"},
+		{sizeof(byte_flags),           "byte flags",           k_char_integer_byte_swap_codes,    "byte_flags"},
+		{sizeof(point2d),              "point 2d",             k_point2d_byte_swap_codes,         "point2d"},
+		{sizeof(rectangle2d),          "rectangle 2d",         k_rectangle2d_byte_swap_codes,     "rectangle2d"},
+		{sizeof(rgb_color),            "rgb color",            k_long_integer_byte_swap_codes,    "rgb_color"},
+		{sizeof(argb_color),           "argb color",           k_long_integer_byte_swap_codes,    "argb_color"},
+
+		{sizeof(real),                 "real",                 k_long_integer_byte_swap_codes,    "real"},
+		{sizeof(real_fraction),        "real fraction",        k_long_integer_byte_swap_codes,    "real_fraction"},
+		{sizeof(real_point2d),         "real point 2d",        k_real_point2d_byte_swap_codes,    "real_point2d"},
+		{sizeof(real_point3d),         "real point 3d",        k_real_point3d_byte_swap_codes,    "real_point3d"},
+		{sizeof(real_vector2d),        "real vector 2d",       k_real_point2d_byte_swap_codes,    "real_vector2d"},
+		{sizeof(real_vector3d),        "real vector 3d",       k_real_point3d_byte_swap_codes,    "real_vector3d"},
+		{sizeof(real_quaternion),      "real quaternion",      k_real_quaternion_byte_swap_codes, "real_quaternion"},
+		{sizeof(real_euler_angles2d),  "real euler angles 2d", k_real_point2d_byte_swap_codes,    "real_euler_angles2d"},
+		{sizeof(real_euler_angles3d),  "real euler angles 3d", k_real_point3d_byte_swap_codes,    "real_euler_angles3d"},
+		{sizeof(real_plane2d),         "real plane 2d",        k_real_point3d_byte_swap_codes,    "real_plane2d"},
+		{sizeof(real_plane3d),         "real plane 3d",        k_real_plane3d_byte_swap_codes,    "real_plane3d"},
+		{sizeof(real_rgb_color),       "real rgb color",       k_real_rgb_color_byte_swap_codes,  "real_rgb_color"},
+		{sizeof(real_argb_color),      "real argb color",      k_real_argb_color_byte_swap_codes, "real_argb_color"},
+
+		{sizeof(real_rgb_color),       "real hsv color",       k_real_rgb_color_byte_swap_codes,         /*"real_hsv_color"*/ },
+		{sizeof(real_argb_color),      "real ahsv color",      k_real_argb_color_byte_swap_codes,         /*"real_ahsv_color"*/ },
+
+		{sizeof(short_bounds),         "short integer bounds", k_point2d_byte_swap_codes,         "short_bounds"},
+		{sizeof(angle_bounds),         "angle bounds",         k_real_point2d_byte_swap_codes,    "angle_bounds"},
+		{sizeof(real_bounds),          "real bounds",          k_real_point2d_byte_swap_codes,    "real_bounds"},
+		{sizeof(real_fraction_bounds), "fraction bounds",      k_real_point2d_byte_swap_codes,    "real_fraction_bounds"},
+
+		{0x10,        "tag reference",        k_tag_reference_byte_swap_codes,   "tag_reference"}, //sizeof(tag_reference)
+		{0xC,            "block",                k_tag_block_byte_swap_codes,       "tag_block"},
+		{sizeof(short),                "short block index",    k_short_integer_byte_swap_codes,   "short"},
+		{sizeof(long),                 "long block index",     k_long_integer_byte_swap_codes,    "long"},
+		//sizeof(tag_data) but it's being a bitch so fuck it.
+		{0xC,             "data",                 k_tag_data_byte_swap_codes,        "tag_data"},
+		{0,                            "array start",          k_start_array_byte_swap_codes},
+		{0,                            "array end",            k_end_array_byte_swap_codes},
+		{0,                            "pad",                  k_pad_byte_swap_codes},
+		{0,                            "skip",                 k_pad_byte_swap_codes},
+		{0,                            "explanation",          k_explanation_byte_swap_codes},
+		{0,                            "custom",               k_custom_byte_swap_codes},
+		{0,                            "terminator X",         k_terminator_byte_swap_codes}
+	};
+	static_assert(std::size(k_tag_field_definitions) == field_type::k_number_of_tag_field_types);
+};
+
+namespace Yelo {
 	typedef void (__cdecl *proc_tag_data_byte_swap)(void *block_element, void *address, long size);
 
 	struct tag_data_definition {
-		const char *                 name;
+		const char *name;
 		long_flags              flags;
-		long                   maximum_size;
+		long                    maximum_size;
 		proc_tag_data_byte_swap byte_swap_proc;
 
 		bool IsConsideredDebugOnly() const {
@@ -368,8 +281,8 @@ namespace Yelo {
 
 	struct tag_reference_definition {
 		unsigned long flags;
-		tag        group_tag;
-		tag        *group_tags;
+		tag           group_tag;
+		tag           *group_tags;
 
 		struct s_group_tag_iterator {
 		private:
@@ -422,11 +335,11 @@ namespace Yelo {
 	typedef bool (__cdecl *proc_tag_group_postprocess)(datum_index tag_index, Enums::tag_postprocess_mode mode);
 
 	struct tag_group {
-		const char *    name;
+		const char *name;
 		unsigned long flags;
-		tag        group_tag;
-		tag        parent_group_tag;
-		short      version;
+		tag           group_tag;
+		tag           parent_group_tag;
+		short         version;
 		unsigned short : 16;
 		proc_tag_group_postprocess postprocess_proc;
 		tag_block_definition       *header_block_definition;
@@ -447,7 +360,7 @@ namespace Yelo {
 			return (*lhs)->group_tag - (*rhs)->group_tag;
 		}
 
-		static int __cdecl SearchByNameProc(void *, const char * key, const tag_group *const *group) {
+		static int __cdecl SearchByNameProc(void *, const char *key, const tag_group *const *group) {
 			return strcmp(key, (*group)->name);
 		}
 
@@ -456,27 +369,18 @@ namespace Yelo {
 	static_assert(sizeof(tag_group) == 0x60);
 
 
-	struct s_tag_instance : Memory::s_datum_base_aligned {
-		char        filename[Yelo::Enums::k_max_tag_name_length + 1];         // 0x4
-		tag         group_tag;            // 0x104
-		tag         parent_group_tags[2];   // 0x108
-		bool        is_verified;         // 0x110 was loaded with Flags::_tag_load_for_editor_bit
-		bool        is_read_only;         // 0x111
-		bool        is_orphan;            // 0x112
-		bool        is_reload;            // 0x113 true if this instance is the one used for another tag during tag_reload
-		datum_index reload_index;   // 0x114 index of the instance used to reload -this- tag's definition
-		uint      file_checksum;      // 0x118
-		tag_block   root_block;      // 0x11C
-	}; static_assert(sizeof(s_tag_instance) == 0x128);
+	// struct s_tag_instance : Memory::s_datum_base_aligned {
+	// 	char        filename[Yelo::Enums::k_max_tag_name_length + 1];         // 0x4
+	// 	tag         group_tag;            // 0x104
+	// 	tag         parent_group_tags[2];   // 0x108
+	// 	bool        is_verified;         // 0x110 was loaded with Flags::_tag_load_for_editor_bit
+	// 	bool        is_read_only;         // 0x111
+	// 	bool        is_orphan;            // 0x112
+	// 	bool        is_reload;            // 0x113 true if this instance is the one used for another tag during tag_reload
+	// 	datum_index reload_index;   // 0x114 index of the instance used to reload -this- tag's definition
+	// 	uint        file_checksum;      // 0x118
+	// 	tag_block<void>   root_block;      // 0x11C
+	// }; static_assert(sizeof(s_tag_instance) == 0x128);
 
-	namespace TagGroups {
-		struct s_tag_field_definition {
-			size_t           size;                  /// <summary>	The size of a single instance of this field. </summary>
-			const char *          name;                  /// <summary>	The user-friendly name of this field. </summary>
-			byte_swap_code_t *byte_swap_codes;   /// <summary>	The needed for byte swapping an instance of this field. </summary>
-
-			/// <summary>	The C name of this field. Null if it can't be defined in code (eg, _field_custom) </summary>
-			const char * code_name;
-		};
-	};
 };
+

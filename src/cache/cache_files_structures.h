@@ -1,6 +1,6 @@
 #pragma once
 
-#include <minwindef.h>
+#include <windows.h>
 #include "cache_base.h"
 #include "cache_files_structures_yelo.h"
 #include "cache_files.h"
@@ -24,7 +24,7 @@ namespace Yelo::Cache {
 		PAD64; // ?
 		tag_string             name;
 		tag_string             build_string;
-		Enums::cache_file_type cache_type;
+		Yelo::Enums::cache_file_type cache_type;
 		unsigned short : 16;
 		uint crc;
 		unsigned long : 32; // ?

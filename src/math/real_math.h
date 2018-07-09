@@ -69,3 +69,34 @@ struct real_rectangle2d {
 	real x0, x1; // top, bottom
 	real y0, y1; // left, right
 };
+
+// a 3d real vector with ?
+struct real_quaternion {
+	// X-Component
+	real i;
+
+	// Y-Component
+	real j;
+
+	// Z-Component
+	real k;
+
+	// ?
+	real w;
+};
+
+typedef float angle;
+typedef float real_fraction;
+// bounding in real angle values
+struct angle_bounds
+{
+	angle lower;
+	angle upper;
+};
+
+// bounding in real values
+struct real_fraction_bounds
+{
+	real lower;
+	real upper;
+};

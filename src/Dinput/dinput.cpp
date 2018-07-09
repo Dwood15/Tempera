@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Windows.h>
+#include <xinput.h>
+
 #include "dinput.h"
 
 #include <strsafe.h>
@@ -8,7 +10,6 @@
 
 namespace Input::DInput {
 
-#include <xinput.h>
 	void RegisterLuaFunctions(::LuaScriptManager *mgr) {
 		mgr->registerGlobalLuaFunction("GetControllerState", [](lua_State * L) {
 			auto idx = getLuaInt(L);

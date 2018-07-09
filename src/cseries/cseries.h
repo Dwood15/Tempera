@@ -1,15 +1,11 @@
 #pragma once
 
-
-#include <precompile.h>
-
 namespace Yelo {
 	// The epsilon value I've seen Halo1 use
 	// TODO: See if we need to throw this into the base module
 	const real K_REAL_EPSILON = 0.000099999997f; // 0x38D1B717
 
-	const long K_TICKS_PER_SECOND = 30;
-	const real  K_SECONDS_PER_TICK = 0.033333335f; // 0x3D088889
+
 };
 
 namespace Yelo::blam {

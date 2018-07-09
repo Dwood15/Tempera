@@ -8,8 +8,6 @@
 #include <macros_generic.h>
 
 namespace Yelo {
-	struct datum_index;
-
 	/// <summary>	Handle to data allocated by the engine's data-array construct. </summary>
 	struct datum_index {
 		typedef short index_t;
