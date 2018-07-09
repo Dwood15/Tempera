@@ -37,5 +37,7 @@ namespace feature_management::engines {
 		static void OnUnitControlUpdate(int client_update_idx);
 
 		static void WriteHooks();
+
+		static void ** GetHsFunctionTableReferenceList();
 	};
 };

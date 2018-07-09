@@ -139,8 +139,7 @@ namespace Yelo {
 		// in our code. Evaluator takes no parameters but may return a value.
 		void InitializeScriptFunction(Yelo::Enums::hs_function_enumeration function, proc_hs_yelo_function proc) {
 			if (function > NONE && function < Yelo::Enums::k_hs_function_enumeration_count) {
-				ScriptFunctionSetEvaluteProc(*hs_yelo_functions[function],
-													  reinterpret_cast<proc_hs_evaluate>(CreateScriptFunction(proc, false)));
+				ScriptFunctionSetEvaluteProc(*hs_yelo_functions[function], reinterpret_cast<proc_hs_evaluate>(CreateScriptFunction(proc, false)));
 			}
 		}
 
@@ -174,25 +173,16 @@ namespace Yelo {
 #define YELO_INIT_SCRIPT_FUNCTION_DEDI(function_index, proc)            Scripting::NullifyScriptFunction(function_index)
 #define YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(function_index, proc)   Scripting::NullifyScriptFunctionWithParams(function_index)
 
-		void AllowFullAccess(bool allow) {
-			static byte code[] = {
-				0xB0, 0x01, 0xC3,   // implicitly allow expression access to everything
-				0x8A, 0xD1, 0xC0   // default expression access to the game's settings
-			};
-			if (allow) Memory::WriteMemory(GET_FUNC_VPTR(HS_VALID_ACCESS_FLAGS), code, 3);
-			else Memory::WriteMemory(GET_FUNC_VPTR(HS_VALID_ACCESS_FLAGS), code + 3, 3);
-		}
-
 		static void ScriptFunctionSetEvaluteProc(hs_function_definition &function, proc_hs_evaluate proc) {
 			if (function.paramc != 0)
-				YELO_DEBUG_FORMAT("Setting script function which has parameters (expected none): %s", function.name);
+				Print<true>("Setting script function which has parameters (expected none): %s", function.name);
 
 			function.evaluate = proc;
 		}
 
 		static void ScriptFunctionWithParamsSetEvaluteProc(hs_function_definition &function, proc_hs_evaluate proc) {
 			if (function.paramc == 0)
-				YELO_DEBUG_FORMAT("Setting script function which has no parameters (expected 1 or more): %s", function.name);
+				Print<true>("Setting script function which has no parameters (expected 1 or more): %s", function.name);
 
 			function.evaluate = proc;
 		}
@@ -217,14 +207,10 @@ namespace Yelo {
 
 		// Only 39 functions in CE release are actually 'null'...but now in OS2, we no longer overwrite existing functions!
 		// So ignore this comment :p
-		API_CODEDATA static uint
-		hs_eval_func_ptrs[Enums::k_hs_script_functions_count_upgrade - Enums::k_hs_functions_count];
+		API_CODEDATA static uint hs_eval_func_ptrs[Enums::k_hs_script_functions_count_upgrade - Enums::k_hs_functions_count];
 		// next free hs_eval_func_ptrs index
 		static long hs_eval_func = 0;
-		API_CODEDATA static byte
-		hs_func_pool[
-		std::size(hs_eval_func_ptrs)
-		][sizeof(hs_eval_func_has_param)];
+		API_CODEDATA static byte hs_func_pool[std::size(hs_eval_func_ptrs)][sizeof(hs_eval_func_has_param)];
 
 		// Creates a evaluate function that calls [func] and passes
 		// an array of parameters to it if it [takes_params]
@@ -281,7 +267,17 @@ namespace Yelo {
 			GameState::RuntimeData::InitializeScripting();
 
 			//////////////////////////////////////////////////////////////////////////
-			AllowFullAccess(true);
+			constexpr bool allow = true;
+			{
+				static byte code[] = {
+					0xB0, 0x01, 0xC3,   // implicitly allow expression access to everything
+					0x8A, 0xD1, 0xC0   // default expression access to the game's settings
+				};
+				if constexpr (allow) {
+					Memory::WriteMemory(GET_FUNC_VPTR(HS_VALID_ACCESS_FLAGS), code, 3);
+				}
+				else Memory::WriteMemory(GET_FUNC_VPTR(HS_VALID_ACCESS_FLAGS), code + 3, 3);
+			}
 		}
 
 		void DisposeLibrary() {

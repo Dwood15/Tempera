@@ -109,4 +109,15 @@ STAT_ASSRT(ushort, 0x2);
 
 #define NONE                  -1
 
+
+// Name of the section where we'll place executable data
+#define API_CODEDATA_SECTION_NAME	".yelo"
+// Apply this to data which will later contain code which will also be executed
+#define API_CODEDATA				__declspec(allocate(API_CODEDATA_SECTION_NAME))
+// The fucking *compiler* ignores 'write' with 'execute. Needs manual fix-up
+#pragma section( API_CODEDATA_SECTION_NAME, read,write,execute )
+// ...Actually, this fixes the problem of the compiler ignoring the 'write' attribute
+// When compiled into object-code (.obj), the 'write' attribute is lost, so it's not really the linker's fault
+#pragma comment(linker, "/section:" API_CODEDATA_SECTION_NAME ",ERW")
+
 #endif

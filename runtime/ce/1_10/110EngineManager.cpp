@@ -83,10 +83,10 @@ constexpr uintptr_t regular_player_clamps[] = {
 
 	//"33 C0 83 F9 FF 74 05 B8 .01 00 00 00 66 89 46 0C");
 	0x477115, //players_update_before_game_server patch
+	0x45FC67, //"game_engine_post_rasterize_in_game clamp fix"
 
-	0x4476F1, //"first_person_camera_update clamp fix")
-	0x45FC65, //"game_engine_post_rasterize_in_game clamp fix")
-	0x474B0D, //"player_control_get_facing_direction clamp fix")
+	0x4476F1, //"first_person_camera_update clamp fix"
+	0x474B0D, //"player_control_get_facing_direction clamp fix"
 
 	0x477BEF, //"First cmp of requested_player_index with 1");
 	0x477C10, //"2nd cmp of requested_player_index with 1");
@@ -143,6 +143,13 @@ void __declspec(naked) CE110::OnUnitControlUpdate(int client_update_idx) {
 	Control::UnitControl(unit_idx, from_control_data, client_update_idx);
 
 	__asm retn
+}
+
+static void ** CE110::GetHsFunctionTableReferenceList() {
+
+#include "hs_function_table_references.h"
+	return K_HS_FUNCTION_TABLE_REFERENCES;
+
 }
 
 

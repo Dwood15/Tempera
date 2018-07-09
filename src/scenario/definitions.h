@@ -38,7 +38,8 @@ namespace Yelo {
 			short        game_types[4];
 
 			long:8 * sizeof(long) * 6;
-		}; static_assert(sizeof(scenario_player) == 0x34);
+		};
+		static_assert(sizeof(scenario_player) == 0x34);
 
 		struct scenario_trigger_volume {
 			// _scenario_trigger_volume_type_? = 0
@@ -51,7 +52,8 @@ namespace Yelo {
 			real_vector3d up;
 			real_point3d  position;
 			real_vector3d transform;
-		}; static_assert(sizeof(scenario_trigger_volume) == 0x60);
+		};
+		static_assert(sizeof(scenario_trigger_volume) == 0x60);
 
 		struct scenario_netpoint {
 			real_point3d  position;
@@ -60,7 +62,8 @@ namespace Yelo {
 			short         team_index;
 			tag_reference weapon_group;
 			long:8 * sizeof(long) * 28;
-		}; static_assert(sizeof(scenario_netpoint) == 0x94);
+		};
+		static_assert(sizeof(scenario_netpoint) == 0x94);
 
 		struct scenario_netgame_equipment {
 			unsigned long flags;
@@ -73,7 +76,8 @@ namespace Yelo {
 			angle         facing_degrees;
 			tag_reference item_collection;
 			long:8 * sizeof(long) * 12;
-		}; static_assert(sizeof(scenario_netgame_equipment) == 0x90);
+		};
+		static_assert(sizeof(scenario_netgame_equipment) == 0x90);
 
 		struct scenario_starting_equipment {
 			unsigned long flags;
@@ -81,7 +85,8 @@ namespace Yelo {
 			long:8 * sizeof(long) * 12;
 			tag_reference item_collections[6];
 			long:8 * sizeof(long) * 12;
-		}; static_assert(sizeof(scenario_starting_equipment) == 0xCC);
+		};
+		static_assert(sizeof(scenario_starting_equipment) == 0xCC);
 
 
 		struct scenario_cutscene_flag {
@@ -225,8 +230,8 @@ namespace Yelo {
 
 			long:8 * sizeof(long) * 9; // 36
 
-			tag_block:8 * sizeof(tag_block) * 1 + 1 + 1 + 1;
-			tag_block:8 * sizeof(tag_block) * 1 + 1 + 1 + 1 + 1 + 1 + 1;
+			tag_block:8 * sizeof(tag_block) * (1 + 1 + 1 + 1);
+			tag_block:8 * sizeof(tag_block) * (1 + 1 + 1 + 1 + 1 + 1 + 1);
 
 			tag_data hs_syntax_data;
 			tag_data hs_string_data;

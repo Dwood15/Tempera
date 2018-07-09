@@ -32,6 +32,7 @@ namespace feature_management::engines {
 
 	public:
 
+		void ** GetHsFunctionTableReferences();
 		char                     *DEBUG_FILENAME = const_cast<char *>("tempera.unk.unk.debug.log");
 		char *LUA_FILENAME   = const_cast<char *>("tempera.init.lua");
 
@@ -46,6 +47,8 @@ namespace feature_management::engines {
 		bool IsCustomEd();
 
 		bool IsCoreInitialized();
+
+		size_t GetNumberOfFunctionTableReferences();
 
 		void WriteHooks();
 

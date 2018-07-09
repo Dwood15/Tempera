@@ -236,6 +236,24 @@ GlobalEngine::GlobalEngine() {
 	}
 }
 
+void ** GlobalEngine::GetHsFunctionTableReferences() {
+	if(this->HasSupport()) {
+		if(this->IsCustomEd()) {
+			return CE110::GetHsFunctionTableReferenceList();
+		}
+	}
+
+	return nullptr;
+}
+
+size_t GlobalEngine::GetNumberOfFunctionTableReferences() {
+	if (this->IsCustomEd()) {
+		return 354u;
+	}
+
+	return 0;
+}
+
 void GlobalEngine::RefreshCore() {
 	if (this->HasSupport()) {
 		if (this->IsSapien()) {

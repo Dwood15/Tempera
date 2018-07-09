@@ -1,7 +1,6 @@
 #pragma once
 
 
-#include <memory_locations.h>
 #include "../../memory/upgrades/blam_memory_upgrades.hpp"
 #include "../script_extensions/hs_base.h"
 
@@ -15,7 +14,7 @@
 	Yelo::Scripting::hs_function_definition function_##name##_definition = {	\
 		HS_TYPE(ret),0,															\
 		#name,																	\
-		CAST_PTR(Yelo::Scripting::proc_hs_parse,Yelo::Scripting::GET_FUNC_PTR(HS_MACRO_FUNCTION_PARSE)), \
+		CAST_PTR(Yelo::Scripting::proc_hs_parse,CurrentEngine.getFunctionBegin("hs_macro_function_parse")), \
 		nullptr,																\
 		info,																	\
 		nullptr,																\
@@ -28,17 +27,6 @@
 // [param]	(string) Function's "parameters" text, lists the parameter names
 // [argc]	How many parameters this function takes
 // [...]	List of parameter's [hs_type] types
-#define HS_FUNCTION_WITH_PARAMS(name, ret, info, param, paramc, ...)			\
-	Yelo::Scripting::hs_function_definition function_##name##_definition = {	\
-		HS_TYPE(ret),0,															\
-		#name,																	\
-		CAST_PTR(Yelo::Scripting::proc_hs_parse,Yelo::Scripting::GET_FUNC_PTR(HS_MACRO_FUNCTION_PARSE)), \
-		nullptr,																\
-		info,																	\
-		param,																	\
-		FLAG(Yelo::Flags::_hs_access_enabled_bit),								\
-		paramc, {__VA_ARGS__}													\
-	}
 //////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////
@@ -68,13 +56,42 @@
 
 namespace Yelo::Scripting {
 
-	HS_FUNCTION(physics_get_gravity, real, "");
-	HS_FUNCTION_WITH_PARAMS(physics_set_gravity,
-									void, "",
-									"gravity fraction", 1,
-									_hs_type_real
-	);
-	HS_FUNCTION(physics_constants_reset, void, "");
+	Yelo::Scripting::hs_function_definition function_physics_get_gravity_definition = {
+		Enums::_hs_type_real,
+		0,
+		"physics_get_gravity",
+		(reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse"))),
+		nullptr,
+		"",
+		nullptr,
+		(1 << (Yelo::Flags::_hs_access_enabled_bit)),
+		0
+	};
+
+	Yelo::Scripting::hs_function_definition function_physics_set_gravity_definition = {
+		Enums::_hs_type_void,
+		0,
+		"physics_set_gravity",
+		(reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse"))),
+		nullptr,
+		"",
+		"gravity fraction",
+		(1 << (Yelo::Flags::_hs_access_enabled_bit)),
+		1,
+		{Yelo::Enums::hs_type::_hs_type_real}
+	};
+
+	Yelo::Scripting::hs_function_definition function_physics_constants_reset_definition = {
+		Enums::_hs_type_void,
+		0,
+		"physics_constants_reset",
+		(reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse"))),
+		nullptr,
+		"",
+		nullptr,
+		(1 << (Yelo::Flags::_hs_access_enabled_bit)),
+		0
+	};
 
 	// #include "Game/ScriptLibrary.Definitions.RuntimeData.inl"
 
@@ -82,7 +99,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"game_change_version_id",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"returns whether the change was successful or not",
 		"<also-change-game-build-string> <version-string> ",
@@ -95,7 +112,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"game_engine_data_get_integer",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<data-name>",
@@ -111,7 +128,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"display_scripted_ui_widget",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<name>",
@@ -124,7 +141,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"play_bink_movie",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<filename>",
@@ -138,7 +155,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"scenario_faux_zone_current_switch_variant",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"depreceated, do not use",
 		"<variant-name>",
@@ -150,7 +167,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"scenario_faux_zone_switch_variant",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"depreceated, do not use",
 		"<zone-name> <variant-name>",
@@ -162,7 +179,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"scenario_faux_zone_switch_sky",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"depreceated, do not use",
 		"<zone-sky-name>",
@@ -175,7 +192,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"structure_bsp_set_lightmap_set",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"Sets a bsp's lightmap set",
 		"<bsp-index> <set-name>",
@@ -188,7 +205,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"structure_bsp_set_sky_set",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"Sets a bsp's sky set",
 		"<bsp-index> <set-name>",
@@ -201,7 +218,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"vehicle_remapper_enabled",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"returns the remapper state before the function call",
 		"state_name",
@@ -214,7 +231,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"data_array_info",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<data-array-name>",
@@ -227,7 +244,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"ai_transform_actor",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"Transforms an actor into the specified target. Returns false if it fails. Empty names causes random selection.",
 		"<object> <transform_name> <target_name>",
@@ -240,7 +257,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"ai_transform_actors",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"Transforms a list of actors into the specified target. Returns false if it fails. Empty names causes random selection.",
 		"<objects> <transform_name> <target_name>",
@@ -253,7 +270,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"ai_transform_actors_by_type",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"Transforms actors in a list of a specific type into the specified target. Returns false if it fails. Empty names causes random selection.",
 		"<objects> <actor_variant> <transform_name> <target_name>",
@@ -266,7 +283,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"ai_actor_is_transforming",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"Returns true if the specified actor is transforming.",
 		"<object>",
@@ -280,135 +297,136 @@ namespace Yelo::Scripting {
 	static hs_function_definition *hs_yelo_functions[] = {
 		//&GET_HS_FUNCTION(null),
 
-		&GET_HS_FUNCTION(volume_test_player_team),
-		&GET_HS_FUNCTION(volume_test_player_team_all),
-		&GET_HS_FUNCTION(player_team_teleport),
-		&GET_HS_FUNCTION(player_team_players),
+		// &GET_HS_FUNCTION(volume_test_player_team),
+		// &GET_HS_FUNCTION(volume_test_player_team_all),
+		// &GET_HS_FUNCTION(player_team_teleport),
+		// &GET_HS_FUNCTION(player_team_players),
 
-		&GET_HS_FUNCTION(player_data_get_integer),
-		&GET_HS_FUNCTION(player_team_data_get_integer),
-		&GET_HS_FUNCTION(player_data_get_object),
-		&GET_HS_FUNCTION(player_data_get_real),
-		&GET_HS_FUNCTION(player_data_set_real),
-		&GET_HS_FUNCTION(player_local_get),
+		// &GET_HS_FUNCTION(player_data_get_integer),
+		// &GET_HS_FUNCTION(player_team_data_get_integer),
+		// &GET_HS_FUNCTION(player_data_get_object),
+		// &GET_HS_FUNCTION(player_data_get_real),
+		// &GET_HS_FUNCTION(player_data_set_real),
+		// &GET_HS_FUNCTION(player_local_get),
 
-		&GET_HS_FUNCTION(objects_distance_to_object),
-		&GET_HS_FUNCTION(object_data_get_real),
-		&GET_HS_FUNCTION(object_data_set_real),
-		&GET_HS_FUNCTION(weapon_data_get_real),
-		&GET_HS_FUNCTION(weapon_data_set_real),
-		&GET_HS_FUNCTION(weapon_data_magazine_get_integer),
-		&GET_HS_FUNCTION(weapon_data_magazine_set_integer),
-		&GET_HS_FUNCTION(weapon_data_trigger_set_real),
-		&GET_HS_FUNCTION(unit_data_get_object),
-		&GET_HS_FUNCTION(unit_data_get_integer),
-		&GET_HS_FUNCTION(unit_data_set_integer),
-		&GET_HS_FUNCTION(unit_data_get_real),
-		&GET_HS_FUNCTION(unit_data_set_real),
+		// &GET_HS_FUNCTION(objects_distance_to_object),
+		// &GET_HS_FUNCTION(object_data_get_real),
+		// &GET_HS_FUNCTION(object_data_set_real),
+		// &GET_HS_FUNCTION(weapon_data_get_real),
+		// &GET_HS_FUNCTION(weapon_data_set_real),
+		// &GET_HS_FUNCTION(weapon_data_magazine_get_integer),
+		// &GET_HS_FUNCTION(weapon_data_magazine_set_integer),
+		// &GET_HS_FUNCTION(weapon_data_trigger_set_real),
+		// &GET_HS_FUNCTION(unit_data_get_object),
+		// &GET_HS_FUNCTION(unit_data_get_integer),
+		// &GET_HS_FUNCTION(unit_data_set_integer),
+		// &GET_HS_FUNCTION(unit_data_get_real),
+		// &GET_HS_FUNCTION(unit_data_set_real),
 
-		&GET_HS_FUNCTION(physics_get_gravity),
-		&GET_HS_FUNCTION(physics_set_gravity),
-		&GET_HS_FUNCTION(physics_constants_reset),
+		&Yelo::Scripting::function_physics_get_gravity_definition,
+		&Yelo::Scripting::function_physics_set_gravity_definition,
+		&Yelo::Scripting::function_physics_constants_reset_definition,
 
-		&GET_HS_FUNCTION(runtime_integers_reset),
-		&GET_HS_FUNCTION(runtime_integer_get),
-		&GET_HS_FUNCTION(runtime_integer_set),
-		&GET_HS_FUNCTION(runtime_integer_inc),
-		&GET_HS_FUNCTION(runtime_integer_dec),
+		// &GET_HS_FUNCTION(runtime_integers_reset),
+		// &GET_HS_FUNCTION(runtime_integer_get),
+		// &GET_HS_FUNCTION(runtime_integer_set),
+		// &GET_HS_FUNCTION(runtime_integer_inc),
+		// &GET_HS_FUNCTION(runtime_integer_dec),
 
-		&GET_HS_FUNCTION(game_change_version_id),
-		&GET_HS_FUNCTION(game_engine_data_get_integer),
+		&Yelo::Scripting::function_game_change_version_id_definition,
+		&Yelo::Scripting::function_game_engine_data_get_integer_definition,
 
-		&GET_HS_FUNCTION(machine_is_host),
-		&GET_HS_FUNCTION(machine_is_dedi),
+		&Yelo::Scripting::function_machine_is_host_definition,
+		&Yelo::Scripting::function_machine_is_dedi_definition,
 
-		&GET_HS_FUNCTION(abs_integer),
-		&GET_HS_FUNCTION(abs_real),
+		// &GET_HS_FUNCTION(abs_integer),
+		// &GET_HS_FUNCTION(abs_real),
 
-		&GET_HS_FUNCTION(pp_load),
-		&GET_HS_FUNCTION(pp_unload),
+		//TODO: POSTPROCESSING
+		// &GET_HS_FUNCTION(pp_load),
+		// &GET_HS_FUNCTION(pp_unload),
+		//
+		// &GET_HS_FUNCTION(pp_get_effect_instance_index_by_name),
+		// &GET_HS_FUNCTION(pp_set_effect_instance_active),
+		// &GET_HS_FUNCTION(pp_set_effect_instance_fade),
+		// &GET_HS_FUNCTION(pp_get_effect_instance_current_fade),
+		// &GET_HS_FUNCTION(pp_get_effect_instance_fade_direction),
+		// &GET_HS_FUNCTION(pp_get_effect_index_by_name),
+		// &GET_HS_FUNCTION(pp_get_effect_is_valid),
+		// &GET_HS_FUNCTION(pp_get_effect_shader_variable_index_by_name),
+		// &GET_HS_FUNCTION(pp_set_effect_shader_variable_boolean),
+		// &GET_HS_FUNCTION(pp_set_effect_shader_variable_integer),
+		// &GET_HS_FUNCTION(pp_set_effect_shader_variable_real),
+		// &GET_HS_FUNCTION(pp_set_effect_shader_instance_active),
+		// &GET_HS_FUNCTION(pp_bloom_set_size),
+		// &GET_HS_FUNCTION(pp_bloom_set_exposure),
+		// &GET_HS_FUNCTION(pp_bloom_set_mix_amount),
+		// &GET_HS_FUNCTION(pp_bloom_set_minimum_color),
+		// &GET_HS_FUNCTION(pp_bloom_set_maximum_color),
 
-		&GET_HS_FUNCTION(pp_get_effect_instance_index_by_name),
-		&GET_HS_FUNCTION(pp_set_effect_instance_active),
-		&GET_HS_FUNCTION(pp_set_effect_instance_fade),
-		&GET_HS_FUNCTION(pp_get_effect_instance_current_fade),
-		&GET_HS_FUNCTION(pp_get_effect_instance_fade_direction),
-		&GET_HS_FUNCTION(pp_get_effect_index_by_name),
-		&GET_HS_FUNCTION(pp_get_effect_is_valid),
-		&GET_HS_FUNCTION(pp_get_effect_shader_variable_index_by_name),
-		&GET_HS_FUNCTION(pp_set_effect_shader_variable_boolean),
-		&GET_HS_FUNCTION(pp_set_effect_shader_variable_integer),
-		&GET_HS_FUNCTION(pp_set_effect_shader_variable_real),
-		&GET_HS_FUNCTION(pp_set_effect_shader_instance_active),
-		&GET_HS_FUNCTION(pp_bloom_set_size),
-		&GET_HS_FUNCTION(pp_bloom_set_exposure),
-		&GET_HS_FUNCTION(pp_bloom_set_mix_amount),
-		&GET_HS_FUNCTION(pp_bloom_set_minimum_color),
-		&GET_HS_FUNCTION(pp_bloom_set_maximum_color),
+		// &GET_HS_FUNCTION(bitwise_and),
+		// &GET_HS_FUNCTION(bitwise_or),
+		// &GET_HS_FUNCTION(bitwise_xor),
+		// &GET_HS_FUNCTION(bitwise_lhs),
+		// &GET_HS_FUNCTION(bitwise_rhs),
+		// &GET_HS_FUNCTION(bit_test),
+		// &GET_HS_FUNCTION(bit_toggle),
+		// &GET_HS_FUNCTION(bit_flags_test),
+		// &GET_HS_FUNCTION(bit_flags_toggle),
+		// &GET_HS_FUNCTION(hex_string_to_long),
+		//
+		// &GET_HS_FUNCTION(runtime_integer_operation),
+		// &GET_HS_FUNCTION(runtime_vectors_reset),
+		// &GET_HS_FUNCTION(runtime_vector_get_element),
+		// &GET_HS_FUNCTION(runtime_vector_set_element),
+		// &GET_HS_FUNCTION(runtime_vector_set),
+		// &GET_HS_FUNCTION(runtime_vector_operation),
+		// &GET_HS_FUNCTION(runtime_vector_to_string),
+		// &GET_HS_FUNCTION(object_data_set_vector),
+		// &GET_HS_FUNCTION(object_data_save_vector),
 
-		&GET_HS_FUNCTION(bitwise_and),
-		&GET_HS_FUNCTION(bitwise_or),
-		&GET_HS_FUNCTION(bitwise_xor),
-		&GET_HS_FUNCTION(bitwise_lhs),
-		&GET_HS_FUNCTION(bitwise_rhs),
-		&GET_HS_FUNCTION(bit_test),
-		&GET_HS_FUNCTION(bit_toggle),
-		&GET_HS_FUNCTION(bit_flags_test),
-		&GET_HS_FUNCTION(bit_flags_toggle),
-		&GET_HS_FUNCTION(hex_string_to_long),
+		&Yelo::Scripting::function_display_scripted_ui_widget_definition,
+		&Yelo::Scripting::function_play_bink_movie_definition,
 
-		&GET_HS_FUNCTION(runtime_integer_operation),
-		&GET_HS_FUNCTION(runtime_vectors_reset),
-		&GET_HS_FUNCTION(runtime_vector_get_element),
-		&GET_HS_FUNCTION(runtime_vector_set_element),
-		&GET_HS_FUNCTION(runtime_vector_set),
-		&GET_HS_FUNCTION(runtime_vector_operation),
-		&GET_HS_FUNCTION(runtime_vector_to_string),
-		&GET_HS_FUNCTION(object_data_set_vector),
-		&GET_HS_FUNCTION(object_data_save_vector),
+		&Yelo::Scripting::function_scenario_faux_zones_reset_definition,
+		&Yelo::Scripting::function_scenario_faux_zone_current_switch_variant_definition,
+		&Yelo::Scripting::function_scenario_faux_zone_switch_variant_definition,
+		&Yelo::Scripting::function_scenario_faux_zone_switch_sky_definition,
 
-		&GET_HS_FUNCTION(display_scripted_ui_widget),
-		&GET_HS_FUNCTION(play_bink_movie),
+		&Yelo::Scripting::function_structure_bsp_set_lightmap_set_definition,
+		&Yelo::Scripting::function_structure_bsp_set_sky_set_definition,
 
-		&GET_HS_FUNCTION(scenario_faux_zones_reset),
-		&GET_HS_FUNCTION(scenario_faux_zone_current_switch_variant),
-		&GET_HS_FUNCTION(scenario_faux_zone_switch_variant),
-		&GET_HS_FUNCTION(scenario_faux_zone_switch_sky),
+		&Yelo::Scripting::function_ai_transform_actor_definition,
+		&Yelo::Scripting::function_ai_transform_actors_definition,
+		&Yelo::Scripting::function_ai_transform_actors_by_type_definition,
+		&Yelo::Scripting::function_ai_actor_is_transforming_definition,
 
-		&GET_HS_FUNCTION(structure_bsp_set_lightmap_set),
-		&GET_HS_FUNCTION(structure_bsp_set_sky_set),
+		&Yelo::Scripting::function_vehicle_remapper_enabled_definition,
 
-		&GET_HS_FUNCTION(ai_transform_actor),
-		&GET_HS_FUNCTION(ai_transform_actors),
-		&GET_HS_FUNCTION(ai_transform_actors_by_type),
-		&GET_HS_FUNCTION(ai_actor_is_transforming),
+		// &GET_HS_FUNCTION(sv_httpserver_set_thread_count),
+		// &GET_HS_FUNCTION(sv_httpserver_set_root),
+		// &GET_HS_FUNCTION(sv_httpserver_set_throttle),
+		// &GET_HS_FUNCTION(sv_httpserver_set_ports),
+		// &GET_HS_FUNCTION(sv_httpserver_show_config),
+		// &GET_HS_FUNCTION(sv_httpserver_start),
+		// &GET_HS_FUNCTION(sv_httpserver_stop),
+		// &GET_HS_FUNCTION(sv_httpserver_log_enable),
+		// &GET_HS_FUNCTION(sv_httpserver_set_connection_ban),
+		// &GET_HS_FUNCTION(sv_httpserver_banlist),
+		// &GET_HS_FUNCTION(sv_httpserver_banlist_file),
+		// &GET_HS_FUNCTION(sv_httpserver_ban_ip),
+		// &GET_HS_FUNCTION(sv_httpserver_unban_ip),
 
-		&GET_HS_FUNCTION(vehicle_remapper_enabled),
-
-		&GET_HS_FUNCTION(sv_httpserver_set_thread_count),
-		&GET_HS_FUNCTION(sv_httpserver_set_root),
-		&GET_HS_FUNCTION(sv_httpserver_set_throttle),
-		&GET_HS_FUNCTION(sv_httpserver_set_ports),
-		&GET_HS_FUNCTION(sv_httpserver_show_config),
-		&GET_HS_FUNCTION(sv_httpserver_start),
-		&GET_HS_FUNCTION(sv_httpserver_stop),
-		&GET_HS_FUNCTION(sv_httpserver_log_enable),
-		&GET_HS_FUNCTION(sv_httpserver_set_connection_ban),
-		&GET_HS_FUNCTION(sv_httpserver_banlist),
-		&GET_HS_FUNCTION(sv_httpserver_banlist_file),
-		&GET_HS_FUNCTION(sv_httpserver_ban_ip),
-		&GET_HS_FUNCTION(sv_httpserver_unban_ip),
-
-		&GET_HS_FUNCTION(sv_mapdownload_start_server),
-		&GET_HS_FUNCTION(sv_mapdownload_stop_server),
-		&GET_HS_FUNCTION(sv_mapdownload_set_part_definitions_path),
-		&GET_HS_FUNCTION(sv_mapdownload_set_host),
-		&GET_HS_FUNCTION(sv_mapdownload_reload_map_part_definitions),
+		// &GET_HS_FUNCTION(sv_mapdownload_start_server),
+		// &GET_HS_FUNCTION(sv_mapdownload_stop_server),
+		// &GET_HS_FUNCTION(sv_mapdownload_set_part_definitions_path),
+		// &GET_HS_FUNCTION(sv_mapdownload_set_host),
+		// &GET_HS_FUNCTION(sv_mapdownload_reload_map_part_definitions),
 
 		&GET_HS_FUNCTION(data_array_info),
 
 		// debug functions
-		&GET_HS_FUNCTION(test_networking),
+		// &GET_HS_FUNCTION(test_networking),
 	};
 
 	static const long K_HS_YELO_FUNCTION_COUNT = std::size(hs_yelo_functions);
@@ -427,7 +445,7 @@ namespace Yelo::Scripting {
 	//////////////////////////////////////////////////////////////////////////
 	// hs definitions
 	Yelo::Scripting::hs_function_definition function_debug_pvs_definition = {
-		Enums::_hs_type_void, 0, "debug_pvs", reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE), nullptr, "", "",
+		Enums::_hs_type_void, 0, "debug_pvs", reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")), nullptr, "", "",
 		(1 << (Yelo::Flags::_hs_access_enabled_bit)), 1, {Enums::_hs_type_bool}
 	};
 
@@ -435,7 +453,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"radiosity_start",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -448,7 +466,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"radiosity_save",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -460,7 +478,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"radiosity_debug_point",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -473,7 +491,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"debug_teleport_player",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -486,7 +504,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"hud_team_icon_set_pos",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -498,7 +516,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"hud_team_icon_set_scale",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -510,7 +528,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"hud_team_background_set_pos",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -522,7 +540,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"hud_team_background_set_scale",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -535,7 +553,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"reload_shader_transparent_chicago",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -547,7 +565,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"rasterizer_reload_effects",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -560,7 +578,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"oid_watch",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -572,7 +590,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"oid_dump",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"",
@@ -581,7 +599,7 @@ namespace Yelo::Scripting {
 		{Enums::_hs_type_string}
 	};
 	Yelo::Scripting::hs_function_definition function_oid_status_definition = {
-		Enums::_hs_type_void, 0, "oid_status", reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE), nullptr, "", "",
+		Enums::_hs_type_void, 0, "oid_status", reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")), nullptr, "", "",
 		(1 << (Yelo::Flags::_hs_access_enabled_bit)), 1, {Enums::_hs_type_string}
 	};
 
@@ -611,54 +629,76 @@ namespace Yelo::Scripting {
 #pragma warning( pop )
 	}                 _fixup_globals           = {
 		{ // fixups
-			{0x11C, &GET_HS_FUNCTION(debug_pvs)},
-			{0x11D, &GET_HS_FUNCTION(radiosity_start)},
-			{0x11E, &GET_HS_FUNCTION(radiosity_save)},
-			{0x11F, &GET_HS_FUNCTION(radiosity_debug_point)},
+			{0x11C, &Yelo::Scripting::function_debug_pvs_definition},
+			{0x11D, &Yelo::Scripting::function_radiosity_start_definition},
+			{0x11E, &Yelo::Scripting::function_radiosity_save_definition},
+			{0x11F, &Yelo::Scripting::function_radiosity_debug_point_definition},
 
-			{0x170, &GET_HS_FUNCTION(debug_teleport_player)},
+			{0x170, &Yelo::Scripting::function_debug_teleport_player_definition},
 
-			{0x17D, &GET_HS_FUNCTION(hud_team_icon_set_pos)},
-			{0x17E, &GET_HS_FUNCTION(hud_team_icon_set_scale)},
-			{0x17F, &GET_HS_FUNCTION(hud_team_background_set_pos)},
-			{0x180, &GET_HS_FUNCTION(hud_team_background_set_scale)},
+			{0x17D, &Yelo::Scripting::function_hud_team_icon_set_pos_definition},
+			{0x17E, &Yelo::Scripting::function_hud_team_icon_set_scale_definition},
+			{0x17F, &Yelo::Scripting::function_hud_team_background_set_pos_definition},
+			{0x180, &Yelo::Scripting::function_hud_team_background_set_scale_definition},
 
-			{0x1A8, &GET_HS_FUNCTION(reload_shader_transparent_chicago)},
-			{0x1A9, &GET_HS_FUNCTION(rasterizer_reload_effects)},
+			{0x1A8, &Yelo::Scripting::function_reload_shader_transparent_chicago_definition},
+			{0x1A9, &Yelo::Scripting::function_rasterizer_reload_effects_definition},
 
-			{0x21C, &GET_HS_FUNCTION(oid_watch)},
-			{0x21D, &GET_HS_FUNCTION(oid_dump)},
-			{0x21E, &GET_HS_FUNCTION(oid_status)},
+			{0x21C, &Yelo::Scripting::function_oid_watch_definition},
+			{0x21D, &Yelo::Scripting::function_oid_dump_definition},
+			{0x21E, &Yelo::Scripting::function_oid_status_definition},
 
-			{0x112, &GET_HS_GLOBAL(radiosity_quality), true},
-			{0x113, &GET_HS_GLOBAL(radiosity_step_count), true},
-			{0x114, &GET_HS_GLOBAL(radiosity_lines), true},
-			{0x115, &GET_HS_GLOBAL(radiosity_normals), true},
+			{0x112, &Yelo::Scripting::global_radiosity_quality_definition, true},
+			{0x113, &Yelo::Scripting::global_radiosity_step_count_definition, true},
+			{0x114, &Yelo::Scripting::global_radiosity_lines_definition, true},
+			{0x115, &Yelo::Scripting::global_radiosity_normals_definition, true},
 
 			{NONE}
 		},
 	};
 
 	static void NullifyScriptLibraryFixups() {
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(debug_pvs));
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(radiosity_start));
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(radiosity_save));
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(radiosity_debug_point));
+		if (!CurrentEngine.IsSapien()) {
+			NullifyScriptFunctionWithParams(Yelo::Scripting::function_debug_pvs_definition);
+			NullifyScriptFunctionWithParams(Yelo::Scripting::function_radiosity_start_definition);
+			NullifyScriptFunctionWithParams(Yelo::Scripting::function_radiosity_save_definition);
+			NullifyScriptFunctionWithParams(Yelo::Scripting::function_radiosity_debug_point_definition);
+			NullifyScriptFunctionWithParams(Yelo::Scripting::function_oid_watch_definition);
+			NullifyScriptFunctionWithParams(Yelo::Scripting::function_oid_dump_definition);
+			NullifyScriptFunctionWithParams(Yelo::Scripting::function_oid_status_definition);
+		}
 
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(debug_teleport_player));
+		NullifyScriptFunctionWithParams(Yelo::Scripting::function_debug_teleport_player_definition);
 
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(hud_team_icon_set_pos));
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(hud_team_icon_set_scale));
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(hud_team_background_set_pos));
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(hud_team_background_set_scale));
+		NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_icon_set_pos_definition);
+		NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_icon_set_scale_definition);
+		NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_background_set_pos_definition);
+		NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_background_set_scale_definition);
 
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(reload_shader_transparent_chicago));
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(rasterizer_reload_effects));
-
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(oid_watch));
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(oid_dump));
-		NullifyScriptFunctionWithParams(GET_HS_FUNCTION(oid_status));
+		NullifyScriptFunctionWithParams(Yelo::Scripting::function_reload_shader_transparent_chicago_definition);
+		NullifyScriptFunctionWithParams(Yelo::Scripting::function_rasterizer_reload_effects_definition);
 	}
+
+	struct s_upgrade_globals {
+		struct {
+			long count;
+			long capacity;
+			hs_function_definition *table[Enums::k_hs_script_functions_count_upgrade];
+			long yelo_start_index; // starting index of our custom 'yelo' functions
+		} functions;
+
+		struct {
+			long count;
+			long capacity;
+			hs_global_definition *table[Enums::k_hs_external_globals_count_upgrade];
+			long yelo_start_index; // starting index of our custom 'yelo' globals
+		} globals;
+	};
+
+	static s_upgrade_globals _upgrade_globals       = {
+		{0, Enums::k_hs_script_functions_count_upgrade},
+		{0, Enums::k_hs_external_globals_count_upgrade}
+	};
 
 	static void InitializeLibraryFixups() {
 		NullifyScriptLibraryFixups();
@@ -681,45 +721,26 @@ namespace Yelo::Scripting {
 		//////////////////////////////////////////////////////////////////////////
 	}
 
-	static struct s_upgrade_globals {
-		struct {
-			long count;
-			long capacity;
-			hs_function_definition *table[Enums::k_hs_script_functions_count_upgrade];
-			long yelo_start_index; // starting index of our custom 'yelo' functions
-		} functions;
 
-		struct {
-			long count;
-			long capacity;
-			hs_global_definition *table[Enums::k_hs_external_globals_count_upgrade];
-			long yelo_start_index; // starting index of our custom 'yelo' globals
-		} globals;
-	}                 _upgrade_globals         = {
-		{0, Enums::k_hs_script_functions_count_upgrade},
-		{0, Enums::k_hs_external_globals_count_upgrade}
-	};
 
 
 #include "globals_declarations.h"
 #include "../script_extensions/hs_base.h"
 #include "enums.h"
-#include "../../network/server/network_server_manager_structures.hpp"
-#include "../../network/server/network_server_manager.hpp"
-#include "../../network/networking.h"
-#include "../../game/engines/engine.hpp"
+// #include "../../network/server/network_server_manager_structures.hpp"
+// #include "../../network/server/network_server_manager.hpp"
+// #include "../../network/networking.h"
+// #include "../../game/engines/engine.hpp"
 
 	static void MemoryUpgradesInitialize() {
 		InitializeLibraryFixups();
 
 		//////////////////////////////////////////////////////////////////////////
 		// Add the game's functions/globals to our upgraded memory
-		static const rsize_t K_HS_FUNCTION_TABLE_COUNT =
-										0x211;
+		static const rsize_t K_HS_FUNCTION_TABLE_COUNT = 0x211;
 
-		static const rsize_t K_HS_EXTERNAL_GLOBALS_COUNT = 0x1EC
-																			- 1 // NOTE: we don't copy the 'rasterizer_frame_drop_ms' definition as its not defined in the tools
-		;
+		static const rsize_t K_HS_EXTERNAL_GLOBALS_COUNT = 0x1EC - 1; // NOTE: we don't copy the 'rasterizer_frame_drop_ms' definition as its not defined in the tools
+
 
 		for (rsize_t x = 0, index = 0;
 			  x < K_HS_FUNCTION_TABLE_COUNT;
@@ -766,13 +787,16 @@ namespace Yelo::Scripting {
 		//////////////////////////////////////////////////////////////////////////
 		// Update the game code to use OUR function/global definition tables
 		{
-			hs_function_definition ****definitions = reinterpret_cast<hs_function_definition ****>(K_HS_FUNCTION_TABLE_REFERENCES);
-			const size_t k_count = std::size(K_HS_FUNCTION_TABLE_REFERENCES);
+			void ** table_references = CurrentEngine.GetHsFunctionTableReferences();
+			if (table_references != nullptr) {
+				hs_function_definition ****definitions = reinterpret_cast<hs_function_definition ****>(table_references);
+				const size_t           k_count         = CurrentEngine.GetNumberOfFunctionTableReferences();
 
-			for (size_t x = 0; x < k_count; x++)
-				*definitions[x] = &_upgrade_globals.functions.table[0];
+				for (size_t x = 0; x < k_count; x++) {
+					*definitions[x] = &_upgrade_globals.functions.table[0];
+				}
+			}
 		}
-
 		{
 			hs_global_definition ****definitions = reinterpret_cast<hs_global_definition ****>(K_HS_EXTERNAL_GLOBALS_REFERENCES);
 			const size_t k_count = std::size(K_HS_EXTERNAL_GLOBALS_REFERENCES);
@@ -845,7 +869,7 @@ namespace Yelo::Scripting {
 	{
 		TypeHolder result; result.pointer = nullptr;
 
-		result.boolean = GameState::IsServer();
+		result.boolean = false; //GameState::IsServer();
 
 		return result.pointer;
 	}
@@ -854,8 +878,7 @@ namespace Yelo::Scripting {
 	{
 		TypeHolder result; result.pointer = nullptr;
 
-		Yelo::Networking::s_network_game_server* game_server = Yelo::Networking::NetworkGameServer();
-		result.boolean = game_server != nullptr && game_server->IsDedi();
+		result.boolean = false;
 
 		return result.pointer;
 	}
@@ -1134,7 +1157,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"runtime_integer_get",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value-index>",
@@ -1146,7 +1169,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"runtime_integer_set",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value-index> <value>",
@@ -1158,7 +1181,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"runtime_integer_inc",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value-index>",
@@ -1170,7 +1193,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"runtime_integer_dec",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value-index>",
@@ -1182,7 +1205,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"runtime_integer_operation",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value-index> <operation-name> <operation-value>",
@@ -1197,7 +1220,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_real,
 		0,
 		"runtime_vector_get_element",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value-index> <element-index>",
@@ -1210,7 +1233,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"runtime_vector_set_element",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value-index> <element-index> <operation-name> <operation-value>",
@@ -1223,7 +1246,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"runtime_vector_set",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value-index> <operation-name> <value-x> <value-y> <value-z>",
@@ -1236,7 +1259,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"runtime_vector_operation",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value-index> <operation-name> <operation-vector-index>",
@@ -1249,7 +1272,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_string,
 		0,
 		"runtime_vector_to_string",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value-index>",
@@ -1266,7 +1289,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_short,
 		0,
 		"pp_get_effect_instance_index_by_name",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"returns the index of the effect instance named <instance-name>",
 		"<instance-name>",
@@ -1279,7 +1302,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"pp_set_effect_instance_active",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"instantly set an effect instance to on or off",
 		"<instance-index> <instance-enabled>",
@@ -1292,7 +1315,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"pp_set_effect_instance_fade",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"fade an effect instance in or out",
 		"<instance-index> <fade-start> <fade-end> <fade-time>",
@@ -1305,7 +1328,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_real,
 		0,
 		"pp_get_effect_instance_current_fade",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"returns current fade amount of an effect instance",
 		"<instance-index>",
@@ -1318,7 +1341,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_short,
 		0,
 		"pp_get_effect_instance_fade_direction",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"returns fade direction of an effect instance, -1 = no fade, 0 = fade out, 1 = fade in",
 		"<instance-index>",
@@ -1331,7 +1354,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_short,
 		0,
 		"pp_get_effect_index_by_name",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"returns the index of the effect named <effect-name>",
 		"<effect-name>",
@@ -1344,7 +1367,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"pp_get_effect_is_valid",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"returns whether an effect is valid and ready to use",
 		"<effect-index>",
@@ -1357,7 +1380,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_short,
 		0,
 		"pp_get_effect_shader_variable_index_by_name",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"gets the index of an exposed post processing effect variable named <name>",
 		"<effect-index> <variable-name>",
@@ -1370,7 +1393,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"pp_set_effect_shader_variable_boolean",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"sets the value of an exposed boolean variable in a post processing effect",
 		"<effect-index> <variable-index> <boolean> <real>",
@@ -1383,7 +1406,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"pp_set_effect_shader_variable_integer",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"sets the value of an exposed integer variable in a post processing effect",
 		"<effect-index> <variable-index> <long> <real>",
@@ -1396,7 +1419,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"pp_set_effect_shader_variable_real",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"sets the value of an exposed float/vector/color variable in a post processing effect",
 		"<effect-index> <variable-index> <real> <real> <real> <real> <real>",
@@ -1409,7 +1432,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"pp_set_effect_shader_instance_active",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"disables/enables a shader instance in an effect",
 		"<effect-index> <shader-instance-index> <boolean>",
@@ -1422,7 +1445,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"pp_bloom_set_size",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"changes the bloom size over a period of time",
 		"<real> <real>",
@@ -1435,7 +1458,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"pp_bloom_set_exposure",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"changes the bloom exposure over a period of time",
 		"<real> <real>",
@@ -1448,7 +1471,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"pp_bloom_set_mix_amount",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"changes the bloom mix amount over a period of time",
 		"<real> <real>",
@@ -1461,7 +1484,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"pp_bloom_set_minimum_color",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"changes the bloom minimum color over a period of time",
 		"<real> <real> <real> <real>",
@@ -1474,7 +1497,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"pp_bloom_set_maximum_color",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"changes the bloom maximum color over a period of time",
 		"<real> <real> <real> <real>",
@@ -1487,7 +1510,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"volume_test_player_team",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"returns true if any players of the specified team are within the specified volume.",
 		"<volume> <team-index>",
@@ -1499,7 +1522,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"volume_test_player_team_all",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"returns true if all players of the specified team are within the specified volume.",
 		"<volume> <team-index>",
@@ -1511,7 +1534,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"player_team_teleport",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"moves the specified team to the specified flag.",
 		"<team-index> <cutscene-flag>",
@@ -1524,7 +1547,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_object_list,
 		0,
 		"player_team_players",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"returns a list of players on the specified team",
 		"<team-index>",
@@ -1537,7 +1560,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"player_data_get_integer",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<player-list-index> <data-name>",
@@ -1550,7 +1573,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"player_team_data_get_integer",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<team-index> <data-name>",
@@ -1563,7 +1586,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_object,
 		0,
 		"player_data_get_object",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<player-list-index> <data-name>",
@@ -1576,7 +1599,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_real,
 		0,
 		"player_data_get_real",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<player-list-index> <data-name>",
@@ -1589,7 +1612,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"player_data_set_real",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<player-list-index> <data-name> <data-value>",
@@ -1603,7 +1626,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_real,
 		0,
 		"objects_distance_to_object",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<objects> <destination-object>",
@@ -1616,7 +1639,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_real,
 		0,
 		"object_data_get_real",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<object> <data-name> <subdata-name>",
@@ -1629,7 +1652,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"object_data_set_real",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<object> <data-name> <subdata-name> <data-value>",
@@ -1642,7 +1665,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"object_data_set_vector",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<object> <data-name> <vector-index>",
@@ -1655,7 +1678,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"object_data_save_vector",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<object> <data-name> <vector-index>",
@@ -1668,7 +1691,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_real,
 		0,
 		"weapon_data_get_real",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<weapon> <data-name>",
@@ -1681,7 +1704,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"weapon_data_set_real",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<weapon> <data-name> <data-value>",
@@ -1694,7 +1717,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"weapon_data_magazine_get_integer",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<weapon> <magazine-index> <data-name> <subdata-name>",
@@ -1707,7 +1730,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"weapon_data_magazine_set_integer",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<weapon> <magazine-index> <data-name> <subdata-name> <data-value>",
@@ -1720,7 +1743,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"weapon_data_trigger_set_real",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<weapon> <trigger-index> <data-name> <subdata-name> <data-value>",
@@ -1733,7 +1756,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_object,
 		0,
 		"unit_data_get_object",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<unit> <data-name>",
@@ -1746,7 +1769,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"unit_data_get_integer",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<unit> <data-name>",
@@ -1759,7 +1782,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"unit_data_set_integer",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<unit> <data-name> <data-value>",
@@ -1772,7 +1795,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_real,
 		0,
 		"unit_data_get_real",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<unit> <data-name>",
@@ -1785,7 +1808,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"unit_data_set_real",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<unit> <data-name> <data-value>",
@@ -1798,7 +1821,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"abs_integer",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value>",
@@ -1811,7 +1834,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_real,
 		0,
 		"abs_real",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value>",
@@ -1824,7 +1847,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"bitwise_and",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value> <flags>",
@@ -1837,7 +1860,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"bitwise_or",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value> <flags>",
@@ -1850,7 +1873,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"bitwise_xor",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value> <flags>",
@@ -1863,7 +1886,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"bitwise_lhs",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value> <bit-count>",
@@ -1876,7 +1899,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"bitwise_rhs",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value> <bit-count>",
@@ -1889,7 +1912,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"bit_test",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value> <bit-index>",
@@ -1902,7 +1925,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"bit_toggle",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value> <bit-index> <on-or-off>",
@@ -1915,7 +1938,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_bool,
 		0,
 		"bit_flags_test",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value> <flags>",
@@ -1928,7 +1951,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"bit_flags_toggle",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value> <flags> <add-or-remove>",
@@ -1941,7 +1964,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_long,
 		0,
 		"hex_string_to_long",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"",
 		"<value>",
@@ -1957,7 +1980,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"sv_mapdownload_set_part_definitions_path",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"sets the path containing the map part definition xmls",
 		"<string>",
@@ -1969,7 +1992,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"sv_mapdownload_set_host",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"sets the web address where the map parts are being hosted",
 		"<string>",
@@ -1983,7 +2006,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"sv_httpserver_set_thread_count",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"sets the number of http threads the http server starts",
 		"<short>",
@@ -1996,7 +2019,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"sv_httpserver_set_root",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"sets the folder to serve files from",
 		"<string>",
@@ -2009,7 +2032,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"sv_httpserver_set_throttle",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"sets the maximum bandwidth the http server will use in bytes per sec, append k and m for kilo and mega bytes respectively",
 		"<string>",
@@ -2022,7 +2045,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"sv_httpserver_set_ports",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"sets the ports to listen on",
 		"<string>",
@@ -2041,7 +2064,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"sv_httpserver_log_enable",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"set whether to output http server events into the server log",
 		"<bool>",
@@ -2054,7 +2077,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"sv_httpserver_set_connection_ban",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"sets the variables that controls how many connections an IP can have over time",
 		"<max_connections> <connection_cooloff> <forget_connection_time>",
@@ -2069,7 +2092,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"sv_httpserver_banlist_file",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"sets the http servers ban list suffix",
 		"<string>",
@@ -2082,7 +2105,7 @@ namespace Yelo::Scripting {
 		Enums::_hs_type_void,
 		0,
 		"sv_httpserver_ban_ip",
-		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE),
+		reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")),
 		nullptr,
 		"adds an ip to the ban list, the version bool is false for ipv4 and true for ipv6",
 		"<bool> <short> <short> <short> <short> <short> <short> <short> <short>",
@@ -2092,7 +2115,7 @@ namespace Yelo::Scripting {
 	};
 
 	Yelo::Scripting::hs_function_definition function_sv_httpserver_unban_ip_definition = {
-		Enums::_hs_type_void, 0, "sv_httpserver_unban_ip", reinterpret_cast<Yelo::Scripting::proc_hs_parse>(Yelo::Scripting::PTR_HS_MACRO_FUNCTION_PARSE), nullptr,
+		Enums::_hs_type_void, 0, "sv_httpserver_unban_ip", reinterpret_cast<Yelo::Scripting::proc_hs_parse>(CurrentEngine.getFunctionBegin("hs_macro_function_parse")), nullptr,
 		"removes an ip from the ban list by its index", "<short>", (1 << (Yelo::Flags::_hs_access_enabled_bit)), 1, {Enums::_hs_type_short}
-	}
+	};
 };
