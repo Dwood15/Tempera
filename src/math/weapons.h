@@ -1,5 +1,4 @@
 #pragma once
-#include "enums_generic.h"
 #include "../ce_base_types.h"
 #include "real_math.h"
 #include "../gamestate/objects.h"

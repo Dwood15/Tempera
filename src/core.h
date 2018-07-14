@@ -22,7 +22,6 @@
 #include "Direct3D/d3d9hook.h"
 #include "math/colors.h"
 #include "gamestate/player_types.h"
-#include "gamestate/game_time/gametime.h"
 #include "game/time/time_structures.hpp"
 
 ////////////////////////////////////////

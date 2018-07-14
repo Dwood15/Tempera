@@ -5,7 +5,7 @@
 
 namespace feature_management::engines {
 	class Sapien : public IEngine<Sapien> {
-#include "function_map.inl"
+
 	public:
 		Sapien() = default;
 
@@ -13,9 +13,7 @@ namespace feature_management::engines {
 
 		static void WriteHooks();
 
-		static const defined_functionrange * GetFunctionMap() {
-			return sapien_function_map;
-		}
+		static const defined_functionrange * GetFunctionMap();
 
 		static void OnPlayerActionUpdate();
 

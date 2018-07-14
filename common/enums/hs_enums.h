@@ -1,4 +1,16 @@
 #pragma once
+
+namespace Yelo::Flags {
+	enum hs_yelo_definition_flags : unsigned short
+	{
+		_hs_yelo_definition_internal_bit,
+		// changes to the global are sync'd
+		_hs_yelo_definition_is_synchronized_bit,
+		// hs_function is actually an hs_function_definition_yelo
+		_hs_yelo_definition_is_yelo_function_bit,
+	};
+};
+
 namespace Yelo::Enums {
 
 	enum hs_function_enumeration : short {

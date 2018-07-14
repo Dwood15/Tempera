@@ -12,9 +12,8 @@
 // A POD-type that contains a non-POD type's data
 // http://stackoverflow.com/questions/146452/what-are-pod-types-in-c
 // TODO: verify the type parameters are non-POD types using boost or something
-template<typename TBase, typename TImpl = TBase>
-class c_non_pod_container
-{
+template <typename TBase, typename TImpl = TBase>
+class c_non_pod_container {
 public: // Has to be public to retain POD-traits
 	char m_instance_data[sizeof(TImpl)];
 
@@ -22,40 +21,40 @@ public: // Has to be public to retain POD-traits
 	typedef TImpl type_t;
 
 protected:
-	TBase* GetPointer()
-	{
-		return reinterpret_cast<TBase *>(m_instance_data);
-	}
-	const TBase* GetPointer() const
-	{
+	TBase *GetPointer() {
 		return reinterpret_cast<TBase *>(m_instance_data);
 	}
 
-	TBase& GetReference()
-	{
+	const TBase *GetPointer() const {
+		return reinterpret_cast<TBase *>(m_instance_data);
+	}
+
+	TBase &GetReference() {
 		return reinterpret_cast<TBase &>(m_instance_data);
 	}
-	const TBase& GetReference() const
-	{
+
+	const TBase &GetReference() const {
 		return reinterpret_cast<TBase &>(m_instance_data);
 	}
 
 public:
 	// pointer-to-member convenience operator
-	TBase* operator->()				{ return GetPointer(); }
-	const TBase* operator->() const	{ return GetPointer(); }
+	TBase *operator ->() { return GetPointer(); }
+
+	const TBase *operator ->() const { return GetPointer(); }
 
 	// cast to pointer convenience operator
-	operator TBase*()				{ return GetPointer(); }
-	operator const TBase*() const	{ return GetPointer(); }
+	operator TBase *() { return GetPointer(); }
+
+	operator const TBase *() const { return GetPointer(); }
 
 	// cast to reference convenience operator
-	operator TBase&()				{ return *GetReference(); }
-	operator const TBase&() const	{ return *GetReference(); }
+	operator TBase &() { return *GetReference(); }
+
+	operator const TBase &() const { return *GetReference(); }
 
 	// Use this for your non-default inplace new operations
-	void* AllocationAddress()
-	{
+	void *AllocationAddress() {
 		return reinterpret_cast<void *>(m_instance_data);
 	}
 
@@ -63,13 +62,11 @@ public:
 	// http://stackoverflow.com/questions/620137/do-the-parentheses-after-the-type-name-make-a-difference-with-new
 
 	// Construct the non-POD type using TImpl's default constructor
-	TBase* ConstructDefault()
-	{
-		return new (AllocationAddress()) TImpl();
+	TBase *ConstructDefault() {
+		return new(AllocationAddress()) TImpl();
 	}
 
-	void Destruct()
-	{
+	void Destruct() {
 		GetPointer()->~T();
 	}
 };

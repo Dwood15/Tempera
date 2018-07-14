@@ -154,7 +154,6 @@ namespace Yelo {
 			tag_block:8 * sizeof(tag_block) * 3;
 		};
 
-		struct structure_bsp_header;
 		struct scenario_structure_bsp_reference {
 			long                 cache_offset;
 			long                 bsp_data_size;
@@ -165,7 +164,7 @@ namespace Yelo {
 
 
 		struct scenario {
-			enum { k_group_tag = 'scnr' };
+			// enum { k_group_tag = 'scnr' };
 
 			tag_reference _dont_use;
 			tag_reference _wont_use;
@@ -176,15 +175,15 @@ namespace Yelo {
 			Yelo::Enums::scenario_type type;
 			unsigned short             flags;
 
-			tag_block:8 * sizeof(tag_block) * 1; // scenario_child_scenario_reference
-			angle local_north;
-			tag_data :8 * sizeof(tag_data) * 1;
-			long     :8 * sizeof(long) * 34; // 136
-			tag_block:8 * sizeof(tag_block) * 1 + 1; // scenario_function
-			tag_data :8 * sizeof(tag_data) * 1; // editor_scenario_data
-			tag_block:8 * sizeof(tag_block) * 1; // editor_comment_definition
-			tag_block:8 * sizeof(tag_block) * 1; // Halo2. scenario_environment_object
-			long     :8 * sizeof(long) * 53; // 212
+			tag_block : 8 * sizeof(tag_block); // scenario_child_scenario_reference
+			angle 		local_north;
+			tag_data  : 8 * sizeof(tag_data);
+			long      : 8 * sizeof(long) * 34; // 136
+			tag_block : 8 * sizeof(tag_block) * (1 + 1); // scenario_function
+			tag_data  : 8 * sizeof(tag_data) * 1; // editor_scenario_data
+			tag_block : 8 * sizeof(tag_block) * 1; // editor_comment_definition
+			tag_block : 8 * sizeof(tag_block) * 1; // Halo2. scenario_environment_object
+			long      : 8 * sizeof(long) * 53; // 212
 
 			Yelo::TagBlock<const scenario_object_name> object_names;
 
@@ -215,7 +214,7 @@ namespace Yelo {
 			Yelo::TagBlock<const s_scenario_sound_scenery>      sound_scenery;
 			Yelo::TagBlock<const scenario_object_palette_entry> sound_scenery_palette;
 
-			tag_block:8 * sizeof(tag_block) * 1 + 1;
+			tag_block:8 * sizeof(tag_block) * 2;
 
 			long:8 * sizeof(long) * 15; // 60
 
@@ -226,12 +225,12 @@ namespace Yelo {
 			Yelo::TagBlock<const scenario_netpoint>                              netgame_flags;
 			Yelo::TagBlock<scenario_netgame_equipment>                           netgame_equipment;
 			Yelo::TagBlock<const scenario_starting_equipment>                    starting_equipment;
-			tag_block:8 * sizeof(tag_block) * 1 + 1 + 1 + 1;
+			tag_block:8 * sizeof(tag_block) * (4);
 
 			long:8 * sizeof(long) * 9; // 36
 
-			tag_block:8 * sizeof(tag_block) * (1 + 1 + 1 + 1);
-			tag_block:8 * sizeof(tag_block) * (1 + 1 + 1 + 1 + 1 + 1 + 1);
+			tag_block:8 * sizeof(tag_block) * (4);
+			tag_block:8 * sizeof(tag_block) * (7);
 
 			tag_data hs_syntax_data;
 			tag_data hs_string_data;

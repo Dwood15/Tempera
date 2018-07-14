@@ -57,30 +57,30 @@ namespace calls {
 	 * @param args
 	 * @return
 	 */
-	template <uintptr_t addr, Convention conv = Convention::m_cdecl, typename retType = void, typename ...argTypes>
-	inline retType DoCall(argTypes... args) {
-		// typedef retType (__stdcall *function_t)(argTypes...);
-		using ufunc_t = retType(__cdecl *)(argTypes...);
-
-		if constexpr(conv == Convention::m_stdcall) {
-			using ufunc_t = retType(__stdcall *)(argTypes...);
-
-		} else if constexpr(conv == Convention::m_fastcall) {
-			using ufunc_t = retType(__fastcall *)(argTypes...);
-
-		} else if constexpr(conv == Convention::m_thiscall) {
-			using ufunc_t = retType(__thiscall *)(argTypes...);
-
-		} else if constexpr(conv == Convention::m_cdecl) {
-			using ufunc_t = retType(__cdecl *)(argTypes...);
-
-		} else {
-			throw "Invalid return type specified!";
-		}
-
-		static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
-		return func_to_call(args...);
-	};
+	// template <uintptr_t addr, Convention conv = Convention::m_cdecl, typename retType = void, typename ...argTypes>
+	// inline retType DoCall(argTypes... args) {
+	// 	// typedef retType (__stdcall *function_t)(argTypes...);
+	// 	using ufunc_t = retType(__cdecl *)(argTypes...);
+	//
+	// 	if constexpr(conv == Convention::m_stdcall) {
+	// 		using ufunc_t = retType(__stdcall *)(argTypes...);
+	//
+	// 	} else if constexpr(conv == Convention::m_fastcall) {
+	// 		using ufunc_t = retType(__fastcall *)(argTypes...);
+	//
+	// 	} else if constexpr(conv == Convention::m_thiscall) {
+	// 		using ufunc_t = retType(__thiscall *)(argTypes...);
+	//
+	// 	} else if constexpr(conv == Convention::m_cdecl) {
+	// 		using ufunc_t = retType(__cdecl *)(argTypes...);
+	//
+	// 	} else {
+	// 		throw "Invalid return type specified!";
+	// 	}
+	//
+	// 	static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
+	// 	return func_to_call(args...);
+	// };
 
 	/**
 	 * Do a competent function call against the engine

@@ -2,7 +2,6 @@
 
 
 #include "function_declarations.h"
-#include "enums.h"
 
 namespace Yelo::Scripting {
 

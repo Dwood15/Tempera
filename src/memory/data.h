@@ -116,13 +116,17 @@ namespace Yelo {
 
 		static void data_verify(const Memory::s_data_array *data) {}
 
-		[[deprecated]]
-		static s_data_array *data_new(const char *name, long maximum_count, size_t datum_size) {
-			static uintptr_t FUNCTION = CurrentEngine.getFunctionBegin("data_new");
-
-			__asm mov      ebx, datum_size
-			return calls::DoCall<Convention::m_cdecl, s_data_array *, long, const char *>(FUNCTION, maximum_count, name);
-		}
+		// [[deprecated]]
+		// static s_data_array *data_new(const char *name, long maximum_count, size_t datum_size) {
+		// 	static auto FUNCTION = CurrentEngine.getFunctionBegin("data_new");
+		//
+		// 	if (!FUNCTION) {
+		// 		return nullptr;
+		// 	}
+		//
+		// 	__asm mov      ebx, datum_size
+		// 	return calls::DoCall<Convention::m_cdecl, s_data_array *, long, const char *>(*FUNCTION, maximum_count, name);
+		// }
 
 		//Intended to be a complete replacement for the in-game data_new :)
 		//TODO: TEST + confirm works. _Looks_ functionally similar to the original data_new.

@@ -11,7 +11,6 @@ set(CACHE_H
 	${C_SHARED_H}
 	#	${CMAKE_CURRENT_SOURCE_DIR}/builder.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/cache_base.h
-	${CMAKE_CURRENT_SOURCE_DIR}/cache_enums.h
 	${CMAKE_CURRENT_SOURCE_DIR}/cache_files.h
 	${CMAKE_CURRENT_SOURCE_DIR}/cache_files_globals.h
 	#	${CMAKE_CURRENT_SOURCE_DIR}/cache_files_yelo.hpp

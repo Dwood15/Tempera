@@ -2,6 +2,8 @@
 
 
 #include <dinput.h>
+#include <optional>
+
 #include "versions.h"
 #include "gamestate/objects.h"
 #include "core.h"
@@ -36,7 +38,7 @@ namespace feature_management::engines {
 		char                     *DEBUG_FILENAME = const_cast<char *>("tempera.unk.unk.debug.log");
 		char *LUA_FILENAME   = const_cast<char *>("tempera.init.lua");
 
-		LuaScriptManager * GetLuaState();
+		LuaScriptManager * GetLuaState() volatile;
 
 		s_player_action GetPlayerActionOverride(ushort idx, s_unit_control_data * from);
 
@@ -46,7 +48,7 @@ namespace feature_management::engines {
 
 		bool IsCustomEd();
 
-		bool IsCoreInitialized();
+		bool IsCoreInitialized() volatile ;
 
 		size_t GetNumberOfFunctionTableReferences();
 
@@ -84,7 +86,10 @@ namespace feature_management::engines {
 
 		GlobalEngine();
 
-		void RefreshCore();
+		void RefreshCore() volatile;
+
+		auto GetHsFunctionTableCountReferences16();
+		auto GetHsFunctionTableCountReferences32();
 
 		minor GetMinorVersion() {
 			return this->CurrentMinor;
@@ -92,7 +97,7 @@ namespace feature_management::engines {
 
 		const char *GetCurrentMajorVerString();
 
-		Core *GetCore();
+		Core *GetCore() volatile;
 
 		/**
  		* Called before VirtualProtect is run.
@@ -108,7 +113,7 @@ namespace feature_management::engines {
 		 * @param needle function name to look up
 		 * @return uintptr of the entry point of function.
 		 */
-		uintptr_t getFunctionBegin(const char *needle);
+		std::optional<uintptr_t> getFunctionBegin(const char *needle);
 
 		/**
 		 * Run-time lookup of memory regions.
@@ -117,13 +122,13 @@ namespace feature_management::engines {
 		 * @param addr Address to look up
 		 * @return named description of the memory region.
 		 */
-		const char *getMemoryRegionDescriptor(const uintptr_t addr);
+		const char *getMemoryRegionDescriptor(const uintptr_t addr) volatile;
 	};
 };
 
 static feature_management::engines::GlobalEngine CurrentEngine;
 
-void post_dll_load();
+static volatile feature_management::engines::GlobalEngine * vEngine = &CurrentEngine;
 
 /**
  * Called variably based on fps

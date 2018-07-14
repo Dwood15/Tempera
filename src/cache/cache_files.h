@@ -9,7 +9,6 @@
 // map_name: The name of a cache file without path information or extensions
 
 #include <synchapi.h>
-#include "cache_enums.h"
 #include "../cseries/base.h"
 #include "../memory/datum_index.h"
 #include "../tags/group/tag_groups.h"
@@ -95,9 +94,6 @@ namespace Yelo {
 namespace Yelo {
 
 	namespace TagGroups {
-		struct structure_bsp_header;
-		struct scenario_structure_bsp_reference;
-
 		Cache::s_cache_tag_header *Index();
 
 		Cache::s_cache_tag_instance const *Instances(); // Don't directly use this for getting tags

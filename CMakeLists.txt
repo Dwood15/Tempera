@@ -120,6 +120,10 @@ set(COMMON_H
 	common/engine_interface.h
 	common/macros_generic.h
 	common/struct_helper.h
+	common/enums/effects_enums.h
+	common/enums/generic_enums.h
+	common/enums/hs_enums.h
+	common/enums/objects_enums.h
 	src/engine/game.h
 	)
 

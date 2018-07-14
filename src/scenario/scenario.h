@@ -37,7 +37,7 @@ namespace Yelo {
 // #define blam_global_bsp3d            *(Scenario::GlobalBspReference())
 // #define blam_global_collision_bsp      *(Scenario::GlobalCollisionBspReference())
 
-		struct s_scenario_globals;
+		// struct s_scenario_globals;
 
 		const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
 

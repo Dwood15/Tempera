@@ -26,12 +26,6 @@
 #include "math.h"
 #include "../math/colors.h"
 
-//0x006AC4DC;
-
-#define FOV_XBOUND 0.024f
-#define FOV_YBOUND 0.012f
-#define OBJECT_CLIP 17
-
 struct _camera {
 	WORD  Unknown1;
 	short wPerspective; // First Person( 0 ), Third Person( 1 ), Dead( 3 )

@@ -1,5 +1,4 @@
 set(S_LIBRARY_H
-	${CMAKE_CURRENT_SOURCE_DIR}/library/enums.h
 	${CMAKE_CURRENT_SOURCE_DIR}/library/function_declarations.h
 	${CMAKE_CURRENT_SOURCE_DIR}/library/globals_declarations.h
 	${CMAKE_CURRENT_SOURCE_DIR}/library/internal_compile.inl

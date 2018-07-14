@@ -1,5 +1,5 @@
 
-static inline const defined_functionrange hce110_function_map[] = {
+constexpr const defined_functionrange hce110_function_map[] = {
 	{"magnitude_squared3d",                                                      0x401000, 0x40101F},
 	{"distance_squared3d",                                                       0x401020, 0x40104F},
 	{"real_seed_random_range_extended",                                          0x401050, 0x40108F},

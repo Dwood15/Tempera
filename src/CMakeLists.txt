@@ -11,6 +11,7 @@ set(DINPUT_CXX
 	${CMAKE_CURRENT_SOURCE_DIR}/Dinput/dinput.cpp
 	)
 
+add_subdirectory(ai)
 add_subdirectory(math)
 add_subdirectory(cache)
 add_subdirectory(cseries)
@@ -28,6 +29,7 @@ add_subdirectory(tags)
 
 set(SRC_CXX
 	src/Direct3D/d3d9hook.cpp
+	${AI_CXX}
 	${DINPUT_CXX}
 	${CMAKE_CURRENT_SOURCE_DIR}/core.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/CurrentEngine.cpp
@@ -41,6 +43,7 @@ set(SRC_CXX
 	PARENT_SCOPE)
 
 set(SRC_H
+	${AI_H}
 	${GAME_H}
 	${SCRIPTING_H}
 	${SCENARIO_H}

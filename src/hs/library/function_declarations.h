@@ -726,7 +726,6 @@ namespace Yelo::Scripting {
 
 #include "globals_declarations.h"
 #include "../script_extensions/hs_base.h"
-#include "enums.h"
 // #include "../../network/server/network_server_manager_structures.hpp"
 // #include "../../network/server/network_server_manager.hpp"
 // #include "../../network/networking.h"
@@ -1080,29 +1079,29 @@ namespace Yelo::Scripting {
 		InitializeScriptFunction(Enums::_hs_function_machine_is_dedi, scripting_machine_is_dedi);
 
 
-		YELO_INIT_SCRIPT_FUNCTION_USER(Enums::_hs_function_pp_load, Rasterizer::PostProcessing::Scripting::HS_Load);
-		YELO_INIT_SCRIPT_FUNCTION_USER(Enums::_hs_function_pp_unload, Rasterizer::PostProcessing::Scripting::HS_Unload);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_instance_index_by_name, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectInstanceIndexByName);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_instance_active, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectInstanceActive);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_instance_fade, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectInstanceFade);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_instance_current_fade, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectInstanceCurrentFade);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_instance_fade_direction, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectInstanceFadeDirection);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_index_by_name, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectIndexByName);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_is_valid, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectIsValid);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_shader_variable_index_by_name, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectShaderVariableIndexByName);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_shader_variable_boolean, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectShaderVariableBoolean);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_shader_variable_integer, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectShaderVariableInteger);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_shader_variable_real, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectShaderVariableReal);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_shader_instance_active, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectShaderInstanceActive);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_bloom_set_size, Rasterizer::PostProcessing::Scripting::Bloom::HS_BloomSetSize);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_bloom_set_exposure, Rasterizer::PostProcessing::Scripting::Bloom::HS_BloomSetExposure);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_bloom_set_mix_amount, Rasterizer::PostProcessing::Scripting::Bloom::HS_BloomSetMixAmount);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_bloom_set_minimum_color, Rasterizer::PostProcessing::Scripting::Bloom::HS_BloomSetMinimumColor);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_bloom_set_maximum_color, Rasterizer::PostProcessing::Scripting::Bloom::HS_BloomSetMaximumColor);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_ai_transform_actor, AI::Transform::HS_AITransformActor);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_ai_transform_actors, AI::Transform::HS_AITransformActors);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_ai_transform_actors_by_type, AI::Transform::HS_AITransformActorsByType);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_ai_actor_is_transforming, AI::Transform::HS_AIActorIsTransforming);
+		//YELO_INIT_SCRIPT_FUNCTION_USER(Enums::_hs_function_pp_load, Rasterizer::PostProcessing::Scripting::HS_Load);
+		//YELO_INIT_SCRIPT_FUNCTION_USER(Enums::_hs_function_pp_unload, Rasterizer::PostProcessing::Scripting::HS_Unload);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_instance_index_by_name, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectInstanceIndexByName);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_instance_active, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectInstanceActive);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_instance_fade, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectInstanceFade);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_instance_current_fade, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectInstanceCurrentFade);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_instance_fade_direction, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectInstanceFadeDirection);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_index_by_name, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectIndexByName);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_is_valid, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectIsValid);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_get_effect_shader_variable_index_by_name, Rasterizer::PostProcessing::Scripting::Internal::HS_GetEffectShaderVariableIndexByName);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_shader_variable_boolean, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectShaderVariableBoolean);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_shader_variable_integer, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectShaderVariableInteger);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_shader_variable_real, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectShaderVariableReal);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_set_effect_shader_instance_active, Rasterizer::PostProcessing::Scripting::Internal::HS_SetEffectShaderInstanceActive);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_bloom_set_size, Rasterizer::PostProcessing::Scripting::Bloom::HS_BloomSetSize);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_bloom_set_exposure, Rasterizer::PostProcessing::Scripting::Bloom::HS_BloomSetExposure);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_bloom_set_mix_amount, Rasterizer::PostProcessing::Scripting::Bloom::HS_BloomSetMixAmount);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_bloom_set_minimum_color, Rasterizer::PostProcessing::Scripting::Bloom::HS_BloomSetMinimumColor);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_pp_bloom_set_maximum_color, Rasterizer::PostProcessing::Scripting::Bloom::HS_BloomSetMaximumColor);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_ai_transform_actor, AI::Transform::HS_AITransformActor);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_ai_transform_actors, AI::Transform::HS_AITransformActors);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_ai_transform_actors_by_type, AI::Transform::HS_AITransformActorsByType);
+		//YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_ai_actor_is_transforming, AI::Transform::HS_AIActorIsTransforming);
 
 		//////////////////////////////////////////////////////////////////////////
 		// Numbers

@@ -119,5 +119,15 @@ STAT_ASSRT(ushort, 0x2);
 // ...Actually, this fixes the problem of the compiler ignoring the 'write' attribute
 // When compiled into object-code (.obj), the 'write' attribute is lost, so it's not really the linker's fault
 #pragma comment(linker, "/section:" API_CODEDATA_SECTION_NAME ",ERW")
-
+#define FUNC_GET(funcName)       CurrentEngine.getFunctionBegin(#funcName)
 #endif
+
+
+//TODO: Move to enums
+//0x006AC4DC; Halo PC 1.07
+#define FOV_XBOUND 0.024f
+#define FOV_YBOUND 0.012f
+#define OBJECT_CLIP 17
+
+
+#define __trueinline extern __forceinline

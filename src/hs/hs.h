@@ -1,19 +1,16 @@
 #pragma once
 
-
+#include "enums/generic_enums.h"
 #include "../memory/datum_index.h"
 #include "../scenario/scenario.h"
 #include "structures.hpp"
 #include "runtime.hpp"
 #include "../cseries/handle_abi.hpp"
-#include "../game/game.hpp"
-#include "../game/allegiance.h"
-#include "../ai/actors/actors.hpp"
+#include "library/yelo_definitions.h"
 #include "../memory/upgrades/blam_memory_upgrades.hpp"
-#include "../ai/actors/actor_types.hpp"
-#include "../interface/hud/hud_definitions.hpp"
 #include "../scenario/yelo/yelo_global_definitions.h"
 #include "../cseries/base.h"
+#include "../cseries/yelo_base.h"
 
 namespace Yelo::Scripting {
 	auto item = Yelo::Enums::k_maximum_hs_syntax_nodes_per_scenario_upgrade;
@@ -53,20 +50,20 @@ namespace Yelo::Scripting {
 		uintptr_t bits;
 		void      *pointer;
 
-		bool    boolean;
-		real    real;
-		short   short;
-		long   long;
-		const char *  string;
+		bool boolean;
+		real real;
+		short short;
+		long long;
+		const char *string;
 
 		hs_script_index_t script;
 		//			hs_global_index_t global;
 
-		Enums::game_difficulty_level difficulty_level;
-		Enums::game_team             team;
-		Enums::actor_default_state   ai_default_state;
-		Enums::actor_type            actor_type;
-		Enums::hud_anchor            hud_corner;
+		game_difficulty_level difficulty_level;
+		game_team             team;
+		actor_default_state   ai_default_state;
+		actor_type            actor_type;
+		hud_anchor            hud_corner;
 
 		datum_index tag_index;
 		datum_index datum;
@@ -88,6 +85,8 @@ namespace Yelo::Scripting {
 };
 
 namespace Yelo::blam {
+	using namespace Yelo::Scripting;
+
 	void hs_nodes_garbage_collect() {
 		// NOTE: engine seems to use a for(;;) using data_next_index() on syntax nodes
 		for (auto node : HsSyntax()) {
@@ -107,7 +106,7 @@ namespace Yelo::blam {
 	}
 
 	Yelo::Enums::hs_type hs_global_get_type(short global_index) {
-		assert(global_index != NONE); // engine doesn't do this
+		//assert(global_index != NONE); // engine doesn't do this
 
 		bool is_internal = (global_index & Enums::_hs_global_index_is_external_mask) == 0;
 		global_index &= Enums::_hs_global_index_mask;
@@ -119,8 +118,8 @@ namespace Yelo::blam {
 		return hs_global_external_get(global_index)->type;
 	}
 
-	const char *  hs_global_get_name(short global_index) {
-		assert(global_index != NONE); // engine doesn't do this
+	const char *hs_global_get_name(short global_index) {
+		//assert(global_index != NONE); // engine doesn't do this
 
 		bool is_internal = (global_index & Enums::_hs_global_index_is_external_mask) == 0;
 		global_index &= Enums::_hs_global_index_mask;
@@ -132,11 +131,11 @@ namespace Yelo::blam {
 		return hs_global_external_get(global_index)->name;
 	}
 
-	short hs_find_global_by_name(const char *  name) {
+	short hs_find_global_by_name(const char *name) {
 		// TODO: update code when containers come online
 
 		// search the globals external from the scenario first
-		long     global_index = 0;
+		long      global_index = 0;
 		for (auto *external_global : c_hs_library::GetExternalGlobals()) {
 			if (!_stricmp(name, external_global->name)) {
 				global_index |= Enums::_hs_global_index_is_external_mask;
@@ -167,8 +166,8 @@ namespace Yelo::blam {
 		return NONE;
 	}
 
-	short hs_find_function_by_name(const char *  name) {
-		long     function_index = 0;
+	short hs_find_function_by_name(const char *name) {
+		long      function_index = 0;
 		for (auto *function : c_hs_library::GetFunctionsTable()) {
 			if (!_stricmp(name, function->name)) {
 				// engine casts down as well, so we will too
@@ -191,7 +190,7 @@ namespace Yelo::blam {
 			return -1;
 		}
 
-		long     reference_index = 0;
+		long      reference_index = 0;
 		for (auto &reference : scenario->references) {
 			if (reference.reference.tag_index == tag_index) {
 				// engine casts down as well, so we will too
@@ -205,7 +204,7 @@ namespace Yelo::blam {
 		return -1;
 	}
 
-	Scripting::hs_script_index_t hs_find_script_by_name(const char *  name) {
+	Scripting::hs_script_index_t hs_find_script_by_name(const char *name) {
 		// TODO: update code when containers come online
 
 		auto *scenario = global_scenario_try_and_get();
@@ -214,7 +213,7 @@ namespace Yelo::blam {
 			return hs_script_index_t::k_null;
 		}
 
-		long     script_index = 0;
+		long      script_index = 0;
 		for (auto &script : scenario->scripts) {
 			if (!_stricmp(name, script.name)) {
 				return hs_script_index_t::CreateIndex(static_cast<short>(script_index));
@@ -227,7 +226,7 @@ namespace Yelo::blam {
 		return hs_script_index_t::k_null;
 	}
 
-	bool hs_evaluate_by_script_name(const char *  name) {
+	bool hs_evaluate_by_script_name(const char *name) {
 		// TODO: update code when containers come online
 
 		auto script = hs_find_script_by_name(name);
@@ -246,11 +245,11 @@ namespace Yelo::blam {
 // these are now defined in hs_types.cpp
 namespace Yelo::blam {
 	extern const std::array<unsigned short, Yelo::Enums::k_number_of_hs_object_types> k_hs_object_type_masks;
-	extern const std::array<tag, Enums::_hs_type_tag_reference__count>      k_hs_tag_reference_type_group_tags;
+	extern const std::array<tag, Enums::_hs_type_tag_reference__count>                k_hs_tag_reference_type_group_tags;
 
-	extern std::array<const char * , Enums::k_number_of_hs_types>           hs_type_names;
-	extern std::array<const char * , Enums::k_number_of_hs_script_types>    hs_script_type_names;
-	extern std::array<const string_list, Enums::_hs_type_enum__count> hs_enum_table;
+	extern std::array<const char *, Enums::k_number_of_hs_types>        hs_type_names;
+	extern std::array<const char *, Enums::k_number_of_hs_script_types> hs_script_type_names;
+	extern std::array<const string_list, Enums::_hs_type_enum__count>   hs_enum_table;
 
 	bool hs_type_valid(short type) { return type >= Enums::_hs_type_void && type < Enums::k_number_of_hs_types; }
 
@@ -262,8 +261,6 @@ namespace Yelo::blam {
 
 	bool hs_type_is_object_name(short type) { return type >= Yelo::Enums::_hs_type_object_name__first && type < Enums::_hs_type_object_name__last; }
 };
-
-
 
 namespace Yelo::Enums {
 	// stock sizes
@@ -303,155 +300,141 @@ namespace Yelo::Enums {
 
 #define GET_HS_GLOBAL(name) Yelo::Scripting::global_##name##_definition
 
-namespace Yelo
-{
-	namespace Flags
-	{
-		enum hs_yelo_definition_flags : unsigned short
+namespace Yelo::Scripting {
+	typedef void *(__stdcall *proc_hs_yelo_function)();
+
+	typedef void *(__stdcall *proc_hs_yelo_function_with_params)(void **arguments);
+
+	// This is the name of a blam global which isn't used in release builds of the game.
+	// We use this global to expose the build version to scripts without causing harm when not using OS.
+	// It was chosen due to the hs_type being a 'real', which allows us to specify the version number as "MAJ.MIN"
+	// See: K_OPENSAUCE_VERSION
+	static const const char *k_external_global_opensauce_override_name = "ai_debug_path_maximum_radius";
+
+	size_t GetTotalScenarioHsSyntaxData() { return Enums::k_total_scenario_hs_syntax_data; }
+
+	size_t GetTotalScenarioHsSyntaxDataUpgrade() { return Enums::k_total_scenario_hs_syntax_data_upgrade; }
+
+	// Interpret [data] as [type] data. Takes the [data].pointer and sets [data] to the dereferenced value.
+	// If [data].pointer is NULL, then this sets [data] to [type]'s NONE equivalent.
+	void UpdateTypeHolderFromPtrToData(TypeHolder &data, const Enums::hs_type type) {
+		if (data.pointer != nullptr) {
+			TypeHolder copy;
+			copy.pointer = data.pointer;
+			data.pointer = nullptr;
+			switch (type) {
+				//case HS_TYPE(byte):
+				case Enums::_hs_type_bool:
+					data.byte = *copy.ptr.byte;
+					break;
+					//////////////////////////////////////////////////////////////////////////
+					// block index based types
+				case Enums::_hs_type_script:
+				case Enums::_hs_type_trigger_volume:
+				case Enums::_hs_type_cutscene_flag:
+				case Enums::_hs_type_cutscene_camera_point:
+				case Enums::_hs_type_cutscene_title:
+				case Enums::_hs_type_cutscene_recording:
+				case Enums::_hs_type_device_group:
+				case Enums::_hs_type_ai_command_list:
+				case Enums::_hs_type_starting_profile:
+				case Enums::_hs_type_conversation:
+					//////////////////////////////////////////////////////////////////////////
+				case Enums::_hs_type_object_name:
+				case Enums::_hs_type_short:
+					data.uint16 = *copy.ptr.uint16;
+					break;
+				case Enums::_hs_type_real:
+				case Enums::_hs_type_ai:
+					//////////////////////////////////////////////////////////////////////////
+					// datum_index based types
+				case Enums::_hs_type_object_list:
+				case Enums::_hs_type_sound:
+				case Enums::_hs_type_effect:
+				case Enums::_hs_type_damage:
+				case Enums::_hs_type_looping_sound:
+				case Enums::_hs_type_animation_graph:
+				case Enums::_hs_type_actor_variant:
+				case Enums::_hs_type_damage_effect:
+				case Enums::_hs_type_object_definition:
+				case Enums::_hs_type_object:
+				case Enums::_hs_type_unit:
+				case Enums::_hs_type_vehicle:
+				case Enums::_hs_type_weapon:
+				case Enums::_hs_type_device:
+				case Enums::_hs_type_scenery:
+					//////////////////////////////////////////////////////////////////////////
+				case Enums::_hs_type_long:
+					data.uint32 = *copy.ptr.uint32;
+					break;
+
+					//////////////////////////////////////////////////////////////////////////
+					//				case HS_TYPE(string): data.ptr.ascii = copy.ptr.ascii; break;
+			}
+		} else // the pointer is null, so default to NONE
 		{
-			_hs_yelo_definition_internal_bit,
-			// changes to the global are sync'd
-			_hs_yelo_definition_is_synchronized_bit,
-			// hs_function is actually an hs_function_definition_yelo
-			_hs_yelo_definition_is_yelo_function_bit,
-		};
-	};
+			data.pointer = nullptr;
 
-	namespace Scripting
-	{
-		typedef void* (__stdcall* proc_hs_yelo_function)();
-		typedef void* (__stdcall* proc_hs_yelo_function_with_params)(void** arguments);
+			switch (type) {
+				//case HS_TYPE(byte):
+				case Enums::_hs_type_bool:
+					data.byte = NONE;
+					break;
+					//////////////////////////////////////////////////////////////////////////
+					// block index based types
+				case Enums::_hs_type_script:
+				case Enums::_hs_type_trigger_volume:
+				case Enums::_hs_type_cutscene_flag:
+				case Enums::_hs_type_cutscene_camera_point:
+				case Enums::_hs_type_cutscene_title:
+				case Enums::_hs_type_cutscene_recording:
+				case Enums::_hs_type_device_group:
+				case Enums::_hs_type_ai_command_list:
+				case Enums::_hs_type_starting_profile:
+				case Enums::_hs_type_conversation:
+					//////////////////////////////////////////////////////////////////////////
+				case Enums::_hs_type_object_name:
+				case Enums::_hs_type_short:
+					data.int16 = NONE;
+					break;
+				case Enums::_hs_type_real:
+					data.real = -1.0f;
+					break;
+				case Enums::_hs_type_ai:
+					//////////////////////////////////////////////////////////////////////////
+					// datum_index based types
+				case Enums::_hs_type_object_list:
+				case Enums::_hs_type_sound:
+				case Enums::_hs_type_effect:
+				case Enums::_hs_type_damage:
+				case Enums::_hs_type_looping_sound:
+				case Enums::_hs_type_animation_graph:
+				case Enums::_hs_type_actor_variant:
+				case Enums::_hs_type_damage_effect:
+				case Enums::_hs_type_object_definition:
+				case Enums::_hs_type_object:
+				case Enums::_hs_type_unit:
+				case Enums::_hs_type_vehicle:
+				case Enums::_hs_type_weapon:
+				case Enums::_hs_type_device:
+				case Enums::_hs_type_scenery:
+					//////////////////////////////////////////////////////////////////////////
+				case Enums::_hs_type_long:
+					data.uint32 = NONE;
+					break;
 
-		// This is the name of a blam global which isn't used in release builds of the game.
-		// We use this global to expose the build version to scripts without causing harm when not using OS.
-		// It was chosen due to the hs_type being a 'real', which allows us to specify the version number as "MAJ.MIN"
-		// See: K_OPENSAUCE_VERSION
-		static const const char *  k_external_global_opensauce_override_name = "ai_debug_path_maximum_radius";
-
-		size_t GetTotalScenarioHsSyntaxData()  { return Enums::k_total_scenario_hs_syntax_data; }
-		size_t GetTotalScenarioHsSyntaxDataUpgrade() { return Enums::k_total_scenario_hs_syntax_data_upgrade; }
-
-		// Interpret [data] as [type] data. Takes the [data].pointer and sets [data] to the dereferenced value.
-		// If [data].pointer is NULL, then this sets [data] to [type]'s NONE equivalent.
-		void UpdateTypeHolderFromPtrToData(TypeHolder& data, const Enums::hs_type type) {
-			if (data.pointer != nullptr) {
-				TypeHolder copy;
-				copy.pointer = data.pointer;
-				data.pointer = nullptr;
-				switch (type) {
-					//case HS_TYPE(byte):
-					case Enums::_hs_type_bool:
-						data.byte = *copy.ptr.byte;
-						break;
-						//////////////////////////////////////////////////////////////////////////
-						// block index based types
-					case Enums::_hs_type_script:
-					case Enums::_hs_type_trigger_volume:
-					case Enums::_hs_type_cutscene_flag:
-					case Enums::_hs_type_cutscene_camera_point:
-					case Enums::_hs_type_cutscene_title:
-					case Enums::_hs_type_cutscene_recording:
-					case Enums::_hs_type_device_group:
-					case Enums::_hs_type_ai_command_list:
-					case Enums::_hs_type_starting_profile:
-					case Enums::_hs_type_conversation:
-						//////////////////////////////////////////////////////////////////////////
-					case Enums::_hs_type_object_name:
-					case Enums::_hs_type_short:
-						data.unsigned short = *copy.ptr.unsigned short;
-						break;
-					case Enums::_hs_type_real:
-					case Enums::_hs_type_ai:
-						//////////////////////////////////////////////////////////////////////////
-						// datum_index based types
-					case Enums::_hs_type_object_list:
-					case Enums::_hs_type_sound:
-					case Enums::_hs_type_effect:
-					case Enums::_hs_type_damage:
-					case Enums::_hs_type_looping_sound:
-					case Enums::_hs_type_animation_graph:
-					case Enums::_hs_type_actor_variant:
-					case Enums::_hs_type_damage_effect:
-					case Enums::_hs_type_object_definition:
-					case Enums::_hs_type_object:
-					case Enums::_hs_type_unit:
-					case Enums::_hs_type_vehicle:
-					case Enums::_hs_type_weapon:
-					case Enums::_hs_type_device:
-					case Enums::_hs_type_scenery:
-						//////////////////////////////////////////////////////////////////////////
-					case Enums::_hs_type_long:
-						data.uint = *copy.ptr.uint;
-						break;
-
-						//////////////////////////////////////////////////////////////////////////
-						//				case HS_TYPE(string): data.ptr.ascii = copy.ptr.ascii; break;
-				}
-			} else // the pointer is null, so default to NONE
-			{
-				data.pointer = nullptr;
-
-				switch (type) {
-					//case HS_TYPE(byte):
-					case Enums::_hs_type_bool:
-						data.byte = NONE;
-						break;
-						//////////////////////////////////////////////////////////////////////////
-						// block index based types
-					case Enums::_hs_type_script:
-					case Enums::_hs_type_trigger_volume:
-					case Enums::_hs_type_cutscene_flag:
-					case Enums::_hs_type_cutscene_camera_point:
-					case Enums::_hs_type_cutscene_title:
-					case Enums::_hs_type_cutscene_recording:
-					case Enums::_hs_type_device_group:
-					case Enums::_hs_type_ai_command_list:
-					case Enums::_hs_type_starting_profile:
-					case Enums::_hs_type_conversation:
-						//////////////////////////////////////////////////////////////////////////
-					case Enums::_hs_type_object_name:
-					case Enums::_hs_type_short:
-						data.short = NONE;
-						break;
-					case Enums::_hs_type_real:
-						data.real = -1.0f;
-						break;
-					case Enums::_hs_type_ai:
-						//////////////////////////////////////////////////////////////////////////
-						// datum_index based types
-					case Enums::_hs_type_object_list:
-					case Enums::_hs_type_sound:
-					case Enums::_hs_type_effect:
-					case Enums::_hs_type_damage:
-					case Enums::_hs_type_looping_sound:
-					case Enums::_hs_type_animation_graph:
-					case Enums::_hs_type_actor_variant:
-					case Enums::_hs_type_damage_effect:
-					case Enums::_hs_type_object_definition:
-					case Enums::_hs_type_object:
-					case Enums::_hs_type_unit:
-					case Enums::_hs_type_vehicle:
-					case Enums::_hs_type_weapon:
-					case Enums::_hs_type_device:
-					case Enums::_hs_type_scenery:
-						//////////////////////////////////////////////////////////////////////////
-					case Enums::_hs_type_long:
-						data.long = NONE;
-						break;
-
-						//////////////////////////////////////////////////////////////////////////
-						//				case HS_TYPE(string): data.ptr.ascii = nullptr; break;
-				}
+					//////////////////////////////////////////////////////////////////////////
+					//				case HS_TYPE(string): data.ptr.ascii = nullptr; break;
 			}
 		}
-		// Interpret [ptr] as a [type] pointer. Takes [ptr], deferences it and sets [data] to the value.
-		// [data] is 'const' as this doesn't modify the pointer, but the data which it points to.
-		void UpdateTypeHolderDataFromPtr(const TypeHolder& data, const Enums::hs_type type, void* ptr);
+	}
 
+	// Interpret [ptr] as a [type] pointer. Takes [ptr], deferences it and sets [data] to the value.
+	// [data] is 'const' as this doesn't modify the pointer, but the data which it points to.
+	void UpdateTypeHolderDataFromPtr(const TypeHolder &data, const Enums::hs_type type, void *ptr);
 
-		// currently defined in Halo1_CE's ScriptLibrary.cpp
-		bool DefinitionsMatch(const TagGroups::s_scripting_definitions& data);
-	};
+	// currently defined in Halo1_CE's ScriptLibrary.cpp
+	bool DefinitionsMatch(const TagGroups::s_scripting_definitions &data);
 };
 
 namespace Yelo::Scripting {
@@ -477,7 +460,7 @@ namespace Yelo::Scripting {
 					//////////////////////////////////////////////////////////////////////////
 				case Enums::_hs_type_object_name:
 				case Enums::_hs_type_short:
-					*data.ptr.unsigned short = *reinterpret_cast<unsigned short *>(ptr);
+					*data.ptr.uint16 = *reinterpret_cast<unsigned short *>(ptr);
 					break;
 				case Enums::_hs_type_real:
 				case Enums::_hs_type_ai:
@@ -500,7 +483,7 @@ namespace Yelo::Scripting {
 				case Enums::_hs_type_scenery:
 					//////////////////////////////////////////////////////////////////////////
 				case Enums::_hs_type_long:
-					*data.ptr.uint = *reinterpret_cast<uint *>(ptr);
+					*data.ptr.int32 = *reinterpret_cast<uint *>(ptr);
 					break;
 
 					//////////////////////////////////////////////////////////////////////////

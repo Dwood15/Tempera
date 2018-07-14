@@ -9,7 +9,7 @@
 #include <cstdio>
 #include <macros_generic.h>
 #include "../ce_base_types.h"
-#include "../math/enums_generic.h"
+#include "enums/generic_enums.h"
 #include "../math/real_math.h"
 
 STAT_ASSRT(sbyte, 1);

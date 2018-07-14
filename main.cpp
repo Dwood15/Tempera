@@ -45,11 +45,6 @@
 #define WIN32_LEAN_AND_MEAN
 
 
-
-//For some unknown reason, dll_load is not getting recognized on the main.cpp compile step.
-// extern void spcore::memory::post_dll_load();
-
-
 static bool loaded = false;
 static void *orig_DirectInput8Create;
 
@@ -128,7 +123,7 @@ static inline void *init(HMODULE *reason) {
 
 	//run the post_dll_load lua hook
 	if (SUPPORTSFEAT(LUA_HOOKS)) {
-		post_dll_load();
+		CurrentEngine.GetLuaState()->call_lua_event_by_type(LuaCallbackId::post_dll_init);
 	}
 
 	return orig_DirectInput8Create;

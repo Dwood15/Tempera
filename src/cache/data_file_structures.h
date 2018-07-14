@@ -5,7 +5,6 @@
 #include "../cseries/base.h"
 #include "../cseries/errors.h"
 #include "../memory/memory_yelo.hpp"
-#include "cache_enums.h"
 
 namespace Yelo {
 	namespace Cache {

@@ -4,6 +4,7 @@
 #include "cache_base.h"
 #include "cache_files_structures_yelo.h"
 #include "cache_files.h"
+#include <enums/cache_enums.h>
 
 namespace Yelo::Cache {
 	struct s_cache_header : public s_cache_header_base {

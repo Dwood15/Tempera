@@ -7,7 +7,7 @@
 #include <vector>
 #include "players_interface.h"
 #include "memory_interface.h"
-#include "../math/enums_generic.h"
+#include "enums/generic_enums.h"
 
 static bool isValidCbId(uint id) {
 	return (id < LuaCallbackId::max_callback_id && id >= before_game_tick);

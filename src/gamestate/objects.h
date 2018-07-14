@@ -22,14 +22,13 @@
 
 #include "../math/real_math.h"
 #include "../ce_base_types.h"
-#include "../math/enums_generic.h"
 #include "../math/animations.h"
 #include "../math/colors.h"
 #include "../core.h"
 #include "../tags/tags.h"
 #include "controls.h"
-#include "objects/objects_enums.h"
 #include <sal.h>
+#include <enums/objects_enums.h>
 
 #pragma pack(push)
 #pragma pack(1)

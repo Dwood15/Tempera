@@ -125,8 +125,8 @@ int l_CallVoidEngineFunctionByFunctionMapName(lua_State *L) {
 	auto str = lua_tostring(L, 1);
 	auto got = CurrentEngine.getFunctionBegin(str);
 
-	if (got != static_cast<uint>(-1)) {
-		calls::DoCall<Convention::m_cdecl>(got);
+	if (got) {
+		calls::DoCall<Convention::m_cdecl>(*got);
 		lua_pushboolean(L, true);
 		return 1;
 	}

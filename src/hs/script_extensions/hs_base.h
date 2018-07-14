@@ -2,7 +2,6 @@
 
 
 #include "../library/function_declarations.h"
-#include "../library/enums.h"
 #include "../library/globals_declarations.h"
 #include "../structures.hpp"
 #include "../../memory/memory_interface_base.hpp"

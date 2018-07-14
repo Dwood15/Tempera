@@ -1,8 +1,8 @@
 #pragma once
 
 #include <macros_generic.h>
+#include <enums/effects_enums.h>
 #include "../../cseries/base.h"
-#include "../../effects/effects_constants.h"
 #include "../../render/rasterizer/geometry.h"
 #include "../../render/constants.h"
 

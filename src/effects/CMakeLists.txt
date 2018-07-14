@@ -33,7 +33,6 @@ set(EFFECTS_H
 #	${E_SHADER_H}
 #	${E_SOUND_H}
 
-	${CMAKE_CURRENT_SOURCE_DIR}/effects_constants.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/effects.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/effect_definitions.hpp
 	PARENT_SCOPE)

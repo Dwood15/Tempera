@@ -20,6 +20,11 @@ using namespace feature_management::engines;
 
 }
 
+static const defined_functionrange * Sapien::GetFunctionMap() {
+	#include "function_map.txt"
+	return sapien_function_map;
+}
+
 void Sapien::WriteHooks() {
 	constexpr uint game_tick_hook = 0x51F219;
 	calls::WriteSimpleHook(game_tick_hook, &game_tick);

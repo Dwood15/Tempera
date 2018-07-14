@@ -4,145 +4,105 @@
 // game
 #include "../ce_base_types.h"
 #include "../CurrentEngine.h"
+#include "../cseries/MacrosCpp.h"
+#include "../gamestate/objects/units/unit_camera.h"
 
-namespace blam
-{
+
+//TODO C++ Definition file and use a FUCKINGINLINEMSVCYOULITTLESHIT macro that forces these functions to be inlined.
+namespace blam {
+
+	bool callFunc(std::optional<uintptr_t> addr) {
+		if (addr) {
+			calls::DoCall(*addr);
+			return true;
+		}
+		return false;
+	}
+
 	//////////////////////////////////////////////////////////////////////////
 	// cheats.c
-	__declspec(naked) void __cdecl cheat_all_weapons()
-	{
-		static const uintptr_t FUNCTION = Engine::GET_FUNC_PTR(CHEAT_ALL_WEAPONS);
-
-		__asm {
-		call	FUNCTION
-		retn
-		}
+	__forceinline void  cheat_all_weapons() {
+		callFunc(CurrentEngine.getFunctionBegin("cheat_all_weapons"));
 	}
-	__declspec(naked) void __cdecl cheat_spawn_warthog()
-	{
-		static const uintptr_t FUNCTION = Engine::GET_FUNC_PTR(CHEAT_SPAWN_WARTHOG);
 
-		__asm {
-		call	FUNCTION
-		retn
-		}
+	void cheat_spawn_warthog() {
+		callFunc(CurrentEngine.getFunctionBegin("cheat_spawn_warthog"));
 	}
-	__declspec(naked) void __cdecl cheat_teleport_to_camera()
-	{
-		static const uintptr_t FUNCTION = Engine::GET_FUNC_PTR(CHEAT_TELEPORT_TO_CAMERA);
 
-		__asm {
-		call	FUNCTION
-		retn
-		}
+	void cheat_teleport_to_camera() {
+		callFunc(CurrentEngine.getFunctionBegin("cheat_teleport_to_camera"));
 	}
-	__declspec(naked) void __cdecl cheat_active_camouflage()
-	{
-		static const uintptr_t FUNCTION = Engine::GET_FUNC_PTR(CHEAT_ACTIVE_CAMOFLAGE);
 
-		__asm {
-		call	FUNCTION
-		retn
-		}
+	void cheat_active_camouflage() {
+		callFunc(CurrentEngine.getFunctionBegin("cheat_active_camouflage"));
 	}
-	__declspec(naked) void __cdecl cheat_active_camouflage_local_player()
-	{
-		static const uintptr_t FUNCTION = Engine::GET_FUNC_PTR(CHEAT_ACTIVE_CAMOFLAGE_LOCAL_PLAYER);
 
-		__asm {
-		call	FUNCTION
-		retn
-		}
+	void cheat_active_camouflage_local_player() {
+		callFunc(CurrentEngine.getFunctionBegin("cheat_active_camouflage_local_player"));
 	}
-	__declspec(naked) datum_index __cdecl cheat_local_player()
-	{
-		static const uintptr_t FUNCTION = Engine::GET_FUNC_PTR(CHEAT_PLAYER_INDEX);
 
-		__asm {
-		call	FUNCTION
-		retn
+	datum_index cheat_local_player() {
+		static const auto FUNCTION = CurrentEngine.getFunctionBegin("cheat_player_index");
+
+		if (!FUNCTION) {
+			return datum_index::null();
 		}
+
+		return calls::DoCall<Convention::m_cdecl, datum_index>(*FUNCTION);
 	}
+
 	//////////////////////////////////////////////////////////////////////////
 	// game_allegiance.c
-	bool __cdecl game_team_is_enemy(signed long team, signed long team_to_test)
-	{
-		static const uintptr_t FUNCTION = Engine::GET_FUNC_PTR(GAME_TEAM_IS_ENEMY);
-
-		__asm {
-		mov		ecx, team_to_test
-		mov		edx, team
-		call	FUNCTION
-		}
+	bool game_team_is_enemy(signed long team, signed long team_to_test) {
+		return calls::DoCall<Convention::m_fastcall, bool, short, short>(CurrentEngine.getFunctionBegin("game_team_is_enemy"), team, team_to_test);
 	}
+
 	//////////////////////////////////////////////////////////////////////////
 	// game_engine.c
-	datum_index __cdecl find_closest_player_index(datum_index player_index)
-	{
-		return Engine::Players::FindClosestPlayerIndex(player_index);
+	datum_index find_closest_player_index(datum_index player_index) {
+		static const auto FUNCTION = CurrentEngine.getFunctionBegin("find_closest_player_index");
+
+		if (!FUNCTION) {
+			return datum_index::null();
+		}
+
+		return calls::DoCall<Convention::m_cdecl, datum_index, datum_index>(*FUNCTION, player_index);
 	}
 
-
-	__declspec(naked) void __cdecl game_engine_rasterize_message(wstring message, real alpha)
-	{
-		static const uintptr_t FUNCTION = Engine::GET_FUNC_PTR(GAME_ENGINE_RASTERIZE_MESSAGE);
-
-		
-		push	alpha
-		push	message
-		call	FUNCTION
-		add		esp, 4 * 2
-		API_FUNC_NAKED_END_NO_STACK_POP()
+	void game_engine_rasterize_message(wstring message, real alpha) {
+		static const auto FUNCTION = CurrentEngine.getFunctionBegin("game_engine_rasterize_message");
+		calls::DoCall<Convention::m_cdecl, void, wstring, real>(*FUNCTION, message, alpha);
 	}
+
 	//////////////////////////////////////////////////////////////////////////
 	// game_engine_multiplayer_sounds.c
-	__declspec(naked) void __cdecl game_engine_play_multiplayer_sound(datum_index player_index, shortmultiplayer_sound_index, bool should_replicate)
-	{
-		static const uintptr_t FUNCTION = Engine::GET_FUNC_PTR(GAME_ENGINE_PLAY_MULTIPLAYER_SOUND);
+	void game_engine_play_multiplayer_sound(datum_index player_index, short multiplayer_sound_index, bool should_replicate) {
+		static const auto FUNCTION = CurrentEngine.getFunctionBegin("game_engine_play_multiplayer_sound");
 
-		
-		push	esi
-		push	edi
+		if (!FUNCTION) {
+			return;
+		}
 
-		movzx	esi, should_replicate
-		push	esi
-		movsx	esi, multiplayer_sound_index
-		mov		edi, player_index
-		call	FUNCTION
-		add		esp, 4 * 1
-
-		pop		edi
-		pop		esi
-		API_FUNC_NAKED_END_NO_STACK_POP()
+		//TODO: Verify consistency with Sapien
+		__asm movsx   esi, multiplayer_sound_index
+		__asm mov   edi, player_index
+		calls::DoCall<Convention::m_cdecl, void, bool>(*FUNCTION, should_replicate);
 	}
 	//////////////////////////////////////////////////////////////////////////
 	// players.c
 
 
-
-
-
-
 	//////////////////////////////////////////////////////////////////////////
 	// player_control.c
-	__declspec(naked) void __cdecl player_control_get_unit_camera_info(const short player_index, Players::s_unit_camera_info& camera_info) {
-		static const uintptr_t FUNCTION = CurrentEngine.getFunctionBegin("PLAYER_CONTROL_GET_UNIT_CAMERA_INFO");
+	void player_control_get_unit_camera_info(const short player_index, Yelo::TagGroups::s_unit_camera_info &camera_info) {
+		static const auto FUNCTION = CurrentEngine.getFunctionBegin("player_control_get_unit_camera_info");
 
-		__asm {
-		push   eax
-		push   ecx
-		push   edx
-		push   esi
-
-		mov      ax, player_index
-		mov      esi, camera_info
-		call   FUNCTION
-
-		pop      esi
-		pop      edx
-		pop      ecx
-		pop      eax
-		pop      ebp
+		if (!FUNCTION) {
+			return;
 		}
+
+		__asm mov      ax, player_index
+		__asm mov      esi, camera_info
+		calls::DoCall<>(*FUNCTION);
 	}
 };

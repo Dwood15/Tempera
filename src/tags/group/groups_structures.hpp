@@ -145,7 +145,7 @@ namespace Yelo {
 	static_assert(sizeof(tag_block_definition) == 0x2C);
 };
 
-#include "../../math/enums_generic.h"
+#include "enums/generic_enums.h"
 namespace byteswaps {
 	using namespace Yelo;
 	using namespace Yelo::Enums;
