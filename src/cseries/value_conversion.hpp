@@ -6,7 +6,7 @@
 #pragma once
 
 #include <string>
-#include "base.h"
+#include "macros_generic.h"
 #include "../math/int_math.h"
 #include "../math/colors.h"
 #include "../math/real_math.h"

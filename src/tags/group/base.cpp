@@ -1,7 +1,5 @@
-#pragma once
-
 #include <windows.h>
-#include "base.h"
+#include "macros_generic.h"
 
 namespace Yelo {
 	namespace blam {

@@ -8,8 +8,8 @@
 
 #include "../group/groups_structures.hpp"
 #include "../group/base.h"
-#include "../group/tag_groups_base_yelo.hpp"
-#include "../tag_enums.h"
+#include "../group/tagreference.h"
+#include "enums/tag_enums.h"
 
 namespace Yelo {
 	typedef char string_id_yelo_value[Yelo::Enums::k_string_id_yelo_length + 1];

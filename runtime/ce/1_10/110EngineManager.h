@@ -1,9 +1,13 @@
 #pragma once
 
 #include <versions.h>
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
 #include <dinput.h>
+#pragma clang diagnostic pop
+
 #include <macros_generic.h>
-#include "../../../src/hs/structures.hpp"
+#include "../../../src/hs/structures.h"
 #include "../../../src/scenario/structures.h"
 
 namespace feature_management::engines {
@@ -72,7 +76,7 @@ namespace feature_management::engines {
 
 		//////////////////////////////////////////////////////////////////////////
 		// Scripting.cpp
-		static auto **const recorded_animations = (reinterpret_cast<Yelo::Scripting::recorded_animations_data_t **>(0x64B940));
+		// static auto **const recorded_animations = (reinterpret_cast<Yelo::Scripting::recorded_animations_data_t **>(0x64B940));
 		static auto **const object_list_header  = (reinterpret_cast<Yelo::Scripting::object_list_header_data_t **>(0x815904));
 
 		static auto **const list_object_reference = (reinterpret_cast<Yelo::Scripting::list_object_reference_data_t **>(0x815908));

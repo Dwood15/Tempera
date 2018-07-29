@@ -7,7 +7,7 @@
 
 #include "../memory/datum_index.h"
 #include "../memory/array.h"
-#include "object_lists_structures.hpp"
+#include "object_lists_structures.h"
 
 namespace Yelo {
 	namespace Scripting {
@@ -77,7 +77,7 @@ namespace Yelo::blam {
 	}
 
 	// Add [object_index] to [list_index]
-	static void __cdecl object_list_add(datum_index list_index, datum_index object_index);
+	static void __cdecl object_list_add(datum_index list_index, datum_index object_index) {}
 
 	// Get the next object_index in a list of objects
 	// [list_reference]:

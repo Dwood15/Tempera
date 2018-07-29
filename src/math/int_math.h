@@ -14,7 +14,7 @@ struct sbsp_stri {
 	};
 };
 
-static_assert(sizeof(sbsp_stri) == 0x6);
+STAT_ASSERT(sbsp_stri, 0x6);
 
 struct rectangle2d {
 	short top;    //0X0
@@ -22,21 +22,24 @@ struct rectangle2d {
 	short bottom; //0x4
 	short right;    //0x6
 };
+STAT_ASSERT(rectangle2d, 0x8);
+
 struct point2d {
 	short x;
 	short y;
 
-	inline operator short *() { return reinterpret_cast<short *>(this); };
+	inline operator short *() { return reinterpret_cast<short *>(this); }
 };
-static_assert(sizeof(rectangle2d) == 0x8);
+STAT_ASSERT(point2d, 0x4);
 
-// bounding in short integer values
+// bounding in short integer 
 struct short_bounds {
 	short lower;
 	short upper;
 
-	inline operator short *() { return reinterpret_cast<short *>(this); };
+	inline operator short *() { return reinterpret_cast<short *>(this); }
 };
+STAT_ASSERT(short_bounds, 0x4);
 
 
 #define pad_point2d unsigned short : 16; unsigned short : 16

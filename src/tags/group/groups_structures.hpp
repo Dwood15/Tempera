@@ -5,9 +5,9 @@
 */
 #pragma once
 
-#include "base.h"
+#include "macros_generic.h"
 #include "tag_groups.h"
-#include "../tag_enums.h"
+#include "enums/tag_enums.h"
 namespace Yelo {
 	class tag_field {
 	public:
@@ -86,10 +86,6 @@ namespace Yelo {
 		// Yelo::TagGroups::s_tag_field_set_runtime_data *GetRuntimeInfo() const;
 
 		// void SetRuntimeInfo(TagGroups::s_tag_field_set_runtime_data *info);
-
-		// TAction: void operator()([const] tag_block_definition* block, [const] tag_field& field)
-		template <class TAction, bool k_assert_field_type>
-		void FieldsDoAction(TAction &action = TAction());
 
 		// Mainly a visitor for startup/shutdown processes, performs an action (via a functor) on a root block definition
 		// then repeats the action for all child blocks (etc)
@@ -192,6 +188,9 @@ namespace byteswaps {
 };
 
 #include "../../math/colors.h"
+#include "../../math/int_math.h"
+#include "../../math/real_math.h"
+
 namespace Yelo::TagGroups {
 	using namespace Yelo;
 	using namespace byteswaps;

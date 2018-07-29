@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../cseries/base.h"
+#include "macros_generic.h"
 #include "../memory/datum_index.h"
 #include "actors/actor_perception.hpp"
 #include "../scenario/structures.h"

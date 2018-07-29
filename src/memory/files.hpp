@@ -7,7 +7,7 @@
 
 #include <windows.h>
 #include <fileapi.h>
-#include "../cseries/base.h"
+#include "macros_generic.h"
 
 namespace Yelo {
 	namespace Enums {

@@ -1,6 +1,5 @@
 
 set(CSERIES_H
-	${CMAKE_CURRENT_SOURCE_DIR}/base.h
 	${CMAKE_CURRENT_SOURCE_DIR}/cseries.h
 	${CMAKE_CURRENT_SOURCE_DIR}/enum_wrappers.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/errors.h

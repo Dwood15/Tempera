@@ -7,9 +7,12 @@
     You should have received a copy of the GNU General Public License
     along with haloforge.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#pragma pack(4)
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#pragma pack(1)
 
 #include "addlog.h"
 
@@ -46,7 +49,6 @@ void DEBUG(const char *fmt, ...) {
 		va_start (va_alist, fmt);
 	DBGPrnt(fmt, va_alist);
 		va_end (va_alist);
-
 }
 
 /**

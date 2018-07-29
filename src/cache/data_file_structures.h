@@ -2,7 +2,7 @@
 
 #include <windows.h>
 #include <addlog.h>
-#include "../cseries/base.h"
+#include "macros_generic.h"
 #include "../cseries/errors.h"
 #include "../memory/memory_yelo.hpp"
 
@@ -83,7 +83,7 @@ namespace Yelo {
 
 			bool ReadHeader(Enums::data_file_reference_type expected_type) {
 				if (!Read(0, &header, sizeof(header))) {
-					DWORD last_error = GetLastError();
+					//DWORD last_error = GetLastError();
 					//printf_s("Failed to read data file header %s\n", name);
 					return false;
 				}
@@ -102,7 +102,7 @@ namespace Yelo {
 				file_names.address = YELO_NEW_ARRAY(char, buffer_size);
 
 				if (!Read(header.file_names_offset, file_names.address, buffer_size)) {
-					DWORD last_error = GetLastError();
+					// DWORD last_error = GetLastError();
 					// printf_s("Invalid format in data file %s\n", name);
 					return false;
 				}
@@ -117,7 +117,7 @@ namespace Yelo {
 				file_index_table.address = YELO_NEW_ARRAY(s_data_file_item, header.tag_count);
 
 				if (!Read(header.file_index_table_offset, file_index_table.address, buffer_size)) {
-					DWORD last_error = GetLastError();
+					// DWORD last_error = GetLastError();
 					//printf_s("Invalid format in data file %s\n", name);
 					return false;
 				}
@@ -164,7 +164,7 @@ namespace Yelo {
 					WriteFile(file_handle, &header, sizeof(header), &bytes_written, nullptr);
 				}
 
-				DWORD last_error = GetLastError();
+				// DWORD last_error = GetLastError();
 				Print<true>("### FAILED TO OPEN DATA-CACHE FILE: %s.\n\n", this->name);
 				return false;
 			}

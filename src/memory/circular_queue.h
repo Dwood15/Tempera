@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../cseries/base.h"
+#include "macros_generic.h"
 
 namespace Yelo {
 	namespace Enums {

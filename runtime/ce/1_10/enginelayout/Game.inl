@@ -17,7 +17,6 @@
 #include "../../../../../../../BlamSauce/game/engines/engine_slayer.hpp"
 #include "../../../../../../../BlamSauce/game/engines/variants.h"
 #include "../../../../../../../BlamSauce/game/engines/engine.hpp"
-#include "../../../../../../../BlamSauce/cseries/base.h"
 #include "../../../../../../../BlamSauce/interface/camera/camera.h"
 
 #ifdef ENGINE_DPTR

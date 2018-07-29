@@ -3,7 +3,7 @@
  * of various engine functions. This should not be interacted with directly, but through
  * the interfaces provided.
  */
-static inline const defined_functionrange sapien_function_map[] = {
+static const defined_functionrange sapien_function_map[] = {
 
 	{
 		"j_block_folder::ai_script_reference_definition::ctor",                                                                                    0x4010A0, 0x4010A4

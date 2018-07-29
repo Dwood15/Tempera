@@ -1,8 +1,9 @@
 #pragma once
 
 
-#include "../../memory/upgrades/blam_memory_upgrades.hpp"
+
 #include "../../ai/ai_script.h"
+#include "../hs.h"
 
 namespace Yelo
 {
@@ -64,7 +65,7 @@ namespace Yelo
 		template<>
 		struct hs_type_traits<Enums::_hs_type_script>
 		{
-			typedef hs_script_index_t ctype;
+			typedef s_hs_script_container_datum_index ctype;
 		};
 
 		template<>

@@ -53,14 +53,14 @@ struct map_header // HALO PC type.
 	char head[4];			// 'deah' translates as head
 	int Version;			// 5 = Xbox, 6 = Trial, 7 = PC, 609 = CE
 	int DecompLen;			// Actual len of decompressed data. Halo sticks garbage on the end so that the file is one of several fixed sizes (35, etc).
-	DWORD Unknown1;
+	int Unknown1;
 	int TagIndexOffset;
 	int TagIndexMetaLength;
 	int Zeros0[2];			// both always 0x0
 	char MapName[32];
 	char BuildDate[32];		// Year.Month.Day.Build - I guess they use this to make sure that a certain build will only open that build's map files, because this string is in the app too
 	int MapType;			// 0 = singleplayer, 1 = multiplayer, 2 = ui - this also determines the size of the cache file. UI = 35MB, multiplayer = 47MB, and singleplayer = 270MB
-	DWORD Unknown4;
+	int Unknown4;
 	int Zeros1[485];
 	char foot[4];			// 'toof' translates to foot
 };

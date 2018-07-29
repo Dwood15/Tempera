@@ -7,7 +7,7 @@
 
 
 
-#include "../cseries/base.h"
+#include "macros_generic.h"
 #include "files.hpp"
 #include "../cseries/yelo_base.h"
 #include "../cseries/errors.h"

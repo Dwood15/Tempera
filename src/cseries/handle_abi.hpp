@@ -11,9 +11,9 @@ namespace Yelo
 	struct handle_abi_type_traits;
 
 	template<typename T>
-	struct handle_abi_type_traits<T, sizeof(sbyte)>
+	struct handle_abi_type_traits<T, sizeof(signed char)>
 	{
-		typedef sbyte bits_type;
+		typedef signed char bits_type;
 	};
 	template<typename T>
 	struct handle_abi_type_traits<T, sizeof(short)>

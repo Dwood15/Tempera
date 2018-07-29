@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include "../../../../../../../BlamSauce/memory/upgrades/blam_memory_upgrades.hpp"
 
 #ifdef ENGINE_DPTR
 #undef ENGINE_DPTR
@@ -181,7 +180,7 @@ static auto **const lightnings = reinterpret_cast<lightnings_data_t **>(K_LIGHTN
 static auto **const cached_object_render_states = reinterpret_cast<Render::cached_object_render_states_data_t **>(K_CACHED_OBJECT_RENDER_STATES);;
 static auto **const unit_globals = reinterpret_cast<s_unit_globals_data **>(K_UNIT_GLOBALS);;
 static auto **const device_groups = reinterpret_cast<device_groups_data_t **>(K_DEVICE_GROUPS);;
-static auto **const object_header = reinterpret_cast<object_header_data_t **>(K_OBJECT_HEADER);;
+//static auto **const object_header = reinterpret_cast<object_header_data_t **>(K_OBJECT_HEADER);;
 static auto **const objects_pool = reinterpret_cast<s_objects_pool_data **>(K_OBJECTS_POOL);;
 static auto **const object_globals = reinterpret_cast<s_object_globals_data **>(K_OBJECT_GLOBALS);;
 static auto **const object_name_list = reinterpret_cast<s_object_name_list_data **>(K_OBJECT_NAME_LIST);;

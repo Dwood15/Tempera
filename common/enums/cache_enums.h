@@ -1,13 +1,14 @@
 #pragma once
 
 namespace Yelo::Cache {
-	static const char *  K_DATA_FILE_EXTENSION = ".map";
-	static const char *K_MAP_FILE_EXTENSION  = ".map";
-	static const char *K_MAP_FILES_DIRECTORY = R"(maps\)";
+	constexpr const char *  K_DATA_FILE_EXTENSION = ".map";
+	constexpr const char *K_MAP_FILE_EXTENSION  = ".map";
+	constexpr const char *K_MAP_FILES_DIRECTORY = R"(maps\)";
 };
 
+#include "generic_enums.h"
 namespace Yelo::Enums {
-	enum cache_file_request_source : byte_enum {
+	enum cache_file_request_source : unsigned char {
 		_cache_file_request_source_open_map,
 		_cache_file_request_source_bitmaps,
 		_cache_file_request_source_sounds,

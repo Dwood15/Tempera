@@ -3,7 +3,7 @@
 
 #include "../library/function_declarations.h"
 #include "../library/globals_declarations.h"
-#include "../structures.hpp"
+#include "../structures.h"
 #include "../../memory/memory_interface_base.hpp"
 
 namespace Yelo {

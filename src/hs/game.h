@@ -1,17 +1,10 @@
-
-#include <memory_locations.h>
-#include "../../models/animations/recorded_animations.hpp"
-#include "../../hs/object_lists.hpp"
-
 #pragma once
-namespace Yelo::Enums {
-	enum {
-		k_total_scenario_hs_syntax_data_upgrade = sizeof(Yelo::Memory::s_data_array) + (sizeof(Scripting::hs_syntax_node) * k_maximum_hs_syntax_nodes_per_scenario_upgrade),
-	};
-};
+
+#include "enums/hs_enums.h"
+#include "structures.h"
 
 namespace Yelo::Scripting {
-	recorded_animations_data_t &RecordedAnimations();
+	// recorded_animations_data_t &RecordedAnimations();
 
 	void InitializeLibrary();
 
@@ -31,8 +24,7 @@ namespace Yelo::Scripting {
 		*ADDRESS_OF_SCENARIO_HS_SYNTAX_DATA_SIZE_CHECK = Enums::_x86_opcode_jge_short;
 	}
 
-	static void MemoryUpgradesDispose() {
-	}
+	static void MemoryUpgradesDispose() {}
 
 	void __cdecl Update() {}
 
@@ -45,7 +37,7 @@ namespace Yelo::Scripting {
 		Memory::CreateHookRelativeCall(&Update, reinterpret_cast<void *>(HS_UPDATE_HOOK), Enums::_x86_opcode_retn);
 	}
 
-	recorded_animations_data_t &RecordedAnimations() { DPTR_IMP_GET_BYREF(recorded_animations); }
+	// recorded_animations_data_t &RecordedAnimations() { DPTR_IMP_GET_BYREF(recorded_animations); }
 
 	hs_syntax_data_t &HsSyntax() { DPTR_IMP_GET_BYREF(hs_syntax); }
 

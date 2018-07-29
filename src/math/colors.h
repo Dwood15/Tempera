@@ -6,7 +6,11 @@
 #pragma once
 
 #include <macros_generic.h>
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
 #include <d3dx9math.h>
+#pragma clang diagnostic pop
 
 //TODO: Investigate why this is the way it is.
 struct argb_color;
@@ -24,7 +28,7 @@ struct argb_color {
 	byte      alpha;
 	rgb_color rgb;
 };
-STAT_ASSRT(argb_color, 0x4);
+STAT_ASSERT(argb_color, 0x4);
 
 // represents a color, range: 0 - 1
 struct real_rgb_color {
@@ -32,14 +36,14 @@ struct real_rgb_color {
 	float green;
 	float blue;
 };
-STAT_ASSRT(real_rgb_color, 0xC);
+STAT_ASSERT(real_rgb_color, 0xC);
 
 // represents a color, range: 0 - 1
 struct real_argb_color {
 	float          alpha;
 	real_rgb_color rgb;
 };
-STAT_ASSRT(real_argb_color, 0x10);
+STAT_ASSERT(real_argb_color, 0x10);
 
 //#define vect float
 struct vect2 : public D3DXVECTOR2 {
@@ -76,7 +80,7 @@ struct vect3 : public D3DXVECTOR3 {
 
 };
 
-STAT_ASSRT(vect3, sizeof(D3DXVECTOR3));
+STAT_ASSERT(vect3, sizeof(D3DXVECTOR3));
 
 //-------------------------
 struct HaloColor {

@@ -7,10 +7,60 @@
 #pragma pack(1)
 
 #include <cstdio>
+#include <cstddef>
+
 #include <macros_generic.h>
 #include "../ce_base_types.h"
 #include "enums/generic_enums.h"
 #include "../math/real_math.h"
+
+
+struct player {
+	short   playerid;
+	short   host;
+	wchar_t PlayerName0[12]; // Unicode / Max - 11 Chars + EOS (12 total)
+	long    Unknown0;        // Always -1 / 0xFFFFFFFF
+	long    Team;            // 0 = Red / 1 = Blue
+	long    SwapID;          // is an ObjectID
+	short   SwapType;        // 8 = Vehicle / 6 = Weapon
+	short   SwapSeat;        // Warthog - Driver = 0 / Passenger = 1 / Gunner = 2 / Weapon = -1
+	long    RespawnTimer;    // ?????? Counts down when dead, Alive = 0
+	long    RespawnTimeGrowth; // Always 0
+	Yelo::datum_index   SlaveUnitIndex;          // matches object table
+	long    PlayerLastObjectId;        // Some sort of ID
+	long    Sector;          // This is very, very interesting. BG is split into 25 location ID's. 1 -19
+	long    Unknown4;        // Always -1 / 0xFFFFFFFF
+	long    BulletCount;     // Something to do with bullets increases - weird.
+	wchar_t PlayerName1[12]; // Unicode / Max - 11 Chars + EOS (12 total)
+	long    Color;
+	char    MachineIndex;
+	std::byte    ControllerIndex;
+	char    Team2;
+	char    PlayerIndex;   //Should be 0-16F
+	long    Unknown7;
+	float   SpeedModifier;
+	std::byte    Unknown8[42];   //This is multiplayer-related stuff.
+	short   Kills;          // Number of kills
+	std::byte    Unknown9[6];
+	short   Assists;
+	std::byte    Unknown10[8];
+	short   Teamkills;
+	short   Deaths;
+	short   Suicides;         // suicides, i think. Suicides make you die, you killed someone on your team, but also count to suicide count too.
+	std::byte    Unknown11[40];
+	short   Ping;
+	long    TeamKills;
+	long    TeamKillTimer;
+	std::byte    Unknown12[14];
+	long    unk;
+	long    unk2;
+	float   unk3;
+	Yelo::datum_index   unknown_ident;
+	std::byte    Unknown13[120];
+	std::byte    Unknown14[12];    // 0xFF's
+	std::byte    Unknown15[119];
+	std::byte    Unknown16;
+};
 
 STAT_ASSRT(sbyte, 1);
 using namespace Yelo;
@@ -18,6 +68,8 @@ struct s_player_hud_messages {
 	byte unk[0x460];
 };
 STAT_ASSRT(s_player_hud_messages, 0x460);
+
+
 
 struct s_hud_messaging_state {
 	s_player_hud_messages hmi[MAX_PLAYER_COUNT_LOCAL];
@@ -123,7 +175,19 @@ struct s_players_globals_data {
 
 STAT_ASSRT(s_players_globals_data, 0x10 + (0x4 * 2 * MAX_PLAYER_COUNT_LOCAL) + (0x4 * 2 * MAX_PLAYERS_IN_GAME));
 
-static s_players_globals_data *players_global_data = *(s_players_globals_data **) 0x815918;
+// static s_players_globals_data *players_global_data = *(s_players_globals_data **) 0x815918;
+
+struct _core_0 {
+	data_header<void>      *Unknown;
+	data_header<void>      *ObjectListHeader;
+	data_header<void>      *ListObjectReference;
+	data_header<void>      *HSGlobals;
+	data_header<void>      *HSThread;
+	data_header<void>      *ScriptNode;
+	s_players_globals_data *PlayersGlobals;
+	data_header<void>      *Teams;
+	data_header<player>    *Players;
+};
 
 struct s_player_control {
 	datum_index         unit_index;                                                                      // 0x0
@@ -146,7 +210,7 @@ struct s_player_control {
 	unsigned long       _unk_fld3_32;                                                                    // 0x3C
 };
 
-static_assert(sizeof(s_player_control) == 0x40);
+STAT_ASSERT(s_player_control, 0x40);
 
 struct s_player_control_globals_data {
 	unsigned long action_flags[2]; // see "action_test" script functions
@@ -157,7 +221,8 @@ struct s_player_control_globals_data {
 	//TODO: Find out what functions access this array, and modify them to loop over this array, based on number of local players. :)
 	s_player_control local_players[MAX_PLAYER_COUNT_LOCAL]; //0x10
 };
-STAT_ASSRT(s_player_control_globals_data, (0x10 + sizeof(s_player_control) * MAX_PLAYER_COUNT_LOCAL));
+
+STAT_ASSERT(s_player_control_globals_data, (0x10 + sizeof(s_player_control) * MAX_PLAYER_COUNT_LOCAL));
 static_assert(sizeof(s_player_control_globals_data) < (unsigned int) 0xFF);
 
 

@@ -1,6 +1,5 @@
 #pragma once
 
-
 // RIVERSIDE MOTHER FUCKER! *techno beat*
 static void * K_HS_FUNCTION_TABLE_REFERENCES[] = {
 	0x47CF09,

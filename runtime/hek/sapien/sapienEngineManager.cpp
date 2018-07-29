@@ -1,5 +1,4 @@
-#pragma once
-
+#include <utility>
 
 #include "sapienEngineManager.h"
 #include "../../../src/lua/script_manager.h"
@@ -7,21 +6,20 @@
 
 using namespace feature_management::engines;
 
- void __declspec(naked) Sapien::OnPlayerActionUpdate() {
+// void __declspec(naked) Sapien::OnPlayerActionUpdate() {
 
-	s_player_action *current_action;
+//__cdecl makes the _caller_ clean up the stack. __stdcall means our function cleans up the stack
 
+//This is this way, because clang's a pussy-ass bitch
+void __declspec(naked) Sapien::OnPlayerActionUpdate() {
 	__asm mov     dword ptr[esp+18h], ecx
 	__asm mov     dword ptr[esp+14h], edi
-	__asm mov current_action, ebp
-
-
 	__asm retn
-
 }
 
-static const defined_functionrange * Sapien::GetFunctionMap() {
-	#include "function_map.txt"
+const defined_functionrange *Sapien::GetFunctionMap() {
+#include "function_map.txt"
+
 	return sapien_function_map;
 }
 

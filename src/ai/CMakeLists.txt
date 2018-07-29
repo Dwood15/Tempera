@@ -22,7 +22,6 @@ set(A_ACTORS_H
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_perception.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_stimulus.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_structures.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_types.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actors.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/tranform_manager.h)
 

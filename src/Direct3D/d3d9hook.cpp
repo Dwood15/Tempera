@@ -19,7 +19,6 @@
 #include "../core.h"
 #include "../gamestate/camera.h"
 #include "../CurrentEngine.h"
-#include "../gamestate/objectcontroller.h"
 
 CD3D::CD3D() {
 	Font = NULL;
@@ -249,8 +248,11 @@ long __stdcall hkSetStreamSource(IDirect3DDevice9 *pDevice, UINT StreamNumber, I
 //    in the vTable
 
 // vTable is just a huge table of pointers to every d3d9 function
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
 #include "../../include/detours/detours.h"
+#pragma clang diagnostic pop
+
 DWORD __stdcall CD3D::hkD3DHook(void *lpVoid) {
 	vTable_D3D9 *vD3D9; // Create instance of d3d9 Virtual Method Table
 

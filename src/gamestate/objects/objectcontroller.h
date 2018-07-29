@@ -1,19 +1,5 @@
 #pragma once
-
-
-
-/*
-	This file is part of tempera.
-
-   You should have received a copy of the GNU General Public License
-   along with tempera.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#include "objects.h"
-#include "../core.h"
-
-
-class Core;
+#include "../objects.h"
 
 class ObjectController {
 	float StepSize     = 0.05f;
@@ -31,9 +17,7 @@ class ObjectController {
 	void SetHoldDistance(float dist);
 
 public:
-	Core *ocCore;
-
-	ObjectController(Core *newcore);
+	ObjectController();
 
 	void MoveObjXY();
 

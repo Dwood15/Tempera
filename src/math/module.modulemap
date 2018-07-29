@@ -1,0 +1,3 @@
+module Tempera_Colors {
+    header "colors.h"
+}

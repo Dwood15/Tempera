@@ -2,7 +2,7 @@
 
 #include "../ce_base_types.h"
 #include "objects.h"
-
+#include "unit_controls.h"
 namespace Input {
 	struct ControlSettings {
 		bool  Initialized;
@@ -49,7 +49,6 @@ namespace Input {
 	// API_INLINE int32 GetControlState(enums::PlayerControl control) { return GetControlState(SettingsGetDevice(control), SettingsGetType(control), SettingsGetIndex(control), SettingsGetDirection(control) );
 }
 
-#include "../CurrentEngine.h"
 struct s_unit_control_data;
 namespace Control {
 	extern void HandleActionOverride(ushort idx, s_unit_control_data * from);

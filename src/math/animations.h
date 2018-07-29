@@ -1,6 +1,7 @@
 #pragma once
 
 #include "macros_generic.h"
+#include "../memory/datum_index.h"
 
 //S_animation-state won't get synched.
 struct s_animation_state {
@@ -13,4 +14,16 @@ struct s_animation_state {
 	// Leap Airborne = 40, Leap Melee = 41, Unused AFAICT = 42, Berserk = 43)
 	__int16 animation_index;
 	__int16 frame_index;
-}; static_assert(sizeof(s_animation_state) == 0x4);
+};
+
+STAT_ASSERT(s_animation_state, 0x4);
+
+
+struct s_object_datum_animation_data {
+	Yelo::datum_index       definition_index;    // 0xCC
+	s_animation_state state;        // 0xD0
+	__int16           interpolation_frame_index;// 0xD4
+	__int16           interpolation_frame_count;// 0xD6
+};
+
+STAT_ASSERT(s_object_datum_animation_data, 0xC);

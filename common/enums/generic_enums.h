@@ -9,6 +9,32 @@
 #pragma region generic tag
 #pragma region byteswap shit
 
+namespace Yelo::Flags {
+	enum project_yellow_globals_flags {
+		_project_yellow_globals_hide_health_when_zoomed_bit,
+		_project_yellow_globals_hide_shield_when_zoomed_bit,
+		_project_yellow_globals_hide_motion_sensor_when_zoomed_bit,
+		_project_yellow_globals_force_game_to_use_stun_jumping_penalty_bit,
+		// TODO:
+		_project_yellow_globals_allow_grenade_chain_reactions_in_mp_bit,
+
+		k_number_of_project_yellow_globals_flags,
+	};
+};
+
+namespace Yelo::Enums {
+	enum {
+		k_data_signature          = 'd@t@',
+		k_data_iterator_signature = 'iter',
+
+		k_lruv_cache_signature = 'weee',
+
+		k_memory_pool_signature   = 'pool',
+		k_block_header_signature  = 'head',
+		k_block_trailer_signature = 'tail',
+	};
+};
+
 namespace byteswaps {
 	enum {
 		k_byte_swap_signature = 'bysw',

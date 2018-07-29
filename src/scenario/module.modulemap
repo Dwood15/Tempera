@@ -1,0 +1,10 @@
+module Tempera_Scenario {
+    header "scenario.h"
+}
+module Tempera_Definitions {
+    header "definitions.h"
+}
+
+module Tempera_StructureBsp {
+    header "structure_bsp.h"
+}

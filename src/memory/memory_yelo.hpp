@@ -91,15 +91,15 @@ namespace Yelo {
 		struct memory_stl_allocator {
 			typedef T         value_type;
 			typedef size_t    size_type;
-			typedef ptrdiff_t difference_type;
+			// typedef ptrdiff_t difference_type;
 			typedef T         *pointer;
 			typedef const T   *const_pointer;
 			typedef T         &reference;
 			typedef const T   &const_reference;
 
-			pointer address(reference r) const { return &r; };
+			pointer address(reference r) const { return &r; }
 
-			const_pointer address(const_reference r) const { return &r; };
+			const_pointer address(const_reference r) const { return &r; }
 
 			size_type max_size() const {
 				// The following has been carefully written to be independent of
@@ -159,7 +159,7 @@ namespace Yelo {
 				// The Standardization Committee recommends that std::length_error
 				// be thrown in the case of integer overflow.
 				if (n > max_size()) {
-					throw std::length_error(__FUNCTION__ " - Integer overflow.");
+					throw std::length_error(__FUNCTION__); // " - Integer overflow."));
 				}
 
 				void *const pv = YELO_MALLOC(n * sizeof(T), false);

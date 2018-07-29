@@ -2,9 +2,8 @@
 
 #include <cmath>
 #include <string>
-#include <stringapiset.h>
 #include <time.h>
-#include "base.h"
+#include "macros_generic.h"
 #include "../memory/datum_index.h"
 #include "MacrosCpp.h"
 #include <functional>
@@ -95,23 +94,27 @@ namespace Yelo {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	Tests whether an ASCII string is NULL or begins with a null terminator </summary>
-	inline bool is_null_or_empty(const char* const str) { return str == nullptr || str[0] == '\0'; }
+	static inline bool is_null_or_empty(const char* const str) {
+		return str == nullptr || str[0] == '\0';
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	Tests whether an ASCII string buffer begins with a null terminator </summary>
 	template <size_t kLength>
-	inline bool is_null_or_empty(const char (&array)[kLength]) {
+	static inline bool is_null_or_empty(const char (&array)[kLength]) {
 		return array[0] == '\0';
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	Tests whether a wide string is NULL or begins with a null terminator </summary>
-	inline bool is_null_or_empty(wstring const str) { return str == nullptr || str[0] == L'\0'; }
+	static inline bool is_null_or_empty(const wchar_t * str) {
+		return str == nullptr || str[0] == L'\0';
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	Tests whether a wide string buffer begins with a null terminator </summary>
 	template <size_t kLength>
-	inline bool is_null_or_empty(const wchar_t (&array)[kLength]) {
+	static inline bool is_null_or_empty(const wchar_t (&array)[kLength]) {
 		return array[0] == L'\0';
 	}
 
@@ -119,15 +122,15 @@ namespace Yelo {
 	// is assumed to be null terminated
 	// Returns [string] if successful
 	// If NULL is returned, you can use GetLastError() for error information
-	static char *wstring_to_string(char *string, long string_length, wstring wide, long wide_length = -1) {
-		if (!WIN32_FUNC(WideCharToMultiByte)(CP_ACP, 0, wide, wide_length, string, string_length, nullptr, nullptr))
-			return nullptr;
-		else
-			return string;
-	}
+	// static char *wstring_to_string(char *string, long string_length, wstring wide, long wide_length = -1) {
+	// 	if (!WIN32_FUNC(WideCharToMultiByte)(CP_ACP, 0, wide, wide_length, string, string_length, nullptr, nullptr))
+	// 		return nullptr;
+	// 	else
+	// 		return string;
+	// }
 
 	// [string_length] includes the null terminator
-	static char *wstring_to_string_lazy(char *string, long string_length, wstring wide) {
+	static char *wstring_to_string_lazy(char *string, long string_length, wchar_t * wide) {
 
 		string[--string_length] = '\0';
 		for (long x = 0; string_length--; x++) {
@@ -142,15 +145,15 @@ namespace Yelo {
 	// is assumed to be null terminated
 	// Returns [wide] if successful
 	// If NULL is returned, you can use GetLastError() for error information
-	static wstring string_to_wstring(wstring wide, long wide_length, const char * string, long string_length = -1) {
-		if (!WIN32_FUNC(MultiByteToWideChar)(CP_ACP, 0, string, string_length, wide, wide_length))
-			return nullptr;
-		else
-			return wide;
-	}
+	// static wstring string_to_wstring(wstring wide, long wide_length, const char * string, long string_length = -1) {
+	// 	if (!WIN32_FUNC(MultiByteToWideChar)(CP_ACP, 0, string, string_length, wide, wide_length))
+	// 		return nullptr;
+	// 	else
+	// 		return wide;
+	// }
 
 	// [string_length] includes the null terminator
-	static wstring string_to_wstring_lazy(wstring string, long string_length, const char * ascii) {
+	static wstring string_to_wstring_lazy(wchar_t * string, long string_length, const char * ascii) {
 
 		string[--string_length] = L'\0';
 		for (long x = 0; string_length--; x++) {
@@ -200,46 +203,46 @@ namespace Yelo {
 			union {// t_type_interface_pointers
 				bool* boolean;
 				char* character;
-				Yelo::byte* byte;
-				Yelo::sbyte* sbyte;
+				byte* byte;
+				sbyte* sbyte;
 				ushort* uint16;
 				short* int16;
 				uint* uint32;
 				int* int32;
-				Yelo::real* real;
+				real* real;
 
 				datum_index* datum;
 
-				Yelo::cstring ascii;
-				Yelo::wstring unicode;
+				cstring ascii;
+				wstring unicode;
 			}ptr;
 
 			union {// t_type_interface_arrays
 				bool boolean[1];
 				char character[1];
-				Yelo::byte byte[1];
-				Yelo::sbyte sbyte[1];
+				byte byte[1];
+				sbyte sbyte[1];
 				ushort uint16[1];
 				short int16[1];
 				uint uint32[1];
 				int int32[1];
-				Yelo::real real[1];
+				real real[1];
 
 				datum_index datum[1];
 
-				Yelo::cstring ascii[1];
-				Yelo::wstring unicode[1];
+				cstring ascii[1];
+				wstring unicode[1];
 			}array;
 
 			bool boolean;
 			char character;
-			Yelo::byte byte;
-			Yelo::sbyte sbyte;
+			byte byte;
+			sbyte sbyte;
 			ushort uint16;
 			short int16;
 			uint uint32;
 			int int32;
-			Yelo::real real;
+			real real;
 
 			datum_index datum;
 		};
@@ -257,7 +260,7 @@ namespace Yelo {
 	typedef TTypeHolder<void> TypeHolder;
 	static_assert(sizeof(TypeHolder) == 0x4);
 
-	static const TypeHolder k_null_as_type_holder = {reinterpret_cast<void *>(nullptr)};  ///< nullptr represented as a TypeHolder value
+	static const TypeHolder k_null_as_type_holder = {reinterpret_cast<void *>(0)};  ///< nullptr represented as a TypeHolder value
 	static const TypeHolder k_none_as_type_holder = {reinterpret_cast<void *>(-1)}; ///< NONE represented as TypeHolder val
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -386,33 +389,33 @@ namespace Yelo {
 
 	// Returns INVALID_HANDLE_VALUE as nullptr, else returns [h]
 	// Should be used in conjunction with std::unique_ptr and winapi_handle_closer
-	inline HANDLE ToSafeHandle(HANDLE h) {
-		return h == INVALID_HANDLE_VALUE ? nullptr : h;
-	}
+	// inline HANDLE ToSafeHandle(HANDLE h) {
+	// 	return h == INVALID_HANDLE_VALUE ? nullptr : h;
+	// }
 
 	/// <summary>	Primarily a deleter for std::unique_ptr for use with WinAPI handles. </summary>
-	struct winapi_handle_closer {
-		void operator ()(HANDLE h) const {
-			// YELO_ASSERT_DISPLAY(h != INVALID_HANDLE_VALUE, "tried to close an INVALID handle");
-			if (h != nullptr)
-				WIN32_FUNC(CloseHandle)(h);
-		}
-	};
+	// struct winapi_handle_closer {
+	// 	void operator ()(HANDLE h) const {
+	// 		// YELO_ASSERT_DISPLAY(h != INVALID_HANDLE_VALUE, "tried to close an INVALID handle");
+	// 		if (h != nullptr)
+	// 			WIN32_FUNC(CloseHandle)(h);
+	// 	}
+	// };
 
 	/// <summary>	Primarily a deleter for std::unique_ptr for objects allocated by LocalAlloc. </summary>
-	struct winapi_local_deleter {
-		void operator ()(HLOCAL h) const {
-			// YELO_ASSERT_DISPLAY(h != INVALID_HANDLE_VALUE, "tried to close an INVALID handle");
-			if (h != nullptr)
-				LocalFree(h);
-		}
-	};
+	// struct winapi_local_deleter {
+	// 	void operator ()(HLOCAL h) const {
+	// 		// YELO_ASSERT_DISPLAY(h != INVALID_HANDLE_VALUE, "tried to close an INVALID handle");
+	// 		if (h != nullptr)
+	// 			LocalFree(h);
+	// 	}
+	// };
 
 	/// <summary>	Primarily a deleter for std::unique_ptr for use CRT's FILE. </summary>
 	struct crt_file_closer {
 		void operator ()(FILE *h) const {
 			if (h != nullptr) {
-				int result = fclose(h);
+				fclose(h);
 				// YELO_ASSERT_DISPLAY(result == 0, "failed to fclose");
 			}
 		}
@@ -592,8 +595,8 @@ namespace Yelo {
 	// Use this when are probably about to get really messy...
 	static void PrepareToDropError(const char * text) {
 		if (text == nullptr) text = "(null)";
-
-		MessageBoxA(nullptr, text, "Prepare to Drop!", MB_OK | MB_ICONEXCLAMATION);
+		throw "Gonna die";
+		// ::MessageBoxA(nullptr, text, "Prepare to Drop!");
 	}
 
 	namespace blam {

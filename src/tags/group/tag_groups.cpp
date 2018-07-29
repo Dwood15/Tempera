@@ -1,23 +1,22 @@
-#pragma once
 #include <windows.h>
-#include "base.h"
+#include "macros_generic.h"
 #include "verification.h"
 
 namespace Yelo::blam {
 
-
-	datum_index find_tag_instance(tag group_tag, const char * name) {
+	datum_index find_tag_instance(tag group_tag, const char *name) {
 		return datum_index::null();
 	}
 
 	template <class TAction>
 	void tag_groups_do_header_block_definition_action(TAction &action = TAction()) {}
 
-	static void tag_block_generate_default_element(const tag_block_definition *definition, void *address) { }
+	static void tag_block_generate_default_element(const tag_block_definition *definition, void *address) {}
 
 }
 
 #include "../string_ids/yelo.h"
+
 namespace Yelo::TagGroups {
 	// Get the length, in characters, of a string field, excluding the null character
 	long StringFieldGetLength(const tag_field *field) {
@@ -32,14 +31,20 @@ namespace Yelo::TagGroups {
 
 	char *TryAndGetGroupName(tag group_tag, _Out_ long_string name) {
 		const tag_group *group = nullptr;
-		if (group != nullptr)
+		if (group != nullptr) {
 			strcpy(name, group->name);
-		else if (group_tag == NONE)
+
+		} else if (group_tag == NONE) {
 			strcpy(name, "NONE");
-		else if (group_tag == 0)
+
+		} else if (group_tag == 0) {
 			strcpy(name, "ZERO");
-		else
-			strcpy(name, group_tag_to_string{group_tag}.ToString());
+
+		} else {
+			auto nm = group_tag_to_string{{group_tag}}.ToString();
+			strcpy(name, nm);
+
+		}
 
 		return name;
 	}

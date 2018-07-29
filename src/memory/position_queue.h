@@ -2,7 +2,7 @@
 
 
 #include "simple_circular_queue.h"
-#include "../cseries/base.h"
+#include "macros_generic.h"
 
 namespace Yelo::Game {
 	struct s_position_queue_entry : TStructImpl(20) {

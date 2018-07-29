@@ -1,11 +1,12 @@
 #pragma once
 
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
 #include <dinput.h>
 #include <optional>
+#pragma clang diagnostic pop
 
 #include "versions.h"
-#include "gamestate/objects.h"
 #include "core.h"
 #include "lua/script_manager.h"
 
@@ -13,8 +14,9 @@ class LuaScriptManager;
 
 static bool ShouldOverride[MAX_PLAYER_COUNT_LOCAL];
 struct s_player_action;
-class Core;
 struct s_unit_control_data;
+
+const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
 
 namespace feature_management::engines {
 	class GlobalEngine {
@@ -56,11 +58,12 @@ namespace feature_management::engines {
 
 		bool HasSupport();
 
+		auto ScenarioGlobals();
+
 		IDirectInput8A *GetDInput8Device();
 		IDirectInputDevice8A *GetKeyboardInput();
 		IDirectInputDevice8A *GetMouseInput();
 		IDirectInputDevice8A **GetJoystickInputs();
-
 
 		bool ShouldOverrideAction(ushort idx = 0);
 		void ResetOverride(ushort idx = 0);

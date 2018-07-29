@@ -9,7 +9,7 @@
 // map_name: The name of a cache file without path information or extensions
 
 #include <synchapi.h>
-#include "../cseries/base.h"
+#include "macros_generic.h"
 #include "../memory/datum_index.h"
 #include "../tags/group/tag_groups.h"
 #include "cache_files_structures.h"
@@ -43,6 +43,8 @@ namespace Yelo {
 
 
 		static const char *  DataFileTypeToString(Enums::data_file_type type) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wswitch"
 			switch (type) {
 				case Enums::_data_file_type_bitmaps:
 					return "bitmaps";
@@ -51,8 +53,8 @@ namespace Yelo {
 				case Enums::_data_file_type_locale:
 					return "loc";
 			}
-			// throw "What type of DataFile are you looking for???";
-			return nullptr;
+#pragma clang diagnostic pop
+			throw "What type of DataFile are you looking for???";
 		}
 
 		static const char *  DataFileTypeToString(Enums::data_file_reference_type type) {
@@ -141,7 +143,7 @@ namespace Yelo {
 
 			auto *global_tag_instances = TagGroups::Instances();
 
-			auto &cache_tag_header = *Yelo::TagGroups::Index();
+			// auto &cache_tag_header = *Yelo::TagGroups::Index();
 			//YELO_ASSERT_DISPLAY(tag_index.index > NONE && tag_index.index < cache_tag_header.count, "i don't think %08x is a tag index", tag_index);
 
 			auto &tag_instance = global_tag_instances[tag_index.index];

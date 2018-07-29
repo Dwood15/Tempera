@@ -81,7 +81,8 @@ namespace calls {
 	// 	static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
 	// 	return func_to_call(args...);
 	// };
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-local-typedef"
 	/**
 	 * Do a competent function call against the engine
 	 * @tparam conv
@@ -91,7 +92,7 @@ namespace calls {
 	 * @param args
 	 * @return
 	 */
-	template <Convention conv = Convention::m_cdecl, typename retType = void, typename ...argTypes>
+	 template <Convention conv = Convention::m_cdecl, typename retType = void, typename ...argTypes>
 	inline retType DoCall(uintptr_t addr, argTypes... args) {
 		// typedef retType (__stdcall *function_t)(argTypes...);
 		using ufunc_t = retType(__cdecl *)(argTypes...);
@@ -112,10 +113,11 @@ namespace calls {
 			throw "Invalid return type specified!";
 		}
 
-		static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
+		static ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
 		return func_to_call(args...);
 	};
 };
+#pragma clang diagnostic pop
 
 
 template <typename Func, typename i_t = int, i_t max = MAX_PLAYER_COUNT_LOCAL>

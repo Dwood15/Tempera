@@ -1,0 +1,3 @@
+module Tempera_DatumIndex {
+    header "datum_index.h"
+}

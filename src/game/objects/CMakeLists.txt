@@ -23,7 +23,7 @@ set(OBJECTS_H
 #	${CMAKE_CURRENT_SOURCE_DIR}/objects.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/objects_yelo.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/placeholder_definitions.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/scenario_definitions_structures.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/scenario_definitions_structures.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/scenery_definitions.hpp
 #	${O_BIPEDS_H}
 #	${O_FIELD_H}

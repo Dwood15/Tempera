@@ -2,7 +2,7 @@
 
 
 #include "datum_index.h"
-#include "../cseries/base.h"
+#include "macros_generic.h"
 
 namespace Yelo::Memory {
 	//////////////////////////////////////////////////////////////////////////

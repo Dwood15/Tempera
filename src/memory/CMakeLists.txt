@@ -1,6 +1,5 @@
 #Yeah, I know, I got lazy. But holey moley is it a pain to do so many of these different CMakeLists files.
 set(M_UPGRADES_H
-	${CMAKE_CURRENT_SOURCE_DIR}/upgrades/blam_memory_upgrades.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/upgrades/game_state_yelo.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/upgrades/gs_upgrades.inl
 	)

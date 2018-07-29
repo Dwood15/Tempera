@@ -1,18 +1,7 @@
-/*
-	Project: haloforge
-	File: tags.h
-	Copyright � 2009 SilentK, Abyll
-
-    You should have received a copy of the GNU General Public License
-    along with haloforge.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #pragma once
 
-#ifndef TAGS_H
-#define TAGS_H
 #include "map.h"
-
+#include "../math/colors.h"
 struct ident {
 	short index;
 	short id;
@@ -483,7 +472,3 @@ struct wind // 'wind'
 };
 
 // To be continued...
-
-
-
-#endif /* TAGS_H */

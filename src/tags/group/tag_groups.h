@@ -1,14 +1,6 @@
 #pragma once
 
-#include "base.h"
-#include "groups_structures.hpp"
-#include "../../memory/datum_index.h"
-#include "../../memory/data.h"
-#include "../../memory/upgrades/blam_memory_upgrades.hpp"
-#include "../../memory/array.h"
-#include "tag_groups_base_yelo.hpp"
-#include "../../cache/cache_files.h"
-
+#include "macros_generic.h"
 
 namespace Yelo::TagGroups {
 	// Patches stock tag_groups with new fields where they once had useless padding
@@ -23,7 +15,6 @@ namespace Yelo::TagGroups {
 	// Called after the group definitions have been verified
 	// Defined in CheApe's TagGroups.cpp
 	void InitializeFixes();
-
 
 	char *TryAndGetGroupName(tag group_tag, _Out_ long_string name);
 
@@ -47,8 +38,5 @@ namespace Yelo::TagGroups {
 		const uint _group = *((const uint *) name);
 		return (tag) ((_group >> 24) | ((_group >> 8) & 0xFF00) | (((_group << 8) & 0xFF0000) | ((_group << 24) & 0xFF000000)));
 	}
-
-	template <typename T>
-	inline void tag_data_delete(Yelo::TagData<T> &data, size_t terminator_size = 0);
 };
 

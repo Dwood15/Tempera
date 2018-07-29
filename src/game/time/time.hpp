@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "../../cseries/base.h"
+#include "macros_generic.h"
 #include "../../cseries/MacrosCpp.h"
 #include "time_structures.hpp"
 #include "../../ce_base_types.h"
@@ -11,7 +11,7 @@ namespace Yelo {
 	static const real  K_SECONDS_PER_TICK = 0.033333335f; // 0x3D088889
 
 	namespace GameState {
-		static s_game_time_globals *GameTimeGlobals();
+		static s_game_time_globals *GameTimeGlobals() { return nullptr; }
 	};
 
 	namespace blam {

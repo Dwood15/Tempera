@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstring>
 #include <rpc.h>
 #include <exception>
 #include <addlog.h>
@@ -80,8 +79,6 @@ namespace Yelo {
 			// HACK: don't use this unless the s_data_iterator was created in the OS codebase!
 			// engine's iterator_new doesn't initialize 'finished_flag' and we use it for end() hacks
 			bool operator !=(const s_data_iterator &other) const {
-				auto last_datum = this->data->last_datum;
-
 				if (other.IsEndHack()) {
 					return !this->finished_flag;
 				}
@@ -154,7 +151,7 @@ namespace Yelo {
 		static void data_dispose(s_data_array *data) {
 			if (data != nullptr) {
 				data_verify(data);
-				reinterpret_cast<s_data_array *>(GlobalFree(data));
+				GlobalFree(data);
 			}
 		}
 
@@ -165,6 +162,7 @@ namespace Yelo {
 			data->next_datum.index = 0;
 			data->next_index       = 0;
 			strncpy((char *) &data->next_datum.salt, data->name, 2u);
+			// strncpy_s((char *) &data->next_datum.salt, data->name, 2u);
 			data->next_datum.salt |= 0x8000u;
 			if (data->max_datum > 0) {
 				return; // we're done here!
@@ -219,7 +217,7 @@ namespace Yelo {
 			data_verify(data);
 
 			if (!data->is_valid) {
-				throw std::exception("invalid data array passed to " __FUNCTION__);
+				throw std::exception("invalid data array passed"); // __FUNCTION__);
 			}
 			iterator.data          = data;
 			iterator.next_index    = 0;
@@ -230,7 +228,7 @@ namespace Yelo {
 
 		static void *data_iterator_next(s_data_iterator &iterator) {
 			if (!(iterator.signature == (reinterpret_cast<uintptr_t>(iterator.data) ^ Enums::k_data_iterator_signature))) {
-				throw std::exception("uninitialized iterator passed to " __FUNCTION__);
+				throw std::exception("uninitialized iterator passed");// std::string(__FUNCTION__) );
 			}
 
 			const s_data_array *data = iterator.data;
@@ -370,7 +368,7 @@ namespace Yelo {
 		static void *datum_get(s_data_array *data, datum_index index) {
 
 			if (sizeof(T) != data->datum_size) {
-				Print(false, "Datum_get for object size: %d doesn't match engine size: %d", sizeof(T), data->datum_size);
+				Print("Datum_get for object size: %d doesn't match engine size: %d", sizeof(T), data->datum_size);
 				throw std::exception("Datum get mismatch! See debug log.");
 			}
 
@@ -382,7 +380,7 @@ namespace Yelo {
 				return 0;
 			}
 
-			if ((object_array, item, !item)) {
+			if (!item) {
 				return 0;
 			}
 

@@ -25,5 +25,5 @@ namespace Yelo::Objects {
 			real_vector3d shadow_vector;
 			real_rgb_color shadow_color;
 		};
-		static_assert( sizeof(s_object_lighting) == 0x74 );
+		STAT_ASSERT(s_object_lighting, 0x74 );
 };

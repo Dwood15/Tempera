@@ -11,7 +11,6 @@
 // yelo globals		- project_yellow_globals
 // blam scenario	- scenario
 
-#include "yelo_scenario_definite.h"
 #include "../cache/cache_files.hpp"
 #include "../hs/hs_yelo.hpp"
 #include "yelo_global_definitions.h"

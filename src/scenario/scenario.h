@@ -1,26 +1,24 @@
 #pragma once
 
-#include "../cseries/base.h"
+#include "macros_generic.h"
 #include "../memory/datum_index.h"
 #include "../math/real_math.h"
+#include "scenario.h"
 #include "definitions.h"
 
 namespace Yelo {
-
-	namespace GameState {
 		// Globals tag data
 // 		TagGroups::s_game_globals **GlobalGameGlobalsReference();
 //
 // #define blam_global_game_globals      *(GameState::GlobalGameGlobalsReference())
 
 		// TagGroups::s_game_globals *GlobalGameGlobals();
-	};
 
 	// _Not_ a fan!
 	namespace Scenario {
 		datum_index *GlobalScenarioIndexReference();
 
-		TagGroups::scenario **GlobalScenarioReference();
+		// ::Yelo::TagGroups::scenario **GlobalScenarioReference();
 
 		// short *GlobalStructureBspIndexReference();
 
@@ -37,15 +35,12 @@ namespace Yelo {
 // #define blam_global_bsp3d            *(Scenario::GlobalBspReference())
 // #define blam_global_collision_bsp      *(Scenario::GlobalCollisionBspReference())
 
-		// struct s_scenario_globals;
 
-		const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
 
-		s_scenario_globals *ScenarioGlobals();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Gets the currently loaded scenario. </summary>
-		TagGroups::scenario *Scenario();
+		// Yelo::TagGroups::scenario *Scenario();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Get the currently loaded SBPS's bsp3d block. </summary>
@@ -69,19 +64,18 @@ namespace Yelo {
 	};
 
 	namespace blam {
-		using namespace TagGroups;
 
 		// TagGroups::s_game_globals *scenario_get_game_globals() {
 		// 	return GameState::GlobalGameGlobals();
 		// }
 
-		TagGroups::scenario *global_scenario_get() {
-			return Scenario::Scenario();
-		}
-
-		TagGroups::scenario *global_scenario_try_and_get() {
-			return Scenario::Scenario();
-		}
+		// TagGroups::scenario *global_scenario_get() {
+		// 	return Scenario::Scenario();
+		// }
+		//
+		// TagGroups::scenario *global_scenario_try_and_get() {
+		// 	return Scenario::Scenario();
+		// }
 
 		// TagGroups::structure_bsp *global_structure_bsp_get() {
 		// 	return Scenario::StructureBsp();
@@ -146,7 +140,7 @@ namespace Yelo {
 			blam_global_scenario_index      = datum_index::null();
 			// blam_global_structure_bsp_index = NONE;
 			//Scenario::ScenarioGlobals()->current_structure_bsp_index = NONE;
-			blam_global_scenario      = nullptr;
+			// blam_global_scenario      = nullptr;
 			// blam_global_structure_bsp = nullptr;
 			// blam_global_collision_bsp = nullptr;
 			// blam_global_bsp3d         = nullptr;
@@ -191,10 +185,7 @@ namespace Yelo {
 			// for (scenario_netgame_equipment &equipment : scenario->netgame_equipment)
 			// 	equipment.runtime_object_index = datum_index::null();
 			//
-			// return true;
+			return true;
 		}
-
-
-
 	};
 };

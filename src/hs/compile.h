@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdlib>
-#include "../cseries/base.h"
+#include "macros_generic.h"
 
 namespace Yelo::Scripting {
 		struct s_hs_compile_globals {

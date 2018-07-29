@@ -1,34 +1,13 @@
 #pragma once
-/**
- *  Project: Tempera
- *  File: camera.h
- *  Copyright � 2018 Dwood
- *
- *  This file is part of Tempera.
- *
- *  haloforge is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  haloforge is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with haloforge. If not, see <http://www.gnu.org/licenses/>.
- **/
 
 #include "../math/real_math.h"
 #include "../ce_base_types.h"
 #include "../math/animations.h"
 #include "../math/colors.h"
-#include "../core.h"
 #include "../tags/tags.h"
+#include "../scenario/structures.h"
 #include "controls.h"
-#include <sal.h>
-#include <enums/objects_enums.h>
+#include "enums/objects_enums.h"
 
 #pragma pack(push)
 #pragma pack(1)
@@ -40,7 +19,7 @@ struct bone {
 
 struct s_garbage_data {
 	__int16 ticks_until_gc;
-	PAD16;
+	unsigned short:16;
 	__int32 _unused[5];
 }; static_assert(sizeof(s_garbage_data) == (k_object_size_garbage - k_object_size_item));
 
@@ -60,52 +39,12 @@ struct s_item_data {
 	}                   object_collision;
 	real_vector3d       __unk_type0;        // 0x218
 	real_euler_angles2d __unk_type1;    // 0x224
-}; static_assert(sizeof(s_item_data) == (k_object_size_item - k_object_size_object));
+};
+
+STAT_ASSERT(s_item_data, (k_object_size_item - k_object_size_object));
+
 INTELLISENSE_HACK(s_item_data)
 
-namespace obj {
-	namespace Memory {
-		struct s_header_data {
-			uint32     allocation_crc;
-			char       level[256];
-			tag_string version;
-			short      player_spawn_count;
-			short      game_difficulty;
-			uint32     cache_crc;
-
-			//Also known as YELO//Open Saucey territory.
-			sbyte _unused[32];
-
-		}; STAT_ASSRT(s_header_data, 0x14C);
-
-		struct s_memory_pool_block {
-			typedef void **reference_t;
-
-			long                head;         // 'head'
-			long                size;         // size of the block, exclusive of this header, within the pool
-			reference_t         reference;      // the pointer referencing the block allocation
-			s_memory_pool_block *next;      // linked list: the pool block that follows this one
-			s_memory_pool_block *prev;      // linked list: the pool block the comes before this one
-			long                tail;         // 'tail'
-		};
-
-		struct s_memory_pool {
-			long                signature;      // 'head'
-			::tag_string        name;         // debug code name for the allocation
-			void                *base_address;   // next address to allocate a block at
-			long                size;         // total size of the pool
-			long                free_size;      // total size left in the pool thats not owned by anything
-			s_memory_pool_block *first;      // pointer to the first pool item
-			s_memory_pool_block *last;      // pointer to the last pool item
-		};
-	};
-
-	struct s_objects_pool_data {
-		Memory::s_memory_pool header;
-		byte                  data[k_object_memory_pool_allocation_size];
-	};
-
-};
 
 // Object datums in the memory pool can have dynamically allocated nested-blocks.
 // Due to the way the game implements this, OS can allocate a nested-block of its own in an object,
@@ -136,14 +75,11 @@ struct s_object_datum_network_delta_data {
 	bool          valid_timestamp;                    // 0x54
 	unsigned char __pad__unk3[3];
 	signed long   timestamp;                        // 0x58
-}; static_assert(sizeof(s_object_datum_network_delta_data) == 0x44);
+};
 
-struct s_object_datum_animation_data {
-	Yelo::datum_index       definition_index;    // 0xCC
-	s_animation_state state;        // 0xD0
-	__int16           interpolation_frame_index;// 0xD4
-	__int16           interpolation_frame_count;// 0xD6
-}; static_assert(sizeof(s_object_datum_animation_data) == 0xC);
+STAT_ASSERT(s_object_datum_network_delta_data, 0x44);
+
+
 
 struct s_object_datum_damage_data {
 	float            maximum_health;                    // 0xD8
@@ -180,11 +116,8 @@ struct s_halo_pc_network {
 	signed long network_time;                           // 0x8 or 0xC
 }; static_assert(sizeof(s_halo_pc_network) == 0xC);
 
-struct s_scenario_location {
-	long             leaf_index;
-	__int16          cluster_index;
-	unsigned __int16 __unk_type0;
-}; static_assert(sizeof(s_scenario_location) == 0x8);
+
+#include "../scenario/scenario_location.h"
 
 //s_object_data is also in forge's definitions. \\TODO: Rework and look at again.
 struct s_object_data {
@@ -198,12 +131,12 @@ struct s_object_data {
 	real_vector3d                     forward;                                                    // 0x74
 	real_vector3d                     up;                                                            // 0x80
 	real_vector3d                     angular_velocity;                                            // 0x8C
-	s_scenario_location               location;                                                    // 0x98
+	Yelo::Scenario::s_scenario_location               location;                                                    // 0x98
 	real_point3d                      center;                                                        // 0xA0
 	float                             radius;                                                        // 0xBC
 	float                             scale;                                                        // 0xB0
 	__int16                           type;                                                        // 0xB4
-	PAD16;
+	unsigned short:16;
 	game_team   owner_team;                                                    // 0xB8
 	__int16     name_list_index;                                                            // 0xBA
 	// ticks spent not at_rest. only biped updates this
@@ -212,10 +145,10 @@ struct s_object_data {
 	Yelo::datum_index player_index;                                                        // 0xC0
 	// If this were a projectile, this might be the handle to the weapon which spawned it
 	Yelo::datum_index owner_object_index;                                                    // 0xC4
-	PAD32;                                                                          // 0xC8 unused
+	unsigned long:32;                                                                          // 0xC8 unused
 	s_object_datum_animation_data animation;                                        // 0xCC
 	s_object_datum_damage_data    damage;                                            // 0xD8
-	PAD32;                                                 // 0x108 unused
+	PAD32                                               // 0x108 unused
 	Yelo::datum_index cluster_partition_index;                                // 0x10C
 	Yelo::datum_index garbage_collection_object_index_rltd;                    // 0x110, object_index, garbage collection related
 	Yelo::datum_index next_object_index;                                        // 0x114
@@ -252,12 +185,8 @@ struct s_object_datum {
 	};
 	s_object_data object;
 };
-static_assert(sizeof(s_object_datum) == object_sizes::k_object_size_object);
 
-struct s_persistent_control {
-	long          ticks_remaining;                              // 0x210
-	unsigned long flags;                                 // 0x214
-};
+STAT_ASSERT(s_object_datum, object_sizes::k_object_size_object);
 
 struct s_damage_result {
 	short       category;                                    // 0x404 Enums::damage_category
@@ -293,131 +222,12 @@ struct s_unit_datum_animation_data {
 	real_rectangle2d  aiming_bounds;            // 0x2C8
 	long              pad3;                              // 0x2D8
 	long              pad4;
-}; static_assert(sizeof(s_unit_datum_animation_data) == 0x48);
-
-
-
-struct s_unit_speech {
-	Yelo::Enums::unit_speech_priority priority;
-	Yelo::Enums::unit_scream_type     scream;
-	Yelo::datum_index                       sound_definition_index;
-	short                             time_rel_pad0; // time related
-	unsigned short                    pad_unknown;
-	long                              pad_unverified; // haven't verified what is here yet
-	byte                              ai_information[0x20];
-}; static_assert(sizeof(s_unit_speech) == 0x30);
-
-struct s_unit_speech_data {
-	s_unit_speech current;                              // 0x388
-	s_unit_speech next;                                 // 0x3B8 not *positive* of this field
-	short         pad0;                              // 0x3E8
-	short         pad1;                              // 0x3EA
-	short         pad2;                              // 0x3EC
-	short         pad3;                              // 0x3EE
-	long          pad4;                              // 0x3F0 time related
-	bool          pad5;                                 // 0x3F4
-	bool          pad6;                                 // 0x3F5
-	bool          pad7;                                 // 0x3F6
-	unsigned char pad8;                                          // 0x3F7
-	short         pad9;                              // 0x3F8
-	short         padA;                              // 0x3FA
-	short         padB;                              // 0x3FC
-	short         padC;                              // 0x3FE
-	long          padD;                              // 0x400
 };
+STAT_ASSERT(s_unit_datum_animation_data, 0x48);
 
-enum unit_camo_regrowth : short {
-	_unit_camo_regrowth_off,
-	_unit_camo_regrowth_on, // they fired their weapon, requiring active_camo_regrowth_rate to be applied
-};
 
-struct s_recent_damage {
-	long        game_tick;            // the last game tick damage was dealt
-	real        damage;               // total (read: additive) damage the responsible object has done
-	Yelo::datum_index responsible_unit;
-	Yelo::datum_index responsible_player;   // would be NONE if killed by AI
-};
-
-struct control_state {
-	/** Unit is pressing the crouch button. */
-	ushort crouch_button : 1;
-
-	/** Unit is pressing the jump button. */
-	ushort jump_button : 1;
-
-	ushort unkA : 2;
-
-	/** Unit is pressing the flashlight button. */
-	ushort flashlight_button : 1;
-
-	ushort unkB : 1;
-
-	/** Unit is pressing the action button. */
-	ushort action_button : 1;
-
-	/** Unit is pressing the melee button. */
-	ushort melee_button : 1;
-
-	ushort unkC :  2;
-
-	/** Unit is pressing the reload button. */
-	ushort reload_button : 1;
-
-	/** Unit is pressing the primary fire button. */
-	ushort primary_fire_button : 1;
-
-	/** Unit is pressing the primary fire button. */
-	ushort secondary_fire_button : 1;
-
-	/** Unit is pressing the grenade button. */
-	ushort grenade_button : 1;
-
-	/** Unit is holding the exchange weapon button or is holding down the action button. */
-	ushort exchange_weapon_button : 1;
-
-	ushort unkD : 1;
-};
-static_assert(sizeof(control_state) == sizeof(short));
-
-union unit_control_flags {
-	short         control_flags_a;
-	control_state control_flags;
-};
-static_assert(sizeof(unit_control_flags) == sizeof(short));
-
-struct s_unit_control_data {
-	byte               animation_state;
-	byte               aiming_speed;
-	unit_control_flags control_flags;
-	int16              weapon_index;
-	int16              grenade_index;
-	int16              zoom_index;
-	PAD16;
-	real_vector3d       throttle;
-	real                primary_trigger;
-	real_vector3d       facing_vector;
-	real_vector3d       aiming_vector;
-	real_euler_angles3d looking_vector;
-};
-
-static_assert(sizeof(s_unit_control_data) == 0x40);
-
-struct s_player_action {
-	unit_control_flags control_flagsA;
-	unit_control_flags control_flagsB;
-	float              desired_facing_yaw;
-	float              desired_facing_pitch;
-	float              throttle_forwardback;
-	float              throttle_leftright;
-	float              primary_trigger;
-	__int16            desired_weapon_index;
-	__int16            desired_grenade_index;
-	__int16            desired_zoom_index;
-	__int16            field_1E;
-};
-
-//If it's not here, it won't ever update...
-static s_player_action ActionOverrides[MAX_PLAYER_COUNT_LOCAL];
+#include "unit_speech.h"
+#include "enums/objects_enums.h"
 
 struct s_unit_data {
 	Yelo::datum_index                 actor_index;                              // 0x1F4 //0x0
@@ -506,7 +316,7 @@ struct s_unit_data {
 	unsigned long      pad10_unknown;
 	long               death_time;                                    // 0x41C // game time when this unit died
 	short              feign_death_timer;                              // 0x420
-	unit_camo_regrowth camo_regrowth;                  // 0x422
+	byteswaps::unit_camo_regrowth camo_regrowth;                  // 0x422
 	real               stun;                                          // 0x424
 	short              stun_timer;                                    // 0x428
 	short              killing_spree_count;                              // 0x42A
@@ -530,14 +340,14 @@ struct s_unit_data {
 	unsigned long       pad17;                                             // 0x4C8 unused
 	//////////////////////////////////////////////////////////////////////////
 };
-static_assert(sizeof(s_unit_data) == 0x2D8); //(Enums::k_object_size_unit - Enums::k_object_size_object));
+STAT_ASSERT(s_unit_data, 0x2D8); //(Enums::k_object_size_unit - Enums::k_object_size_object));
 
 struct s_unit_datum {
 	s_object_data unit_object;
 	s_unit_data   unit;
 };
 
-static_assert(sizeof(s_unit_datum) == object_sizes::k_object_size_unit);
+STAT_ASSERT(s_unit_datum, object_sizes::k_object_size_unit);
 
 struct s_item_datum {
 	enum {
@@ -546,7 +356,8 @@ struct s_item_datum {
 
 	s_object_data object;
 	s_item_data   item;
-}; static_assert(sizeof(s_item_datum) == object_sizes::k_object_size_item);
+};
+STAT_ASSERT(s_item_datum, object_sizes::k_object_size_item);
 
 struct s_garbage_datum : s_item_datum {
 	enum {
@@ -554,7 +365,9 @@ struct s_garbage_datum : s_item_datum {
 	};
 
 	s_garbage_data garbage;
-}; static_assert(sizeof(s_garbage_datum) == k_object_size_garbage);
+};
+
+STAT_ASSERT(s_garbage_datum, k_object_size_garbage);
 
 struct s_object_header_datum {
 	short               header_salt;    //0x0
@@ -577,7 +390,8 @@ struct s_object_header_datum {
 
 		struct s_biped_datum   *_biped;
 		struct s_vehicle_datum *_vehicle;
-	}; STAT_ASSRT(magic, 0x4);
+	};
+	STAT_ASSERT(magic, 0x4)
 
 }; //static_assert(sizeof(s_object_header_datum) == 0xC);
 
@@ -586,7 +400,7 @@ struct s_object_header_datum {
 
 
 struct object_data {
-	ident                             Meta;                                                            // 0x0
+	Yelo::datum_index                             Meta;                                                            // 0x0
 	s_halo_pc_network                 PcNetworkData;                                                   // 0x4
 	unsigned long                     Flags;                                                         // 0x10 TODO: Document.
 	signed long                       ObjectMarkerId;                                                // 0x14
@@ -596,7 +410,7 @@ struct object_data {
 	vect3                             Forward;                                                         // 0x74
 	vect3                             Up;                                                            // 0x80
 	vect3                             AngularVelocity;                                                // 0x8C
-	s_scenario_location               Location;                                                         // 0x98
+	Yelo::Scenario::s_scenario_location               Location;                                                         // 0x98
 	vect3                             Center;                                                         // 0xA0
 	float                             Radius;                                                         // 0xBC
 	float                             Scale;                                                         // 0xB0
@@ -607,18 +421,18 @@ struct object_data {
 	// ticks spent not at_rest. only biped updates this
 	__int16                           MovingTime;                                                      // 0xBC
 	__int16                           RegionPermutation;                                               // 0xBE, variant id
-	ident                             Player;                                                         // 0xC0
+	Yelo::datum_index                             Player;                                                         // 0xC0
 	// If this were a projectile, this might be the handle to the weapon which spawned it
-	ident                             owner_object_index;                                              // 0xC4
+	Yelo::datum_index                             owner_object_index;                                              // 0xC4
 	long                              unknown1;                                                         // 0xC8 unused
 	s_object_datum_animation_data     Animation;                                                      // 0xCC
 	s_object_datum_damage_data        Damage;                                                         // 0xD8
 	long                              unknown2;                                                         // 0x108 unused
-	ident                             cluster_partition_index;                                       // 0x10C
-	ident                             garbage_collection_object_index_rltd;                           // 0x110, object_index, garbage collection related
+	Yelo::datum_index                             cluster_partition_index;                                       // 0x10C
+	Yelo::datum_index                             garbage_collection_object_index_rltd;                           // 0x110, object_index, garbage collection related
 	Yelo::datum_index                       next_object_index;                                                // 0x114
-	ident                             first_object_index;                                             // 0x118
-	ident                             parent_object_index;                                             // 0x11C
+	Yelo::datum_index                             first_object_index;                                             // 0x118
+	Yelo::datum_index                             parent_object_index;                                             // 0x11C
 	signed char                       parent_node_index;                                               // 0x120
 	char                              unused_byte_unk;                                                 // 0x121 idk if this is an sbyte or bool here
 	bool                              force_shield_update;                                             // 0x122
@@ -640,11 +454,10 @@ struct object_data {
 	s_object_header_block_reference node_orientations2;                                // 0x1EC real_orientation3d[node_count]
 	s_object_header_block_reference node_matrix_block;                                // 0x1F0 real_matrix4x3[node_count]
 
-	bool IsPlayer() { return (Player.id >= 0 || Player.index >= 0); }
+	bool IsPlayer() { return (Player.index >= 0); }
 };
 
-static_assert(sizeof(object_data) == object_sizes::k_object_size_object);
-
+STAT_ASSERT(object_data, object_sizes::k_object_size_object);
 
 struct object_header {
 	short         object_id;         //0x0
@@ -656,48 +469,26 @@ struct object_header {
 	short         sector;  // 0x4 // portal rendering ( cluster index )
 	short         size;    // 0x6 // Structure size
 	object_data   *address; // 0x8
-
 };
 
-struct biped_data {
-	object_data _object;               // 0x0000
-	long        ActorIndex;            // 0x01F4
-	long        SwarmActorIndex;        // 0x01F8
-	long        SwarmNextActorIndex;    // 0x01FC
-	long        SwarmPrevObjectId;      // 0x0200
-	long        IsInvisible;            // 0x0204	normal = 0x41 invis = 0x51 (bitfield?)
-	char        KeyStateActionFlags;    // 0x0208	bit: crouch = 1, jump = 2, (3, unk), 4 - flashlight,
-	char        Unknown11[3];         // 0x0209
-	char        Unknown09[230];        // 0x020C // originally: 276
-	short       selected_weap_index;    // 0x02F2
-	short       selected_weap_index1;    // 0x02F4
-	short       Unknown14;            // 0x02F6
-	ident       held_weapons_ident[3];    // 0x02F8 // -1 if slot doesnt have a weap. (You can stick in any ident into here, and <TAB> weapon switch and it will go into your hand. Even the biped_data object for the player. But that "weapon"'s first person is wierd.. but works!?.. but don't swap back. lol)
-	ident       weap_slot_invalid;    //0x02FC // I can paste into the other three to swap weapons, but this fourth one is reset to -1 always. (But the original weapon disappears... Wierd?)
-	char        Unknown10[24];
-	char        Zoom00;                // 0x0320
-	char        Zoom01;                // 0x0321
-	char        Unknown12[610];        // 0x0322
-	bone        LeftThigh;            // 0x0584
-	bone        RightThigh;            // 0x05B8
-	bone        Pelvis;                // 0x05EC
-	bone        LeftCalf;            // 0x0620
-	bone        RightCalf;            // 0x0654
-	bone        Spine;                // 0x0688
-	bone        LeftClavicle;        // 0x06BC
-	bone        LeftFoot;            // 0x06F0
-	bone        Neck;                // 0x0724
-	bone        RightClavicle;        // 0x0758
-	bone        RightFoot;            // 0x078C
-	bone        Head;                // 0x07C0
-	bone        LeftUpperArm;        // 0x07F4
-	bone        RightUpperArm;        // 0x0828
-	bone        LeftLowerArm;        // 0x085C
-	bone        RightLowerArm;        // 0x0890
-	bone        LeftHand;            // 0x08C4
-	bone        RightHand;            // 0x08F8
-	BYTE        Unknown20[1216];    // 0x092C
-}; // Size - 3564(0x0DEC) bytes
+struct _core_1 {
+	data_header<void>          *Widget;
+	data_header<void>          *Unknown;
+	data_header<void>          *Glow;
+	data_header<void>          *GlowParticles;
+	data_header<void>          *Flag;
+	data_header<void>          *Antenna;
+	data_header<object_header> *Object;
+	data_header<void>          *Unknown1[3];
+	data_header<void>          *Unknown2;
+	data_header<void>          *ClusterNoncollideableObject;
+	data_header<void>          *NoncollideableObjectCluster;
+	unsigned long              UnknownCounter;
+	data_header<void>          *Unknown3;
+	data_header<void>          *ClusterCollideableObjectRefe;
+	data_header<void>          *CollideableObjectClusterRefe;
+	data_header<void>          *Unknown4;
+};
 
 /*
 ////////// Unused ///////////////
@@ -730,7 +521,7 @@ public:
 
 };
  //From old HaloForge.
- 	// ident                             meta;                                // 0x0000
+ 	// Yelo::datum_index                             meta;                                // 0x0000
 	// long                              object_role;                         // 0x0004
 	// char                              flags1[4];                           // 0x0008
 	// long                              NetworkTime;                              // 0x000C
@@ -752,9 +543,9 @@ public:
 	// short     NameListIdx;                           // 0x00BA
 	// short     MovingTime;                            // 0x00BC
 	// short     RegionPermutation;                    // 0x00BD
-	// ident     Player;                              // 0x00C0
+	// Yelo::datum_index     Player;                              // 0x00C0
 	// // If this were a projectile, this might be the handle to the weapon which spawned it
-	// ident     OwnerId;                            // 0x00C4 - Parent object ID of this object (DOES NOT APPLY TO BIPEDS/PLAYER OBJECTS)
+	// Yelo::datum_index     OwnerId;                            // 0x00C4 - Parent object ID of this object (DOES NOT APPLY TO BIPEDS/PLAYER OBJECTS)
 	// PAD32;
 	// s_object_datum_animation_data AntrMeta;                            // 0x00CC - Animation Related?
 	//
@@ -767,7 +558,7 @@ public:
 	// float Shields;                              // 0x00E4  (0 to 3) (Normal = 1) (Full overshield = 3) percent?
 	// long  CurrentShieldDamage;                  // 0x00E8  // INSTANTANEOUS amount of shield being damaged.
 	// long  CurrentHealthDamage;                  // 0x00EC // INSTANTANEOUS amount of health being damaged.
-	// ident unknown6;                              // 0x00F0  // (???) Always 0xFFFFFFFF?
+	// Yelo::datum_index unknown6;                              // 0x00F0  // (???) Always 0xFFFFFFFF?
 	// float LastShieldDamagedAmt;                  // 0x00F4
 	// float LastBodyDamagedAmount;               // 0x00F8
 	// long  LastShieldDamagedTime;               // 0x00FC
@@ -776,10 +567,10 @@ public:
 	// short DamageFlags;                           // 0x00106 //Some kind of hp related bitmask.
 	// long  UnknownFlags;                        // 0x0108
 	// long  ClusterPartition;                     // 0x010C // Continually counts up, and resumes even after object is destroyed and recreated (killed)
-	// ident some_obj_id2;                        // 0x0110 // garbage collection related?
-	// ident NextObjectId;                        // 0x0114
-	// ident CurrentWeapon;                        // 0x0118 // currently held weapon (if this is a player)
-	// ident VehicleWeapon;                        // 0x011C // or the thing that <this> is in (i.e. a weapon 'inside' a player, but only if it's wielded)
+	// Yelo::datum_index some_obj_id2;                        // 0x0110 // garbage collection related?
+	// Yelo::datum_index NextObjectId;                        // 0x0114
+	// Yelo::datum_index CurrentWeapon;                        // 0x0118 // currently held weapon (if this is a player)
+	// Yelo::datum_index VehicleWeapon;                        // 0x011C // or the thing that <this> is in (i.e. a weapon 'inside' a player, but only if it's wielded)
 	// short SeatType;                              // 0x0120
 	// short unknown16;                           // 0x0122
 	// float ShieldsHit;                           // 0x0124 //Counts down from 1 after shields are hit (0 to 1)
@@ -788,11 +579,11 @@ public:
 	// float ARFunction;                           // 0x0130
 	// float Flashlight2;                           // 0x0134
 	// long  unknown17[5];                        // 0x0138
-	// ident ObjectAttachmentId1;                  // 0x014C
-	// ident ObjectAttachmentId2;                  // 0x0150
+	// Yelo::datum_index ObjectAttachmentId1;                  // 0x014C
+	// Yelo::datum_index ObjectAttachmentId2;                  // 0x0150
 	// long  zero[6];                              // 0x0154
-	// ident UnknownIdent3;                        // 0x016C
-	// ident CashedRndrIdx;                        // 0x0170
+	// Yelo::datum_index UnknownIdent3;                        // 0x016C
+	// Yelo::datum_index CashedRndrIdx;                        // 0x0170
 	// short
 	// long  unknown18;                           // 0x0174
 	// long  unknown19[4];                        // 0x0178

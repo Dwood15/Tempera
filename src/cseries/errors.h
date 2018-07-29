@@ -1,6 +1,6 @@
 
 #pragma once
-#include "base.h"
+#include "macros_generic.h"
 
 namespace Yelo
 {

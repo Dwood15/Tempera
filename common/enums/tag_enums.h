@@ -1,16 +1,21 @@
 #pragma once
+#include "hs_enums.h"
+
 namespace Yelo::Enums {
-	enum {
-		k_max_tag_name_length   = 255,
-		k_string_id_yelo_length = k_max_tag_name_length,
 
-		k_tag_block_format_buffer_size = 512,
+	constexpr int	k_tag_string_length  = 31; // character count in a [tag_string] type
+	constexpr int	k_long_string_length = 255; // character count in a [long_string] type
+	constexpr int	k_string_id_length = 127;
+	constexpr int	k_string_64_length  = 63;
+	constexpr int	k_string_128_length = 127;
+	constexpr int	k_string_256_length = 255;
 
-		k_maximum_tags_per_tag_chain = 4,
-		k_maximum_children_per_tag   = 16,
-
-		k_tag_group_loading_error_string_length = k_max_tag_name_length * 10
-	};
+	constexpr int k_max_tag_name_length   = 255;
+	constexpr int k_string_id_yelo_length = k_max_tag_name_length;
+	constexpr int k_tag_block_format_buffer_size = 512;
+	constexpr int k_maximum_tags_per_tag_chain = 4;
+	constexpr int k_maximum_children_per_tag   = 16;
+	constexpr int k_tag_group_loading_error_string_length = k_max_tag_name_length * 10;
 
 	enum {
 		k_maximum_field_byte_swap_codes = 1024,
@@ -23,6 +28,7 @@ namespace Yelo::Enums {
 		k_tag_field_markup_character_units_prefix = ':',
 		k_tag_field_markup_character_block_name   = '^',
 	};
+
 	enum field_type : short {
 		_field_string,
 		_field_char_integer,
@@ -75,12 +81,12 @@ namespace Yelo::Enums {
 
 	// Note: AFAICT, the engine code doesn't actually do the postprocess setup this way.
 	// They have what is essentially a boolean parameter that could be considered as 'bool for_editor'
-	enum tag_postprocess_mode : byte_enum {
+	enum tag_postprocess_mode : unsigned char {
 		// In this mode, the tag is being postprocessed for runtime values (automatically fill fields, etc)
-			_tag_postprocess_mode_for_runtime = FALSE,
+			_tag_postprocess_mode_for_runtime = 0,
 		// In this mode we're opening for tag editing (eg, tool process or guerilla) and should skip the postprocessing
 		// code which prepares the tag for use in-game (Sapien and when building a cache)
-			_tag_postprocess_mode_for_editor  = TRUE,
+			_tag_postprocess_mode_for_editor  = 1,
 	};
 };
 
@@ -147,8 +153,8 @@ namespace Yelo::_string_id {
 		k_index_bit_count  = 19,
 		k_id_set_bit_count = 6,
 
-		k_index_bit_mask = MASK(k_index_bit_count),
-		k_id_bit_mask    = MASK(k_id_set_bit_count),
+		k_index_bit_mask = ( (unsigned)(1 << (k_index_bit_count)) - (unsigned)1 ),
+		k_id_bit_mask    =( (unsigned)(1 << (k_id_set_bit_count)) - (unsigned)1 ),
 
 		k_index_bit_shift = 0,
 		k_id_bit_shift    = k_index_bit_count,
@@ -156,7 +162,7 @@ namespace Yelo::_string_id {
 		k_maximum_set_values  = (1 << k_index_bit_count) >> 7,
 		k_maximum_set_storage = k_maximum_set_values * (Enums::k_string_id_length + 1),
 
-		_string_id_invalid = NONE,
+		_string_id_invalid = 0,
 	};
 
 	enum {

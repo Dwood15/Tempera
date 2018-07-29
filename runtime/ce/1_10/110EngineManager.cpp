@@ -1,5 +1,3 @@
-#pragma once
-
 #include <utility>
 #include "../../common/addlog.h"
 #include "110EngineManager.h"
@@ -127,7 +125,7 @@ constexpr std::pair<uintptr_t, short> short_patches[] {
 #include "../../../src/lua/script_manager.h"
 #include "../../../src/CurrentEngine.h"
 #include "hs_function_table_references.h"
-#include "../../../src/hs/structures.hpp"
+#include "../../../src/hs/structures.h"
 
 void __declspec(naked) CE110::OnPlayerActionUpdate() {
 
@@ -135,8 +133,6 @@ void __declspec(naked) CE110::OnPlayerActionUpdate() {
 
 	__asm mov     dword ptr [esp+18h], -1
 	__asm mov current_action, ebp
-
-
 	__asm retn
 }
 

@@ -1,10 +1,7 @@
-#pragma once
-
 #include <cstring>
 #include <cstdio>
 #include <engine_interface.h>
 #include "function_rewrite.h"
-#include "../../../src/core.h"
 #include "../../../src/gamestate/game_globals.h"
 
 namespace spcore {
@@ -50,12 +47,12 @@ namespace spcore {
 	};
 
 	//Initialzie at new map!
-	static const void __cdecl player_control::player_control_initialize() {
+	static const void player_control::player_control_initialize() {
 		//TODO: overwrite the built-in control initialization to account for s_player_control_globals I think
 	}
 
-	void __cdecl  player_control::player_control_initialize_for_new_map() {
-		float matrix_related_flt = *(float *) 0x612188;
+	void player_control::player_control_initialize_for_new_map() {
+		// float matrix_related_flt = *(float *) 0x612188;
 
 		s_player_control_globals_data *player_controls        = *(s_player_control_globals_data **) 0x64C38C;
 		game_options::s_game_globals  *game_globals           = *(game_options::s_game_globals **) 0x6E2260;
@@ -97,7 +94,7 @@ namespace spcore {
 		//End of Function
 	}
 
-	void __cdecl hud_update_nav_points() {
+	void hud_update_nav_points() {
 		signed int player_idx   = 0;
 		static auto *const players_globals = *reinterpret_cast<s_players_globals_data **>(0x815918);
 
@@ -120,7 +117,7 @@ namespace spcore {
 		} while (player_datum > 0);
 	}
 
-	void __cdecl hud_update_unit() {
+	void hud_update_unit() {
 		signed int player_idx   = 0;
 		static auto *const players_globals = *reinterpret_cast<s_players_globals_data **>(0x815918);
 		auto       player_datum = players_globals->local_player_players[player_idx].index;

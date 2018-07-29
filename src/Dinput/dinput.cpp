@@ -1,12 +1,12 @@
-#pragma once
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
 #include <Windows.h>
 #include <xinput.h>
-
-#include "dinput.h"
-
 #include <strsafe.h>
+#pragma clang diagnostic pop
+
 #include <addlog.h>
+#include "dinput.h"
 
 namespace Input::DInput {
 

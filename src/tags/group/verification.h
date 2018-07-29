@@ -80,23 +80,24 @@ namespace Yelo {
 		}
 
 		static void VerifyDataFieldDefinition(const tag_field &field, const tag_block_definition *block_definition) {
-			auto *definition = field.Definition<tag_data_definition>();
-
-			// NOTE: added owner block name to info
-			YELO_ASSERT_DISPLAY(definition, "no definition specified for tag_data field in block %s.", block_definition->name);
-			YELO_ASSERT(definition->name);
-			YELO_ASSERT(VALID_FLAGS(definition->flags, Flags::k_number_of_tag_data_definition_flags));
-			YELO_ASSERT(definition->maximum_size > 0);
+			// auto definition = field.Definition<tag_data_definition>();
+			//
+			// // NOTE: added owner block name to info
+			// YELO_ASSERT_DISPLAY(definition, "no definition specified for tag_data field in block %s.", block_definition->name);
+			// YELO_ASSERT(definition->name);
+			// YELO_ASSERT(VALID_FLAGS(definition->flags, Flags::k_number_of_tag_data_definition_flags));
+			// YELO_ASSERT(definition->maximum_size > 0);
 		}
 
 		// Verify a field that is a child of [block_definition]
 		static void VerifyTagField(const tag_block_definition *block_definition, const tag_field &field) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wswitch"
 			switch (field.type) {
 				case Enums::_field_string: {
-					uintptr_t definition = reinterpret_cast<uintptr_t>(field.definition);
-
-					YELO_ASSERT(definition == 0 || definition <= Enums::k_long_string_length ||
-									TagFieldIsOldStringId(&field));
+					// uintptr_t definition = reinterpret_cast<uintptr_t>(field.definition);
+					//
+					// YELO_ASSERT(definition == 0 || definition <= Enums::k_long_string_length || TagFieldIsOldStringId(&field));
 				}
 					break;
 
@@ -119,9 +120,8 @@ namespace Yelo {
 					break;
 
 				case Enums::_field_block: {
-					auto *definition = field.Definition<tag_block_definition>();
-					YELO_ASSERT_DISPLAY(definition, "no definition specified for block field in block %s.",
-											  block_definition->name); // NOTE: added owner block name to info
+					// auto *definition = field.Definition<tag_block_definition>();
+					// YELO_ASSERT_DISPLAY(definition, "no definition specified for block field in block %s.", block_definition->name); // NOTE: added owner block name to info
 
 					// VerifyBlockFieldDefinitions(definition);
 				}
@@ -133,9 +133,8 @@ namespace Yelo {
 
 				case Enums::_field_short_block_index:
 				case Enums::_field_long_block_index: {
-					auto *definition = field.Definition<tag_block_definition>();
-					YELO_ASSERT_DISPLAY(definition, "no definition specified for block index field in block %s.",
-											  block_definition->name); // NOTE: added owner block name to info
+					// auto *definition = field.Definition<tag_block_definition>();
+					// YELO_ASSERT_DISPLAY(definition, "no definition specified for block index field in block %s.", block_definition->name); // NOTE: added owner block name to info
 				}
 					break;
 
@@ -145,12 +144,13 @@ namespace Yelo {
 					break;
 
 				case Enums::_field_explanation: {
-					const char *definition = field.Definition<const char>();
-					// NOTE: added owner block name to info
-					YELO_ASSERT_DISPLAY(definition, "no definition specified for explanation field in block %s.", block_definition->name);
+					// const char *definition = field.Definition<const char>();
+					// // NOTE: added owner block name to info
+					// YELO_ASSERT_DISPLAY(definition, "no definition specified for explanation field in block %s.", block_definition->name);
 				}
 					break;
 			}
+#pragma clang diagnostic pop
 		}
 
 		// Verify [block] and its child fields
@@ -167,8 +167,6 @@ namespace Yelo {
 					VerifyTagField(block, field);
 				}
 			};
-
-			block->FieldsDoAction<verify_tag_field_action, true>();
 		}
 
 		static void VerifyTagGroupTags() {

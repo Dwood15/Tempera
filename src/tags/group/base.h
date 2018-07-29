@@ -14,7 +14,7 @@ namespace Yelo::TagGroups {
 
 // #define TREF_SIZEOF sizeof(tag_reference);
 
-template <typename T>
+template <typename T = int>
 class tag_block {
 	typedef T *iter;
 
@@ -45,9 +45,12 @@ class tag_block {
 	iter begin() { return definitions; }
 
 	iter end() { return definitions + Count(); }
-};
 
-static_assert(sizeof(tag_block<void>) == 0xC);
+};
+	static_assert(sizeof(tag_block<int>) == 0xC);
+	static_assert(sizeof(tag_block<short>) == 0xC);
+	static_assert(sizeof(tag_block<char>) == 0xC);
+
 
 
 namespace Yelo {
@@ -115,7 +118,7 @@ namespace Yelo {
 		bool resize(long new_size = 0);
 	};
 
-	static_assert(sizeof(tag_data) == 0x14);
+	STAT_ASSERT(tag_data, 0x14);
 
 	void __cdecl tag_reference_clear(tag_reference &reference);
 
@@ -125,47 +128,12 @@ namespace Yelo {
 #define pad_tag_data PAD32 PAD32 PAD32 PAD32 PAD32
 
 	namespace blam {
-		// Clear the values of a tag reference so that it references no tag
-		void __cdecl tag_reference_clear(tag_reference &reference);
-
 		void __cdecl tag_reference_set(tag_reference &reference, tag group_tag, const char *name);
-
-		template <typename T>
-		void tag_reference_set(tag_reference &reference, const char *name);
-
-		datum_index __cdecl tag_reference_try_and_get(const tag_reference *reference);
-
-		bool __cdecl tag_reference_resolve(_Inout_ tag_reference *reference);
 
 		// non-standard overload of the above resolve()
 		bool tag_reference_resolve(_Inout_ tag_reference &reference, tag expected_group_tag);
 
-		template <typename T>
-		bool tag_reference_resolve(_Inout_ tag_reference &reference);
-
 		// Get the address of a block element which exists at [element_index]
-		template<typename T>
-		void *__cdecl tag_block_get_element(T *block, long element_index);
-
-		// Add a new block element and return the index which
-		// represents the newly added element
-		template<typename T>
-		long __cdecl tag_block_add_element(T *block) {
-			return nullptr;
-		}
-
-		// Resize the block to a new count of elements, returning the
-		// success result of the operation
-
-		template<typename T>
-		bool __cdecl tag_block_resize(T *block, long element_count) {
-			return false;
-		}
-
-		template<typename T>
-		bool __cdecl tag_data_resize(T *data, long new_size) {
-			return false;
-		}
 
 		template<typename T>
 		void *__cdecl tag_data_get_pointer(T &data, long offset, long size) {
@@ -188,8 +156,6 @@ namespace Yelo {
 	namespace TagGroups {
 		// just an endian swap
 		static void TagSwap(tag &x);
-
-		static tag string_to_group_tag(const char *name);
 
 		// Returns true if the tag is an instance of the group_tag or is a child group of it.
 		// Returns false if not, or tag_index is invalid.

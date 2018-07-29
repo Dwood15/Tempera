@@ -1,5 +1,3 @@
-#pragma once
-
 #include <windows.h>
 #include "groups_structures.hpp"
 
@@ -41,17 +39,7 @@ namespace Yelo {
 		return block_field->Definition<tag_block_definition>();
 	}
 
-	// TAction: void operator()([const] tag_block_definition* block, [const] tag_field& field)
-	template <class TAction, bool k_assert_field_type>
-	void tag_block_definition::FieldsDoAction(TAction &action) {
-		for (auto &field : *this) {
-			if (k_assert_field_type) {
-				YELO_ASSERT(field.type >= 0 && field.type < Enums::k_number_of_tag_field_types);
-			}
 
-			action(this, field);
-		}
-	}
 
 
 	// Mainly a visitor for startup/shutdown processes, performs an action (via a functor) on a root block definition

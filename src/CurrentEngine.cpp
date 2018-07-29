@@ -1,9 +1,7 @@
-#pragma once
 
 #include "CurrentEngine.h"
 #include "lua/script_manager.h"
-#include "gamestate/game_time/gametime.h"
-#include <ce/1_10/110EngineManager.h>
+#include "ce/1_10/110EngineManager.h"
 #include <hek/sapien/sapienEngineManager.h>
 #include <addlog.h>
 #include <filesystem>
@@ -128,6 +126,14 @@ constexpr bool GlobalEngine::equal(const char *lhs, const char *rhs) {
 	return true;
 }
 
+auto GlobalEngine::ScenarioGlobals() {
+	if(!this->IsCoreInitialized() ||} !eCore->scenario_globals) {
+		return static_cast<Yelo::Scenario::s_scenario_globals *>(nullptr);
+	}
+
+	return eCore->scenario_globals;
+}
+
 void GlobalEngine::InitializeLuaState() {
 	PrintLn("Attempting to initialize LuaScript manager");
 	LuaState->InitializeLua(LUA_FILENAME);
@@ -158,8 +164,7 @@ IDirectInputDevice8A *GlobalEngine::GetKeyboardInput() {
 IDirectInputDevice8A *GlobalEngine::GetMouseInput() {
 	if (this->IsCustomEd()) {
 		return CE110::GetMouseInput();
-	}
-	return NULL;
+	}	return NULL;
 }
 
 IDirectInputDevice8A **GlobalEngine::GetJoystickInputs() {

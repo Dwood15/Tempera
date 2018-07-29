@@ -13,10 +13,12 @@
 #ifndef D3D9HOOK_H
 #define D3D9HOOK_H
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
 #include <stdio.h>
 #include <d3d9.h>
 #include <d3dx9.h>
-
+#pragma clang diagnostic pop
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
 

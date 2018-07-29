@@ -6,21 +6,8 @@
 */
 #pragma once
 
-#include <blamlib/Halo1/ai/actions.hpp>
-#include <blamlib/Halo1/ai/actor_types.hpp>
-#include <blamlib/Halo1/ai/ai.hpp>
-#include <blamlib/Halo1/ai/ai_communication.hpp>
-#include <blamlib/Halo1/ai/encounters.hpp>
-#include <blamlib/Halo1/ai/props.hpp>
-#include <blamlib/Halo1/memory/data.hpp>
-
 namespace Yelo
 {
-	namespace Objects
-	{
-		struct s_damage_data;
-	};
-
 	namespace AI
 	{
 		encounter_data_t&				Encounters();

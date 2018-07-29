@@ -28,7 +28,7 @@ namespace Yelo {
 			};
 		};
 
-		static constexpr datum_index null() { return { static_cast<uint>(-1) }; };
+		static constexpr datum_index null() { return { static_cast<uint>(-1) }; }
 
 		bool IsNull() const { return -1 == handle; }
 
@@ -68,7 +68,25 @@ namespace Yelo {
 		inline bool operator !=(const uint& rhs) const { return this->handle != rhs; }
 	};
 
-	static_assert(sizeof(datum_index) == 0x4);
+	STAT_ASSERT(datum_index, 0x4);
+
+	template <typename T>
+	struct data_header {
+		char              name[32];
+		short             max;      // Max number of <things> possible
+		short             size;      // Size of each <thing> class instance
+		bool              is_valid;
+		bool              identifier_zero_invalid;
+		short             padding;
+		unsigned long     signature; // d@t@
+		short             next_index;
+		short             last_index;
+		Yelo::datum_index next;         // the next <thing> to be initialized
+		T                 *first;         // Pointer to the first <thing> class instance
+	};
+
+	STAT_ASSERT(data_header<void>, 0x38);
+
 #define pad_datum_index unsigned short : 16; unsigned short : 16
 #define DATUM_INDEX_TO_IDENTIFIER(datum)      (datum & 0xFFFF0000)
 #define DATUM_INDEX_TO_ABSOLUTE_INDEX(datum)   (datum & 0x0000FFFF)

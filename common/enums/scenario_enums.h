@@ -1,15 +1,21 @@
 #pragma once
-
 namespace Yelo::Enums {
+	enum production_build_stage {
+		_production_build_stage_ship,
+		_production_build_stage_alpha,
+		_production_build_stage_beta,
+		_production_build_stage_delta,
+		_production_build_stage_epsilon,
+		_production_build_stage_release,
+	};
+
+	enum project_yelo_info {
+		k_group_tag = 'yelo',
+		k_version   = 2,
+	};
 
 	enum {
 		k_maximum_object_names_per_scenario = 512,
-	};
-
-	enum scenario_type : short {
-		_scenario_type_campaign,
-		_scenario_type_multiplayer,
-		_scenario_type_main_menu,
 	};
 
 	enum {
@@ -53,4 +59,29 @@ namespace Yelo::Enums {
 
 		_scenario_netgame_flag_type,
 	};
+};
+
+namespace Yelo::Flags {
+	enum project_yellow_flags : unsigned short {
+		_project_yellow_dont_fix_ui_game_globals_bit,
+		_project_yellow_game_updates_ignore_player_pvs_hack_bit,
+
+		k_number_of_project_yellow_flags,
+
+		_project_yellow_invalid_version_bit    = 13,      // runtime. a yelo tag was found but it was an invalid version
+		_project_yellow_null_definition_bit    = 14,      // runtime. 'null_yelo' definition
+		_project_yellow_cache_is_protected_bit = 15,   // runtime. cache was protected with HEK+
+
+		_project_yellow__first_runtime_bit =
+		_project_yellow_invalid_version_bit,
+	};
+	static_assert(k_number_of_project_yellow_flags <= _project_yellow__first_runtime_bit);
+
+	enum project_yellow_gameplay_flags : unsigned long {
+		// don't allow MTV settings for this map, even if the user enables it
+			_project_yellow_gameplay_prohibit_multiteam_vehicles_bit,
+
+		k_number_of_project_yellow_gameplay_flags
+	};
+
 };

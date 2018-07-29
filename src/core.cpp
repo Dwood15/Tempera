@@ -12,7 +12,6 @@
 #include <addlog.h>
 #include "core.h"
 #include "math.h"
-#include "gamestate/objectcontroller.h"
 
 typedef std::string string;
 
@@ -155,14 +154,14 @@ ident Core::GetPlayerObjectIdent(short player_index) {
  * @param player_index 0-15 index of player to try to get.
  * @returns the address of a players biped object structure
  */
-biped_data *Core::GetBiped(short player_index) {
-	short object_index = GetPlayerObjectIdent(player_index).index;
-
-	if (object_index == INVALID)
-		return NULL;
-
-	return (biped_data *) GetObjectHeader(object_index)->address;
-}
+// biped_data *Core::GetBiped(short player_index) {
+// 	short object_index = GetPlayerObjectIdent(player_index).index;
+//
+// 	if (object_index == INVALID)
+// 		return NULL;
+//
+// 	return (biped_data *) GetObjectHeader(object_index)->address;
+// }
 
 // Returns an object_header structure by object index
 object_header *Core::GetObjectHeader(short object_index) {
@@ -213,7 +212,7 @@ bool Core::AreWeInMainMenu() {
 // Console Methods
 // Toggles console on / off
 void Core::ToggleConsole(bool bSwitch) {
-	DWORD dwOldProtect = NULL;
+	// DWORD dwOldProtect = NULL;
 	if (bSwitch) {
 
 	} else {

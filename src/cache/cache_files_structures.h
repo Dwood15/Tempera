@@ -22,7 +22,7 @@ namespace Yelo::Cache {
 
 		long offset_to_index;
 		long tag_memory_size;
-		PAD64; // ?
+		unsigned __int64:64; // ?
 		tag_string             name;
 		tag_string             build_string;
 		Yelo::Enums::cache_file_type cache_type;

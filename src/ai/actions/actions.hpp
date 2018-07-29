@@ -7,34 +7,10 @@
 #pragma once
 
 #include <cstdio>
-#include "../../math/color_math.h"
+#include <enums/ai_enums.h>
+#include "../../math/colors.h"
 #include "../../memory/datum_index.h"
-
 namespace Yelo {
-	namespace Enums {
-		enum actor_action : short {
-			_actor_action_none,
-			_actor_action_sleep,
-			_actor_action_alert,
-			_actor_action_fight,
-			_actor_action_flee,
-			_actor_action_uncover,
-			_actor_action_guard,
-			_actor_action_search,
-			_actor_action_wait,
-			_actor_action_vehicle,
-			_actor_action_charge,
-			_actor_action_obey,
-			_actor_action_converse,
-			_actor_action_avoid,
-
-			k_number_of_actor_actions
-		};
-
-		enum action_class : short {
-			_action_class_passive = 1,
-		};
-	};
 
 	namespace AI {
 		typedef void (__cdecl *proc_action_function)(datum_index actor_index);
