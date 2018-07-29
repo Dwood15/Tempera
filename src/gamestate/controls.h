@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../ce_base_types.h"
-#include "objects.h"
 #include "unit_controls.h"
+
 namespace Input {
 	struct ControlSettings {
 		bool  Initialized;

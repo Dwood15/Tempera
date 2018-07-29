@@ -8,4 +8,5 @@ module Tempera_Enums {
     header "hud_enums.h"
     header "objects_enums.h"
     header "scenario_enums.h"
+    header "tag_enums.h"
 }

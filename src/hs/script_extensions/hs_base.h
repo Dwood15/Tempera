@@ -279,10 +279,7 @@ namespace Yelo {
 			}
 		}
 
-		void DisposeLibrary() {
-		}
-
-		// True if the script definitions in [data] match the functions/globals 
+		// True if the script definitions in [data] match the functions/globals
 		// defined by Yelo's code.
 		bool DefinitionsMatch(const TagGroups::s_scripting_definitions &data) {
 			const byte k_developer_mode = *GameState::DeveloperMode();

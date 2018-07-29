@@ -15,32 +15,32 @@ LPCoreAddressList CE110::GetCoreAddressList() {
 
 	CurrentCore.core_3 = 0x0; //0x87A76C; //may be a pc address, not CE lol
 
-	CurrentCore.core_4 = 0x81B800;
-	CurrentCore.core_5 = 0x81B894;
-	CurrentCore.core_6 = 0x653BE4;
-	CurrentCore.core_7 = 0x0; //0x71D0E8; //may be a pc address, not CE lol
-	CurrentCore.CAMERA = 0x6474E4;
-	CurrentCore.MAP_HEADER_ADDRESS = 0x643044;
+	CurrentCore.core_4                   = 0x81B800;
+	CurrentCore.core_5                   = 0x81B894;
+	CurrentCore.core_6                   = 0x653BE4;
+	CurrentCore.core_7                   = 0x0; //0x71D0E8; //may be a pc address, not CE lol
+	CurrentCore.CAMERA                   = 0x6474E4;
+	CurrentCore.MAP_HEADER_ADDRESS       = 0x643044;
 	CurrentCore.TAG_INDEX_HEADER_ADDRESS = 0x40440000;
 
-	CurrentCore.CONSOLE_HOOK_ADDRESS = 0x004C9DC0;
-	CurrentCore.DEVMODE_HOOK_ADDRESS = 0x004836DB;
+	CurrentCore.CONSOLE_HOOK_ADDRESS      = 0x004C9DC0;
+	CurrentCore.DEVMODE_HOOK_ADDRESS      = 0x004836DB;
 	CurrentCore.CONSOLE_TEXT_HOOK_ADDRESS = 0x00499AB0;
 
-	CurrentCore.to_respawn_count = 0x6B4802; //short *
-	CurrentCore.spawn_count = 0x624A9C; //short *
+	CurrentCore.to_respawn_count    = 0x6B4802; //short *
+	CurrentCore.spawn_count         = 0x624A9C; //short *
 	CurrentCore.render_window_count = 0x6B4098; //short *
-	CurrentCore.at_main_menu = 0x6B4051; //short *
+	CurrentCore.at_main_menu        = 0x6B4051; //short *
 
-	CurrentCore.hud_scripted_globals	= 0x6B44A8;
-	CurrentCore.hud_messaging_state	= 0x677624;
+	CurrentCore.hud_scripted_globals = 0x6B44A8;
+	CurrentCore.hud_messaging_state  = 0x677624;
 
 	CurrentCore.game_state_globals_location_ptr = 0x67DD8C;
-	CurrentCore.game_state_globals_ptr = 0x67DD88;
-	CurrentCore.crc_checksum_buffer = 0x4D36D0;
+	CurrentCore.game_state_globals_ptr          = 0x67DD88;
+	CurrentCore.crc_checksum_buffer             = 0x4D36D0;
 
-	CurrentCore.game_state_cpu_allocation  = * (uint*)CurrentCore.game_state_globals_ptr;
-	CurrentCore.game_state_location_as_int = * (uint *)CurrentCore.game_state_globals_location_ptr;
+	CurrentCore.game_state_cpu_allocation  = *(uint *) CurrentCore.game_state_globals_ptr;
+	CurrentCore.game_state_location_as_int = *(uint *) CurrentCore.game_state_globals_location_ptr;
 
 	//static s_players_globals_data *players_global_data       = *(s_players_globals_data **) 0x815918;
 	CurrentCore.players_global_data = 0x815918;
@@ -50,6 +50,7 @@ LPCoreAddressList CE110::GetCoreAddressList() {
 
 const defined_functionrange *CE110::GetFunctionMap() {
 #include "function_map.txt"
+
 	return hce110_function_map;
 	//return nullptr;
 }
@@ -105,40 +106,39 @@ constexpr uintptr_t regular_player_clamps[] = {
 	// MPP_B(0x51EE05, "rasterizer_detail_objects_rebuild_vertices get_render_window_ct_patch_5");
 };
 
-constexpr std::pair<uintptr_t, char> MPPARBs[] {
-	{ 0x476200, sizeof(s_player_control_globals_data) },//, players_initialize_sizeof_a_patch);
-	{ 0x47620A, sizeof(s_player_control_globals_data) }, //);
-	{ 0x49F897, 0x0 }, //player_spawn_count_hack_fuck_off
-	{ 0x45B8D4, 0x7C }, //"precache_new_map_max_spawn_ct_cmp");
+constexpr std::pair<uintptr_t, char> MPPARBs[]{
+	{0x476200, sizeof(s_player_control_globals_data)},//, players_initialize_sizeof_a_patch);
+	{0x47620A, sizeof(s_player_control_globals_data)}, //);
+	{0x49F897, 0x0}, //player_spawn_count_hack_fuck_off
+	{0x45B8D4, 0x7C}, //"precache_new_map_max_spawn_ct_cmp");
 	//"FF FF FF 7D 05 89 75 F4 EB 0D .7E 05 89 75 F4 EB"
 	//main_game_render's jle effectively clamps us to 1, so we just do unconditional jmp
-	{ 0x4CC61A, 0xEB }//, "main_game_render_patch");
+	{0x4CC61A, 0xEB}//, "main_game_render_patch");
 };
 
-constexpr std::pair<uintptr_t, short> short_patches[] {
+constexpr std::pair<uintptr_t, short> short_patches[]{
 	//"66 8B 41 0C 66 3D 01 00 7C EA .7F E8 0F BF C0 C3"
 	//main_get_window_ct
-	{ 0x4CC5BA, (short)0x9090}, //We nop the greater than count so we actually get the proper window renderings.
-	{ 0x50F5EB, (short)0x9090}, //render_player_frame_jg_patch
+	{0x4CC5BA, (short) 0x9090}, //We nop the greater than count so we actually get the proper window renderings.
+	{0x50F5EB, (short) 0x9090}, //render_player_frame_jg_patch
 };
 
 #include "../../../src/lua/script_manager.h"
 #include "../../../src/CurrentEngine.h"
 #include "hs_function_table_references.h"
-#include "../../../src/hs/structures.h"
 
 void __declspec(naked) CE110::OnPlayerActionUpdate() {
 
-	s_player_action * current_action;
+	s_player_action *current_action;
 
-	__asm mov     dword ptr [esp+18h], -1
+	__asm mov     dword ptr[esp+18h], -1
 	__asm mov current_action, ebp
 	__asm retn
 }
 
 void __declspec(naked) CE110::OnUnitControlUpdate(int client_update_idx) {
 	unsigned short unit_idx;
-	s_unit_control_data * from_control_data;
+	s_unit_control_data *from_control_data;
 
 	__asm mov unit_idx, ax
 	__asm mov from_control_data, edx
@@ -149,7 +149,7 @@ void __declspec(naked) CE110::OnUnitControlUpdate(int client_update_idx) {
 }
 
 auto GetHsFunctionTable() {
-	static auto **const hs_function_table      = reinterpret_cast<Yelo::Scripting::hs_function_definition **>(0x624118);
+	static auto **const hs_function_table = reinterpret_cast<Yelo::Scripting::hs_function_definition **>(0x624118);
 	return hs_function_table;
 }
 
@@ -158,17 +158,17 @@ auto CE110::GetHsFunctionTableCount() {
 	return hs_function_table_count;
 }
 
-auto CE110::GetHsFunctionTableCountReferences16(){
-	static short * references[] = {
-		(short *)0x4861E1,
-		(short *)0x486F14,
+auto CE110::GetHsFunctionTableCountReferences16() {
+	static short *references[] = {
+		(short *) 0x4861E1,
+		(short *) 0x486F14,
 	};
 
 	return references;
 }
 
-auto CE110::GetHsFunctionTableCountReferences32(){
-	static long  *K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit[] = {
+auto CE110::GetHsFunctionTableCountReferences32() {
+	static long *K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit[] = {
 		(reinterpret_cast<long *>(0x4864FA)),
 	};
 
@@ -179,6 +179,40 @@ auto CE110::GetHsFunctionTableReferenceList() {
 	return K_HS_FUNCTION_TABLE_REFERENCES;
 }
 
+void CE110::InitializeHSMemoryUpgrades() {
+	static unsigned int *K_MAX_HS_SYNTAX_NODES_PER_SCENARIO_UPGRADE_ADDRESS_LIST[] = {
+		(reinterpret_cast<uint *>(0x485D7B)),
+	};
+
+	static unsigned int *K_TOTAL_SCENARIO_HS_SYNTAX_DATA_UPGRADE_ADDRESS_LIST[] = {
+		//CAST_PTR(uint*, PLATFORM_VALUE(0x485E93, 0x47D783)), // don't modify this one, modify the size check using the address below
+		(reinterpret_cast<uint *>(0x485DCA)),
+	};
+
+	for (auto ptr : CE110::K_MAX_HS_SYNTAX_NODES_PER_SCENARIO_UPGRADE_ADDRESS_LIST) {
+		*ptr = Enums::k_maximum_hs_syntax_nodes_per_scenario_upgrade;
+	}
+
+	for (auto ptr : CE110::K_TOTAL_SCENARIO_HS_SYNTAX_DATA_UPGRADE_ADDRESS_LIST) {
+		*ptr = Enums::k_total_scenario_hs_syntax_data_upgrade;
+	}
+
+	byte *ADDRESS_OF_SCENARIO_HS_SYNTAX_DATA_SIZE_CHECK = (reinterpret_cast<byte *>(0x485D77));
+
+	// change from 'jz' (0x74) to 'jge' (0x7D)
+	// This allows us to support scenarios with original script nodes, or with
+	// Yelo based script nodes, which are larger (because of memory upgrades, duh)
+	*ADDRESS_OF_SCENARIO_HS_SYNTAX_DATA_SIZE_CHECK = Enums::_x86_opcode_jge_short;
+
+	// Currently, no code is ran in Update. SO WE CAN IGNORE IT.
+	// Memory::CreateHookRelativeCall(&Update, reinterpret_cast<void *>(HS_UPDATE_HOOK), Enums::_x86_opcode_retn);
+}
+
+void CE110::InitializeMemoryUpgrades() {
+	InitializeHSMemoryUpgrades();
+	InitializeLibrary();
+
+}
 
 void CE110::WriteHooks() {
 	//TODO: Conceptually separate these out..

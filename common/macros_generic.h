@@ -13,10 +13,10 @@
 #define TO_STR(x) #x
 #define XSTR(s) TO_STR(s)
 
-
-template<size_t A, size_t B> struct TAssertEquality {
-	static_assert(A==B, "A != B");
-	static constexpr bool _cResult = (A==B);
+template <size_t A, size_t B>
+struct TAssertEquality {
+	static_assert(A == B, "A != B");
+	static constexpr bool _cResult = (A == B);
 };
 
 #define STAT_ASSERT(object, size) static_assert( TAssertEquality<sizeof(object), size>::_cResult, "Don't match!");
@@ -38,6 +38,7 @@ typedef unsigned int   uint;
 typedef unsigned short ushort;
 typedef unsigned long  long_flags;
 typedef signed char    byte_enum;
+typedef short          int16;
 
 //sanity checks.
 STAT_ASSRT(bool, 0x1);
@@ -150,7 +151,6 @@ STAT_ASSRT(ushort, 0x2);
 
 #define __trueinline extern __forceinline
 
-
 #define pad_bool  unsigned char : 8;
 
 // # from 0 to 255
@@ -175,7 +175,6 @@ typedef unsigned __int64 uint64;
 // # from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
 // typedef signed //__int64  // i//nt64;
 #define pad_int64 unsigned long : 32; unsigned long : 32
-
 
 // a floating-point # from 1.175494351e-38F to 3.402823466e+38F
 typedef float real;
@@ -206,19 +205,32 @@ typedef char string128[128];
 typedef char string256[256];
 
 // 64 character UNICODE string (128 bytes), with null terminator
-typedef wchar_t wstring64[64];
+typedef wchar_t       wstring64[64];
 // 256 character UNICODE string (512 bytes), with null terminator
-typedef wchar_t wstring256[256];
+typedef wchar_t       wstring256[256];
 // a tag group id
 typedef unsigned long tag;
 
 // an enumerated value in a 1 byte range
-typedef signed char byte_enum;
+typedef signed char   byte_enum;
 typedef unsigned char byte_flags;
 
-typedef signed long long_enum;
+typedef signed long    long_enum;
 typedef unsigned short short_flags;
-typedef unsigned long long_flags;
+typedef unsigned long  long_flags;
+
+typedef unsigned int  uintptr_t;
+typedef unsigned long tag;
+typedef char          tag_string[32];
+typedef const char    *cstring;
+typedef char *tag_reference_name_reference;
+
+/// <summary>	The integral type used to represent game ticks. </summary>
+typedef long  game_ticks_t;
+/// <summary>	The integral type used to represent (relative) game timers. </summary>
+/// <remarks>	Steps are in ticks. Generally used for countdowns </remarks>
+typedef short game_time_t;
+
 
 #define pad_tag_string unsigned long : 32; unsigned long : 32; unsigned long : 32; unsigned long : 32; unsigned long : 32; unsigned long : 32; unsigned long : 32; unsigned long : 32
 
@@ -240,10 +252,9 @@ typedef unsigned long long_flags;
 // bit flags in a 4 byte range
 #define pad_long_flags unsigned long : 32
 
-
 namespace Yelo {
 	struct string_list {
-		long count;
+		long       count;
 		const char **strings;
 
 		const char **begin() const { return strings; }
@@ -262,7 +273,6 @@ namespace Yelo {
 	};
 
 	STAT_ASSERT(string_list, 0x8);
-
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>
@@ -335,4 +345,14 @@ namespace Yelo {
 		/// <param name="offset">	Field offset within the fake sub-class to treat as the get result. </param>
 #define TStructSubGetPtrImpl(type, name, offset)   TStructGetPtrImpl(type, name, offset - DATA_OFFSET)
 	};
+};
+
+
+namespace Yelo::Enums {
+	constexpr int k_maximum_number_of_local_players = 4;
+	constexpr int k_multiplayer_maximum_players     = 16;
+
+	// for team_data (which has a maximum of 16 datums) and such.
+	// This is 1 in Stubbs, I'm positive team_data uses k_multiplayer_maximum_players.
+	constexpr int k_multiplayer_maximum_teams = k_multiplayer_maximum_players;
 };

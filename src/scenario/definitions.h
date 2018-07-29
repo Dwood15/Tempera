@@ -6,14 +6,12 @@
 #include "../memory/datum_index.h"
 #include "../math/int_math.h"
 #include "../math/colors.h"
-#include "scenario.h"
 #include "../tags/group/markup.h"
 #include "../tags/group/base.h"
 #include "../tags/group/tagreference.h"
 #include "../models/animations/recorded_animation_definitions.h"
 #include "../game/objects/scenario_definitions_structures.h"
-#include "../hs/scenario.h"
-#include "scenario_enums.h"
+#include "enums/scenario_enums.h"
 
 namespace Yelo::blam {
 	bool __cdecl hs_scenario_postprocess(bool for_runtime);
@@ -24,7 +22,7 @@ namespace Yelo::TagGroups {
 		long          padA[6]; // 24
 		tag_reference reference;
 	};
-	STAT_ASSERT(hs_tag_reference, 0x28);
+	STAT_ASSERT(hs_tag_reference, 0x28)
 
 	struct hs_source_file {
 		tag_string name;

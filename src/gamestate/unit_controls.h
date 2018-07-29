@@ -86,5 +86,4 @@ struct s_player_action {
 	short            field_1E;
 };
 
-//If it's not here, it won't ever update...
-static s_player_action ActionOverrides[MAX_PLAYER_COUNT_LOCAL];
+

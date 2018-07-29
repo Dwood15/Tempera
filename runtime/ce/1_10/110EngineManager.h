@@ -7,15 +7,15 @@
 #pragma clang diagnostic pop
 
 #include <macros_generic.h>
-#include "../../../src/hs/structures.h"
 #include "../../../src/scenario/structures.h"
 
 namespace feature_management::engines {
 	class CE110 : public IEngine<CE110> {
+	private:
+		static void InitializeHSMemoryUpgrades();
 
 	public:
 		CE110() {}
-
 		~CE110() {}
 
 		static const defined_functionrange *GetFunctionMap();
@@ -39,6 +39,19 @@ namespace feature_management::engines {
 		static auto *const global_scenario_index = reinterpret_cast<datum_index *>(0x6397CC);
 		static auto *const structure_bsp_index   = reinterpret_cast<short *>(0x6397D0);
 
+		//TODO
+		// recorded_animations_data_t &RecordedAnimations() { DPTR_IMP_GET_BYREF(recorded_animations); }
+
+		// hs_syntax_data_t &HsSyntax() { DPTR_IMP_GET_BYREF(hs_syntax); }
+
+		// object_list_header_data_t &ObjectListHeader() { DPTR_IMP_GET_BYREF(object_list_header); }
+
+		// list_object_reference_data_t &ListObjectReference() { DPTR_IMP_GET_BYREF(list_object_reference); }
+
+		// hs_thread_data_t &HsThreads() { DPTR_IMP_GET_BYREF(hs_threads); }
+		//
+		// hs_globals_data_t &HsGlobals() { DPTR_IMP_GET_BYREF(hs_globals); }
+
 		//////////////////////////////////////////////////////////////////////////
 		// Scenario.cpp
 		static auto **const scenario_globals = reinterpret_cast<Yelo::Scenario::s_scenario_globals **>(0x6E2254);
@@ -47,17 +60,6 @@ namespace feature_management::engines {
 		static auto const OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__READ  = 0x4F8207;
 		static auto const OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__WRITE = 0x4F83CE;
 		static auto const OBJECTS_INITIALIZE_FOR_NEW_MAP_MOD_PROCESSED_BSPS    = 0x4F84E2;
-
-		static byte *ADDRESS_OF_SCENARIO_HS_SYNTAX_DATA_SIZE_CHECK = (reinterpret_cast<byte *>(0x485D77));
-
-		static unsigned int *K_MAX_HS_SYNTAX_NODES_PER_SCENARIO_UPGRADE_ADDRESS_LIST[] = {
-			(reinterpret_cast<uint *>(0x485D7B)),
-		};
-
-		static unsigned int *K_TOTAL_SCENARIO_HS_SYNTAX_DATA_UPGRADE_ADDRESS_LIST[] = {
-			//CAST_PTR(uint*, PLATFORM_VALUE(0x485E93, 0x47D783)), // don't modify this one, modify the size check using the address below
-			(reinterpret_cast<uint *>(0x485DCA)),
-		};
 
 		//////////////////////////////////////////////////////////////////////////
 		// Render
@@ -139,6 +141,8 @@ namespace feature_management::engines {
 
 		static void WriteHooks();
 
+
+		static void InitializeMemoryUpgrades();
 		static auto GetHsFunctionTableReferenceList();
 
 		__trueinline static auto GetHsFunctionTable();

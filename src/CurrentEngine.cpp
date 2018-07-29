@@ -9,6 +9,9 @@
 using namespace feature_management;
 using namespace feature_management::engines;
 
+//If it's not here, it won't ever update...
+static volatile s_player_action ActionOverrides[MAX_PLAYER_COUNT_LOCAL];
+
 std::string GlobalEngine::GetCurrentFileName() {
 	static char        name[MAX_PATH];
 	static std::string shortName;
@@ -94,6 +97,17 @@ bool GlobalEngine::IsCoreInitialized() volatile {
 	auto IsZero   = eCore == reinterpret_cast<Core *>(0);
 
 	return !IsNegOne && !IsZero;
+}
+
+void GlobalEngine::InitializeMemoryUpgrades() {
+	if(this->HasSupport() && !this->IsHek()) {
+		if(this->IsCustomEd() && this->CurrentMinor == feature_management::engines::minor::halo_1_10) {
+			CE110::InitializeMemoryUpgrades();
+		}
+
+
+
+	}
 }
 
 features GlobalEngine::GetSupported() {
@@ -546,7 +560,9 @@ const char *GlobalEngine::getMemoryRegionDescriptor(const uintptr_t addr) volati
 }
 
 //Calls every registered lua function by that event.
-#define CALL_LUA_BY_EVENT(event) state->call_lua_event_by_type(LuaCallbackId::##event)
+#include "enums/generic_enums.h"
+
+#define CALL_LUA_BY_EVENT(event) state->call_lua_event_by_type(LuaCallbackId::#event)
 
 void main_setup_connection_init() {
 	static std::optional<uintptr_t> got = FUNC_GET(main_setup_connection);
@@ -562,8 +578,8 @@ void main_setup_connection_init() {
 	}
 
 	vEngine->RefreshCore();
-
-	CALL_LUA_BY_EVENT(post_initialize);
+	state->call_lua_event_by_type(LuaCallbackId::post_initialize);
+	// CALL_LUA_BY_EVENT(post_initialize);
 }
 
 static Core *mCore = 0x0;

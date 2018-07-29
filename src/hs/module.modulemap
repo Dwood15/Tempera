@@ -1,8 +1,17 @@
 module Tempera_Scripting {
-    header "compile.h"
-    header "game.h"
-    header "runtime.h"
-    header "scenario.h"
-    header "structures.h"
-    header "threads.h"
+    module Compile {
+        header "compile.h"
+    }
+
+    module Runtime {
+        header "runtime.h"
+    }
+
+    module Structures {
+        header "structures.h"
+    }
+
+    module Threads {
+        header "threads.h"
+    }
 }

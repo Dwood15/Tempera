@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include "../../cseries/yelo_base.h"
 #include "groups_structures.hpp"
 #include "tag_groups.h"
@@ -192,11 +191,7 @@ namespace Yelo {
 			}
 		};
 
-		struct s_tag_iterator {
-			Yelo::Memory::s_data_iterator instances_iterator;
-			tag                           group_tag_filter;
-		};
-		static_assert(sizeof(s_tag_iterator) == 0x14);
+
 	};
 };
 

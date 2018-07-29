@@ -21,9 +21,9 @@ namespace Yelo {
 	namespace blam {
 		using namespace Scripting;
 
-		void hs_evaluate(datum_index thread_index, datum_index expression_index, Scripting::s_hs_value_union *destination);
+		// void hs_evaluate(datum_index thread_index, datum_index expression_index, Scripting::s_hs_value_union *destination);
 
-		void hs_call_evaluate(datum_index thread_index);
+		// void hs_call_evaluate(datum_index thread_index);
 
 		// void hs_runtime_update();
 
@@ -61,7 +61,7 @@ namespace Yelo {
 		// 	// return HsGlobals()[hs_global_index]->value;
 		// }
 
-		void hs_evaluate(datum_index thread_index, datum_index expression_index, s_hs_value_union *destination) {
+		// void hs_evaluate(datum_index thread_index, datum_index expression_index, s_hs_value_union *destination) {
 			// s_hs_thread_datum    *thread     = hs_thread_get(thread_index);
 			// const hs_syntax_node *expression = thread->GetSyntax(expression_index);
 			//
@@ -85,7 +85,7 @@ namespace Yelo {
 			// 	stack_frame->source_expression = expression_index;
 			// 	stack_frame->result_reference  = destination;
 			// }
-		}
+		// }
 		//
 		// static s_hs_value_union *hs_arguments_evaluate(datum_index thread_index, size_t formal_parameters_count, const Enums::hs_type *formal_parameters, bool initialize_stack) {
 		// 	s_hs_thread_datum *thread = hs_thread_get(thread_index);
@@ -149,7 +149,7 @@ namespace Yelo {
 		// 	// function->evaluate(function_index, thread_index, initialize_stack);
 		// }
 
-		void hs_call_evaluate(datum_index thread_index) {
+		// void hs_call_evaluate(datum_index thread_index) {
 			// s_hs_thread_datum *thread = hs_thread_get(thread_index);
 			//
 			// const hs_syntax_node *expression = thread->GetFrameSyntax();
@@ -163,7 +163,7 @@ namespace Yelo {
 			// {
 			// 	hs_function_evaluate(thread_index, initialize_stack, expression->function_index);
 			// }
-		}
+		// }
 
 		// take hs_runtime_globals as a parameter until we define it in our own code
 		// static void hs_thread_main(datum_index thread_index, s_hs_runtime_globals &hs_runtime_globals) {

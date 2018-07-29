@@ -3,7 +3,6 @@
 #include <cassert>
 #include "enums/hs_enums.h"
 #include "../memory/datum_index.h"
-#include "scenario.h"
 #include "../cseries/yelo_base.h"
 #include "../memory/data_base.h"
 #include "library/library.h"

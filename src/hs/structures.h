@@ -1,19 +1,15 @@
 #pragma once
 
-#include <enums/hs_enums.h>
 #include "macros_generic.h"
+#include <enums/hs_enums.h>
 #include "hs.h"
-
-#include "enums/hs_enums.h"
+#include "hs_value_union.h"
+#include "../memory/array.h"
 
 namespace Yelo::Scripting {
 	typedef void (__cdecl *proc_hs_parse)(long function_index, datum_index expression_index);
 
 	typedef void (__cdecl *proc_hs_evaluate)(long function_index, datum_index thread_index, bool initialize_stack);
-
-
-
-
 
 	// halo script function definition
 	struct hs_function_definition {
@@ -110,7 +106,6 @@ namespace Yelo::Scripting {
 
 	STAT_ASSERT(hs_syntax_node, 0x14);
 
-	typedef Memory::DataArray<hs_syntax_node, Yelo::Enums::k_maximum_hs_syntax_nodes_per_scenario, Enums::k_maximum_hs_syntax_nodes_per_scenario_upgrade> hs_syntax_data_t;
 
 	struct s_hs_globals_datum : Yelo::Memory::s_datum_base {
 		unsigned short yelo_flags;
@@ -118,6 +113,7 @@ namespace Yelo::Scripting {
 		Yelo::Scripting::s_hs_value_union value;
 	};
 
+	typedef Memory::DataArray<hs_syntax_node, Yelo::Enums::k_maximum_hs_syntax_nodes_per_scenario, Enums::k_maximum_hs_syntax_nodes_per_scenario_upgrade> hs_syntax_data_t;
 	typedef Memory::DataArray<s_hs_globals_datum, Yelo::Enums::k_maximum_number_of_hs_globals> hs_globals_data_t;
 
 

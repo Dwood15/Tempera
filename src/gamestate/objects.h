@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../math/real_math.h"
-#include "../ce_base_types.h"
 #include "../math/animations.h"
 #include "../math/colors.h"
 #include "../tags/tags.h"

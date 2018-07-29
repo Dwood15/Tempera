@@ -18,7 +18,6 @@ struct s_animation_state {
 
 STAT_ASSERT(s_animation_state, 0x4);
 
-
 struct s_object_datum_animation_data {
 	Yelo::datum_index       definition_index;    // 0xCC
 	s_animation_state state;        // 0xD0

@@ -2,7 +2,6 @@
 
 //////////////////////////////////////////////////////////////////////////
 // game
-#include "../ce_base_types.h"
 #include "../CurrentEngine.h"
 #include "../cseries/MacrosCpp.h"
 #include "../gamestate/objects/units/unit_camera.h"

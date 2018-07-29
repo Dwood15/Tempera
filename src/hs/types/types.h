@@ -1,12 +1,14 @@
 /* See LICENSE.md for specific license information */
 #pragma once
 
+#include <array>
 #include <d3dx9math.inl>
 #include "../ai/actors/actors.hpp"
 
 #include "../structures.h"
 #include "../../ai/actors/actor_definitions.hpp"
 #include "enums/generic_enums.h"
+
 
 namespace Yelo {
 	namespace Scripting {
@@ -638,7 +640,6 @@ namespace Yelo {
 
 	namespace blam {
 		using namespace Scripting;
-
 		const std::array<unsigned short, Yelo::Enums::k_number_of_hs_object_types> k_hs_object_type_masks = {
 			// Yelo::Enums::_object_type_mask_all, // engine actually uses 0xFFFF here
 			// Enums::_object_type_mask_unit,

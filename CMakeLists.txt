@@ -1,26 +1,14 @@
 #Project: Tempera
 #File: CMakeLists.txt
 #Copyright � 2018 dwood
-#
-#this file is part of Tempera.
-#
-#Tempera is free software: you can redistribute it and/or modify
-#it under the terms of the gnu general public license as published by
-#the free software foundation, either version 3 of the license, or
-#(at your option) any later version.
-#
-#Tempera is distributed in the hope that it will be useful,
-#but without any warranty; without even the implied warranty of
-#merchantability or fitness for a particular purpose. See the
-#gnu general public license for more details.
-#
-#You should have received a copy of the gnu general public license
-#along with Tempera.  if not, see <http://www.gnu.org/licenses/>.
+# - GNU GPLv3
 
-#this file is currently heavily inconsistent. Sorry.
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 unset(CMAKE_SHARED_LIBRARY_PREFIX)
+
+#To guarantee we're building for 32 bit windows.
 unset(CMAKE_CL_64)
 
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
@@ -88,7 +76,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 
 set(CMAKE_AR C:\\Program\ Files\\LLVM\\bin\\llvm-ar)
-set(CMAKE_LINKER C:\\Program\ Files\\LLVM\\bin\\llvm-ld)
+set(CMAKE_LINKER C:\\Program\ Files\\LLVM\\bin\\lld-link)
 set(CMAKE_NM C:\\Program\ Files\\LLVM\\bin\\llvm-nm)
 set(CMAKE_OBJDUMP C:\\Program\ Files\\LLVM\\bin\\llvm-objdump)
 set(CMAKE_RANLIB C:\\Program\ Files\\LLVM\\bin\\llvm-ranlib)
@@ -155,14 +143,11 @@ set(COMMON_H
 	common/enums/ai_enums.h
 	common/enums/scenario_enums.h
 	common/enums/geometry_enums.h
-	src/engine/game.h
 	src/core_types.h
-	src/gamestate/unit_controls.h
-	src/gamestate/unit_speech.h
-	src/gamestate/first_divisor.h
 	src/tags/group/tagdata.h
 	src/tags/group/tagblock.h
-	src/scenario/scenario_location.h src/hs/hs_value_union.h)
+	src/scenario/scenario_location.h
+	src/hs/hs_value_union.h src/memory/data_iterator.h)
 
 add_library(dinput8 SHARED
 			common/addlog.cpp
@@ -178,7 +163,7 @@ add_library(dinput8 SHARED
 #The compiler is defaulting to the Windows 10 SDK, which requires external DLL's (xinput1_4.dll is not found error)
 #I manually force it to use my directx sdk xinput.
 #TODO: Use DX_LIBS or whatever the variable is, to specify the 2010 dx XInput.lib explicitly.
-set(XINPUTLIB D:\\Program\ Files\ \(x86\)\\Microsoft\ DirectX\ SDK\ \(June\ 2010\)\\Lib\\x86\\XInput.lib)
+#set(XINPUTLIB "D:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
 #D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
 #Version.Lib is required for looking up current EXE's runtime information.
 target_link_libraries(dinput8 ${MARIADB_LIBRARY} ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
@@ -186,5 +171,5 @@ target_link_libraries(dinput8 ${MARIADB_LIBRARY} ${LUA_GLOB} ${DirectX_LIBRARIES
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")
 
-set_target_properties(dinput8 PROPERTIES OUTPUT_NAME "dinput8")
+set_target_properties(dinput8 PROPERTIES OUTPUT_NAME "dwood_dinput8")
 

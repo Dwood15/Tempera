@@ -35,9 +35,6 @@ namespace Yelo {
 // #define blam_global_bsp3d            *(Scenario::GlobalBspReference())
 // #define blam_global_collision_bsp      *(Scenario::GlobalCollisionBspReference())
 
-
-
-
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Gets the currently loaded scenario. </summary>
 		// Yelo::TagGroups::scenario *Scenario();

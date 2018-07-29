@@ -4,7 +4,6 @@
 #include "macros_generic.h"
 #include "../../cseries/MacrosCpp.h"
 #include "time_structures.hpp"
-#include "../../ce_base_types.h"
 
 namespace Yelo {
 	static const long K_TICKS_PER_SECOND = 30;

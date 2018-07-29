@@ -32,7 +32,6 @@ set(SCRIPTING_H
 	${CMAKE_CURRENT_SOURCE_DIR}/object_lists.h
 	${CMAKE_CURRENT_SOURCE_DIR}/object_lists_structures.h
 	${CMAKE_CURRENT_SOURCE_DIR}/runtime.h
-	${CMAKE_CURRENT_SOURCE_DIR}/scenario.h
 	${CMAKE_CURRENT_SOURCE_DIR}/structures.h
 	${CMAKE_CURRENT_SOURCE_DIR}/threads.h
 	PARENT_SCOPE)

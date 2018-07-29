@@ -1,7 +1,6 @@
 #pragma once
 
-#include "macros_generic.h"
-#include "../ce_base_types.h"
+#include <macros_generic.h>
 #include "player_types.h"
 
 namespace game_options {

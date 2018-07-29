@@ -1,3 +1,4 @@
-module Tempera_Colors {
-    header "colors.h"
+module Tempera_Animations {
+    header "animations.h"
 }
+

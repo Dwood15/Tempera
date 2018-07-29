@@ -136,7 +136,7 @@ namespace Yelo {
 			// call ds:[address]
 				_x86_opcode_jmp_abs  = 0x25FF, /*FF 25*/
 		};
-		static_assert(sizeof(Enums::x86_opcode_twobyte) == 2);
+		STAT_ASSERT(Enums::x86_opcode_twobyte, 2);
 	};
 
 	namespace Memory {
@@ -165,7 +165,7 @@ namespace Yelo {
 		};
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// <summary>	Copies the bytes of a buffer to a foriegn memory space. </summary>
+		/// <summary>	Copies the bytes of a buffer to a foreign memory space. </summary>
 		/// 
 		/// <remarks>	Changes the protection of the foreign memory while copying, then reverts it back. </remarks>
 		///
@@ -174,7 +174,7 @@ namespace Yelo {
 		/// <param name="size">   	The size of the buffer. </param>
 		///
 		/// <returns>	not FALSE if it succeeds, FALSE if it fails. </returns>
-		BOOL WriteMemory(void *address, const void *src, size_t size) {
+		bool WriteMemory(void *address, const void *src, size_t size) {
 			return address == memcpy(address, src, size);
 		}
 
@@ -217,7 +217,8 @@ namespace Yelo {
 		void CreateHookRelativeCall(void *hook, void *hook_address, byte end) {
 			struct relative_call_bytes : Opcode::s_call {
 				byte End;
-			}; static_assert(sizeof(relative_call_bytes) == 6);
+			};
+			STAT_ASSERT(relative_call_bytes, 6)
 			// call near ....
 			// retn\nop
 			relative_call_bytes asm_bytes;

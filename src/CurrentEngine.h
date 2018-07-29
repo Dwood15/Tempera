@@ -94,6 +94,8 @@ namespace feature_management::engines {
 		auto GetHsFunctionTableCountReferences16();
 		auto GetHsFunctionTableCountReferences32();
 
+		void InitializeMemoryUpgrades();
+
 		minor GetMinorVersion() {
 			return this->CurrentMinor;
 		}

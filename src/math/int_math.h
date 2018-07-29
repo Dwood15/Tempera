@@ -1,5 +1,4 @@
 #pragma once
-#include "../ce_base_types.h"
 
 struct sbsp_stri {
 	union {

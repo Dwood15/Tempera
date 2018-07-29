@@ -5,7 +5,6 @@
 #include <addlog.h>
 #include "datum_index.h"
 #include "data_base.h"
-#include "../ce_base_types.h"
 #include "../CurrentEngine.h"
 
 static constexpr Yelo::datum_index::salt_t k_datum_index_salt_msb = 1U << (15);
@@ -59,7 +58,7 @@ namespace Yelo {
 			}
 		};
 
-		static_assert(sizeof(s_data_array) == 0x38);
+		STAT_ASSERT(s_data_array, 0x38)
 
 		struct s_data_iterator {
 			s_data_array *data;

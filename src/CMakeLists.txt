@@ -59,7 +59,6 @@ set(SRC_H
 	${LUA_H}
 	${CMAKE_CURRENT_SOURCE_DIR}/core.h
 	${CMAKE_CURRENT_SOURCE_DIR}/CurrentEngine.h
-	${CMAKE_CURRENT_SOURCE_DIR}/ce_base_types.h
 	${TAGS_H}
 	${GAMESTATE_H}
 	${EXCEPTIONS_H}

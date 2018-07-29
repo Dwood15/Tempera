@@ -24,7 +24,6 @@ set(GAME_H
 #	${CMAKE_CURRENT_SOURCE_DIR}/allegiance.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/cheats.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/configuration.h
-#	${CMAKE_CURRENT_SOURCE_DIR}/game.hpp
 #	${CMAKE_CURRENT_SOURCE_DIR}/lights.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/multiplayer_sounds.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/physics.h

@@ -1,6 +1,5 @@
 #include "macros_generic.h"
 #include "../cseries/yelo_base.h"
-#include "../scenario/scenario.h"
 
 namespace Yelo::Scripting {
 	void UpdateTypeHolderDataFromPtr(const TypeHolder &data, const Enums::hs_type type, void *ptr) {

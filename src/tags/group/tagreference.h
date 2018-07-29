@@ -1,7 +1,6 @@
 #pragma once
 
 #include "macros_generic.h"
-#include "../../ce_base_types.h"
 
 #include "tagdata.h"
 #include "tagblock.h"
