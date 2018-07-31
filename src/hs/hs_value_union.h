@@ -2,7 +2,9 @@
 
 #include "macros_generic.h"
 #include "enums/hs_enums.h"
+#include "enums/generic_enums.h"
 #include "enums/hud_enums.h"
+#include "enums/ai_enums.h"
 #include "../memory/datum_index.h"
 
 namespace Yelo::Scripting {

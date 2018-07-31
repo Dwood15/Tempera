@@ -7,7 +7,7 @@
 
 namespace Yelo::Scenario {
 	// made up name
-	struct __attribute__((packed)) s_scenario_player_atmospheric_fog {
+	struct s_scenario_player_atmospheric_fog {
 		bool is_inside;
 		unsigned char : 8;
 		unsigned short : 16;
@@ -17,7 +17,7 @@ namespace Yelo::Scenario {
 		real           pad03;
 	};
 
-	struct __attribute__((packed)) sound_environment {
+	struct sound_environment {
 		unsigned long : 32;
 		short priority;
 		unsigned short : 16;
@@ -37,11 +37,11 @@ namespace Yelo::Scenario {
 		unsigned __int64:64;
 	};
 
-	struct __attribute__((packed)) s_scenario_globals {
+	struct s_scenario_globals {
 		short current_structure_bsp_index;
 		unsigned short : 16;
 		s_scenario_player_atmospheric_fog player_fog[/* Enums::k_maximum_number_of_local_players*/ 1];
-		struct __attribute__((packed)) {
+		struct {
 			bool copy_environment_tag;
 			unsigned char  : 8;
 			unsigned short : 16; // never seen this set to true
@@ -50,10 +50,10 @@ namespace Yelo::Scenario {
 	};
 
 	STAT_ASSERT(sound_environment, 0x48);
-	STAT_ASSERT(s_scenario_player_atmospheric_fog, 0x2C )
-	STAT_ASSERT(s_scenario_globals, 0x7C)
+	STAT_ASSERT(s_scenario_player_atmospheric_fog, 0x2C);
+	STAT_ASSERT(s_scenario_globals, 0x7C);
 
-	// struct __attribute__((packed)) s_sky_definition {
+	// struct s_sky_definition {
 	// 	enum { k_group_tag = 'sky ' };
 	// 	tag_reference         model;
 	// 	tag_reference         animation;

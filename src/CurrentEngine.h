@@ -1,10 +1,10 @@
 #pragma once
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Weverything"
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Weverything"
 #include <dinput.h>
 #include <optional>
-#pragma clang diagnostic pop
+//#pragma clang diagnostic pop
 
 #include "versions.h"
 #include "core.h"
@@ -15,7 +15,7 @@ class LuaScriptManager;
 static bool ShouldOverride[MAX_PLAYER_COUNT_LOCAL];
 struct s_player_action;
 struct s_unit_control_data;
-
+class Core;
 const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
 
 namespace feature_management::engines {

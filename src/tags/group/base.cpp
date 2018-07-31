@@ -1,10 +1,11 @@
 #include <windows.h>
 #include "macros_generic.h"
+#include "base.h"
 
 namespace Yelo {
 	namespace blam {
 		// Clear the values of a tag reference so that it references no tag
-		void __cdecl tag_reference_clear(tag_reference &reference) {
+		void tag_reference_clear(Yelo::tag_reference &reference) {
 			// The engine's code will free (ie, YELO_FREE) the reference's name
 			// when tag_block_delete_element (which is called by tag_unload) is ran
 
@@ -14,7 +15,7 @@ namespace Yelo {
 			reference.tag_index   = datum_index::null();
 		}
 
-		void __cdecl tag_reference_set(tag_reference &reference, tag group_tag, const char *name) {
+		void  tag_reference_set(tag_reference &reference, tag group_tag, const char *name) {
 			//assert(group_tag == NONE || tag_group_get(group_tag));
 			reference.group_tag = group_tag;
 
@@ -32,7 +33,7 @@ namespace Yelo {
 			return tag_reference_set(reference, T::k_group_tag, name);
 		}
 
-		datum_index __cdecl tag_reference_try_and_get(const tag_reference *reference) {
+		datum_index  tag_reference_try_and_get(const tag_reference *reference) {
 			//
 			// datum_index loaded_tag_index = tag_loaded(reference->group_tag, reference->name);
 			//"tag reference \"%s\" and actual index do not match: is %08lX but should be %08lX",
@@ -42,7 +43,7 @@ namespace Yelo {
 			return datum_index::null();
 		}
 
-		bool __cdecl tag_reference_resolve(_Inout_ tag_reference *reference) {
+		bool  tag_reference_resolve(_Inout_ tag_reference *reference) {
 
 			bool success = false;
 			// if (reference->group_tag != NONE && !is_null_or_empty(reference->name)) {

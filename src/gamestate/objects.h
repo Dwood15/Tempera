@@ -345,8 +345,7 @@ struct s_unit_datum {
 	s_object_data unit_object;
 	s_unit_data   unit;
 };
-
-STAT_ASSERT(s_unit_datum, object_sizes::k_object_size_unit);
+STAT_ASSERT(s_unit_datum, sizeof(s_object_data) + sizeof(s_unit_data));
 
 struct s_item_datum {
 	enum {

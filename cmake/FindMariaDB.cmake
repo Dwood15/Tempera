@@ -54,7 +54,7 @@ endif ()
 
 if (WIN32)
 	#cmake got stubborn, even between multiple forced cache reloads...
-	set(MARIADB_LIBRARY_DIR "C:\\Program Files (x86)\\MariaDB\\MariaDB Connector C\\lib")
+	set(MARIADB_LIBRARY_DIR "C:/Program\ Files\ (x86)/MariaDB/MariaDB\ Connector\ C/lib")
 	# Try to find mariadb client libraries
 	find_library(MARIADB_LIBRARY libmariadb.lib
 				 ${MARIADB_LIBRARY_DIR}

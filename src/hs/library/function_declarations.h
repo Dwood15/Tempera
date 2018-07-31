@@ -805,23 +805,6 @@ namespace Yelo::Scripting {
 				*definitions[x] = &_upgrade_globals.globals.table[0];
 		}
 		//////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////
-		// Update the game code to use OUR function/global definition table's counts
-		{
-			long      count = _upgrade_globals.functions.count;
-			for (auto ptr : K_HS_FUNCTION_TABLE_COUNT_REFERENCES_16bit)
-				*ptr = CAST(short, count);
-			for (auto ptr : K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit)
-				*ptr = count;
-
-			count = _upgrade_globals.globals.count;
-			for (auto ptr : K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_16bit)
-				*ptr = CAST(short, count);
-			for (auto ptr : K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_32bit)
-				*ptr = count;
-		}
-		//////////////////////////////////////////////////////////////////////////
 	}
 
 	void* scripting_game_change_version_id_evaluate(void** arguments)

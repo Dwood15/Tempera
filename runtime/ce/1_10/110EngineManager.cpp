@@ -124,6 +124,7 @@ constexpr std::pair<uintptr_t, short> short_patches[]{
 };
 
 #include "../../../src/lua/script_manager.h"
+#include "../../../src/hs/structures.h"
 #include "../../../src/CurrentEngine.h"
 #include "hs_function_table_references.h"
 
@@ -156,27 +157,6 @@ auto GetHsFunctionTable() {
 auto CE110::GetHsFunctionTableCount() {
 	static auto *const hs_function_table_count = reinterpret_cast<long *>(0x5F9C10);
 	return hs_function_table_count;
-}
-
-auto CE110::GetHsFunctionTableCountReferences16() {
-	static short *references[] = {
-		(short *) 0x4861E1,
-		(short *) 0x486F14,
-	};
-
-	return references;
-}
-
-auto CE110::GetHsFunctionTableCountReferences32() {
-	static long *K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit[] = {
-		(reinterpret_cast<long *>(0x4864FA)),
-	};
-
-	return K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit;
-}
-
-auto CE110::GetHsFunctionTableReferenceList() {
-	return K_HS_FUNCTION_TABLE_REFERENCES;
 }
 
 void CE110::InitializeHSMemoryUpgrades() {

@@ -8,35 +8,6 @@
 #include "MacrosCpp.h"
 #include <functional>
 
-
-namespace Yelo {
-	namespace Enums {
-		enum {
-			k_uuid_buffer_size = 16,
-
-			k_kilo = 1024,
-			k_mega = k_kilo * k_kilo,
-		};
-	};
-
-	namespace Flags {
-		enum {
-			k_alignment_8bit,
-			k_alignment_16bit,
-			k_alignment_32bit,
-			k_alignment_64bit,
-			k_alignment_128bit,
-			k_alignment_256bit,
-			k_alignment_512bit,
-			k_alignment_1024bit,
-			k_alignment_2048bit,
-			k_alignment_4096bit,
-		};
-	};
-};
-
-#define WIN32_FUNC(func) func
-
 static const errno_t k_errnone = 0;
 
 namespace Yelo {
@@ -442,21 +413,21 @@ namespace Yelo {
 		::qsort_s(_Base, _NumOfElements, sizeof(T), reinterpret_cast<proc_stdlib_compare>(_PtFuncCompare), reinterpret_cast<void *>(_Context));
 	}
 
-	template <typename TKey, typename T, size_t k_array_size, typename TContext = void *>
-	inline
-	T *Bsearch(const TKey *_Key, T (&_Base)[k_array_size],
-				  int (__cdecl *_PtFuncCompare)(TContext, const TKey *, const T *), TContext _Context = nullptr) {
-		static_assert(sizeof(TContext) <= sizeof(void *), "Context type is incompatible with C runtime API");
-
-		return reinterpret_cast<T *>(::bsearch_s(_Key, _Base, k_array_size, sizeof(T), reinterpret_cast<proc_stdlib_compare>(_PtFuncCompare), reinterpret_cast<void *>(_Context)));
-	}
-
-	template <typename TKey, typename T, typename TContext = void *, typename TCompareParam = const T *>
-	inline T *Bsearch(const TKey *_Key, T *_Base, rsize_t _NumOfElements, int (__cdecl *_PtFuncCompare)(TContext, const TKey *, TCompareParam), TContext _Context = nullptr) {
-		static_assert(sizeof(TContext) <= sizeof(void *), "Context type is incompatible with C runtime API");
-
-		return reinterpret_cast<T *>(::bsearch_s(_Key, _Base, _NumOfElements, sizeof(T), reinterpret_cast<proc_stdlib_compare>(_PtFuncCompare), reinterpret_cast<void *>(_Context)));
-	}
+	// template <typename TKey, typename T, size_t k_array_size, typename TContext = void *>
+	// inline
+	// T *Bsearch(const TKey *_Key, T (&_Base)[k_array_size],
+	// 			  int (__cdecl *_PtFuncCompare)(TContext, const TKey *, const T *), TContext _Context = nullptr) {
+	// 	static_assert(sizeof(TContext) <= sizeof(void *), "Context type is incompatible with C runtime API");
+	//
+	// 	return reinterpret_cast<T *>(::bsearch_s(_Key, _Base, k_array_size, sizeof(T), reinterpret_cast<proc_stdlib_compare>(_PtFuncCompare), reinterpret_cast<void *>(_Context)));
+	// }
+	//
+	// template <typename TKey, typename T, typename TContext = void *, typename TCompareParam = const T *>
+	// inline T *Bsearch(const TKey *_Key, T *_Base, rsize_t _NumOfElements, int (__cdecl *_PtFuncCompare)(TContext, const TKey *, TCompareParam), TContext _Context = nullptr) {
+	// 	static_assert(sizeof(TContext) <= sizeof(void *), "Context type is incompatible with C runtime API");
+	//
+	// 	return reinterpret_cast<T *>(::bsearch_s(_Key, _Base, _NumOfElements, sizeof(T), reinterpret_cast<proc_stdlib_compare>(_PtFuncCompare), reinterpret_cast<void *>(_Context)));
+	// }
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	Tests whether an array is bitwise zero. </summary>

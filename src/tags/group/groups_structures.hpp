@@ -8,6 +8,8 @@
 #include "macros_generic.h"
 #include "tag_groups.h"
 #include "enums/tag_enums.h"
+#include "../../memory/datum_index.h"
+
 namespace Yelo {
 	class tag_field {
 	public:
@@ -190,7 +192,7 @@ namespace byteswaps {
 #include "../../math/colors.h"
 #include "../../math/int_math.h"
 #include "../../math/real_math.h"
-
+#include <iterator>
 namespace Yelo::TagGroups {
 	using namespace Yelo;
 	using namespace byteswaps;
@@ -267,13 +269,6 @@ namespace Yelo {
 		long_flags              flags;
 		long                    maximum_size;
 		proc_tag_data_byte_swap byte_swap_proc;
-
-		bool IsConsideredDebugOnly() const {
-			return
-				// never streamed is not really debug, but it requires explicit tag_data_load before it is loaded into memory
-				TEST_FLAG(flags, Flags::_tag_data_never_streamed_bit) ||
-				TEST_FLAG(flags, Flags::_tag_data_not_streamed_to_cache_bit);
-		}
 	};
 
 	static_assert(sizeof(tag_data_definition) == 0x10);
@@ -327,7 +322,7 @@ namespace Yelo {
 		}
 	};
 
-	static_assert(sizeof(tag_reference_definition) == 0xC);
+	STAT_ASSERT(tag_reference_definition, 0xC);
 
 	// Postprocess a tag definition (eg, automate the creation of fields, etc)
 	// Called once the tag has been fully loaded (header_block_definition's postprocess is called before this)
@@ -348,8 +343,6 @@ namespace Yelo {
 
 		// TagGroups::s_tag_field_set_runtime_data *GetHeaderRuntimeInfo() const { return header_block_definition->GetRuntimeInfo(); }
 
-		bool IsDebugOnly() const { return TEST_FLAG(flags, Flags::_tag_group_debug_only_yelo_bit); }
-
 		// tag_group* [] (ie, tag_group**) qsort procs
 		static int __cdecl CompareByNameProc(void *, const tag_group *const *lhs, const tag_group *const *rhs) {
 			return strcmp((*lhs)->name, (*rhs)->name);
@@ -362,10 +355,9 @@ namespace Yelo {
 		static int __cdecl SearchByNameProc(void *, const char *key, const tag_group *const *group) {
 			return strcmp(key, (*group)->name);
 		}
-
 	};
 
-	static_assert(sizeof(tag_group) == 0x60);
+	STAT_ASSERT(tag_group, 0x60);
 
 
 	// struct s_tag_instance : Memory::s_datum_base_aligned {

@@ -15,7 +15,7 @@ namespace feature_management::engines {
 
 		static const defined_functionrange * GetFunctionMap();
 
-		static __stdcall void OnPlayerActionUpdate();
+		static void __stdcall OnPlayerActionUpdate();
 
 		static Core GetCoreAddressList();
 

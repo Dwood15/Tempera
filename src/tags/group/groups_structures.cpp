@@ -1,6 +1,6 @@
 #include <windows.h>
 #include "groups_structures.hpp"
-
+#include "addlog.h"
 namespace Yelo {
 	// Searches the definition for a field of type [field_type] with a name which starts
 	// with [name] characters. Optionally starts at a specific field index.

@@ -12,7 +12,7 @@
 #include <macros_generic.h>
 #include "enums/generic_enums.h"
 #include "../math/real_math.h"
-
+#include "../memory/datum_index.h"
 
 struct player {
 	short   playerid;

@@ -2,12 +2,9 @@
 
 #include "map.h"
 #include "../math/colors.h"
-struct ident {
-	short index;
-	short id;
-};
+#include "../memory/datum_index.h"
 
-
+using namespace Yelo;
 struct reflexive {
 	unsigned long Count;
 	void          * Offset;
@@ -20,7 +17,7 @@ struct tag_name {
 
 struct tag_header {
 	unsigned long TagClass[3];
-	ident         tag;
+	datum_index         h_tag_idx;
 	tag_name* TName;
 	void * Offset;
 	long Zeros[2];
@@ -28,7 +25,7 @@ struct tag_header {
 
 struct tag_index_header {
 	tag_header    * FirstTag;
-	ident         firsttag;
+	datum_index         firsttag;
 	long          Unknown;
 	unsigned long TagCount;
 	unsigned long VertexObjectCount;
@@ -44,7 +41,7 @@ struct tagref {
 	unsigned long Tag;
 	tag_name* TName;
 	long  Unknown;
-	ident tag;
+	datum_index tag_ref;
 };
 
 // ************************

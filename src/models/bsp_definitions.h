@@ -145,7 +145,7 @@ namespace Yelo::TagGroups {
 	STAT_ASSERT(tag_block<void *>, 0xC);
 
 
-	struct __attribute__((packed)) structure_bsp {
+	struct structure_bsp {
 		tag_reference lightmap_bitmaps; //0x0
 		real_bounds   vehicle_heights; //0x10 //floor, ceiling
 		long          padA[5]; // Useless? Removed in H2

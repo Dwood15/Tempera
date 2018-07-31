@@ -7,7 +7,7 @@ namespace Yelo::Memory {
 	/// <summary>
 	/// 	for data structures which DO use the proceeding 16 bits after the 'salt' header.
 	/// </summary>
-	struct __attribute__((packed)) s_datum_base {
+	struct s_datum_base {
 	private:
 		datum_index::salt_t header; // salt for this datum
 	public:

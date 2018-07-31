@@ -5,7 +5,7 @@
 #include "../library/globals_declarations.h"
 #include "../structures.h"
 #include "../../memory/memory_interface_base.hpp"
-
+#include <iterator>
 namespace Yelo {
 	namespace Scripting {
 
@@ -206,10 +206,10 @@ namespace Yelo {
 
 		// Only 39 functions in CE release are actually 'null'...but now in OS2, we no longer overwrite existing functions!
 		// So ignore this comment :p
-		API_CODEDATA static uint hs_eval_func_ptrs[Enums::k_hs_script_functions_count_upgrade - Enums::k_hs_functions_count];
+		static uint hs_eval_func_ptrs[Enums::k_hs_script_functions_count_upgrade - Enums::k_hs_functions_count];
 		// next free hs_eval_func_ptrs index
 		static long hs_eval_func = 0;
-		API_CODEDATA static byte hs_func_pool[std::size(hs_eval_func_ptrs)][sizeof(hs_eval_func_has_param)];
+		static byte hs_func_pool[std::size(hs_eval_func_ptrs)][sizeof(hs_eval_func_has_param)];
 
 		// Creates a evaluate function that calls [func] and passes
 		// an array of parameters to it if it [takes_params]

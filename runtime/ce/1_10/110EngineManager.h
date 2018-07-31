@@ -1,13 +1,15 @@
 #pragma once
 
 #include <versions.h>
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Weverything"
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Weverything"
 #include <dinput.h>
-#pragma clang diagnostic pop
+//#pragma clang diagnostic pop
 
 #include <macros_generic.h>
 #include "../../../src/scenario/structures.h"
+#include "../../../src/scenario/definitions.h"
+#include "../../../src/models/collision_bsp.h"
 
 namespace feature_management::engines {
 	class CE110 : public IEngine<CE110> {
@@ -34,10 +36,13 @@ namespace feature_management::engines {
 		static auto const HS_ARGUMENTS_EVALUATE = 0x48D480;
 		static auto const HS_RETURN             = 0x48D270;
 
-		static auto *const global_collision_bsp  = reinterpret_cast<Yelo::TagGroups::collision_bsp **>(0x6E2258);
-		static auto *const global_structure_bsp  = reinterpret_cast<Yelo::TagGroups::structure_bsp **>(0x6E225C);
-		static auto *const global_scenario_index = reinterpret_cast<datum_index *>(0x6397CC);
-		static auto *const structure_bsp_index   = reinterpret_cast<short *>(0x6397D0);
+		static inline Yelo::TagGroups::coll::collision_bsp ** global_collision_bsp  = reinterpret_cast<Yelo::TagGroups::coll::collision_bsp **>(0x6E2258);
+
+		static inline Yelo::TagGroups::structure_bsp ** global_structure_bsp  = reinterpret_cast<Yelo::TagGroups::structure_bsp **>(0x6E225C);
+
+		static inline datum_index * global_scenario_index = reinterpret_cast<datum_index *>(0x6397CC);
+
+		static inline short * structure_bsp_index   = reinterpret_cast<short *>(0x6397D0);
 
 		//TODO
 		// recorded_animations_data_t &RecordedAnimations() { DPTR_IMP_GET_BYREF(recorded_animations); }
@@ -54,9 +59,10 @@ namespace feature_management::engines {
 
 		//////////////////////////////////////////////////////////////////////////
 		// Scenario.cpp
-		static auto **const scenario_globals = reinterpret_cast<Yelo::Scenario::s_scenario_globals **>(0x6E2254);
-		static auto *const global_scenario   = reinterpret_cast<Yelo::TagGroups::scenario **>(0x6E224C);
-		static auto *const global_bsp3d      = reinterpret_cast<Yelo::TagGroups::collision_bsp **>(0x6E2250);
+		static const Yelo::Scenario::s_scenario_globals ** GetScenarioGlobals() { return reinterpret_cast<Yelo::Scenario::s_scenario_globals **>(0x6E2254); }
+		static const Yelo::TagGroups::scenario ** GetGlobalScenario() { return reinterpret_cast<Yelo::TagGroups::scenario **>(0x6E224C); }
+		static const Yelo::TagGroups::coll::collision_bsp ** GetGlobalBsp3d() { return reinterpret_cast<Yelo::TagGroups::coll::collision_bsp **>(0x6E2250); }
+
 		static auto const OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__READ  = 0x4F8207;
 		static auto const OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__WRITE = 0x4F83CE;
 		static auto const OBJECTS_INITIALIZE_FOR_NEW_MAP_MOD_PROCESSED_BSPS    = 0x4F84E2;
@@ -94,31 +100,65 @@ namespace feature_management::engines {
 
 		static auto **const hs_external_globals = reinterpret_cast<Yelo::Scripting::hs_global_definition **>(0x626988);
 
-		static short *K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_16bit[] = {
-			(reinterpret_cast<short *>(0x4860F1)),
-		};
 
-		static long  *K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_32bit[] = {
-			reinterpret_cast<long *>(0x4865AA),
-			reinterpret_cast<long *>(0x48BCDA),
-			reinterpret_cast<long *>(0x48CAFB),
-			reinterpret_cast<long *>(0x48CC0F),
-			reinterpret_cast<long *>(0x48CC6D),
-			reinterpret_cast<long *>(0x48CD70),
-			reinterpret_cast<long *>(0x48D38A),
-		};
-		static void  *K_HS_EXTERNAL_GLOBALS_REFERENCES[]             = {
-			reinterpret_cast<void *>(0x48607C),
-			reinterpret_cast<void *>(0x4860AC),
-			reinterpret_cast<void *>(0x4860D9),
-			reinterpret_cast<void *>(0x486410),
-			reinterpret_cast<void *>(0x4865A5),
-			reinterpret_cast<void *>(0x4891E2),
-			reinterpret_cast<void *>(0x48BC6E),
-			reinterpret_cast<void *>(0x48D1E6),
-			reinterpret_cast<void *>(0x48DB1B),
-			reinterpret_cast<void *>(0x48DC87),
-		};
+		static void UpdateGlobalHSFunctionCounts(long count) {
+			//count = _upgrade_globals.globals.count;
+
+			long  *K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_32bit[] = {
+				reinterpret_cast<long *>(0x4865AA),
+				reinterpret_cast<long *>(0x48BCDA),
+				reinterpret_cast<long *>(0x48CAFB),
+				reinterpret_cast<long *>(0x48CC0F),
+				reinterpret_cast<long *>(0x48CC6D),
+				reinterpret_cast<long *>(0x48CD70),
+				reinterpret_cast<long *>(0x48D38A),
+			};
+
+			for (auto ptr : K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_32bit)
+				*ptr = count;
+
+			static short *K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_16bit[] = {
+				(reinterpret_cast<short *>(0x4860F1)),
+			};
+
+			for (auto ptr : K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_16bit)
+				*ptr = static_cast<short>(count);
+
+			void *K_HS_EXTERNAL_GLOBALS_REFERENCES[] = {
+				reinterpret_cast<void *>(0x48607C),
+				reinterpret_cast<void *>(0x4860AC),
+				reinterpret_cast<void *>(0x4860D9),
+				reinterpret_cast<void *>(0x486410),
+				reinterpret_cast<void *>(0x4865A5),
+				reinterpret_cast<void *>(0x4891E2),
+				reinterpret_cast<void *>(0x48BC6E),
+				reinterpret_cast<void *>(0x48D1E6),
+				reinterpret_cast<void *>(0x48DB1B),
+				reinterpret_cast<void *>(0x48DC87),
+			};
+
+		}
+
+		static void UpdateHSFunctionCounts(long count) { 
+			//count = _upgrade_globals.functions.count;
+
+			static long *K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit[] = {
+				(reinterpret_cast<long *>(0x4864FA)),
+			};
+
+			for (auto ptr : K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit) {
+				*ptr = count;
+			}
+
+			static short *references[] = {
+				(short *)0x4861E1,
+				(short *)0x486F14,
+			};
+
+			for (auto ptr : references) {
+				*ptr = CAST(short, count);
+			}
+		}
 
 		//////////////////////////////////////////////////////////////////////////
 

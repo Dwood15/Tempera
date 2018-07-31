@@ -9,7 +9,7 @@
 namespace Yelo::TagGroups {
 	/// <summary>	when true, all 'model' references are loaded or get as gbxmodels </summary>
 	static inline const bool g_gbxmodel_group_enabled = true;
-}
+};
 
 // #define TREF_SIZEOF sizeof(tag_reference);
 

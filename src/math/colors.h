@@ -2,10 +2,10 @@
 
 #include <macros_generic.h>
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Weverything"
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Weverything"
 #include <d3dx9math.h>
-#pragma clang diagnostic pop
+//#pragma clang diagnostic pop
 
 //TODO: Investigate why this is the way it is.
 struct argb_color;

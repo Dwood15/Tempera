@@ -1,5 +1,6 @@
 #include "macros_generic.h"
 #include "../cseries/yelo_base.h"
+#include "enums/hs_enums.h"
 
 namespace Yelo::Scripting {
 	void UpdateTypeHolderDataFromPtr(const TypeHolder &data, const Enums::hs_type type, void *ptr) {
@@ -168,18 +169,18 @@ namespace Yelo::Scripting {
 		}
 	}
 };
-
+#include "structures.h"
 namespace Yelo::blam {
 	using namespace Yelo::Scripting;
 
 	void hs_nodes_garbage_collect() {
 		// NOTE: engine seems to use a for(;;) using data_next_index() on syntax nodes
-		for (auto node : HsSyntax()) {
-			if (node->IsGarbageCollectable())
-				continue;
+		//for (auto node : HsSyntax()) {
+		//	if (node->IsGarbageCollectable())
+		//		continue;
 
-			HsSyntax().Delete(node.index);
-		}
+		//	HsSyntax().Delete(node.index);
+		//}
 	}
 
 	Scripting::hs_function_definition *hs_function_get(short function_index) {

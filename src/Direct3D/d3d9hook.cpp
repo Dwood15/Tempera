@@ -19,6 +19,7 @@
 #include "../core.h"
 #include "../gamestate/camera.h"
 #include "../CurrentEngine.h"
+#include "../gamestate/objects/objectcontroller.h"
 
 CD3D::CD3D() {
 	Font = NULL;
@@ -126,6 +127,8 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 		return;
 	}
 
+	static short maxObjects = core->GetMaxObjects();
+
 	object_data   *obj          = NULL;
 	object_header *objh         = NULL;
 	object_header *temp_nearest = NULL;
@@ -139,7 +142,8 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 	float tx;
 	float ty;
 
-	for (unsigned short i = 0; i < core->core_1->Object->max; i++) {
+
+	for (unsigned short i = 0; i < maxObjects; i++) {
 		objh = core->GetObjectHeader(i);
 		obj  = core->GetGenericObject(i);
 		if (obj == NULL) {

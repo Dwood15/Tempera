@@ -86,12 +86,12 @@ vect3 CMyCamera::ScreenPos(vect3 coord, bool log) {
 	}
 	// [/Difference]
 
-	float obj_pitch = asin(cam_to_obj.z);
-	float cam_pitch = asin(pCamera->vLookAt.z);
+	float obj_pitch = asinf(cam_to_obj.z);
+	float cam_pitch = asinf(pCamera->vLookAt.z);
 
 	float relative_pitch = cam_pitch - obj_pitch;
 
-	float dist_to_object = sqrt(cam_to_obj.x * cam_to_obj.x + cam_to_obj.y * cam_to_obj.y + cam_to_obj.z * cam_to_obj.z);
+	float dist_to_object = sqrtf(cam_to_obj.x * cam_to_obj.x + cam_to_obj.y * cam_to_obj.y + cam_to_obj.z * cam_to_obj.z);
 
 	if (log) {
 		Print<false>( "Cam yaw/pitch: %f,  %f\n", cam_yaw, cam_pitch);

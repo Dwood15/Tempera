@@ -10,6 +10,7 @@
 #include "Direct3D/d3d9hook.h"
 #include "math/colors.h"
 #include "gamestate/player_types.h"
+#include "gamestate/objects.h"
 #include "game/time/time_structures.hpp"
 #include "core_types.h"
 
@@ -18,7 +19,6 @@ class ObjectController;
 struct s_player_control_globals_data;
 struct s_motion_sensor;
 struct object_header;
-struct _core_1;
 
 namespace Yelo::Scenario {
 	struct s_scenario_globals;
@@ -71,6 +71,8 @@ public:
 
 	ObjectController *ObjectControl;
 
+	short GetMaxObjects() { return this->core_1->Object->max; }
+
 	Core() = default;
 
 	Core(LPCoreAddressList list);
@@ -91,7 +93,7 @@ public:
 
 	long GetPlayerTeam(short player_index);
 
-	ident GetPlayerObjectIdent(short player_index);
+	datum_index GetPlayerObjectIdent(short player_index);
 
 	// biped_data *GetBiped(short player_index);
 

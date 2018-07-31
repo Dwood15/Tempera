@@ -28,7 +28,7 @@ namespace Yelo {
 			};
 		};
 
-		static constexpr datum_index null() { return { static_cast<uint>(-1) }; }
+		static constexpr datum_index null() { return datum_index{static_cast<uint>(-1)}; }
 
 		bool IsNull() const { return -1 == handle; }
 

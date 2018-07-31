@@ -7,8 +7,8 @@
 //WARNING: Please avoid nesting macros/typedefs, that breaks intellisense 9/10 times.
 #pragma region sanity checks
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Weverything"
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Weverything"
 
 #define TO_STR(x) #x
 #define XSTR(s) TO_STR(s)
@@ -21,7 +21,22 @@ struct TAssertEquality {
 
 #define STAT_ASSERT(object, size) static_assert( TAssertEquality<sizeof(object), size>::_cResult, "Don't match!");
 
-#pragma clang diagnostic pop
+/*auto numDigits = [](unsigned long num, unsigned long dig = 0) constexpr {
+	
+	while()
+	if (num < 10) {
+		return dig + 1;
+	}
+
+	return numDigits(num / 10);
+};
+
+static_assert(numDigits(12) == 2);
+static_assert(numDigits(100) == 3);
+static_assert(numDigits(1001) == 4); */
+//constexpr char [] style functions don't work when passed into static_assert. 
+
+//#pragma clang diagnostic pop
 
 //#define STAT_ASSERT(object, size) static_assert(size_check<object, size>());
 
@@ -41,15 +56,15 @@ typedef signed char    byte_enum;
 typedef short          int16;
 
 //sanity checks.
-STAT_ASSRT(bool, 0x1);
-STAT_ASSRT(char, 0x1);
-STAT_ASSRT(short, 0x2);
-STAT_ASSRT(__int16, 0x2);
-STAT_ASSRT(__int32, 0x4);
-STAT_ASSRT(long, 0x4);
-STAT_ASSRT(float, 0x4);
-STAT_ASSRT(long long, 0x8);
-STAT_ASSRT(double, 0x8);
+STAT_ASSERT(bool, 0x1);
+STAT_ASSERT(char, 0x1);
+STAT_ASSERT(short, 0x2);
+STAT_ASSERT(__int16, 0x2);
+STAT_ASSERT(__int32, 0x4);
+STAT_ASSERT(long, 0x4);
+STAT_ASSERT(float, 0x4);
+STAT_ASSERT(long long, 0x8);
+STAT_ASSERT(double, 0x8);
 
 //Typedef'd sanity checks
 STAT_ASSRT(ushort, 0x2);
@@ -102,9 +117,7 @@ STAT_ASSRT(ushort, 0x2);
 #pragma endregion
 
 #pragma region maximums
-#ifndef MAX_PLAYER_COUNT_LOCAL
-#define MAX_PLAYER_COUNT_LOCAL       1
-#endif
+constexpr uint MAX_PLAYER_COUNT_LOCAL = 1;
 
 #ifndef MAX_GAMEPAD_COUNT
 #define MAX_GAMEPAD_COUNT            6
@@ -132,14 +145,14 @@ STAT_ASSRT(ushort, 0x2);
 #define NONE                  -1
 
 // Name of the section where we'll place executable data
-#define API_CODEDATA_SECTION_NAME   ".yelo"
+//#define API_CODEDATA_SECTION_NAME   ".yelo"
 // Apply this to data which will later contain code which will also be executed
-#define API_CODEDATA            __declspec(allocate(API_CODEDATA_SECTION_NAME))
+//#define API_CODEDATA            __declspec(allocate(API_CODEDATA_SECTION_NAME))
 // The fucking *compiler* ignores 'write' with 'execute. Needs manual fix-up
-#pragma section( API_CODEDATA_SECTION_NAME, read, write, execute )
+//#pragma section( API_CODEDATA_SECTION_NAME, read, write, execute )
 // ...Actually, this fixes the problem of the compiler ignoring the 'write' attribute
 // When compiled into object-code (.obj), the 'write' attribute is lost, so it's not really the linker's fault
-#pragma comment(linker, "/section:" API_CODEDATA_SECTION_NAME ",ERW")
+//#pragma comment(linker, "/section:" API_CODEDATA_SECTION_NAME ",ERW")
 #define FUNC_GET(funcName)       CurrentEngine.getFunctionBegin(#funcName)
 #endif
 

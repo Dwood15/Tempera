@@ -12,6 +12,7 @@
 #include <addlog.h>
 #include "core.h"
 #include "math.h"
+#include "gamestate/objects/objectcontroller.h"
 
 typedef std::string string;
 
@@ -74,7 +75,7 @@ Core::Core(LPCoreAddressList list) {
 	camera   = (_camera *) MyCamera->Camera;
 
 	// Object Control
-	ObjectControl = new ObjectController(this);
+	ObjectControl = new ObjectController();
 
 	to_respawn_count    = (short *) list.to_respawn_count;
 	spawn_count         = (short *) list.spawn_count;
@@ -110,7 +111,7 @@ player *Core::GetPlayer(short index) {
 // Check to see if a player is spawned && biped object is valid?
 bool Core::IsPlayerSpawned(short index) {
 	player *newplayer = GetPlayer(index);
-	return (newplayer->SlaveUnitIndex.id != 0 && newplayer->SlaveUnitIndex.id != INVALID);
+	return (newplayer->SlaveUnitIndex.index != 0 && newplayer->SlaveUnitIndex.index != INVALID);
 }
 
 // Check to see if a player is valid
@@ -138,12 +139,12 @@ void Core::TryLogPlayer(short index, bool toConsole) {
 	if (!IsPlayerSpawned(index)) {
 		return;
 	}
-
-	GetPlayer(index)->DumpData(toConsole);
+	Print<true>("Tried to log the player, but obv, that failed, lol");
+	//GetPlayer(index)->DumpData(toConsole);
 }
 
 // Returns a player object ident by player index
-ident Core::GetPlayerObjectIdent(short player_index) {
+datum_index Core::GetPlayerObjectIdent(short player_index) {
 	player *newplayer = GetPlayer(player_index);
 	return newplayer->SlaveUnitIndex;
 }

@@ -3,6 +3,7 @@
 #include <rpc.h>
 #include <exception>
 #include <addlog.h>
+#include <cstring>
 #include "datum_index.h"
 #include "data_base.h"
 #include "../CurrentEngine.h"
@@ -216,7 +217,7 @@ namespace Yelo {
 			data_verify(data);
 
 			if (!data->is_valid) {
-				throw std::exception("invalid data array passed"); // __FUNCTION__);
+				throw "invalid data array passed"; // __FUNCTION__);
 			}
 			iterator.data          = data;
 			iterator.next_index    = 0;
@@ -227,14 +228,14 @@ namespace Yelo {
 
 		static void *data_iterator_next(s_data_iterator &iterator) {
 			if (!(iterator.signature == (reinterpret_cast<uintptr_t>(iterator.data) ^ Enums::k_data_iterator_signature))) {
-				throw std::exception("uninitialized iterator passed");// std::string(__FUNCTION__) );
+				throw"uninitialized iterator passed";// std::string(__FUNCTION__) );
 			}
 
 			const s_data_array *data = iterator.data;
 			data_verify(data);
 			if (!data->is_valid) {
 				//std::str(data->name)
-				throw std::exception("tried to iterate when it was in an invalid state ");
+				throw "tried to iterate when it was in an invalid state ";
 			}
 
 			datum_index::index_t absolute_index = iterator.next_index;

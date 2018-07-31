@@ -11,6 +11,7 @@
 #pragma pack(4)
 #include <iostream>
 #include <fstream>
+#include <ctime>
 #include <filesystem>
 #pragma pack(1)
 
@@ -65,11 +66,9 @@ void InitAddLog(HMODULE hModule, const char * filename) {
 	}
 
 	//why in hell is filesystem still experimental???
-	auto myPath = std::experimental::filesystem::current_path();
+	auto myPath = std::filesystem::current_path() /= filename;
 
-	myPath = myPath /= filename;
-
-	ofile.open(myPath, std::ios::app);
+	ofile.open(myPath.filename().string(), std::ios_base::app);
 
 	printf("Initializing log. Path: %ls\n", myPath.c_str());
 

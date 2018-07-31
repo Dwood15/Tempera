@@ -13,8 +13,8 @@ namespace Yelo::TagGroups {
 		real_vector3d  color_direction;
 	};
 
-	//I'll dammit this is less than ideal, however, I do believe this is the more sensible way of managing static asserts in simpler structures.
-	//We're testing for issues in the current struct, hopefully the child structures will handle this for us instead.
+	//I'll admit this is less than ideal, however, I do believe this is the more sensible way of managing static asserts in simpler structures.
+	//We're testing for issues in the current struct, hopefully the child structures will be guaranteed correct by a similar assert.
 	STAT_ASSRT(light_color_direction, sizeof(real_rgb_color) + sizeof(real_vector3d));
 
 	namespace coll {
@@ -62,14 +62,12 @@ namespace Yelo::TagGroups {
 			long left_surface;
 			long right_surface;
 		};
-
 		STAT_ASSRT(collision_edge, 0x18);
 
 		struct collision_vertex {
 			real_point3d point;
 			long         first_edge;
 		};
-
 		STAT_ASSRT(collision_vertex, sizeof(real_point3d) + 0x4);
 
 		struct collision_bsp {
