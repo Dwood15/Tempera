@@ -2,7 +2,7 @@
 
 #include "macros_generic.h"
 #include "../memory/datum_index.h"
-#include "actors/actor_perception.hpp"
+#include "actors/actor_perception.h"
 #include "../scenario/structures.h"
 #include "../math/real_math.h"
 #include "../memory/array.h"

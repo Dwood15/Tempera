@@ -80,7 +80,7 @@ namespace Yelo
 	private:
 
 		s_header						m_header;
-		std::vector<s_element_editor>	m_elements;
+	::std::vector<s_element_editor>	m_elements;
 
 	public:
 		// Opens a packed file and memory maps it, read for accessing by pointer
@@ -204,7 +204,7 @@ namespace Yelo
 				return E_FAIL;
 			}
 
-			std::ofstream file(save_location, std::ios::out | std::ios::binary);
+		::std::ofstream file(save_location,::std::ios::out |::std::ios::binary);
 			if(file.fail())
 			{
 				YELO_WARN("c_packed_file: failed to open file for writing (%s) %s",

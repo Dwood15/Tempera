@@ -14,7 +14,7 @@
 #include "math.h"
 #include "gamestate/objects/objectcontroller.h"
 
-typedef std::string string;
+typedef::std::string string;
 
 typedef void (*pConsoleCMD)(char *command);
 
@@ -273,7 +273,7 @@ void hkConsoleCMD(char *command) {
 
 // Calls the requested console command
 void Core::ConsoleCMD(char *command) {
-	DWORD dwOldProtect    = NULL;
+	DWORD dwOldProtect    = (DWORD)NULL;
 	BYTE  bConsoleOrig[8] = {0x8A, 0x07, 0x81, 0xEC, 0x00, 0x05, 0x00, 0x00};
 
 	VirtualProtect((void *) CONSOLE_HOOK_ADDRESS, 8, PAGE_EXECUTE_READWRITE, &dwOldProtect);

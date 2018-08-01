@@ -29,41 +29,10 @@ void DEBUG(const char* fmt, ...);
 // void Print(bool toConsole, const char *fmt, ...);
 
 template<bool toConsole = true>
-static void Print(const char *fmt, ...)  {
-	if (!fmt) {
-		return;
-	}
-
-	va_list va_alist;
-		va_start(va_alist, fmt);
-
-	if constexpr (toConsole) {
-		vprintf(fmt, va_alist);
-	}
-
-	DBGPrnt(fmt, va_alist);
-		va_end(va_alist);
-}
+extern void Print(const char *fmt, ...);
 
 template<bool toConsole = true>
-static void PrintLn(const char *fmt, ...) {
-	if (!fmt) {
-		return;
-	}
-
-	va_list va_alist;
-
-		va_start(va_alist, fmt);
-	if constexpr (toConsole) {
-		vprintf(fmt, va_alist);
-		//I'm incredibly lazy. Hopefully the compiler can optimize it out.
-		vprintf("\n", va_alist);
-	}
-
-	DBGPrnt(fmt, va_alist);
-
-		va_end(va_alist);
-}
+extern void PrintLn(const char *fmt, ...);
 
 void InitAddLog(HMODULE hModule, const char * filename);
 void ExitAddLog();

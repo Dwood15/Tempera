@@ -8,6 +8,8 @@
 #include <macros_generic.h>
 
 namespace Yelo {
+	constexpr uint max_uint = static_cast<uint>(-1);
+
 	/// <summary>	Handle to data allocated by the engine's data-array construct. </summary>
 	struct datum_index {
 		typedef short index_t;
@@ -28,9 +30,11 @@ namespace Yelo {
 			};
 		};
 
-		static constexpr datum_index null() { return datum_index{static_cast<uint>(-1)}; }
+		static constexpr datum_index null() {
+			return {{max_uint}};
+		}
 
-		bool IsNull() const { return -1 == handle; }
+		bool IsNull() const { return max_uint == handle; }
 
 		static datum_index Create(index_t index, salt_t salt) {
 			datum_index result;

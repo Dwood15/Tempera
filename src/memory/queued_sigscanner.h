@@ -19,7 +19,7 @@ namespace core::util {
 			m_offset = m_dereferences = 0;
 		}
 
-		std::vector<uint8_t> m_signature;
+	::std::vector<uint8_t> m_signature;
 		uintptr_t            m_start;
 		size_t               m_length;
 		void                 **m_output;
@@ -31,10 +31,9 @@ namespace core::util {
 
 	class queued_sigscanner {
 	protected:
-		std::mutex m_signatures_mutex;
+	::std::mutex m_signatures_mutex;
 
-		void tokenize_signature(const std::string &signature, std::vector<std::string> &out) {
-			using namespace std;
+		void tokenize_signature(const::std::string &signature,::std::vector<std::string> &out) {
 
 			out = {
 				istream_iterator<string>{istringstream(signature) >> skipws},
@@ -42,8 +41,7 @@ namespace core::util {
 			};
 		}
 
-		sigscan_params &construct_signature(const std::string &sig) {
-			using namespace std;
+		sigscan_params &construct_signature(const::std::string &sig) {
 
 			auto           &scan_params{m_signatures.emplace_back(sigscan_params())};
 			vector<string> tokens;
@@ -51,14 +49,14 @@ namespace core::util {
 			tokenize_signature(sig, tokens);
 
 			for (auto &token : tokens) {
-				std::string clean_token(token);
-				clean_token.erase(std::remove(clean_token.begin(), clean_token.end(), '*'), clean_token.end());
-				clean_token.erase(std::remove(clean_token.begin(), clean_token.end(), '.'), clean_token.end());
+			::std::string clean_token(token);
+				clean_token.erase(::std::remove(clean_token.begin(), clean_token.end(), '*'), clean_token.end());
+				clean_token.erase(::std::remove(clean_token.begin(), clean_token.end(), '.'), clean_token.end());
 
 				if (clean_token.empty())
 					continue;
 
-				scan_params.m_signature.push_back((uint8_t) std::strtoul(clean_token.c_str(), nullptr, 16));
+				scan_params.m_signature.push_back((uint8_t)::std::strtoul(clean_token.c_str(), nullptr, 16));
 
 				if ((token.front() == '.' && token.back() != '.')) {
 					scan_params.m_offset = (scan_params.m_signature.size() - 1);
@@ -132,7 +130,7 @@ namespace core::util {
 		queued_sigscanner() = default;
 
 		template <typename T1, typename T2>
-		sigscan_params &add_signature(T1 start, T2 &out, const std::string &signature, size_t length) {
+		sigscan_params &add_signature(T1 start, T2 &out, const::std::string &signature, size_t length) {
 			auto &scan_params{construct_signature(signature)};
 
 			scan_params.m_length = length;
@@ -143,7 +141,7 @@ namespace core::util {
 		}
 
 		template <typename T1>
-		auto &add_signature(IMAGE_DOS_HEADER *mod, T1 &out, const std::string &signature, size_t length = 0) {
+		auto &add_signature(IMAGE_DOS_HEADER *mod, T1 &out, const::std::string &signature, size_t length = 0) {
 			auto nt_headers{(IMAGE_NT_HEADERS *) (uintptr_t(mod) + mod->e_lfanew)};
 
 			return add_signature(
@@ -155,26 +153,26 @@ namespace core::util {
 		}
 
 		template <typename T1>
-		auto &add_signature(HMODULE mod, T1 &out, const std::string &signature, size_t length = 0) {
+		auto &add_signature(HMODULE mod, T1 &out, const::std::string &signature, size_t length = 0) {
 			return add_signature<T1>((IMAGE_DOS_HEADER *) mod, out, signature, length);
 		}
 
 		template <typename T>
-		auto &addsignature(T &out, const std::string &signature) {
+		auto &addsignature(T &out, const::std::string &signature) {
 			return add_signature(GetModuleHandleA("haloce.exe"), out, signature);
 		}
 
 		void scan() {
-			std::vector<std::thread> threads;
+		::std::vector<std::thread> threads;
 
-			for (std::size_t i{}; i < std::thread::hardware_concurrency(); ++i)
-				threads.emplace_back(std::thread([this]() { this->worker_thread(); }));
+			for (::std::size_t i{}; i <::std::thread::hardware_concurrency(); ++i)
+				threads.emplace_back(::std::thread([this]() { this->worker_thread(); }));
 
 			for (auto &&thread : threads)
 				thread.join();
 		}
 
 	protected:
-		std::deque<sigscan_params> m_signatures;
+	::std::deque<sigscan_params> m_signatures;
 	};
 };

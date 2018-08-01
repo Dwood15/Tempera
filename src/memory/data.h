@@ -7,7 +7,6 @@
 #include "datum_index.h"
 #include "data_base.h"
 #include "../CurrentEngine.h"
-
 static constexpr Yelo::datum_index::salt_t k_datum_index_salt_msb = 1U << (15);
 //TODO: VERIFY EACH AND EVERY DOCALL:
 //Function call may be different convention between sapien and haloce
@@ -28,15 +27,15 @@ namespace Yelo {
 			/// <summary>	Base address of the array's datum. </summary>
 			void        *base_address;
 
-			datum_index::salt_t GetInitialSalt() const {
-				datum_index::salt_t result = 0;
-				// NOTE: engine uses strncpy
-				std::memcpy(&result, this->name, sizeof(result));
-
-				result |= k_datum_index_salt_msb;
-
-				return result;
-			}
+			// datum_index::salt_t GetInitialSalt() const {
+			// 	datum_index::salt_t result = 0;
+			// 	// NOTE: engine uses strncpy
+			// ::std::memcpy(&result, this->name, sizeof(result));
+			//
+			// 	result |= k_datum_index_salt_msb;
+			//
+			// 	return result;
+			// }
 
 			datum_index::salt_t GetNextSalt(datum_index::salt_t cursor) const {
 				return ++cursor != 0 ? cursor : k_datum_index_salt_msb;
@@ -228,7 +227,7 @@ namespace Yelo {
 
 		static void *data_iterator_next(s_data_iterator &iterator) {
 			if (!(iterator.signature == (reinterpret_cast<uintptr_t>(iterator.data) ^ Enums::k_data_iterator_signature))) {
-				throw"uninitialized iterator passed";// std::string(__FUNCTION__) );
+				throw"uninitialized iterator passed";//::std::string(__FUNCTION__) );
 			}
 
 			const s_data_array *data = iterator.data;
@@ -369,7 +368,7 @@ namespace Yelo {
 
 			if (sizeof(T) != data->datum_size) {
 				Print("Datum_get for object size: %d doesn't match engine size: %d", sizeof(T), data->datum_size);
-				throw std::exception("Datum get mismatch! See debug log.");
+				throw ::std::exception("Datum get mismatch! See debug log.");
 			}
 
 			T *object_array = reinterpret_cast<T *>(data->base_address); // edx

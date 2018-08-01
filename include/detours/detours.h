@@ -608,7 +608,7 @@ inline PBYTE DetourGenNop(PBYTE pbCode)
     *pbCode++ = 0x90;
     return pbCode;
 }
-#endif DETOURS_INTERAL
+#endif
 #endif // __cplusplus
 
 #endif // _DETOURS_H_

@@ -737,7 +737,7 @@ static const defined_functionrange sapien_function_map[] = {
 	},
 
 	{
-		"public: static bool __cdecl std::char_traits<char>::eq_int_type(int const &, int const &)",                                               0x422C80, 0x422C9F
+		"public: static bool __cdecl::std::char_traits<char>::eq_int_type(int const &, int const &)",                                               0x422C80, 0x422C9F
 	},
 
 	{
@@ -745,7 +745,7 @@ static const defined_functionrange sapien_function_map[] = {
 	},
 
 	{
-		"public: static bool __cdecl std::char_traits<char>::eq_int_type(int const &, int const &)",                                               0x4234B0, 0x4235AF
+		"public: static bool __cdecl::std::char_traits<char>::eq_int_type(int const &, int const &)",                                               0x4234B0, 0x4235AF
 	},
 
 	{
@@ -909,7 +909,7 @@ static const defined_functionrange sapien_function_map[] = {
 		"public: int __thiscall CRect::Height(void)const",                                                                                         0x474700, 0x47470F
 	},
 	{
-		"public: static bool __cdecl std::char_traits<char>::eq_int_type(int const &, int const &)",                                               0x474710, 0x47472F
+		"public: static bool __cdecl::std::char_traits<char>::eq_int_type(int const &, int const &)",                                               0x474710, 0x47472F
 	},
 	{
 		"public: void * & __thiscall CPtrList::GetHead(void)",                                                                                     0x47A680, 0x47A6FF

@@ -17,10 +17,47 @@
 
 #include "addlog.h"
 
-static std::ofstream ofile;
+static::std::ofstream ofile;
 static char   dlldir[320];
 
 static volatile bool debug_write_locked = false;
+
+template<bool toConsole>
+static void Print(const char *fmt, ...)  {
+	if (!fmt) {
+		return;
+	}
+
+	va_list va_alist;
+	va_start(va_alist, fmt);
+
+	if constexpr (toConsole) {
+		vprintf(fmt, va_alist);
+	}
+
+	DBGPrnt(fmt, va_alist);
+	va_end(va_alist);
+}
+
+template<bool toConsole>
+static void PrintLn(const char *fmt, ...) {
+	if (!fmt) {
+		return;
+	}
+
+	va_list va_alist;
+
+	va_start(va_alist, fmt);
+	if constexpr (toConsole) {
+		vprintf(fmt, va_alist);
+		//I'm incredibly lazy. Hopefully the compiler can optimize it out.
+		vprintf("\n", va_alist);
+	}
+
+	DBGPrnt(fmt, va_alist);
+
+	va_end(va_alist);
+}
 
 void DBGPrnt(const char *fmt, va_list va_alist) {
 	if (!ofile || !fmt) {
@@ -39,7 +76,7 @@ void DBGPrnt(const char *fmt, va_list va_alist) {
 
 	char logbuf[256] = {0};
 	_vsnprintf(logbuf + strlen(logbuf), sizeof(logbuf) - strlen(logbuf), fmt, va_alist);
-	ofile << logbuf << std::endl;
+	ofile << logbuf <<::std::endl;
 
 	debug_write_locked = false;
 }
@@ -66,16 +103,16 @@ void InitAddLog(HMODULE hModule, const char * filename) {
 	}
 
 	//why in hell is filesystem still experimental???
-	auto myPath = std::filesystem::current_path() /= filename;
+	auto myPath =::std::filesystem::current_path() /= filename;
 
-	ofile.open(myPath.filename().string(), std::ios_base::app);
+	ofile.open(myPath.filename().string(),::std::ios_base::app);
 
 	printf("Initializing log. Path: %ls\n", myPath.c_str());
 
-	std::time_t time = std::time(nullptr);
+::std::time_t time =::std::time(nullptr);
 	DEBUG("*-*-*-*-*-*-*-*-*-*-*-*-*-*");
 	DEBUG("Tempera Injected, live_projekt initialized");
-	DEBUG(std::asctime(std::localtime(&time)));
+	DEBUG(::std::asctime(::std::localtime(&time)));
 	DEBUG("*-*-*-*-*-*-*-*-*-*-*-*-*-*\n");
 }
 

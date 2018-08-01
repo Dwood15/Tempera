@@ -16,7 +16,7 @@ namespace Yelo::TagGroups {
 	// Defined in CheApe's TagGroups.cpp
 	void InitializeFixes();
 
-	char *TryAndGetGroupName(tag group_tag, _Out_ long_string name);
+	char *TryAndGetGroupName(tag group_tag, long_string &name);
 
 	// Convenience function to handle deleting all of the data in tag_data field.
 	// Use [terminator_size] for tag_data which HAS to have a specific amount of

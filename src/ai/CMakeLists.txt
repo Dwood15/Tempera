@@ -16,13 +16,13 @@ set(A_ACTIONS_H
 	${CMAKE_CURRENT_SOURCE_DIR}/actions/action_converse.hpp)
 
 set(A_ACTORS_H
-	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_definitions.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_looking.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_moving.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_perception.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_stimulus.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_structures.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/actors/actors.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_definitions.h
+	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_looking.h
+	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_moving.h
+	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_perception.h
+	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_stimulus.h
+	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_structures.h
+	${CMAKE_CURRENT_SOURCE_DIR}/actors/actors.h
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/tranform_manager.h)
 
 set(AI_CXX

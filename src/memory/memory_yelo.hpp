@@ -35,10 +35,10 @@
 #if defined(YELO_MALLOC)
 #define YELO_NEW_CTOR(type, ...)            new ( YELO_NEW(type) ) type(__VA_ARGS__)
 
-#define YELO_MALLOC_UNIQUE(size, fill_with_garbage) std::unique_ptr<void,   Yelo::Memory::memory_deleter<void>>         ( YELO_MALLOC(size, fill_with_garbage) )
-#define YELO_NEW_ARRAY_UNIQUE(type, count)   std::unique_ptr<type[],   Yelo::Memory::memory_array_deleter<type>>   ( YELO_NEW_ARRAY(type, count) )
-#define YELO_NEW_UNIQUE(type) std::unique_ptr<type,   Yelo::Memory::memory_deleter<type>>         ( YELO_NEW(type) )
-#define YELO_NEW_UNIQUE_CTOR(type, ...) std::unique_ptr<type,   Yelo::Memory::memory_deleter<type>>         (std::move( YELO_NEW_CTOR(type, __VA_ARGS__) ))
+#define YELO_MALLOC_UNIQUE(size, fill_with_garbage)::std::unique_ptr<void,   Yelo::Memory::memory_deleter<void>>         ( YELO_MALLOC(size, fill_with_garbage) )
+#define YELO_NEW_ARRAY_UNIQUE(type, count)  ::std::unique_ptr<type[],   Yelo::Memory::memory_array_deleter<type>>   ( YELO_NEW_ARRAY(type, count) )
+#define YELO_NEW_UNIQUE(type)::std::unique_ptr<type,   Yelo::Memory::memory_deleter<type>>         ( YELO_NEW(type) )
+#define YELO_NEW_UNIQUE_CTOR(type, ...)::std::unique_ptr<type,   Yelo::Memory::memory_deleter<type>>         (::std::move( YELO_NEW_CTOR(type, __VA_ARGS__) ))
 #endif
 
 namespace Yelo {
@@ -73,7 +73,7 @@ namespace Yelo {
 			pointer = nullptr;
 		}
 
-		// Primarily a deleter for std::unique_ptr
+		// Primarily a deleter for::std::unique_ptr
 		template <typename T>
 		struct memory_deleter {
 			inline void operator ()(T *ptr) const { YELO_DELETE(ptr); }
@@ -156,17 +156,17 @@ namespace Yelo {
 					return nullptr;
 
 				// All allocators should contain an integer overflow check.
-				// The Standardization Committee recommends that std::length_error
+				// The Standardization Committee recommends that::std::length_error
 				// be thrown in the case of integer overflow.
 				if (n > max_size()) {
-					throw std::length_error(__FUNCTION__); // " - Integer overflow."));
+					throw ::std::length_error(__FUNCTION__); // " - Integer overflow."));
 				}
 
 				void *const pv = YELO_MALLOC(n * sizeof(T), false);
 
-				// Allocators should throw std::bad_alloc in the case of memory allocation failure.
+				// Allocators should throw::std::bad_alloc in the case of memory allocation failure.
 				if (pv == nullptr)
-					throw std::bad_alloc();
+					throw ::std::bad_alloc();
 
 				return static_cast<pointer>(pv);
 			}

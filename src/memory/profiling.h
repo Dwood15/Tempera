@@ -29,24 +29,24 @@ namespace Yelo {
 			short stack_depth;
 
 			unsigned long : 32; // alignment
-			UNKNOWN_TYPE(__int64); // ticks
+			UNKNOWN_TYPE(long long); // ticks
 			UNKNOWN_TYPE(long); // count
 			unsigned long : 32; // alignment
-			UNKNOWN_TYPE(__int64); // ticks
+			UNKNOWN_TYPE(long long); // ticks
 			byte field_28[sizeof(long) * 120]; // counts
-			byte field_208[sizeof(__int64) * 120]; // ticks
+			byte field_208[sizeof(long long) * 120]; // ticks
 			UNKNOWN_TYPE(long); // element count for the above arrays
 
 			UNKNOWN_TYPE(long); // count
-			UNKNOWN_TYPE(__int64); // ticks
+			UNKNOWN_TYPE(long long); // ticks
 
 			UNKNOWN_TYPE(long); // count
 			unsigned long : 32; // alignment
-			UNKNOWN_TYPE(__int64); // ticks
+			UNKNOWN_TYPE(long long); // ticks
 
 			UNKNOWN_TYPE(long); // count
 			unsigned long : 32; // alignment
-			UNKNOWN_TYPE(__int64); // ticks
+			UNKNOWN_TYPE(long long); // ticks
 		}; static_assert(sizeof(s_profile_section) == 0x5F8); // 0x730
 
 		bool profiling_enabled(); // interfaces to a global in the engine

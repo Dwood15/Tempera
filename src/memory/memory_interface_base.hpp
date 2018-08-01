@@ -367,7 +367,7 @@ namespace Yelo {
 			const bool          WriteOpcode;
 			bool                IsInitialized;
 									  unsigned short : 16;
-			std::array<byte, 5> UndoData;/// <summary>	internal buffer to store. </summary>
+		::std::array<byte, 5> UndoData;/// <summary>	internal buffer to store. </summary>
 									  unsigned char : 8; unsigned short : 16;
 
 			////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -566,7 +566,7 @@ namespace Yelo {
 
 	namespace blam {
 		inline void crc_new(long &crc_reference) {
-			crc_reference = std::numeric_limits<unsigned long>::max();
+			crc_reference =::std::numeric_limits<unsigned long>::max();
 		}
 
 		inline unsigned long crc_checksum_buffer(unsigned long &crc_reference, const void *buffer, long size) {

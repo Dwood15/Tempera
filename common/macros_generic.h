@@ -2,8 +2,14 @@
  * GPLv3
  */
 #pragma once
+
+
 #ifndef shitty_macros
 #define shitty_macros
+
+#include <cstddef>
+
+
 //WARNING: Please avoid nesting macros/typedefs, that breaks intellisense 9/10 times.
 #pragma region sanity checks
 
@@ -96,9 +102,9 @@ STAT_ASSRT(ushort, 0x2);
 /// Add an anonymous 48-bit field to a structure.
 #define PAD48 unsigned short : 16; unsigned long : 32;
 /// Add an anonymous 64-bit (8 byte) field to a structure.
-#define PAD64 unsigned __int64 : 64;
+#define PAD64 unsigned long long : 64;
 /// Add an anonymous 128-bit (16 byte) field to a structure.
-#define PAD128 unsigned __int64 : 64; unsigned __int64 : 64;
+#define PAD128 unsigned long long : 64; unsigned long long : 64;
 
 // Add a field to a structure that pads as if it were of type [type]
 #define PAD_TYPE(type) pad_##type
@@ -184,9 +190,9 @@ constexpr uint MAX_PLAYER_COUNT_LOCAL = 1;
 #define pad_int32 unsigned long : 32
 
 // # from 0 to 18,446,744,073,709,551,615
-typedef unsigned __int64 uint64;
+typedef unsigned long long uint64;
 // # from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
-// typedef signed //__int64  // i//nt64;
+// typedef signed //long long  // i//nt64;
 #define pad_int64 unsigned long : 32; unsigned long : 32
 
 // a floating-point # from 1.175494351e-38F to 3.402823466e+38F
@@ -267,7 +273,7 @@ typedef short game_time_t;
 
 namespace Yelo {
 	struct string_list {
-		long       count;
+		unsigned long       count;
 		const char **strings;
 
 		const char **begin() const { return strings; }
@@ -298,7 +304,7 @@ namespace Yelo {
 		enum { k_size = K_SIZE };
 
 	protected:
-		// NOTE: I would use std::array here, but I have yet to tested how well it plays with xbox modules (ie, Halo2_Xbox)
+		// NOTE: I would use::std::array here, but I have yet to tested how well it plays with xbox modules (ie, Halo2_Xbox)
 		byte m_data[K_SIZE];
 
 		template <typename T, const size_t k_offset>

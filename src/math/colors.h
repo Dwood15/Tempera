@@ -4,7 +4,9 @@
 
 //#pragma clang diagnostic push
 //#pragma clang diagnostic ignored "-Weverything"
+#pragma GCC diagnostic ignored "-Wpadded"
 #include <d3dx9math.h>
+#pragma GCC diagnostic warning "-Wpadded"
 //#pragma clang diagnostic pop
 
 //TODO: Investigate why this is the way it is.

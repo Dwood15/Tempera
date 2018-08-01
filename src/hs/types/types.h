@@ -3,10 +3,9 @@
 
 #include <array>
 #include <d3dx9math.inl>
-#include "../ai/actors/actors.hpp"
-
 #include "../structures.h"
-#include "../../ai/actors/actor_definitions.hpp"
+#include "../../ai/actors/actors.h"
+#include "../../ai/actors/actor_definitions.h"
 #include "enums/generic_enums.h"
 
 
@@ -131,7 +130,7 @@ namespace Yelo {
 		}
 
 		static s_hs_value_union hs_string_to_real(s_hs_value_union value) {
-			value.real = CAST(real, std::atof(value.str));
+			value.real = CAST(real,::std::atof(value.str));
 
 			return value;
 		}
@@ -382,7 +381,7 @@ namespace Yelo {
 		// scenario datums
 		template <typename T, bool k_supports_none = true>
 		static void hs_inspect_scenario_datum(Enums::hs_type type, char *buffer, size_t buffer_size, long index, const Yelo::TagBlock<const T> &datums) {
-			static_assert(std::is_same<tag_string, decltype(T::name)>::value, "expected the scenario datum to have a field called 'name' that is a tag_string");
+			static_assert(::std::is_same<tag_string, decltype(T::name)>::value, "expected the scenario datum to have a field called 'name' that is a tag_string");
 
 			if (!k_supports_none) {
 				assert(index != NONE);
@@ -489,7 +488,7 @@ namespace Yelo {
 		class c_hs_type_abi {
 		public:
 			static const c_hs_type_abi *Get(Enums::hs_type type) {
-				// static std::array<const c_hs_type_abi *, Enums::k_number_of_hs_types> hs_type_abis = {
+				// static::std::array<const c_hs_type_abi *, Enums::k_number_of_hs_types> hs_type_abis = {
 				// 	{asb1},
 				// 	{asb2},
 				// 	{asb3},
@@ -640,7 +639,7 @@ namespace Yelo {
 
 	namespace blam {
 		using namespace Scripting;
-		const std::array<unsigned short, Yelo::Enums::k_number_of_hs_object_types> k_hs_object_type_masks = {
+		const::std::array<unsigned short, Yelo::Enums::k_number_of_hs_object_types> k_hs_object_type_masks = {
 			// Yelo::Enums::_object_type_mask_all, // engine actually uses 0xFFFF here
 			// Enums::_object_type_mask_unit,
 			// FLAG(Enums::_object_type_vehicle),
@@ -649,7 +648,7 @@ namespace Yelo {
 			// FLAG(Enums::_object_type_scenery),
 		};
 
-		const std::array<tag, Enums::_hs_type_tag_reference__count> k_hs_tag_reference_type_group_tags = {
+		const::std::array<tag, Enums::_hs_type_tag_reference__count> k_hs_tag_reference_type_group_tags = {
 			// TagGroups::sound_definition::k_group_tag,
 			// TagGroups::effect_definition::k_group_tag,
 			// // TagGroups::s_damage_effect_definition::k_group_tag,   // damage
@@ -660,7 +659,7 @@ namespace Yelo {
 			// // TagGroups::s_object_definition::k_group_tag,
 		};
 
-		std::array<const char *, Enums::k_number_of_hs_types> hs_type_names = {
+	::std::array<const char *, Enums::k_number_of_hs_types> hs_type_names = {{
 			"unparsed",
 			"special_form",      // NOTE: changed spaces to underscores
 			"function_name",   // NOTE: changed spaces to underscores
@@ -718,25 +717,26 @@ namespace Yelo {
 			"weapon_name",
 			"device_name",
 			"scenery_name",
-		};
+		}};
 
-		std::array<const char *, Enums::k_number_of_hs_script_types> hs_script_type_names = {
+	::std::array<const char *, Enums::k_number_of_hs_script_types> hs_script_type_names = {{
 			"startup",
 			"dormant",
 			"continuous",
 			"static",
 			"stub",
-		};
+		}};
 
 		// should be in game/game.cpp
-		const char *g_game_difficulty_level_names[k_number_of_game_difficulty_levels] = {
+	::std::array<const char *, k_number_of_game_difficulty_levels> g_game_difficulty_level_names = {{
 			"easy",
 			"normal",
 			"hard",
-			"impossible",
-		};
+			"impossible"
+		}};
 		// should be in game/game_allegiance.cpp
-		const char *g_game_team_names[k_number_of_game_teams]                         = {
+
+	::std::array<const char *, k_number_of_game_teams > g_game_team_names                         = {{
 			"default",
 			"player_update",
 			"human",
@@ -746,10 +746,10 @@ namespace Yelo {
 			"unused6",
 			"unused7",
 			"unused8",
-			"unused9",
-		};
+			"unused9"
+		}};
 		// should be in ai/ai_scenario_definitions.cpp
-		const char *g_ai_default_state_names[Enums::k_number_of_actor_default_states] = {
+	::std::array<const char *, Enums::k_number_of_actor_default_states> g_ai_default_state_names = {{
 			"none",
 			"sleep",
 			"alert",
@@ -761,10 +761,10 @@ namespace Yelo {
 			"guard",
 			"guard_at_position",
 			"search",
-			"flee",
-		};
+			"flee"
+		}};
 		// should be in ai/actor_types.cpp
-		const char *g_actor_type_names[Enums::k_number_of_actor_types]                = {
+	::std::array<const char *, Enums::k_number_of_actor_types> g_actor_type_names = {{
 			"elite",
 			"jackal",
 			"grunt",
@@ -780,22 +780,26 @@ namespace Yelo {
 			"monitor",
 			"sentinel",
 			"none",
-			"mounted_weapon",
-		};
+			"mounted_weapon"
+		}};
+
 		// should be in interface/hud_definitions.cpp
-		const char *g_hud_anchor_names[Enums::k_number_of_hud_anchors]                = {
+	::std::array<const char *, Enums::k_number_of_hud_anchors> g_hud_anchor_names                = {{
 			"top_left",
 			"top_right",
 			"bottom_left",
 			"bottom_right",
-			"center",
-		};
-		std::array<const string_list, Enums::_hs_type_enum__count> hs_enum_table = {
-			string_list{std::size(g_game_difficulty_level_names), &g_game_difficulty_level_names[0]},
-			string_list{std::size(g_game_team_names), &g_game_team_names[0]},
-			string_list{std::size(g_ai_default_state_names), &g_ai_default_state_names[0]},
-			string_list{std::size(g_actor_type_names), &g_actor_type_names[0]},
-			string_list{std::size(g_hud_anchor_names), &g_hud_anchor_names[0]},
-		};
+			"center"
+		}};
+
+		STAT_ASSERT(size_t, sizeof(unsigned long));
+
+	::std::array<const string_list, Enums::_hs_type_enum__count> hs_enum_table = {{
+			string_list{static_cast<unsigned long>(::std::size(g_game_difficulty_level_names)), &g_game_difficulty_level_names[0]},
+			string_list{static_cast<unsigned long>(::std::size(g_game_team_names)), &g_game_team_names[0]},
+			string_list{static_cast<unsigned long>(::std::size(g_ai_default_state_names)), &g_ai_default_state_names[0]},
+			string_list{static_cast<unsigned long>(::std::size(g_actor_type_names)), &g_actor_type_names[0]},
+			string_list{static_cast<unsigned long>(::std::size(g_hud_anchor_names)), &g_hud_anchor_names[0]},
+		}};
 	};
 };

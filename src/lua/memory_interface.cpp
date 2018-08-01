@@ -7,7 +7,7 @@
 
 template <typename T>
  bool inBounds(T val) {
-	return val >= (int) std::numeric_limits<T>::min && (int) std::numeric_limits<T>::max >= val;
+	return val >= (int)::std::numeric_limits<T>::min && (int)::std::numeric_limits<T>::max >= val;
 }
 
 //Little helper functions to assist people with their modding efforts...

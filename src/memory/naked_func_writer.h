@@ -47,7 +47,7 @@ namespace Yelo {
 			}
 
 			// Determine the assembly code length of [k_naked_func]
-			static std::size_t DetermineAsmLength() {
+			static::std::size_t DetermineAsmLength() {
 				static size_t g_length = 0;
 
 				if (g_length == 0) {

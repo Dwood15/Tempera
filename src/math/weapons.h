@@ -75,7 +75,7 @@ struct s_weapon_data {
 	struct s_3rd_16_bytes {
 		int         __unused_pad0;                    // 0x0
 		datum_index tracked_object_index;            // 0x4
-		__int64     __pad64_0;                        // 0x8
+		long long     __pad64_0;                        // 0x8
 	}
 
 	third_16_bytes;

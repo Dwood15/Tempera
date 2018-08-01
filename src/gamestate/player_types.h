@@ -33,32 +33,32 @@ struct player {
 	wchar_t PlayerName1[12]; // Unicode / Max - 11 Chars + EOS (12 total)
 	long    Color;
 	char    MachineIndex;
-	std::byte    ControllerIndex;
+	::std::byte    ControllerIndex;
 	char    Team2;
 	char    PlayerIndex;   //Should be 0-16F
 	long    Unknown7;
 	float   SpeedModifier;
-	std::byte    Unknown8[42];   //This is multiplayer-related stuff.
+	::std::byte    Unknown8[42];   //This is multiplayer-related stuff.
 	short   Kills;          // Number of kills
-	std::byte    Unknown9[6];
+	::std::byte    Unknown9[6];
 	short   Assists;
-	std::byte    Unknown10[8];
+	::std::byte    Unknown10[8];
 	short   Teamkills;
 	short   Deaths;
 	short   Suicides;         // suicides, i think. Suicides make you die, you killed someone on your team, but also count to suicide count too.
-	std::byte    Unknown11[40];
+	::std::byte    Unknown11[40];
 	short   Ping;
 	long    TeamKills;
 	long    TeamKillTimer;
-	std::byte    Unknown12[14];
+	::std::byte    Unknown12[14];
 	long    unk;
 	long    unk2;
 	float   unk3;
 	Yelo::datum_index   unknown_ident;
-	std::byte    Unknown13[120];
-	std::byte    Unknown14[12];    // 0xFF's
-	std::byte    Unknown15[119];
-	std::byte    Unknown16;
+	::std::byte    Unknown13[120];
+	::std::byte    Unknown14[12];    // 0xFF's
+	::std::byte    Unknown15[119];
+	::std::byte    Unknown16;
 };
 
 STAT_ASSRT(sbyte, 1);

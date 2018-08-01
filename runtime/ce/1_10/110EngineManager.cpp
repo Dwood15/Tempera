@@ -1,4 +1,5 @@
 #include <utility>
+#include <enums/memory_enums.h>
 #include "../../common/addlog.h"
 #include "110EngineManager.h"
 #include "function_rewrite.h"
@@ -46,13 +47,6 @@ LPCoreAddressList CE110::GetCoreAddressList() {
 	CurrentCore.players_global_data = 0x815918;
 
 	return CurrentCore;
-}
-
-const defined_functionrange *CE110::GetFunctionMap() {
-#include "function_map.txt"
-
-	return hce110_function_map;
-	//return nullptr;
 }
 
 constexpr uintptr_t regular_player_clamps[] = {
@@ -106,7 +100,7 @@ constexpr uintptr_t regular_player_clamps[] = {
 	// MPP_B(0x51EE05, "rasterizer_detail_objects_rebuild_vertices get_render_window_ct_patch_5");
 };
 
-constexpr std::pair<uintptr_t, char> MPPARBs[]{
+constexpr::std::pair<uintptr_t, char> MPPARBs[]{
 	{0x476200, sizeof(s_player_control_globals_data)},//, players_initialize_sizeof_a_patch);
 	{0x47620A, sizeof(s_player_control_globals_data)}, //);
 	{0x49F897, 0x0}, //player_spawn_count_hack_fuck_off
@@ -116,7 +110,7 @@ constexpr std::pair<uintptr_t, char> MPPARBs[]{
 	{0x4CC61A, 0xEB}//, "main_game_render_patch");
 };
 
-constexpr std::pair<uintptr_t, short> short_patches[]{
+constexpr::std::pair<uintptr_t, short> short_patches[]{
 	//"66 8B 41 0C 66 3D 01 00 7C EA .7F E8 0F BF C0 C3"
 	//main_get_window_ct
 	{0x4CC5BA, (short) 0x9090}, //We nop the greater than count so we actually get the proper window renderings.
@@ -129,15 +123,17 @@ constexpr std::pair<uintptr_t, short> short_patches[]{
 #include "hs_function_table_references.h"
 
 void __declspec(naked) CE110::OnPlayerActionUpdate() {
-
+#ifndef __GNUC__
 	s_player_action *current_action;
 
 	__asm mov     dword ptr[esp+18h], -1
 	__asm mov current_action, ebp
 	__asm retn
+#endif
 }
 
 void __declspec(naked) CE110::OnUnitControlUpdate(int client_update_idx) {
+#ifndef __GNUC__
 	unsigned short unit_idx;
 	s_unit_control_data *from_control_data;
 
@@ -147,6 +143,7 @@ void __declspec(naked) CE110::OnUnitControlUpdate(int client_update_idx) {
 	Control::UnitControl(unit_idx, from_control_data, client_update_idx);
 
 	__asm retn
+#endif
 }
 
 auto GetHsFunctionTable() {
@@ -169,11 +166,11 @@ void CE110::InitializeHSMemoryUpgrades() {
 		(reinterpret_cast<uint *>(0x485DCA)),
 	};
 
-	for (auto ptr : CE110::K_MAX_HS_SYNTAX_NODES_PER_SCENARIO_UPGRADE_ADDRESS_LIST) {
+	for (auto ptr : K_MAX_HS_SYNTAX_NODES_PER_SCENARIO_UPGRADE_ADDRESS_LIST) {
 		*ptr = Enums::k_maximum_hs_syntax_nodes_per_scenario_upgrade;
 	}
 
-	for (auto ptr : CE110::K_TOTAL_SCENARIO_HS_SYNTAX_DATA_UPGRADE_ADDRESS_LIST) {
+	for (auto ptr : K_TOTAL_SCENARIO_HS_SYNTAX_DATA_UPGRADE_ADDRESS_LIST) {
 		*ptr = Enums::k_total_scenario_hs_syntax_data_upgrade;
 	}
 
@@ -182,7 +179,7 @@ void CE110::InitializeHSMemoryUpgrades() {
 	// change from 'jz' (0x74) to 'jge' (0x7D)
 	// This allows us to support scenarios with original script nodes, or with
 	// Yelo based script nodes, which are larger (because of memory upgrades, duh)
-	*ADDRESS_OF_SCENARIO_HS_SYNTAX_DATA_SIZE_CHECK = Enums::_x86_opcode_jge_short;
+	*ADDRESS_OF_SCENARIO_HS_SYNTAX_DATA_SIZE_CHECK = Yelo::Enums::_x86_opcode_jge_short;
 
 	// Currently, no code is ran in Update. SO WE CAN IGNORE IT.
 	// Memory::CreateHookRelativeCall(&Update, reinterpret_cast<void *>(HS_UPDATE_HOOK), Enums::_x86_opcode_retn);
@@ -190,8 +187,7 @@ void CE110::InitializeHSMemoryUpgrades() {
 
 void CE110::InitializeMemoryUpgrades() {
 	InitializeHSMemoryUpgrades();
-	InitializeLibrary();
-
+	//InitializeLibrary();
 }
 
 void CE110::WriteHooks() {
@@ -294,4 +290,10 @@ void CE110::WriteHooks() {
 	//render player frame
 	calls::nopBytes(0x50F5F0, 0xA); //render_player_frame_cmp_patch
 	//end renderplayerframeclamp
+}
+
+#include "function_map.txt"
+const defined_functionrange *CE110::GetFunctionMap() {
+	return hce110_function_map;
+	//return nullptr;
 }

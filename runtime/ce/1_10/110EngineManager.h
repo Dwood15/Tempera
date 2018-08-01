@@ -10,6 +10,7 @@
 #include "../../../src/scenario/structures.h"
 #include "../../../src/scenario/definitions.h"
 #include "../../../src/models/collision_bsp.h"
+#include "../../../src/hs/structures.h"
 
 namespace feature_management::engines {
 	class CE110 : public IEngine<CE110> {
@@ -59,9 +60,9 @@ namespace feature_management::engines {
 
 		//////////////////////////////////////////////////////////////////////////
 		// Scenario.cpp
-		static const Yelo::Scenario::s_scenario_globals ** GetScenarioGlobals() { return reinterpret_cast<Yelo::Scenario::s_scenario_globals **>(0x6E2254); }
-		static const Yelo::TagGroups::scenario ** GetGlobalScenario() { return reinterpret_cast<Yelo::TagGroups::scenario **>(0x6E224C); }
-		static const Yelo::TagGroups::coll::collision_bsp ** GetGlobalBsp3d() { return reinterpret_cast<Yelo::TagGroups::coll::collision_bsp **>(0x6E2250); }
+		static const Yelo::Scenario::s_scenario_globals ** GetScenarioGlobals() { return reinterpret_cast<const Yelo::Scenario::s_scenario_globals **>(0x6E2254); }
+		static const Yelo::TagGroups::scenario ** GetGlobalScenario() { return reinterpret_cast<const Yelo::TagGroups::scenario **>(0x6E224C); }
+		static const Yelo::TagGroups::coll::collision_bsp ** GetGlobalBsp3d() { return reinterpret_cast<const Yelo::TagGroups::coll::collision_bsp **>(0x6E2250); }
 
 		static auto const OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__READ  = 0x4F8207;
 		static auto const OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__WRITE = 0x4F83CE;
@@ -85,20 +86,20 @@ namespace feature_management::engines {
 		//////////////////////////////////////////////////////////////////////////
 		// Scripting.cpp
 		// static auto **const recorded_animations = (reinterpret_cast<Yelo::Scripting::recorded_animations_data_t **>(0x64B940));
-		static auto **const object_list_header  = (reinterpret_cast<Yelo::Scripting::object_list_header_data_t **>(0x815904));
-
-		static auto **const list_object_reference = (reinterpret_cast<Yelo::Scripting::list_object_reference_data_t **>(0x815908));
-		static auto **const hs_syntax             = (reinterpret_cast<Yelo::Scripting::hs_syntax_data_t **>(0x815914));
-		static auto **const hs_globals            = (reinterpret_cast<Yelo::Scripting::hs_globals_data_t **>(0x81590C));
-		static auto **const hs_threads            = (reinterpret_cast<Yelo::Scripting::hs_thread_data_t **>(0x815910));
+		// static auto **const object_list_header  = (reinterpret_cast<Yelo::Scripting::object_list_header_data_t **>(0x815904));
+		//
+		// static auto **const list_object_reference = (reinterpret_cast<Yelo::Scripting::list_object_reference_data_t **>(0x815908));
+		// static auto **const hs_syntax             = (reinterpret_cast<Yelo::Scripting::hs_syntax_data_t **>(0x815914));
+		// static auto **const hs_globals            = (reinterpret_cast<Yelo::Scripting::hs_globals_data_t **>(0x81590C));
+		// static auto **const hs_threads            = (reinterpret_cast<Yelo::Scripting::hs_thread_data_t **>(0x815910));
 
 		static auto const HS_UPDATE_HOOK = 0x48CE78;
 
 		//////////////////////////////////////////////////////////////////////////
 		// script globals related
-		static auto *const hs_external_globals_count = reinterpret_cast<long *>(0x5F9D0C);
+		const long * hs_external_globals_count = reinterpret_cast<long *>(0x5F9D0C);
 
-		static auto **const hs_external_globals = reinterpret_cast<Yelo::Scripting::hs_global_definition **>(0x626988);
+		const Yelo::Scripting::hs_global_definition ** hs_external_globals = reinterpret_cast<const Yelo::Scripting::hs_global_definition **>(0x626988);
 
 
 		static void UpdateGlobalHSFunctionCounts(long count) {
@@ -185,9 +186,9 @@ namespace feature_management::engines {
 		static void InitializeMemoryUpgrades();
 		static auto GetHsFunctionTableReferenceList();
 
-		__trueinline static auto GetHsFunctionTable();
-		__trueinline static auto GetHsFunctionTableCount();
-		__trueinline static auto GetHsFunctionTableCountReferences16();
-		__trueinline static auto GetHsFunctionTableCountReferences32();
+		static __forceinline auto GetHsFunctionTable();
+		static __forceinline auto GetHsFunctionTableCount();
+		static __forceinline auto GetHsFunctionTableCountReferences16();
+		static __forceinline auto GetHsFunctionTableCountReferences32();
 	};
 };

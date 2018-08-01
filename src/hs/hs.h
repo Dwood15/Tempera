@@ -6,7 +6,6 @@
 #include "../memory/datum_index.h"
 #include "structures.h"
 #include "runtime.h"
-#include "../cseries/handle_abi.hpp"
 
 #include "../scenario/yelo/yelo_global_definitions.h"
 #include "macros_generic.h"

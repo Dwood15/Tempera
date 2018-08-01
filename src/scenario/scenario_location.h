@@ -15,7 +15,7 @@ namespace Yelo::Scenario {
 
 	struct s_sky_atmospheric_fog {
 		real_rgb_color color;
-		__int64 : 64;
+		long long : 64;
 		real_fraction maximum_density;
 		real          start_distance;
 		real          opaque_distance;

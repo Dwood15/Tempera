@@ -47,7 +47,7 @@ namespace spcore {
 	};
 
 	//Initialzie at new map!
-	static const void player_control::player_control_initialize() {
+	const void player_control::player_control_initialize() {
 		//TODO: overwrite the built-in control initialization to account for s_player_control_globals I think
 	}
 
@@ -79,7 +79,7 @@ namespace spcore {
 
 		memset(current_player_datum, 0x0, sizeof(s_player_control) * MAX_PLAYER_COUNT_LOCAL);
 
-		for (int i = 0; i < MAX_PLAYER_COUNT_LOCAL; i++) {
+		for (int i = 0; i < (int)MAX_PLAYER_COUNT_LOCAL; i++) {
 			current_player_datum[i].unit_index.handle          = (unsigned long) -1;
 			current_player_datum[i].weapon_index               = -1;
 			current_player_datum[i].grenade_index              = -1;

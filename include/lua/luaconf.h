@@ -74,7 +74,7 @@
 
 /*
 @@ LUA_C89_NUMBERS ensures that Lua uses the largest types available for
-** C89 ('long' and 'double'); Windows always has '__int64', so it does
+** C89 ('long' and 'double'); Windows always has 'long long', so it does
 ** not need to use this case.
 */
 #if defined(LUA_USE_C89) && !defined(LUA_USE_WINDOWS)
@@ -572,7 +572,7 @@
 #elif defined(LUA_USE_WINDOWS) /* }{ */
 /* in Windows, can use specific Windows types */
 
-#define LUA_INTEGER		__int64
+#define LUA_INTEGER		long long
 #define LUA_INTEGER_FRMLEN	"I64"
 
 #define LUA_MAXINTEGER		_I64_MAX

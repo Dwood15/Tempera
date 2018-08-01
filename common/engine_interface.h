@@ -81,8 +81,8 @@ namespace calls {
 	// 	static const ufunc_t func_to_call = reinterpret_cast<ufunc_t>( addr );
 	// 	return func_to_call(args...);
 	// };
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-local-typedef"
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wunused-local-typedef"
 	/**
 	 * Do a competent function call against the engine
 	 * @tparam conv
@@ -117,7 +117,7 @@ namespace calls {
 		return func_to_call(args...);
 	};
 };
-#pragma clang diagnostic pop
+//#pragma clang diagnostic pop
 
 
 template <typename Func, typename i_t = int, i_t max = MAX_PLAYER_COUNT_LOCAL>

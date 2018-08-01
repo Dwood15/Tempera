@@ -1,4 +1,5 @@
 #pragma once
+#include <memory.h>
 
 #include "../../cseries/yelo_base.h"
 #include "groups_structures.hpp"
@@ -75,7 +76,7 @@ namespace Yelo {
 		void clear() {
 			auto reference = (*this);
 
-			std::memset(reference.name, 0, Enums::k_max_tag_name_length + 1);
+		std::memset(reference.name, 0, Enums::k_max_tag_name_length + 1);
 			reference.name_length = 0;
 			reference.group_tag   = NONE;
 			reference.tag_index   = datum_index::null();
@@ -174,12 +175,15 @@ namespace Yelo {
 			return reinterpret_cast<T *>(TagGetUnsafeImpl(tag_index));
 		}
 
+#pragma GCC diagnostic ignored "-Wpadded"
 		// Union hack to use a group tag as a string
+#pragma pack(push, 1)
 		union group_tag_to_string {
 			struct {
 				tag group;
 				unsigned char : 8; // null terminator
 			};
+
 			char str[sizeof(tag) + 1];
 
 			group_tag_to_string &Terminate() { str[4] = '\0';			return *this; }
@@ -190,6 +194,11 @@ namespace Yelo {
 				return Terminate().TagSwap().str;
 			}
 		};
+#pragma pack(pop)
+
+#pragma GCC diagnostic warning "-Wpadded"
+
+		STAT_ASSERT(group_tag_to_string, sizeof(tag) + 0x1);
 
 
 	};

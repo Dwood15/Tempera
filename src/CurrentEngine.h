@@ -25,8 +25,8 @@ namespace feature_management::engines {
 		minor                 CurrentMinor     = minor::nope;
 		defined_functionrange *current_map;
 		//Support Attempted
-		// std::string GetCurrentFileName(char * args) {
-		std::string GetCurrentFileName();
+		//::std::string GetCurrentFileName(char * args) {
+		::std::string GetCurrentFileName();
 
 		bool VerSupported();
 
@@ -107,7 +107,7 @@ namespace feature_management::engines {
 		/**
  		* Called before VirtualProtect is run.
  		*/
-		void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type);
+		void registerLuaCallback(const ::std::string &cb_name, LuaCallbackId cb_type);
 
 		constexpr bool equal(const char *lhs, const char *rhs);
 
@@ -118,7 +118,7 @@ namespace feature_management::engines {
 		 * @param needle function name to look up
 		 * @return uintptr of the entry point of function.
 		 */
-		std::optional<uintptr_t> getFunctionBegin(const char *needle);
+		::std::optional<uintptr_t> getFunctionBegin(const char *needle);
 
 		/**
 		 * Run-time lookup of memory regions.
@@ -132,6 +132,7 @@ namespace feature_management::engines {
 };
 
 static feature_management::engines::GlobalEngine CurrentEngine;
+
 
 static volatile feature_management::engines::GlobalEngine * vEngine = &CurrentEngine;
 

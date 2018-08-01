@@ -14,13 +14,13 @@ namespace Yelo::Scripting {
 	///
 	/// <returns>	null if it fails, else a pointer to the requested memory. </returns>
 	void * s_hs_thread_datum::StackAllocate(size_t size, unsigned long alignment_bit = Flags::k_alignment_32bit, _Out_opt_ short *stack_offset = nullptr) {
-		YELO_HS_THREAD_VALID_STACK(this);
-		YELO_HS_RUNTIME_ASSERT(size, this, "attempt to allocate zero space from the stack.");
+		//YELO_HS_THREAD_VALID_STACK(this);
+		//YELO_HS_RUNTIME_ASSERT(size, this, "attempt to allocate zero space from the stack.");
 
 		// TODO: calc alignment of stack
 		size_t alignment = 0;
 
-		YELO_HS_RUNTIME_ASSERT(stack_frame->AllocationWouldOverflow(stack_data, size, alignment), this, "stack overflow.");
+		//YELO_HS_RUNTIME_ASSERT(stack_frame->AllocationWouldOverflow(stack_data, size, alignment), this, "stack overflow.");
 
 		// TODO: ZeroMemory alignment bytes
 

@@ -1,9 +1,15 @@
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Weverything"
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Weverything"
 #include <Windows.h>
+#define __in
+#define __out
+#define __reserved
 #include <xinput.h>
+#undef __in
+#undef __out
+#undef __reserved
 #include <strsafe.h>
-#pragma clang diagnostic pop
+//#pragma clang diagnostic pop
 
 #include <addlog.h>
 #include "dinput.h"
@@ -36,7 +42,7 @@ namespace Input::DInput {
 			lua_pushinteger(L, state.Gamepad.bLeftTrigger);
 			lua_setfield(L, -2, "leftTrigger");
 
-			//The std::string might seem redundant, and it probably is. But, I'm pretty sure std string will prune uninterpretable characters.
+			//The::std::string might seem redundant, and it probably is. But, I'm pretty sure std string will prune uninterpretable characters.
 			lua_pushinteger(L, state.Gamepad.bRightTrigger);
 			lua_setfield(L, -2, "rightTrigger");
 

@@ -87,7 +87,7 @@ void CD3D::FillRGBA(ID3DXLine *pLine, float x, float y, float width, float heigh
 
 void CD3D::DrawMouse(IDirect3DDevice9 *pDevice, IDirect3DTexture9 *pCursorTexture, ID3DXSprite *pCursorSprite) {
 	POINT    pPoint;
-	D3DCOLOR dColor = NULL;
+	D3DCOLOR dColor = (D3DCOLOR)NULL;
 	GetCursorPos(&pPoint);
 	D3DXVECTOR3 Pos1;
 	// Pos1[0] = x;
@@ -227,11 +227,15 @@ typedef long (__stdcall *pDrawIndexedPrimitive)(IDirect3DDevice9 *pDevice, D3DPR
 pDrawIndexedPrimitive oDrawIndexedPrimitive;
 
 long __stdcall hkDrawIndexedPrimitive(IDirect3DDevice9 *pDevice, D3DPRIMITIVETYPE PrimType, INT BaseVertexIndex, UINT MinVertexIndex, UINT NumVertices, UINT startIndex, UINT primCount) {
+#ifndef __GNUC__
 	__asm pushad
 
 	__asm popad
 
 	return oDrawIndexedPrimitive(pDevice, PrimType, BaseVertexIndex, MinVertexIndex, NumVertices, startIndex, primCount);
+#else
+	return 0;
+#endif
 }
 
 typedef long (__stdcall *pSetStreamSource)(IDirect3DDevice9 *pDevice, UINT StreamNumber, IDirect3DVertexBuffer9 *pStreamData, UINT OffsetInBytes, UINT Stride);
@@ -239,11 +243,15 @@ typedef long (__stdcall *pSetStreamSource)(IDirect3DDevice9 *pDevice, UINT Strea
 pSetStreamSource oSetStreamSource;
 
 long __stdcall hkSetStreamSource(IDirect3DDevice9 *pDevice, UINT StreamNumber, IDirect3DVertexBuffer9 *pStreamData, UINT OffsetInBytes, UINT Stride) {
+#ifndef __GNUC__
 	__asm pushad
 
 	__asm popad
 
 	return oSetStreamSource(pDevice, StreamNumber, pStreamData, OffsetInBytes, Stride);
+#else
+	return 0;
+#endif
 }
 
 // This function grabs the device pointer from Halo
@@ -252,10 +260,8 @@ long __stdcall hkSetStreamSource(IDirect3DDevice9 *pDevice, UINT StreamNumber, I
 //    in the vTable
 
 // vTable is just a huge table of pointers to every d3d9 function
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Weverything"
-#include "../../include/detours/detours.h"
-#pragma clang diagnostic pop
+#pragma GCC diagnostic ignored "-Wendif-labels"
+#include <detours.h>
 
 DWORD __stdcall CD3D::hkD3DHook(void *lpVoid) {
 	vTable_D3D9 *vD3D9; // Create instance of d3d9 Virtual Method Table
@@ -265,7 +271,7 @@ DWORD __stdcall CD3D::hkD3DHook(void *lpVoid) {
 	//0x3C49F5C
 	//0x6B840C
 	void             *pDevicePointer = (void *) 0x6B840C; // Halo full version device pointer ( static )
-	DWORD            dwOldProtect    = NULL;
+	DWORD            dwOldProtect    = (DWORD)NULL;
 	IDirect3DDevice9 *pGameDevice;
 
 	VirtualProtect((void *) pDevicePointer, 4, PAGE_EXECUTE_READWRITE, &dwOldProtect);

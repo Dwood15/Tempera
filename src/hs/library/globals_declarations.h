@@ -52,12 +52,12 @@ namespace Yelo::Scripting {
 		&GET_HS_GLOBAL(rasterizer_effect_depth_fade),
 	};
 	// Validate our definition list has the same amount as our exposed enumeration count
-	static_assert(std::size(hs_yelo_globals) == Yelo::Enums::k_hs_global_enumeration_count);
+	static_assert(::std::size(hs_yelo_globals) == Yelo::Enums::k_hs_global_enumeration_count);
 
 
 #pragma region script globals related
 
-	static const long K_HS_YELO_GLOBALS_COUNT = std::size(hs_yelo_globals);
+	static const long K_HS_YELO_GLOBALS_COUNT =::std::size(hs_yelo_globals);
 	long HSYeloGlobalCount() { return K_HS_YELO_GLOBALS_COUNT; }
 	const hs_global_definition& HSYeloGlobal(short index) { return *hs_yelo_globals[index]; }
 

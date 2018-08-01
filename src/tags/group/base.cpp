@@ -1,7 +1,6 @@
-#include <windows.h>
+#include <memory>
 #include "macros_generic.h"
 #include "base.h"
-
 namespace Yelo {
 	namespace blam {
 		// Clear the values of a tag reference so that it references no tag
@@ -9,7 +8,7 @@ namespace Yelo {
 			// The engine's code will free (ie, YELO_FREE) the reference's name
 			// when tag_block_delete_element (which is called by tag_unload) is ran
 
-			std::memset(reference.name, 0, Enums::k_max_tag_name_length + 1);
+		::std::memset(reference.name, 0, Enums::k_max_tag_name_length + 1);
 			reference.name_length = 0;
 			reference.group_tag   = NONE;
 			reference.tag_index   = datum_index::null();

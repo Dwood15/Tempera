@@ -10,7 +10,7 @@
 //TODO C++ Definition file and use a FUCKINGINLINEMSVCYOULITTLESHIT macro that forces these functions to be inlined.
 namespace blam {
 
-	bool callFunc(std::optional<uintptr_t> addr) {
+	bool callFunc(::std::optional<uintptr_t> addr) {
 		if (addr) {
 			calls::DoCall(*addr);
 			return true;

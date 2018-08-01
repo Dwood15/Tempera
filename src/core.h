@@ -28,6 +28,7 @@ namespace Yelo::Scenario {
 ////////////////////////////////////////
 
 class Core {
+	friend void RefreshCore();
 	_core_0 *core_0;
 	_core_1 *core_1;
 	_core_2 *core_2;

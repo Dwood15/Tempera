@@ -217,7 +217,7 @@ namespace Yelo {
 		// [func] - pointer to a __stdcall type function
 		// Returns: evaluate function address
 		static void *CreateScriptFunction(void *func, bool takes_params) {
-			if (hs_eval_func >= std::size(hs_eval_func_ptrs)) return nullptr; // we don't want to go over our set limit
+			if (hs_eval_func >=::std::size(hs_eval_func_ptrs)) return nullptr; // we don't want to go over our set limit
 
 			void *evaluate = nullptr;
 			hs_eval_func_ptrs[hs_eval_func] = reinterpret_cast<uint>(func);

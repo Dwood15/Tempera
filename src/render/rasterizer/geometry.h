@@ -59,13 +59,17 @@ namespace Yelo::Rasterizer {
 		short node_indices[2];
 		real  node_weights[2];
 	};
+#pragma pack(push, 1)
 	struct model_vertex_compressed {
-		real_point3d position;
-		uint         normal, binormal;
-		uint         tangent;
-		point2d      texcoord;
+		real_point3d position; //0x0
+		uint         normal, binormal; //0xC
+		uint         tangent; //0x10
+		point2d      texcoord; //0x14
 
-		byte           node_indices[2];
-		unsigned short node_weights[2];
+		byte           node_indices[2]; //0x1C
+		unsigned short node_weights[2]; //0x1D
 	};
+#pragma pack(pop)
+	STAT_ASSERT(model_vertex_compressed, 0x22)
+
 };

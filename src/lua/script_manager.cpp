@@ -161,7 +161,7 @@ int l_GetEngineContext(lua_State *L) {
  * @param cb_name
  * @param cb_type
  */
-void LuaScriptManager::registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
+void LuaScriptManager::registerLuaCallback(const::std::string &cb_name, LuaCallbackId cb_type) {
 	if (!this) {
 		PrintLn<false>("\tRegisterLuaCallback exiting b/c of invalid context. :(");
 		return;
@@ -219,7 +219,7 @@ static void PassPlayerControl(lua_State * L, s_player_action * control) {
 	lua_pushnumber(L, control->throttle_forwardback);
 	lua_setfield(L, -2, "throttle.y");
 
-	//The std::string might seem redundant, and it probably is. But, I'm pretty sure std string will prune uninterpretable characters.
+	//The::std::string might seem redundant, and it probably is. But, I'm pretty sure std string will prune uninterpretable characters.
 	PassInteger(L, control->desired_weapon_index);
 	lua_setfield(L, -2, "desired_weapon_index");
 
@@ -310,7 +310,7 @@ void LuaScriptManager::lua_on_tick(ushort remaining, uint32 since_map_begin) {
 /**
  * Something something Lua and void function call by functionName
  */
-void LuaScriptManager::call_void_lua_func(const std::string &funcName) {
+void LuaScriptManager::call_void_lua_func(const::std::string &funcName) {
 	if (!this->IsLoaded()) {
 		PrintLn<false>("Can't call lua func: %s - Lua isn't loaded?!?.", funcName.c_str());
 		return;
@@ -373,7 +373,7 @@ void LuaScriptManager::HandleLuaError(int result) {
  * Initialize Lua, look for file filename.
  * @param filename
  */
-void LuaScriptManager::InitializeLua(const std::string &filename) {
+void LuaScriptManager::InitializeLua(const::std::string &filename) {
 	PrintLn("Trying To load: \n\t%s", filename.c_str());
 
 	L = luaL_newstate();
@@ -517,7 +517,7 @@ void LuaScriptManager::call_lua_event_by_type(LuaCallbackId eventType) {
 		return;
 	}
 
-	for (std::string elem : itm) {
+	for (::std::string elem : itm) {
 		call_void_lua_func(elem);
 	}
 }

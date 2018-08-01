@@ -1,10 +1,10 @@
+#include <filesystem>
 
 #include "CurrentEngine.h"
 #include "lua/script_manager.h"
 #include "ce/1_10/110EngineManager.h"
 #include <hek/sapien/sapienEngineManager.h>
 #include <addlog.h>
-#include <experimental/filesystem>
 
 using namespace feature_management;
 using namespace feature_management::engines;
@@ -14,7 +14,7 @@ static volatile s_player_action ActionOverrides[MAX_PLAYER_COUNT_LOCAL];
 
 std::string GlobalEngine::GetCurrentFileName() {
 	static char        name[MAX_PATH];
-	static std::string shortName;
+	static::std::string shortName;
 	static bool        nameGot = false;
 
 	if (!nameGot) {
@@ -47,7 +47,7 @@ std::string GlobalEngine::GetCurrentFileName() {
 		// 	}
 		// }
 
-		GetModuleFileNameA(0, name, std::size(name));
+		GetModuleFileNameA(0, name,::std::size(name));
 		char *lpCmdline = GetCommandLineA();
 		printf("CommandLine Args: %s\n", lpCmdline);
 		printf("File Name: %s\n", name);
@@ -61,7 +61,7 @@ std::string GlobalEngine::GetCurrentFileName() {
 			till--;
 		}
 
-		shortName = std::string(name).substr(till + 1, num - (till)).c_str();
+		shortName =::std::string(name).substr(till + 1, num - (till)).c_str();
 		nameGot   = true;
 	}
 	return shortName;
@@ -100,12 +100,10 @@ bool GlobalEngine::IsCoreInitialized() volatile {
 }
 
 void GlobalEngine::InitializeMemoryUpgrades() {
-	if(this->HasSupport() && !this->IsHek()) {
-		if(this->IsCustomEd() && this->CurrentMinor == feature_management::engines::minor::halo_1_10) {
+	if (this->HasSupport() && !this->IsHek()) {
+		if (this->IsCustomEd() && this->CurrentMinor == feature_management::engines::minor::halo_1_10) {
 			CE110::InitializeMemoryUpgrades();
 		}
-
-
 
 	}
 }
@@ -141,7 +139,7 @@ constexpr bool GlobalEngine::equal(const char *lhs, const char *rhs) {
 }
 
 auto GlobalEngine::ScenarioGlobals() {
-	if(!this->IsCoreInitialized() ||} !eCore->scenario_globals) {
+	if (!this->IsCoreInitialized() || !eCore->scenario_globals) {
 		return static_cast<Yelo::Scenario::s_scenario_globals *>(nullptr);
 	}
 
@@ -178,7 +176,8 @@ IDirectInputDevice8A *GlobalEngine::GetKeyboardInput() {
 IDirectInputDevice8A *GlobalEngine::GetMouseInput() {
 	if (this->IsCustomEd()) {
 		return CE110::GetMouseInput();
-	}	return NULL;
+	}
+	return NULL;
 }
 
 IDirectInputDevice8A **GlobalEngine::GetJoystickInputs() {
@@ -212,23 +211,23 @@ void GlobalEngine::WriteHooks() {
 
 GlobalEngine::GlobalEngine() {
 	//Get the current path.
-	//auto currentPath = std::experimental::filesystem::current_path();
+	auto currentPath =::std::filesystem::current_path();
 	//TODO: Something like: "GetGameRegistryPath"
 
-	static wchar_t currentPath[MAX_PATH];
+	// static wchar_t currentPath[MAX_PATH];
 
 	// GetModuleFileNameA(hmodule, currentPath, 512);
 	//Check that the path is valid.
 
-	if (std::experimental::filesystem::_Current_get(currentPath)) {
-		printf("Current Path: %ls\n", currentPath);
-	}
+	// if (::std::experimental::filesystem::current_path(). //::filename(currentPath)) {
+	printf("Current Path: %ls\n", currentPath.c_str());
+	// }
 
 	auto filename = GetCurrentFileName();
 
 	printf("Filename: %s\n", filename.c_str());
 
-	auto fName = std::string(filename.c_str());
+	auto fName =::std::string(filename.c_str());
 
 	auto found = fName.find("sapien.exe");
 
@@ -255,31 +254,14 @@ GlobalEngine::GlobalEngine() {
 }
 
 auto GlobalEngine::GetHsFunctionTableCountReferences16() {
-	if (this->HasSupport()) {
-		if (this->IsCustomEd()) {
-			return CE110::GetHsFunctionTableCountReferences16();
-		}
-	}
-
 	return nullptr;
 }
+
 auto GlobalEngine::GetHsFunctionTableCountReferences32() {
-	if (this->HasSupport()) {
-		if (this->IsCustomEd()) {
-			return CE110::GetHsFunctionTableCountReferences32();
-		}
-	}
-
 	return nullptr;
 }
 
-auto GlobalEngine::GetHsFunctionTableReferences() {
-	if (this->HasSupport()) {
-		if (this->IsCustomEd()) {
-			return CE110::GetHsFunctionTableReferenceList();
-		}
-	}
-
+void ** GlobalEngine::GetHsFunctionTableReferences() {
 	return nullptr;
 }
 
@@ -360,7 +342,7 @@ bool GlobalEngine::SupportsFeature(uint feat) {
 	return (this->GetSupported() & feat) == feat;
 }
 
-void GlobalEngine::registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type) {
+void GlobalEngine::registerLuaCallback(const::std::string &cb_name, LuaCallbackId cb_type) {
 	PrintLn<false>("Should be registering callback: %s", cb_name.c_str());
 	LuaState->registerLuaCallback(cb_name, cb_type);
 }
@@ -562,10 +544,11 @@ const char *GlobalEngine::getMemoryRegionDescriptor(const uintptr_t addr) volati
 //Calls every registered lua function by that event.
 #include "enums/generic_enums.h"
 
-#define CALL_LUA_BY_EVENT(event) state->call_lua_event_by_type(LuaCallbackId::#event)
+#define PRINTED(str) #str
+#define CALL_LUA_BY_EVENT(event) state->call_lua_event_by_type(LuaCallbackId::PRINTED(event))
 
 void main_setup_connection_init() {
-	static std::optional<uintptr_t> got = FUNC_GET(main_setup_connection);
+	static::std::optional<uintptr_t> got = FUNC_GET(main_setup_connection);
 
 	if (got) {
 		calls::DoCall<Convention::m_cdecl>(*got);
@@ -591,14 +574,14 @@ void game_tick(int current_frame_tick) {
 		state = vEngine->GetLuaState();
 	}
 
-	CALL_LUA_BY_EVENT(before_game_tick);
+	state->call_lua_event_by_type(LuaCallbackId::before_game_tick);
 
 	if (!mCore) {
 		mCore = vEngine->GetCore();
 	}
 
 	state->lua_on_tick(current_frame_tick, mCore->game_time_globals->elapsed_time);
-	static std::optional<uintptr_t> got = FUNC_GET(game_tick);
+	static::std::optional<uintptr_t> got = FUNC_GET(game_tick);
 
 	if (got) {
 		// PrintLn("Game_tick call");
@@ -607,8 +590,9 @@ void game_tick(int current_frame_tick) {
 	}
 
 	// PrintLn("Lua_post_tick call");
-	CALL_LUA_BY_EVENT(after_game_tick);
+	state->call_lua_event_by_type(LuaCallbackId::after_game_tick);
 	// PrintLn("Post-Lua-post-tick call");
 }
 
 #undef CALL_LUA_BY_EVENT
+#undef PRINTED

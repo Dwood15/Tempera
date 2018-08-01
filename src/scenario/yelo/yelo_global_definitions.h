@@ -127,19 +127,17 @@ namespace Yelo::TagGroups {
 		}
 	};
 
-
-
 	struct _networking_flags {
 		unsigned long unused_bit:1;
 	};
-	static_assert(sizeof(_networking_flags) == 0x4);
+
+	STAT_ASSERT(_networking_flags, 0x4);
 
 	struct s_project_yellow_scenario_build_info {
 		unsigned short : 16;
 		Enums::production_build_stage build_stage;
 		uint                          revision;
 		time_t                        timestamp;
-		STAT_ASSERT(time_t, 0x8)
 		byte uuid_buffer[Enums::k_uuid_buffer_size];
 
 		long pad0[4]; // 16
@@ -148,6 +146,8 @@ namespace Yelo::TagGroups {
 
 		void GenerateUuid() { return; }
 	};
+
+	//		STAT_ASSERT(s_project_yellow_scenario_build_info, ?????)
 
 	//////////////////////////////////////////////////////////////////////////
 

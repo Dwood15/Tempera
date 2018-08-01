@@ -32,7 +32,7 @@ namespace Yelo {
 
 		string_id id;
 
-		static char *GetString(string_id id, __out string_id_yelo_value value);
+		static char *GetString(string_id id, string_id_yelo_value &value);
 
 		static const char *GetString(string_id id);
 

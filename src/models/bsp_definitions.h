@@ -144,7 +144,7 @@ namespace Yelo::TagGroups {
 	STAT_ASSERT(Yelo::TagBlock<structure_surface>, 0xC);
 	STAT_ASSERT(tag_block<void *>, 0xC);
 
-
+#pragma pack(push, 1)
 	struct structure_bsp {
 		tag_reference lightmap_bitmaps; //0x0
 		real_bounds   vehicle_heights; //0x10 //floor, ceiling
@@ -203,10 +203,11 @@ namespace Yelo::TagGroups {
 		tag_block<void *> detail_objects;
 		tag_block<void *> runtime_decals;
 
-		unsigned __int64  PadLast; // Useless? Removed in H2
+		unsigned long long  PadLast; // Useless? Removed in H2
 		s_leaf_map        leaf_map;
 
 	};
+#pragma pack(pop)
 	STAT_ASSERT(structure_bsp, 0x288);
 
 	struct structure_bsp_header {

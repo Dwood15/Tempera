@@ -93,7 +93,7 @@ namespace Yelo::AI::Transform {
 		///
 		/// <returns>	The found transform. </returns>
 		sbyte FindTransform(const TagBlock<TagGroups::actor_variant_transform_collection_transform> &transformations,
-								  std::function<bool(const TagGroups::actor_variant_transform_collection_transform &)> select_func) const;
+								 ::std::function<bool(const TagGroups::actor_variant_transform_collection_transform &)> select_func) const;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>
@@ -532,9 +532,9 @@ namespace Yelo::AI::Transform {
 	}
 
 	sbyte c_actor_variant_transform_manager::FindTransform(const TagBlock<TagGroups::actor_variant_transform_collection_transform> &transformations,
-																			 std::function<bool(const TagGroups::actor_variant_transform_collection_transform &)> select_func) const {
+																			::std::function<bool(const TagGroups::actor_variant_transform_collection_transform &)> select_func) const {
 		// Populate the transform index list
-		std::vector<sbyte> transform_indices;
+	::std::vector<sbyte> transform_indices;
 		for (sbyte         index = 0; index < transformations.Count; index++) {
 			// Ignore transforms that are scripting only
 			if (TEST_FLAG(transformations[index].flags, Flags::_actor_variant_transform_collection_transform_flags_scripted_only)) {
@@ -595,7 +595,7 @@ namespace Yelo::AI::Transform {
 			return TestVitalityCriteria(unit_index, transform_out_definition);
 		};
 
-		std::function<bool(const TagGroups::actor_variant_transform_collection_transform &)> select_func;
+	::std::function<bool(const TagGroups::actor_variant_transform_collection_transform &)> select_func;
 		if (instigator_unit_datum) {
 			// If the instigator is not null select entries that match the instigator and damage type's
 			select_func = [&](const TagGroups::actor_variant_transform_collection_transform &entry) -> bool {
@@ -656,7 +656,7 @@ namespace Yelo::AI::Transform {
 	sbyte c_actor_variant_transform_manager::FindTransformsEntry(const datum_index tag_index) const {
 		// Find an entry with a matching actor variant tag index
 		auto &actor_variant_transforms = m_transform_collection->actor_variant_transforms;
-		auto found_entry               = std::find_if(actor_variant_transforms.begin(), actor_variant_transforms.end(),
+		auto found_entry               =::std::find_if(actor_variant_transforms.begin(), actor_variant_transforms.end(),
 																	 [&](const TagGroups::actor_variant_transform_collection_entry &entry) {
 																		 return entry.actor_variant.tag_index == tag_index;
 																	 }
@@ -709,7 +709,7 @@ namespace Yelo::AI::Transform {
 
 	c_actor_variant_transform_manager::s_actor_variant_transform_state *c_actor_variant_transform_manager::FindTransformState(const datum_index::index_t unit_index) const {
 		// Find the first entry with a matching unit index
-		auto entry = std::find_if(m_transform_states, &m_transform_states[k_max_concurrent_transforms],
+		auto entry =::std::find_if(m_transform_states, &m_transform_states[k_max_concurrent_transforms],
 										  [&](const s_actor_variant_transform_state &entry) -> bool {
 											  return entry.m_unit_index == unit_index;
 										  }
@@ -1259,7 +1259,7 @@ namespace Yelo::AI::Transform {
 		auto &unit_datum      = *blam::object_get_and_verify_type<Objects::s_unit_datum>(unit_index);
 		auto &unit_definition = *blam::tag_get<TagGroups::s_unit_definition>(unit_datum.object.definition_index);
 
-		std::vector<datum_index> riders;
+	::std::vector<datum_index> riders;
 		if ((action.target == Enums::_actor_variant_transform_keyframe_effect_target_riders)
 			 || (action.rider_handling != Enums::_actor_variant_transform_keyframe_rider_handling_none)) {
 			for (short index = 0; index < unit_definition.unit.seats.Count; index++) {
@@ -1426,7 +1426,7 @@ namespace Yelo::AI::Transform {
 		// If the transform name is empty get a random non-instigator transform, otherwise find a matching transform
 		sbyte transform_index = NONE;
 		if (!is_null_or_empty(transform_name)) {
-			auto found_transform = std::find_if(transform_entry.transforms.begin(), transform_entry.transforms.end(),
+			auto found_transform =::std::find_if(transform_entry.transforms.begin(), transform_entry.transforms.end(),
 															[&](const TagGroups::actor_variant_transform_collection_transform &entry) {
 																return strcmp(entry.transform_name, transform_name) == 0;
 															}
@@ -1439,7 +1439,7 @@ namespace Yelo::AI::Transform {
 			transform_index = found_transform - transform_entry.transforms.begin();
 		} else {
 			// Find a random non-instigator transform
-			std::vector<sbyte> transform_indices;
+		::std::vector<sbyte> transform_indices;
 			for (sbyte         index = 0; index < transform_entry.transforms.Count; index++) {
 				if (transform_entry.transforms[index].transform_out_ptr->instigators.Count == 0) {
 					transform_indices.push_back(index);
@@ -1460,7 +1460,7 @@ namespace Yelo::AI::Transform {
 		sbyte target_index = NONE;
 		if (!is_null_or_empty(target_name)) {
 			auto &transform_in = *transform.transform_in_ptr;
-			auto found_target  = std::find_if(transform_in.targets.begin(), transform_in.targets.end(),
+			auto found_target  =::std::find_if(transform_in.targets.begin(), transform_in.targets.end(),
 														 [&](const TagGroups::actor_variant_transform_in_target &entry) {
 															 return strcmp(entry.target_name, target_name) == 0;
 														 }

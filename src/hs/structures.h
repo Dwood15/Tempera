@@ -22,11 +22,11 @@ namespace Yelo::Scripting {
 		const char           *param_info;
 		unsigned short       access;
 		short                paramc;
-		// #pragma warning( push )
-		// #pragma warning( disable : 4200 ) // nonstandard extension used : zero-sized array in struct/union, Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
+		#pragma warning( push )
+		#pragma warning( disable : 4200 ) // nonstandard extension used : zero-sized array in struct/union, Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
 		// don't access directly, use GetParameter
 		Enums::hs_type       params[];
-		// #pragma warning( pop )
+		#pragma warning( pop )
 
 		Enums::hs_type GetParameter(short index) {
 			// assert(index >= 0 && index<paramc);

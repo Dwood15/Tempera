@@ -16,6 +16,7 @@ namespace Yelo::Scenario {
 		real_rgb_color pad02;
 		real           pad03;
 	};
+	STAT_ASSERT(s_scenario_player_atmospheric_fog, 0x2C);
 
 	struct sound_environment {
 		unsigned long : 32;
@@ -33,24 +34,27 @@ namespace Yelo::Scenario {
 		real diffusion;
 		real density;
 		real hf_reference;
-		unsigned __int64:64;
-		unsigned __int64:64;
+		unsigned long long:64;
+		unsigned long long:64;
 	};
+	STAT_ASSERT(sound_environment, 0x48);
 
 	struct s_scenario_globals {
 		short current_structure_bsp_index;
 		unsigned short : 16;
 		s_scenario_player_atmospheric_fog player_fog[/* Enums::k_maximum_number_of_local_players*/ 1];
-		struct {
+#pragma pack(push, 1)
+		struct scen_sound {
 			bool copy_environment_tag;
 			unsigned char  : 8;
 			unsigned short : 16; // never seen this set to true
 			sound_environment environment;
-		}                                 sound;
-	};
+		} sound;
+#pragma pack(pop)
 
-	STAT_ASSERT(sound_environment, 0x48);
-	STAT_ASSERT(s_scenario_player_atmospheric_fog, 0x2C);
+		STAT_ASSERT(scen_sound, 0x4 + sizeof(sound_environment));
+
+	};
 	STAT_ASSERT(s_scenario_globals, 0x7C);
 
 	// struct s_sky_definition {

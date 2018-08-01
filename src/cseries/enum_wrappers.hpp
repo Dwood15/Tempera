@@ -7,7 +7,7 @@
 namespace Yelo {
 	template <typename TEnumClass>
 	class c_enum_default_traits {
-		static_assert(std::is_enum<TEnumClass>::value, "TEnumClass should be an enum (specifically an enum-class)");
+		static_assert(::std::is_enum<TEnumClass>::value, "TEnumClass should be an enum (specifically an enum-class)");
 
 	public:
 		enum {
@@ -24,14 +24,14 @@ namespace Yelo {
 		class TTraits = c_enum_default_traits<TEnumClass>
 	>
 	class c_enum {
-		static_assert(std::is_enum<TEnumClass>::value,
+		static_assert(::std::is_enum<TEnumClass>::value,
 						  "TEnumClass should be an enum (specifically an enum-class)");
-		static_assert(std::is_integral<TStorage>::value,
+		static_assert(::std::is_integral<TStorage>::value,
 						  "TStorage should be an integer type");
-		static_assert(std::is_signed<TStorage>::value,
+		static_assert(::std::is_signed<TStorage>::value,
 						  "TStorage should be a signed integer type");
 
-		static_assert(TTraits::k_number_of <= std::numeric_limits<TStorage>::max(),
+		static_assert(TTraits::k_number_of <=::std::numeric_limits<TStorage>::max(),
 						  "TEnumClass has too many value members for the requested underlying storage");
 
 	public:
@@ -86,11 +86,11 @@ namespace Yelo {
 		class TTraits = c_enum_default_traits<TEnumClass>
 	>
 	class c_flags {
-		static_assert(std::is_enum<TEnumBitsClass>::value,
+		static_assert(::std::is_enum<TEnumBitsClass>::value,
 						  "TEnumBitsClass should be an enum (specifically an enum-class)");
-		static_assert(std::is_integral<TStorage>::value,
+		static_assert(::std::is_integral<TStorage>::value,
 						  "TStorage should be an integer type");
-		static_assert(std::is_unsigned<TStorage>::value,
+		static_assert(::std::is_unsigned<TStorage>::value,
 						  "TStorage should be a unsigned integer type");
 
 		static_assert(TTraits::k_number_of <= BIT_COUNT(TStorage),

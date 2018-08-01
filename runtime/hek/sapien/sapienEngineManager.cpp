@@ -12,9 +12,11 @@ using namespace feature_management::engines;
 
 //This is this way, because clang's a pussy-ass bitch
 void __declspec(naked) Sapien::OnPlayerActionUpdate() {
+#ifndef __GNUC__
 	__asm mov     dword ptr[esp+18h], ecx
 	__asm mov     dword ptr[esp+14h], edi
 	__asm retn
+#endif
 }
 
 const defined_functionrange *Sapien::GetFunctionMap() {

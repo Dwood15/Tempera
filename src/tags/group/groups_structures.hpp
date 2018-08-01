@@ -28,7 +28,7 @@ namespace Yelo {
 		template <typename T>
 		T DefinitionCast() const { return reinterpret_cast<T>(definition); }
 
-		size_t GetSize(_Out_opt_ size_t *runtime_size);
+		size_t GetSize(size_t *runtime_size);
 
 		bool IsReadOnly() const {
 			return name && strchr(name, Enums::k_tag_field_markup_character_read_only); // NOTE: engine uses strrchr
@@ -258,7 +258,7 @@ namespace Yelo::TagGroups {
 		{0,                            "custom",               k_custom_byte_swap_codes},
 		{0,                            "terminator X",         k_terminator_byte_swap_codes}
 	};
-	static_assert(std::size(k_tag_field_definitions) == field_type::k_number_of_tag_field_types);
+	static_assert(::std::size(k_tag_field_definitions) == field_type::k_number_of_tag_field_types);
 };
 
 namespace Yelo {
@@ -290,11 +290,11 @@ namespace Yelo {
 
 			bool operator !=(const s_group_tag_iterator &other) const {
 				if (other.IsEndHack()) {
-					return *m_group_tags != NONE;
+					return *m_group_tags != tag{static_cast<unsigned int>(NONE)};
 				}
 
 				if (this->IsEndHack()) {
-					return *other.m_group_tags != NONE;
+					return *other.m_group_tags != tag{static_cast<unsigned int>(NONE)};
 				}
 
 				return m_group_tags != other.m_group_tags;

@@ -429,10 +429,10 @@ namespace Yelo::Scripting {
 		// &GET_HS_FUNCTION(test_networking),
 	};
 
-	static const long K_HS_YELO_FUNCTION_COUNT = std::size(hs_yelo_functions);
+	static const long K_HS_YELO_FUNCTION_COUNT =::std::size(hs_yelo_functions);
 
 	// Validate our definition list has the same amount as our exposed enumeration count
-	static_assert(std::size(hs_yelo_functions) == Enums::k_hs_function_enumeration_count);
+	static_assert(::std::size(hs_yelo_functions) == Enums::k_hs_function_enumeration_count);
 	// Validate we haven't gone over our limit of allowed new script functions
 	static_assert(Enums::k_hs_function_enumeration_count <= (Enums::k_hs_script_functions_count_upgrade - Enums::k_hs_functions_count));
 
@@ -799,7 +799,7 @@ namespace Yelo::Scripting {
 		}
 		{
 			hs_global_definition ****definitions = reinterpret_cast<hs_global_definition ****>(K_HS_EXTERNAL_GLOBALS_REFERENCES);
-			const size_t k_count = std::size(K_HS_EXTERNAL_GLOBALS_REFERENCES);
+			const size_t k_count =::std::size(K_HS_EXTERNAL_GLOBALS_REFERENCES);
 
 			for (size_t x = 0; x < k_count; x++)
 				*definitions[x] = &_upgrade_globals.globals.table[0];

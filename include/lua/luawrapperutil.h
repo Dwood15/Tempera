@@ -29,7 +29,7 @@
 template <typename T>
 struct luaW_remove_cr
 {
-	typedef typename std::remove_const<typename std::remove_reference<T>::type>::type type;
+	typedef typename::std::remove_const<typename::std::remove_reference<T>::type>::type type;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -134,7 +134,7 @@ struct luaU_Impl<double>
 };
 
 template<typename T>
-struct luaU_Impl<T, typename std::enable_if<std::is_enum<T>::value>::type>
+struct luaU_Impl<T, typename::std::enable_if<std::is_enum<T>::value>::type>
 {
 	static T    luaU_check(lua_State* L, int      index) { return static_cast<T>(luaL_checkinteger  (L, index)); }
 	static T    luaU_to   (lua_State* L, int      index) { return static_cast<T>(lua_tointeger      (L, index)); }
@@ -142,7 +142,7 @@ struct luaU_Impl<T, typename std::enable_if<std::is_enum<T>::value>::type>
 };
 
 template<typename T>
-struct luaU_Impl<T*, typename std::enable_if<std::is_class<T>::value>::type>
+struct luaU_Impl<T*, typename::std::enable_if<std::is_class<T>::value>::type>
 {
 	static T*   luaU_check( lua_State* L, int index) { return luaW_check<T>(L, index); }
 	static T*   luaU_to   ( lua_State* L, int index) { return luaW_to   <T>(L, index); }

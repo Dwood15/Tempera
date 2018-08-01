@@ -21,7 +21,7 @@ namespace Yelo::Scripting {
 		bool IsNull() const;
 
 		static s_hs_script_container_datum_index CreateIndex(short index, short script_container_index = 0) {
-			return {index};
+			return s_hs_script_container_datum_index{{index}};
 		}
 
 		static const s_hs_script_container_datum_index k_null;
@@ -63,10 +63,10 @@ namespace Yelo::Scripting {
 	};
 
 	STAT_ASSERT(s_hs_value_union, sizeof(void *));
-	static const s_hs_value_union k_null_value_union = {0};
-	static const s_hs_value_union k_none_value_union = {0};
+	static const s_hs_value_union k_null_value_union = {{0}};
+	static const s_hs_value_union k_none_value_union = {{0}};
 
 
-	const s_hs_script_container_datum_index s_hs_script_container_datum_index::k_null = {NONE};
+	const s_hs_script_container_datum_index s_hs_script_container_datum_index::k_null = {{NONE}};
 
 }

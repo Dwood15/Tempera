@@ -53,9 +53,9 @@
 /// Add an anonymous 48-bit field to a structure.
 #define PAD48 unsigned short : 16; unsigned long : 32;
 /// Add an anonymous 64-bit (8 byte) field to a structure.
-#define PAD64 unsigned __int64 : 64;
+#define PAD64 unsigned long long : 64;
 /// Add an anonymous 128-bit (16 byte) field to a structure.
-#define PAD128 unsigned __int64 : 64; unsigned __int64 : 64;
+#define PAD128 unsigned long long : 64; unsigned long long : 64;
 
 // Add a field to a structure that markups a unused field of type [type]
 #define UNUSED_TYPE(type) type : 8 * sizeof(type);

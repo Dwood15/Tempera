@@ -25,14 +25,15 @@ int l_registerLuaCallback(lua_State *L);
  */
 int l_GetEngineContext(lua_State *L);
 
-static std::vector<std::string> callbacks[LuaCallbackId::max_callback_id];
+static ::std::vector<::std::string> callbacks[LuaCallbackId::max_callback_id];
 struct s_player_action;
 
+#pragma GCC diagnostic ignored "-Wpadded"
 //This code was (for the most part) copy-pasted from
 //The tutorial series here: https://eliasdaler.wordpress.com/2013/10/20/lua_and_cpp_pt2/
 class LuaScriptManager {
 	lua_State   *L;
-	std::string fileName;
+	::std::string fileName;
 	bool        loaded = false;
 
 	void PassInteger(int val);
@@ -67,21 +68,22 @@ public:
  	* @param cb_name Name of Lua func to call.
  	* @param cb_type On which event this func is called.
  	*/
-	void registerLuaCallback(const std::string &cb_name, LuaCallbackId cb_type);
+	void registerLuaCallback(const ::std::string &cb_name, LuaCallbackId cb_type);
 
-	void registerGlobalLuaFunction(const std::string &funcName, lua_CFunction funcAddr) {
+	void registerGlobalLuaFunction(const ::std::string &funcName, lua_CFunction funcAddr) {
 		lua_pushcclosure(L, funcAddr, 0);
 		lua_setglobal(L, funcName.c_str());
 	}
 
-	void InitializeLua(const std::string &filename = "tempera.init.lua");
+	void InitializeLua(const ::std::string &filename = "tempera.init.lua");
 
 	void lua_on_tick(ushort remaining, uint32 since_map_begin);
 	void lua_on_player_update(s_player_action * control, ushort plyrIdx);
 
-	void call_void_lua_func(const std::string &funcName);
+	void call_void_lua_func(const ::std::string &funcName);
 
 	void call_lua_event_by_type(LuaCallbackId eventType);
 };
+#pragma GCC diagnostic warning "-Wpadded"
 
 static LuaScriptManager mgr;

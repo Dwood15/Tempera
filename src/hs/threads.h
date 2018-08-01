@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <enums/yelo_enums.h>
 #include "enums/hs_enums.h"
 #include "../memory/datum_index.h"
 #include "../cseries/yelo_base.h"
@@ -13,14 +14,11 @@ namespace Yelo::Scripting {
 	struct hs_syntax_node;
 	struct s_hs_thread_datum : Memory::s_datum_base {
 		// 32bit packing only for stock code computability.
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Weverything"
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Weverything"
+//#pragma clang diagnostic pop
 
-#include <PshPack4.h>
-
-#pragma clang diagnostic pop
-
-#define YELO_HS_RUNTIME_ASSERT(expression, thread, explanation)   YELO_ASSERT_DISPLAY(expression, "a problem occurred while executing the script %s: %s (%s)",   thread->GetDescriptionString(), explanation, #expression)
+#define YELO_HS_RUNTIME_ASSERT(expression, thread, explanation)   //YELO_ASSERT_DISPLAY(expression, "a problem occurred while executing the script %s: %s (%s)",   thread->GetDescriptionString(), explanation, #expression)
 
 #define YELO_HS_THREAD_VALID_STACK(thread) YELO_HS_RUNTIME_ASSERT(thread->ValidThread(), thread, "corrupted stack.")
 
@@ -56,7 +54,7 @@ namespace Yelo::Scripting {
 		struct hs_script : hs_scenario_data_base {};
 		STAT_ASSERT(hs_script, 0x5C)
 
-		struct __attribute__((packed)) s_stack_frame {
+		struct s_stack_frame {
 			s_stack_frame    *previous;
 			datum_index      source_expression;
 			void *result_reference;
@@ -167,10 +165,10 @@ namespace Yelo::Scripting {
 		/// </param>
 		///
 		/// <returns>	null if it fails, else a pointer to the requested memory. </returns>
-		void *StackAllocate(size_t size, unsigned long alignment_bit = Flags::k_alignment_32bit, _Out_opt_ short *stack_offset = nullptr);
+		void *StackAllocate(size_t size, unsigned long alignment_bit = Flags::k_alignment_32bit, short *stack_offset = nullptr);
 
 		template <typename T>
-		T *StackAllocate(size_t count = 1, unsigned long alignment_bit = Flags::k_alignment_32bit, _Out_opt_ short *stack_offset = nullptr);
+		T *StackAllocate(size_t count = 1, unsigned long alignment_bit = Flags::k_alignment_32bit, short *stack_offset = nullptr);
 
 		struct s_main_state {
 			datum_index thread_index;
@@ -185,9 +183,9 @@ namespace Yelo::Scripting {
 
 		void MainLoop(const s_main_state &state);
 
-		void MainEpilogue(const s_main_state &state, _Out_opt_ bool &return_delete_thread);
+		void MainEpilogue(const s_main_state &state, bool &return_delete_thread);
 
-		void Main(datum_index this_thread_index, const bool &runtime_globals_enabled, _Out_opt_ bool &return_delete_thread);
+		void Main(datum_index this_thread_index, const bool &runtime_globals_enabled, bool &return_delete_thread);
 
 	};
 

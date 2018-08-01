@@ -1,8 +1,3 @@
-/*
-	Yelo: Open Sauce SDK
-
-	See license\OpenSauce\OpenSauce for specific license information
-*/
 #pragma once
 
 #include "../memory/datum_index.h"

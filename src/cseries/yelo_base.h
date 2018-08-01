@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <cstring>
 #include <string>
 #include <time.h>
 #include "macros_generic.h"
@@ -49,7 +50,7 @@ namespace Yelo {
 	/// <typeparam name="max_value">	The inclusive max value of the bit field. </typeparam>
 	template<int max>
 	constexpr unsigned short bitfield_size() {
-		return std::log2(max) + 1;
+		return::std::log2(max) + 1;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,7 +59,7 @@ namespace Yelo {
 	/// <typeparam name="number_of_members">	The number of members in the enum represented by this bitfield. </typeparam>
 	template <int num_members>
 	constexpr unsigned short bitfield_enum_size() {
-		return std::log2(num_members) + 1;
+		return::std::log2(num_members) + 1;
 	}
 
 	// TODO: refactor these to PascalCase
@@ -142,7 +143,7 @@ namespace Yelo {
 	/// <param name="suffix">	The string to compare to the substring at the end of this instance. </param>
 	///
 	/// <returns>	true if suffix matches the end of the instance; otherwise, false. </returns>
-	static bool EndsWith(const std::string &str, const std::string &suffix) {
+	static bool EndsWith(const::std::string &str, const::std::string &suffix) {
 		// based on http://stackoverflow.com/a/20447331/444977
 
 		if (suffix.length() > str.length())
@@ -231,8 +232,8 @@ namespace Yelo {
 	typedef TTypeHolder<void> TypeHolder;
 	static_assert(sizeof(TypeHolder) == 0x4);
 
-	static const TypeHolder k_null_as_type_holder = {reinterpret_cast<void *>(0)};  ///< nullptr represented as a TypeHolder value
-	static const TypeHolder k_none_as_type_holder = {reinterpret_cast<void *>(-1)}; ///< NONE represented as TypeHolder val
+	static const TypeHolder k_null_as_type_holder = {{reinterpret_cast<void *>(0)}};  ///< nullptr represented as a TypeHolder value
+	static const TypeHolder k_none_as_type_holder = {{reinterpret_cast<void *>(-1)}}; ///< NONE represented as TypeHolder val
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	If the COM interface reference isn't NULL, releases it and NULL it. </summary>
@@ -314,7 +315,7 @@ namespace Yelo {
 	/// <summary>	Class for executing a function at the end of a scope. </summary>
 	class c_scope_end_execute {
 		/// <summary>	Defines an alias representing the end execute function. </summary>
-		typedef std::function<void()> end_execute_func_t;
+		typedef::std::function<void()> end_execute_func_t;
 
 		const end_execute_func_t m_function;
 
@@ -359,12 +360,12 @@ namespace Yelo {
 	}
 
 	// Returns INVALID_HANDLE_VALUE as nullptr, else returns [h]
-	// Should be used in conjunction with std::unique_ptr and winapi_handle_closer
+	// Should be used in conjunction with::std::unique_ptr and winapi_handle_closer
 	// inline HANDLE ToSafeHandle(HANDLE h) {
 	// 	return h == INVALID_HANDLE_VALUE ? nullptr : h;
 	// }
 
-	/// <summary>	Primarily a deleter for std::unique_ptr for use with WinAPI handles. </summary>
+	/// <summary>	Primarily a deleter for::std::unique_ptr for use with WinAPI handles. </summary>
 	// struct winapi_handle_closer {
 	// 	void operator ()(HANDLE h) const {
 	// 		// YELO_ASSERT_DISPLAY(h != INVALID_HANDLE_VALUE, "tried to close an INVALID handle");
@@ -373,7 +374,7 @@ namespace Yelo {
 	// 	}
 	// };
 
-	/// <summary>	Primarily a deleter for std::unique_ptr for objects allocated by LocalAlloc. </summary>
+	/// <summary>	Primarily a deleter for::std::unique_ptr for objects allocated by LocalAlloc. </summary>
 	// struct winapi_local_deleter {
 	// 	void operator ()(HLOCAL h) const {
 	// 		// YELO_ASSERT_DISPLAY(h != INVALID_HANDLE_VALUE, "tried to close an INVALID handle");
@@ -382,7 +383,7 @@ namespace Yelo {
 	// 	}
 	// };
 
-	/// <summary>	Primarily a deleter for std::unique_ptr for use CRT's FILE. </summary>
+	/// <summary>	Primarily a deleter for::std::unique_ptr for use CRT's FILE. </summary>
 	struct crt_file_closer {
 		void operator ()(FILE *h) const {
 			if (h != nullptr) {
@@ -524,7 +525,7 @@ namespace Yelo {
 	/// <summary>	Get the current time and format it into [time_str]. </summary>
 	///
 	/// <param name="time_str">	The resulting time string. </param>
-	static void GetTimeStampString(_Out_ tag_string time_str) {
+	static void GetTimeStampString(tag_string &time_str) {
 		const size_t k_time_str_sizeof = sizeof(tag_string);
 
 		memset(time_str, 0, k_time_str_sizeof);
@@ -543,7 +544,7 @@ namespace Yelo {
 	/// <remarks>	The formatting output by this function is YYYY_MM_DD_hh_mm_ss. </remarks>
 	///
 	/// <param name="time_str">	The resulting time string. </param>
-	static void GetTimeStampStringForFile(_Out_ tag_string time_str) {
+	static void GetTimeStampStringForFile(tag_string &time_str) {
 		const size_t k_time_str_sizeof = sizeof(tag_string);
 
 		memset(time_str, 0, k_time_str_sizeof);

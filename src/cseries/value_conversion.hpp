@@ -19,7 +19,7 @@ namespace Yelo {
 		}
 
 		bool FromString(const char *string, bool &output) {
-			auto std_string = std::string(string);
+			auto std_string =::std::string(string);
 
 			if ((std_string == "True") || (std_string == "true") || (std_string == "on") || (std_string == "1")) {
 				output = true;
@@ -76,7 +76,7 @@ namespace Yelo {
 			return FromStringImpl("%lu", 1, string, &output);
 		}
 
-		bool FromString(const char *string, __int64 &output) {
+		bool FromString(const char *string, long long &output) {
 			return FromStringImpl("%ld", 1, string, &output);
 		}
 
@@ -84,7 +84,7 @@ namespace Yelo {
 			return FromStringImpl("%f", 1, string, &output);
 		}
 
-		bool FromString(const char *string, std::string &output) {
+		bool FromString(const char *string,::std::string &output) {
 			output.assign(string);
 			return true;
 		}

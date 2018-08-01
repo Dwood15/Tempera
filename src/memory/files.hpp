@@ -147,16 +147,16 @@ namespace Yelo {
 		/// <param name="directory_tree">	The directory tree to create. </param>
 		///-------------------------------------------------------------------------------------------------
 		bool BuildDirectoryTree(const char *directory_tree) {
-			std::string            directory(directory_tree);
-			std::string::size_type offset = 0;
+		::std::string            directory(directory_tree);
+		::std::string::size_type offset = 0;
 
 			bool success = true;
 
 			// look for all instances of \ and /, and create the directory tree for each one
-			while ((offset = directory.find_first_of("\\/", offset)) != std::string::npos) {
-				// TODO: a memory optimization trick we could probably do would be to std::swap the character
+			while ((offset = directory.find_first_of("\\/", offset)) !=::std::string::npos) {
+				// TODO: a memory optimization trick we could probably do would be to::std::swap the character
 				// at [offset] with '\0' before and after the mkdir call, thus avoiding the need to substring
-				std::string path = directory.substr(0, offset);
+			::std::string path = directory.substr(0, offset);
 				if (_mkdir(path.c_str()) != 0) {
 					if (errno != EEXIST) {
 						success = false;

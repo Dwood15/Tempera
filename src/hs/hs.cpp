@@ -330,9 +330,5 @@ namespace Yelo::blam {
 };
 
 bool Yelo::Scripting::s_hs_script_container_datum_index::IsNull() const {
-	typedef handle_abi_type_traits<s_hs_script_container_datum_index, sizeof(s_hs_script_container_datum_index)> type_traits;
-
-	auto itm = *reinterpret_cast<const type_traits::bits_type *>(&(*this));
-
-	return itm == NONE;
+	return (&(*this)) == nullptr;
 }

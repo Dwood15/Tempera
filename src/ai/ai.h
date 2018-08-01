@@ -2,7 +2,7 @@
 #pragma once
 #include <precompile.h>
 
-#include "actors/actor_structures.hpp"
+#include "actors/actor_structures.h"
 
 namespace Yelo {
 	namespace Enums {

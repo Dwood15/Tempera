@@ -54,33 +54,33 @@ namespace Yelo::TagGroups {
 	STAT_ASSERT(s_scenario_object_datum, 0x1C);
 
 	struct s_scenario_object_permutation {
-		unsigned __int64:64;
-		unsigned __int64:64;
-		unsigned __int64:64;
-		unsigned __int64:64;
+		unsigned long long:64;
+		unsigned long long:64;
+		unsigned long long:64;
+		unsigned long long:64;
 	};
 
-	STAT_ASSERT(s_scenario_object_permutation, sizeof(__int64) * 4);
+	STAT_ASSERT(s_scenario_object_permutation, sizeof(long long) * 4);
 
 	struct s_scenario_scenery_datum {
-		unsigned __int64:64;
+		unsigned long long:64;
 		s_scenario_object_permutation permutation;
 	};
 
-	STAT_ASSERT(s_scenario_scenery_datum, 0x20 + sizeof(__int64));
+	STAT_ASSERT(s_scenario_scenery_datum, 0x20 + sizeof(long long));
 
 	struct s_scenario_sound_scenery_datum {
-		unsigned __int64:64;
+		unsigned long long:64;
 	};
 	STAT_ASSERT(s_scenario_sound_scenery_datum, 0x8);
 	//////////////////////////////////////////////////////////////////////////
 	// units
 	struct s_scenario_unit_datum {
-		unsigned __int64:64;
+		unsigned long long:64;
 		s_scenario_object_permutation permutation;
 		real                          body_vitality;
 		unsigned long                 flags;
-		unsigned __int64:64;
+		unsigned long long:64;
 	};
 
 	struct s_scenario_biped_datum {
@@ -96,16 +96,22 @@ namespace Yelo::TagGroups {
 
 	//////////////////////////////////////////////////////////////////////////
 	// items
+#pragma pack(push, 1)
 	struct s_scenario_weapon_datum {
-		unsigned __int64:64;
-		s_scenario_object_permutation permutation;
+		unsigned long long:64; //0x0
+		s_scenario_object_permutation permutation; //0x8
 
-		short          rounds_left;
-		short          rounds_total;
-		unsigned short flags;
-		unsigned short padA;
-		long           padB[3];
+		short          rounds_left; //0x28
+		short          rounds_total; //0x2A
+		unsigned short flags; //0x2B
+		unsigned short padA; //0x2D
+		long           padB; //0X30
+		long           padC; //0X34
+		long           padD; //0X38
+		//0x3C
 	};
+#pragma pack(pop)
+	STAT_ASSERT(s_scenario_weapon_datum, 0x3C);
 
 	struct s_scenario_equipment_datum {
 		unsigned short padA;
@@ -116,7 +122,7 @@ namespace Yelo::TagGroups {
 	//////////////////////////////////////////////////////////////////////////
 	// devices
 	struct s_scenario_device_datum {
-		unsigned __int64:64;
+		unsigned long long:64;
 		short         power_group_index;
 		short         position_group_index;
 		unsigned long flags;
@@ -131,15 +137,15 @@ namespace Yelo::TagGroups {
 		unsigned long flags;
 		short         custom_name_index;
 		unsigned short : 16;
-		unsigned __int64:64;
+		unsigned long long:64;
 	};
 	struct s_scenario_light_fixture_datum {
 		real_rgb_color color;
 		real           intensity;
 		angle          falloff;
 		angle          cutoff;
-		unsigned __int64:64;
-		unsigned __int64:64;
+		unsigned long long:64;
+		unsigned long long:64;
 	};
 
 	STAT_ASSERT(s_scenario_light_fixture_datum, 0x10 + sizeof(real_rgb_color) + sizeof(real) + (sizeof(angle) * 2));

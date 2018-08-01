@@ -56,8 +56,8 @@ union unit_control_flags {
 STAT_ASSERT(unit_control_flags, sizeof(short));
 
 struct s_unit_control_data {
-	std::byte               animation_state;
-	std::byte               aiming_speed;
+	::std::byte               animation_state;
+	::std::byte               aiming_speed;
 	unit_control_flags control_flags;
 	short              weapon_index;
 	short              grenade_index;

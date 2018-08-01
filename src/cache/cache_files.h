@@ -43,8 +43,8 @@ namespace Yelo {
 
 
 		static const char *  DataFileTypeToString(Enums::data_file_type type) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wswitch"
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wswitch"
 			switch (type) {
 				case Enums::_data_file_type_bitmaps:
 					return "bitmaps";
@@ -53,7 +53,7 @@ namespace Yelo {
 				case Enums::_data_file_type_locale:
 					return "loc";
 			}
-#pragma clang diagnostic pop
+//#pragma clang diagnostic pop
 			throw "What type of DataFile are you looking for???";
 		}
 

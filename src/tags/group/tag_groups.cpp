@@ -34,7 +34,7 @@ namespace Yelo::TagGroups {
 		if (group != nullptr) {
 			strcpy(name, group->name);
 
-		} else if (group_tag == NONE) {
+		} else if (group_tag == static_cast<uint>(NONE)) {
 			strcpy(name, "NONE");
 
 		} else if (group_tag == 0) {

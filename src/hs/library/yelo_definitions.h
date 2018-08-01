@@ -22,11 +22,11 @@ namespace Yelo::Scripting {
 
 		static size_t                                g_functions_yelo_start_index; ///< Starting index of OS-defined functions
 		static size_t                                g_functions_next_register_index;
-		const std::vector<hs_function_definition *> g_functions              = std::vector<hs_function_definition *>(1024); //k_hs_script_functions_count_upgrade);
+		const ::std::vector<hs_function_definition *> g_functions              =::std::vector<hs_function_definition *>(1024); //k_hs_script_functions_count_upgrade);
 
 		static size_t                                     g_external_globals_yelo_start_index; ///< Starting index of OS-defined globals
 		static size_t                                     g_external_globals_next_register_index;
-		static std::vector<hs_global_definition *> g_external_globals; //(Yelo::Enums::k_hs_external_globals_count_upgrade);
+		static::std::vector<hs_global_definition *> g_external_globals; //(Yelo::Enums::k_hs_external_globals_count_upgrade);
 	public:
 
 		void Initialize() {}
@@ -49,14 +49,14 @@ namespace Yelo::Scripting {
 			return g_external_globals.size() + g_external_globals_yelo_start_index;
 		}
 
-		const std::vector<hs_function_definition *> &GetFunctionsTable(size_t *yelo_start_index = nullptr) {
+		const::std::vector<hs_function_definition *> &GetFunctionsTable(size_t *yelo_start_index = nullptr) {
 			if (yelo_start_index)
 				*yelo_start_index = g_functions_yelo_start_index;
 
 			return g_functions;
 		}
 
-		static const std::vector<hs_global_definition *> &GetExternalGlobals(size_t *yelo_start_index = nullptr) {
+		static const::std::vector<hs_global_definition *> &GetExternalGlobals(size_t *yelo_start_index = nullptr) {
 			if (yelo_start_index)
 				*yelo_start_index = g_external_globals_yelo_start_index;
 
@@ -84,17 +84,17 @@ namespace Yelo::Scripting {
 		hs_function_definition *GetYeloFunction(short function_index) {
 			YELO_ASSERT(function_index>=0);
 
-			return GetFunction(g_functions_yelo_start_index+function_index);
+			return GetFunction(static_cast<short>(g_functions_yelo_start_index)+function_index);
 		}
 
 		hs_global_definition *GetYeloGlobal(short global_index) {
 			YELO_ASSERT(global_index>=0);
 
-			return GetGlobal(g_external_globals_yelo_start_index + global_index);
+			return GetGlobal(static_cast<short>(g_external_globals_yelo_start_index) + global_index);
 		}
 
 		template<typename T>
-		void RegisterLibraryElement(std::vector<T*>& vector, size_t& next_register_index, T& element) {
+		void RegisterLibraryElement(::std::vector<T*>& vector, size_t& next_register_index, T& element) {
 			// since we support 'fixups' that map directly to a specific index, we first have to try and find an
 			// unused slot we can put the desired element at.
 			if (next_register_index < vector.size()) {
@@ -134,7 +134,7 @@ namespace Yelo::Scripting {
 
 	private:
 		template<typename T>
-		void RegisterLibraryFixup(std::vector<T*>& vector, size_t fixup_index, T* element) {
+		void RegisterLibraryFixup(::std::vector<T*>& vector, size_t fixup_index, T* element) {
 			//YELO_ASSERT(element);
 
 			if (fixup_index >= vector.size()) {
@@ -170,5 +170,5 @@ namespace Yelo::Scripting {
 		}
 	};
 
-	std::vector<hs_global_definition *> c_hs_library::g_external_globals = std::vector<hs_global_definition *>(896);
+	::std::vector<hs_global_definition *> c_hs_library::g_external_globals =::std::vector<hs_global_definition *>(896);
 };
