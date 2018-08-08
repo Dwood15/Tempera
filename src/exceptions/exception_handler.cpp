@@ -8,8 +8,6 @@
    You should have received a copy of the GNU General Public License
    along with tempera.  If not, see <http://www.gnu.org/licenses/>.
 */
-#pragma once
-
 #include "exception_handler.h"
 #include "../CurrentEngine.h"
 #include <memory_map.h>

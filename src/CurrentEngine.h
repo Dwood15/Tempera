@@ -16,7 +16,7 @@ static bool ShouldOverride[MAX_PLAYER_COUNT_LOCAL];
 struct s_player_action;
 struct s_unit_control_data;
 class Core;
-const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
+constexpr const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
 
 namespace feature_management::engines {
 	class GlobalEngine {
@@ -40,7 +40,7 @@ namespace feature_management::engines {
 		char                     *DEBUG_FILENAME = const_cast<char *>("tempera.unk.unk.debug.log");
 		char *LUA_FILENAME   = const_cast<char *>("tempera.init.lua");
 
-		LuaScriptManager * GetLuaState() volatile;
+		LuaScriptManager * GetLuaState();
 
 		s_player_action GetPlayerActionOverride(ushort idx, s_unit_control_data * from);
 
@@ -50,7 +50,7 @@ namespace feature_management::engines {
 
 		bool IsCustomEd();
 
-		bool IsCoreInitialized() volatile ;
+		bool IsCoreInitialized();
 
 		size_t GetNumberOfFunctionTableReferences();
 
@@ -89,7 +89,7 @@ namespace feature_management::engines {
 
 		GlobalEngine();
 
-		void RefreshCore() volatile;
+		void RefreshCore();
 
 		auto GetHsFunctionTableCountReferences16();
 		auto GetHsFunctionTableCountReferences32();
@@ -102,7 +102,7 @@ namespace feature_management::engines {
 
 		const char *GetCurrentMajorVerString();
 
-		Core *GetCore() volatile;
+		Core *GetCore();
 
 		/**
  		* Called before VirtualProtect is run.
@@ -127,14 +127,11 @@ namespace feature_management::engines {
 		 * @param addr Address to look up
 		 * @return named description of the memory region.
 		 */
-		const char *getMemoryRegionDescriptor(const uintptr_t addr) volatile;
+		const char *getMemoryRegionDescriptor(const uintptr_t addr);
 	};
 };
 
 static feature_management::engines::GlobalEngine CurrentEngine;
-
-
-static volatile feature_management::engines::GlobalEngine * vEngine = &CurrentEngine;
 
 /**
  * Called variably based on fps

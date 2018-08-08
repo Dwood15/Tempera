@@ -1,3 +1,5 @@
+#define WIN32_LEAN_AND_MEAN
+
 #include "main.h"
 #include "src/CurrentEngine.h"
 #include "src/exceptions/exception_handler.h"
@@ -40,17 +42,16 @@
  * You should have received a copy of the GNU General Public License
  * along with Tempera. If not, see <http://www.gnu.org/licenses/>.
  **/
-
-#pragma once
-#define WIN32_LEAN_AND_MEAN
-
-
-static bool loaded = false;
+ static bool loaded = false;
 static void *orig_DirectInput8Create;
 
 //Used in order to proxy direct input.
 __declspec(naked) void WINAPI Tempera_DirectInput8Create() {
+#ifdef __GNUC__
+	throw "what the fuck did you say to me you little bitch? I have you know I graduated top of my class in the MIT";
+	#else
 	__asm { jmp orig_DirectInput8Create };
+#endif
 }
 
 static inline void *ConnectToSqlDB(const char *host, const char *usr, const char *pwd) {
@@ -87,7 +88,7 @@ static inline void *init(HMODULE *reason) {
 
 	if (!CurrentEngine.HasSupport()) {
 		PrintLn("Tempera could not detect that the current runtime has any feature support.");
-		return false;
+		return nullptr;
 	}
 
 	Print("Current runtime was detected!");
@@ -101,7 +102,7 @@ static inline void *init(HMODULE *reason) {
 
 	if (!*reason) {
 		Print("Failed to load the real dinput8 library!");
-		return false;
+		return nullptr;
 	}
 
 #define SUPPORTSFEAT(FEAT) CurrentEngine.SupportsFeature(feats::FEAT)
@@ -111,7 +112,7 @@ static inline void *init(HMODULE *reason) {
 		CurrentEngine.LuaFirstRun();
 	}
 
-	orig_DirectInput8Create = GetProcAddress(*reason, "DirectInput8Create");
+	orig_DirectInput8Create = (void*)GetProcAddress(*reason, "DirectInput8Create");
 
 	DWORD old;
 	VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);

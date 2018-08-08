@@ -28,7 +28,10 @@ int l_GetEngineContext(lua_State *L);
 static ::std::vector<::std::string> callbacks[LuaCallbackId::max_callback_id];
 struct s_player_action;
 
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wpadded"
+#endif
+
 //This code was (for the most part) copy-pasted from
 //The tutorial series here: https://eliasdaler.wordpress.com/2013/10/20/lua_and_cpp_pt2/
 class LuaScriptManager {
@@ -84,6 +87,9 @@ public:
 
 	void call_lua_event_by_type(LuaCallbackId eventType);
 };
+
+#ifdef __GNUC__
 #pragma GCC diagnostic warning "-Wpadded"
+#endif
 
 static LuaScriptManager mgr;

@@ -5,7 +5,7 @@
 
 #include <macros_generic.h>
 //Yup, guess I'm turning into Kornman...
-#define REAL_ASSRT(name, members) STAT_ASSRT(name, members * sizeof(real))
+#define REAL_ASSRT(name, members) STAT_ASSERT(name, members * sizeof(real))
 //Only bother porting what we actually need.
 struct real_bounds {
 	real lower;
@@ -22,7 +22,7 @@ struct real_plane2d {
 
 struct real_plane3d {
 	real_plane2d ijd;
-	real k;
+	real         k;
 }; REAL_ASSRT (real_plane3d, 0x4);
 
 struct real_point2d {
@@ -38,18 +38,18 @@ struct real_point3d : public real_point2d {
 struct real_euler_angles2d {
 	float yaw;
 	float pitch;
-}; STAT_ASSRT(real_euler_angles2d, 0x8);
+}; STAT_ASSERT(real_euler_angles2d, 0x8);
 
 struct real_vector2d {
 	float x;
 	float y;
-}; STAT_ASSRT(real_vector2d, 0x8);
+}; STAT_ASSERT(real_vector2d, 0x8);
 
 struct real_vector3d {
 	real x;
 	real y;
 	real z;
-}; STAT_ASSRT(real_vector3d, 0xC);
+}; STAT_ASSERT(real_vector3d, 0xC);
 
 struct real_euler_angles3d {
 	// Up, Down offset degrees
@@ -89,15 +89,13 @@ struct real_quaternion {
 typedef float angle;
 typedef float real_fraction;
 // bounding in real angle values
-struct angle_bounds
-{
+struct angle_bounds {
 	angle lower;
 	angle upper;
 };
 
 // bounding in real values
-struct real_fraction_bounds
-{
+struct real_fraction_bounds {
 	real lower;
 	real upper;
 };

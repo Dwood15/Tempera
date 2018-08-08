@@ -4,7 +4,6 @@ set(M_UPGRADES_H
 	${CMAKE_CURRENT_SOURCE_DIR}/upgrades/gs_upgrades.inl
 	)
 
-
 set(MEMORY_H
 	${CMAKE_CURRENT_SOURCE_DIR}/array.h
 	${CMAKE_CURRENT_SOURCE_DIR}/array_yelo.hpp
@@ -12,11 +11,13 @@ set(MEMORY_H
 	${CMAKE_CURRENT_SOURCE_DIR}/circular_queue.h
 	${CMAKE_CURRENT_SOURCE_DIR}/data.h
 	${CMAKE_CURRENT_SOURCE_DIR}/data_base.h
+	${CMAKE_CURRENT_SOURCE_DIR}/data_iterator.h
 	${CMAKE_CURRENT_SOURCE_DIR}/datum_index.h
 	${CMAKE_CURRENT_SOURCE_DIR}/files.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/linked_list.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/lruv_cache.h
 	${CMAKE_CURRENT_SOURCE_DIR}/memory_pool.h
+
 	${CMAKE_CURRENT_SOURCE_DIR}/memory_yelo.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/memory_interface_base.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/naked_func_writer.h

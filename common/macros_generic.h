@@ -25,7 +25,7 @@ struct TAssertEquality {
 	static constexpr bool _cResult = (A == B);
 };
 
-#define STAT_ASSERT(object, size) static_assert( TAssertEquality<sizeof(object), size>::_cResult, "Don't match!");
+#define STAT_ASSERT(object, size) static_assert( TAssertEquality<sizeof(object), size>::_cResult);
 
 /*auto numDigits = [](unsigned long num, unsigned long dig = 0) constexpr {
 	
@@ -46,7 +46,6 @@ static_assert(numDigits(1001) == 4); */
 
 //#define STAT_ASSERT(object, size) static_assert(size_check<object, size>());
 
-#define STAT_ASSRT(object, size)  static_assert(sizeof(object) == size);
 
 typedef float          real;
 typedef int            int32;
@@ -71,9 +70,10 @@ STAT_ASSERT(long, 0x4);
 STAT_ASSERT(float, 0x4);
 STAT_ASSERT(long long, 0x8);
 STAT_ASSERT(double, 0x8);
+STAT_ASSERT(size_t, sizeof(unsigned long));
 
 //Typedef'd sanity checks
-STAT_ASSRT(ushort, 0x2);
+STAT_ASSERT(ushort, 0x2);
 #pragma endregion
 #define INTELLISENSE_HACK(item) //int a[sizeof(item)] = 0;
 

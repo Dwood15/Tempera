@@ -15,12 +15,17 @@
 
 //#pragma clang diagnostic push
 //#pragma clang diagnostic ignored "-Weverything"
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wpadded"
+#endif
+
 #include <stdio.h>
 #include <d3d9.h>
 #include <d3dx9.h>
-#pragma GCC diagnostic warning "-Wpadded"
 
+#ifdef __GNUC__
+#pragma GCC diagnostic warning "-Wpadded"
+#endif
 //#pragma clang diagnostic pop
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")

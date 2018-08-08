@@ -1,5 +1,3 @@
-#pragma once
-
 #include <addlog.h>
 #include "script_manager.h"
 #include "../CurrentEngine.h"
@@ -162,13 +160,15 @@ int l_GetEngineContext(lua_State *L) {
  * @param cb_type
  */
 void LuaScriptManager::registerLuaCallback(const::std::string &cb_name, LuaCallbackId cb_type) {
+#ifndef __GNUC__
 	if (!this) {
 		PrintLn<false>("\tRegisterLuaCallback exiting b/c of invalid context. :(");
 		return;
 	}
+#endif
 
 	if (!loaded) {
-		Print(false, "\tCan't register a callback b/c Lua's not registered as being loaded.");
+		PrintLn<false>("\tCan't register a callback b/c Lua's not registered as being loaded.");
 		return;
 	}
 
@@ -495,10 +495,12 @@ void LuaScriptManager::InitializeLua(const::std::string &filename) {
 }
 
 void LuaScriptManager::call_lua_event_by_type(LuaCallbackId eventType) {
+#ifndef __GNUC__
 	if (!this) {
 		PrintLn<false>("Can't call lua event: %d b/c we're in an invalid context.", eventType);
 		return;
 	}
+#endif
 
 	if (!this->IsLoaded()) {
 		PrintLn<false>("Can't call lua event: %d b/c we're not even loaded!", eventType);

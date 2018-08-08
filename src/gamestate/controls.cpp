@@ -3,7 +3,7 @@
 
 extern Core * eCore;
 
-static void Control::HandleActionOverride(ushort idx, s_unit_control_data * from) {
+void Control::HandleActionOverride(ushort idx, s_unit_control_data * from) {
 	if (CurrentEngine.ShouldOverrideAction(idx)) {
 
 		auto override = CurrentEngine.GetPlayerActionOverride(idx, from);
@@ -29,7 +29,7 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 
 	auto to = reinterpret_cast<s_unit_datum *>(core->GetGenericObject(unit_idx));
 
-	if(to->unit.controlling_player_index.handle != -1)	{
+	if(to->unit.controlling_player_index.handle != static_cast<uint>(-1))	{
 		HandleActionOverride(to->unit.controlling_player_index.index, from);
 	}
 
@@ -45,7 +45,7 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 
 	unit->throttle        = from->throttle;
 	unit->primary_trigger = from->primary_trigger;
-	unit->aiming_speed    = from->aiming_speed;
+	unit->aiming_speed    = (byte)from->aiming_speed;
 
 	if (from->weapon_index != -1) {
 		unit->next_weapon_index = from->weapon_index;

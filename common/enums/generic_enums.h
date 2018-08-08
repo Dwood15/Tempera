@@ -83,55 +83,6 @@ enum LuaCallbackId {
 
 #pragma endregion
 #pragma region tag related
-enum field_type : short {
-	_field_string,
-	_field_char_integer,
-	_field_short_integer,
-	_field_long_integer,
-	_field_angle,
-	_field_tag,
-	_field_enum,
-	_field_long_flags,
-	_field_word_flags,
-	_field_byte_flags,
-	_field_point_2d,
-	_field_rectangle_2d,
-	_field_rgb_color,
-	_field_argb_color,
-	_field_real,
-	_field_real_fraction,
-	_field_real_point_2d,
-	_field_real_point_3d,
-	_field_real_vector_2d,
-	_field_real_vector_3d,
-	_field_real_quaternion,
-	_field_real_euler_angles_2d,
-	_field_real_euler_angles_3d,
-	_field_real_plane_2d,
-	_field_real_plane_3d,
-	_field_real_rgb_color,
-	_field_real_argb_color,
-	_field_real_hsv_color,
-	_field_real_ahsv_color,
-	_field_short_bounds,
-	_field_angle_bounds,
-	_field_real_bounds,
-	_field_real_fraction_bounds,
-	_field_tag_reference,
-	_field_block,
-	_field_short_block_index,
-	_field_long_block_index,
-	_field_data,
-	_field_array_start,
-	_field_array_end,
-	_field_pad,
-	_field_skip,
-	_field_explanation,
-	_field_custom,
-	_field_terminator,
-
-	k_number_of_tag_field_types,
-};
 
 #pragma region sbsp
 enum collision_surface_flags : byte {
@@ -143,11 +94,9 @@ enum collision_surface_flags : byte {
 #pragma endregion
 
 namespace obj {
-	enum {
-		// Stock game state allocation size for the object memory pool
-		// When running in editor tools, this and the max number of objects is increased by 5x
-			k_object_memory_pool_allocation_size = 0x200000,
-	};
+	// Stock game state allocation size for the object memory pool
+	// When running in editor tools, this and the max number of objects is increased by 5x
+	constexpr int k_object_memory_pool_allocation_size{0x200000};
 
 	enum object_header_flags : byte {
 		_object_header_active_bit,

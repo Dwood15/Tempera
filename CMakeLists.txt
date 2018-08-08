@@ -79,12 +79,14 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	set(CLANG_MACROS "-DDIRECTINPUT_VERSION=0x800 -DWIN32 -D_USRDLL -D_WINDLL -DCMAKE_LINK_WHAT_YOU_USE=TRUE")
 	set(CLANG_EXTRA_SETTINGS "-fms-extensions ")
 #-stdlib=libstdc++  -nostdlib -isystem C:/msys32/mingw64/include/c++/8.2.0  -Wno-microsoft-include
-	set(CMAKE_CXX_FLAGS "-Wfatal-errors -std=c++17 -m32 -masm=intel -nodefaultlibs -Wno-unknown-pragmas -fpermissive -Wno-unused-local-typedefs -Wno-comment -Wno-multichar ${CLANG_EXTRA_SETTINGS} ${CLANG_ENABLED_WARNINGS} ${CLANG_DISABLED_WARNINGS} ${CLANG_MACROS}")
+
+	set(QUIET_GCC "-Wno-comment -Wno-multichar -Wno-unknown-pragmas -Wno-unused-local-typedefs")
 
 	set(CMAKE_CXX_FLAGS_DEBUG "-g")
 	set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
 	set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
 	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+	set(CMAKE_CXX_FLAGS "-Wfatal-errors -std=c++17 -m32 -masm=intel -fpermissive ${CMAKE_CXX_FLAGS_DEBUG} ${QUIET_GCC} ${CLANG_EXTRA_SETTINGS} ${CLANG_ENABLED_WARNINGS} ${CLANG_DISABLED_WARNINGS} ${CLANG_MACROS}")
 
 	message(STATUS "Forcing GNU to Clang compiler because CLion is dumb.")
 	#TODO: SET CLANG STUFFS.
@@ -104,8 +106,8 @@ elseif (MSVC)
 
 	#/Zc flag tells C++ what version of cpp we're using/targeting.
 	#/Qpar-report:2 - Tells us about the compiler's optimizations of our for loops.
-	#/std:c++latest implies C++ 20. /Qpar-report:2 /Zp2\ 
-	set(NEW_FEATURES "/std:c++17\ /wo4068")
+	#/std:c++latest implies C++ 20. /Qpar-report:2 /Zp2\
+	set(NEW_FEATURES "/std:c++latest\ /wo4068\ /permissive-")
 	set(CMAKE_CXX_FLAGS_DEBUG "/TP\ /MP\ /MTd\ /Gy- /W3\ /Od\ /Zi\ /MP /EHsc\ ${NEW_FEATURES} /fp:fast\ /arch:SSE2 ${COMPILER_MACROS}")
 	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
 
@@ -136,6 +138,7 @@ set(COMMON_H
 	common/engine_interface.h
 	common/macros_generic.h
 	common/struct_helper.h
+	common/enums/control_enums.h
 	common/enums/effects_enums.h
 	common/enums/generic_enums.h
 	common/enums/hs_enums.h
@@ -143,14 +146,11 @@ set(COMMON_H
 	common/enums/ai_enums.h
 	common/enums/scenario_enums.h
 	common/enums/geometry_enums.h
-	src/core_types.h
-	src/tags/group/tagdata.h
-	src/tags/group/tagblock.h
-	src/scenario/scenario_location.h
-	src/hs/hs_value_union.h src/memory/data_iterator.h common/enums/yelo_enums.h common/enums/memory_enums.h)
+	common/enums/yelo_enums.h
+	common/enums/memory_enums.h
+	)
 
 add_library(dinput8 SHARED
-			common/addlog.cpp
 			${COMMON_H}
 			${LUA_INCLUDE_DIR}
 			${SRC_H}
@@ -158,12 +158,13 @@ add_library(dinput8 SHARED
 			${RUNTIME_CXX}
 			${SRC_CXX}
 			main.cpp
+			common/addlog.cpp
 			)
 
 #The compiler is defaulting to the Windows 10 SDK, which requires external DLL's (xinput1_4.dll is not found error)
 #I manually force it to use my directx sdk xinput.
 #TODO: Use DX_LIBS or whatever the variable is, to specify the 2010 dx XInput.lib explicitly.
-#set(XINPUTLIB "D:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
+set(XINPUTLIB "D:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
 #D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
 #Version.Lib is required for looking up current EXE's runtime information.
 target_link_libraries(dinput8 ${MARIADB_LIBRARY} ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
@@ -171,5 +172,5 @@ target_link_libraries(dinput8 ${MARIADB_LIBRARY} ${LUA_GLOB} ${DirectX_LIBRARIES
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")
 
-set_target_properties(dinput8 PROPERTIES OUTPUT_NAME "dwood_dinput8")
+set_target_properties(dinput8 PROPERTIES OUTPUT_NAME "dinput8")
 

@@ -13,7 +13,7 @@
 #include "gamestate/objects.h"
 #include "game/time/time_structures.hpp"
 #include "core_types.h"
-
+#include "CurrentEngine.h"
 struct object_data;
 class ObjectController;
 struct s_player_control_globals_data;
@@ -26,9 +26,10 @@ namespace Yelo::Scenario {
 ////////////////////////////////////////
 // The Core Class of HaloForge
 ////////////////////////////////////////
-
+struct _core_1;
 class Core {
-	friend void RefreshCore();
+	// friend void feature_managment::engines::GlobalEngine::RefreshCore();
+public:
 	_core_0 *core_0;
 	_core_1 *core_1;
 	_core_2 *core_2;
@@ -37,7 +38,6 @@ class Core {
 	_core_5 *core_5;
 	_core_6 *core_6;
 	_core_7 *core_7;
-public:
 
 	map_header       *MapHeader;
 	tag_index_header *TagIndexHeader;
@@ -72,7 +72,7 @@ public:
 
 	ObjectController *ObjectControl;
 
-	short GetMaxObjects() { return this->core_1->Object->max; }
+	short GetMaxObjects();
 
 	Core() = default;
 

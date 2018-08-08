@@ -6,7 +6,7 @@
 // NOTE: NON-STANDARD ENGINE SOURCE FILE
 #pragma once
 
-#include "groups_structures.hpp"
+#include "groups_structures.h"
 #include "tag_groups.h"
 #include "base.h"
 

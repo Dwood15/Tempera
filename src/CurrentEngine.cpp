@@ -92,7 +92,7 @@ bool GlobalEngine::IsCustomEd() {
 	return this->CurrentMajor == major::CE;
 }
 
-bool GlobalEngine::IsCoreInitialized() volatile {
+bool GlobalEngine::IsCoreInitialized() {
 	auto IsNegOne = eCore == reinterpret_cast<Core *>(-1);
 	auto IsZero   = eCore == reinterpret_cast<Core *>(0);
 
@@ -151,9 +151,9 @@ void GlobalEngine::InitializeLuaState() {
 	LuaState->InitializeLua(LUA_FILENAME);
 }
 
-LuaScriptManager *GlobalEngine::GetLuaState() volatile {
+LuaScriptManager *GlobalEngine::GetLuaState() {
 	if (!LuaState->IsLoaded()) {
-		this->InitializeLuaState();
+		InitializeLuaState();
 	}
 
 	return LuaState;
@@ -273,7 +273,7 @@ size_t GlobalEngine::GetNumberOfFunctionTableReferences() {
 	return 0;
 }
 
-void GlobalEngine::RefreshCore() volatile {
+void GlobalEngine::RefreshCore() {
 	if (this->HasSupport()) {
 		if (this->IsSapien()) {
 			eCore = new Core;
@@ -405,7 +405,7 @@ s_player_action GlobalEngine::GetPlayerActionOverride(ushort idx, s_unit_control
 	return newControl;
 }
 
-Core *GlobalEngine::GetCore() volatile {
+Core *GlobalEngine::GetCore() {
 	if (!IsCoreInitialized()) {
 		RefreshCore();
 	}
@@ -503,9 +503,9 @@ void GlobalEngine::MakePlayerJump(ushort idx = 0) {
 std::optional<uintptr_t> GlobalEngine::getFunctionBegin(const char *needle) {
 	using dfr = defined_functionrange;
 
-	const dfr *funcList = current_map;
+	dfr *funcList = current_map;
 
-	for (dfr *item = const_cast<dfr *>(funcList); item++; item) {
+	for (dfr *item = funcList; item; item++) {
 		if (equal(needle, item->funcName)) {
 			return item->begin;
 		}
@@ -514,7 +514,7 @@ std::optional<uintptr_t> GlobalEngine::getFunctionBegin(const char *needle) {
 	return (uintptr_t) -1;
 }
 
-const char *GlobalEngine::getMemoryRegionDescriptor(const uintptr_t addr) volatile {
+const char *GlobalEngine::getMemoryRegionDescriptor(const uintptr_t addr) {
 
 	printf("searching for address: 0x%X\n", addr);
 
@@ -527,8 +527,9 @@ const char *GlobalEngine::getMemoryRegionDescriptor(const uintptr_t addr) volati
 	}
 	using dfr = defined_functionrange;
 
-	const dfr *funcList = current_map;
-	for (dfr  *item     = const_cast<dfr *>(funcList); item++; item) {
+	dfr *funcList = current_map;
+
+	for (dfr  *item     = funcList; item; item++) {
 		if (item->contains(addr)) {
 			return item->funcName;
 		}
@@ -557,10 +558,10 @@ void main_setup_connection_init() {
 	static LuaScriptManager *state = 0;
 
 	if (state == 0) {
-		state = vEngine->GetLuaState();
+		state = CurrentEngine.GetLuaState();
 	}
 
-	vEngine->RefreshCore();
+	CurrentEngine.RefreshCore();
 	state->call_lua_event_by_type(LuaCallbackId::post_initialize);
 	// CALL_LUA_BY_EVENT(post_initialize);
 }
@@ -571,13 +572,13 @@ void game_tick(int current_frame_tick) {
 	static LuaScriptManager *state = 0;
 
 	if (state == 0) {
-		state = vEngine->GetLuaState();
+		state = CurrentEngine.GetLuaState();
 	}
 
 	state->call_lua_event_by_type(LuaCallbackId::before_game_tick);
 
 	if (!mCore) {
-		mCore = vEngine->GetCore();
+		mCore = CurrentEngine.GetCore();
 	}
 
 	state->lua_on_tick(current_frame_tick, mCore->game_time_globals->elapsed_time);

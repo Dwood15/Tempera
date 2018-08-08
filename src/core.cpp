@@ -221,6 +221,8 @@ void Core::ToggleConsole(bool bSwitch) {
 	}
 }
 
+short Core::GetMaxObjects() { return this->core_1->Object->max; }
+
 // Toggles devmode on / off
 void Core::ToggleDevmode(bool bSwitch) {
 	Core::ConsoleText(hRed, "Dev-mode toggling isn't enabled.");
@@ -291,7 +293,15 @@ void Core::ConsoleCMD(char *command) {
 
 // Hooked console output function
 void hkConsoleText(const char *cFmt, HaloColor *fColor) {
-
+#ifdef __GNUC__
+#elif _MSC_VER
+	__asm {
+	MOV EAX, fColor
+	PUSH cFmt
+	CALL DWORD PTR DS:[oConsoleText]
+	ADD ESP, 04h
+	}
+#endif
 }
 
 // Outputs console text, with custom colors and formatting

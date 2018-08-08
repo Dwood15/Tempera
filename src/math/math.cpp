@@ -1,15 +1,3 @@
-/*
-	Project: tempera
-	File: math.cpp
-	Copyright � 2009 SilentK, Abyll
- 	Copyright 	 2018 Dwood
-
-	This file is part of tempera.
-
-   You should have received a copy of the GNU General Public License
-   along with tempera.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #include <math.h>
 #include "colors.h"
 

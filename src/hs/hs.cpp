@@ -330,5 +330,5 @@ namespace Yelo::blam {
 };
 
 bool Yelo::Scripting::s_hs_script_container_datum_index::IsNull() const {
-	return (&(*this)) == nullptr;
+	throw "WTF IsNull Function impossible to refactor";
 }

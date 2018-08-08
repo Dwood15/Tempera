@@ -2,7 +2,7 @@
 #include <memory.h>
 
 #include "../../cseries/yelo_base.h"
-#include "groups_structures.hpp"
+#include "groups_structures.h"
 #include "tag_groups.h"
 #include "../../memory/memory_yelo.hpp"
 #include "../../memory/data.h"
@@ -175,8 +175,11 @@ namespace Yelo {
 			return reinterpret_cast<T *>(TagGetUnsafeImpl(tag_index));
 		}
 
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wpadded"
 		// Union hack to use a group tag as a string
+#endif
+
 #pragma pack(push, 1)
 		union group_tag_to_string {
 			struct {
@@ -196,8 +199,9 @@ namespace Yelo {
 		};
 #pragma pack(pop)
 
+#ifdef __GNUC__
 #pragma GCC diagnostic warning "-Wpadded"
-
+#endif
 		STAT_ASSERT(group_tag_to_string, sizeof(tag) + 0x1);
 
 

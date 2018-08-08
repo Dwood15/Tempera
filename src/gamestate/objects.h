@@ -253,7 +253,7 @@ struct s_unit_data {
 	real_vector3d               looking_velocity;                           // 0x26C
 	real_vector3d               throttle;                                 // 0x278
 	real                        primary_trigger;                                 // 0x284
-	byte_enum                   aiming_speed;                                 // 0x288
+	byte                   aiming_speed;                                 // 0x288
 	byte                        pad2_melee_related;                                    // 0x289 melee related (state enum?)
 	byte                        pad3_melee_related;                                    // 0x28A melee related (some kind of counter)
 	sbyte                       ticks_until_flame_to_death;                        // 0x28B

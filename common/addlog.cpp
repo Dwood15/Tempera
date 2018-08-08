@@ -7,13 +7,10 @@
     You should have received a copy of the GNU General Public License
     along with haloforge.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#pragma pack(4)
 #include <iostream>
 #include <fstream>
 #include <ctime>
 #include <filesystem>
-#pragma pack(1)
 
 #include "addlog.h"
 
@@ -22,8 +19,9 @@ static char   dlldir[320];
 
 static volatile bool debug_write_locked = false;
 
+#ifdef __GNUC__
 template<bool toConsole>
-static void Print(const char *fmt, ...)  {
+void Print(const char *fmt, ...)  {
 	if (!fmt) {
 		return;
 	}
@@ -40,7 +38,7 @@ static void Print(const char *fmt, ...)  {
 }
 
 template<bool toConsole>
-static void PrintLn(const char *fmt, ...) {
+void PrintLn(const char *fmt, ...) {
 	if (!fmt) {
 		return;
 	}
@@ -58,6 +56,8 @@ static void PrintLn(const char *fmt, ...) {
 
 	va_end(va_alist);
 }
+#endif
+
 
 void DBGPrnt(const char *fmt, va_list va_alist) {
 	if (!ofile || !fmt) {

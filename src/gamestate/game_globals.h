@@ -11,7 +11,7 @@ namespace game_options {
 		int                   game_random_seed;
 		// not always the actual path, sometimes just the name, go figure
 		char                  map_name[255 + 1];
-	}; STAT_ASSRT(s_game_options, 0x10C);
+	}; STAT_ASSERT(s_game_options, 0x10C);
 
 	struct s_game_globals {
 		bool           map_loaded;
@@ -20,7 +20,7 @@ namespace game_options {
 		bool           map_loading_in_progress;
 		real           map_loading_precentage;
 		s_game_options options;
-	}; STAT_ASSRT(s_game_globals, 0x114);
+	}; STAT_ASSERT(s_game_globals, 0x114);
 
 	/*
 struct s_main_globals

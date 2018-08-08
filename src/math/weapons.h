@@ -80,7 +80,7 @@ struct s_weapon_data {
 
 	third_16_bytes;
 
-	STAT_ASSRT(s_3rd_16_bytes, 0x10);
+	STAT_ASSERT(s_3rd_16_bytes, 0x10);
 
 	struct next_set {
 		short   alt_shots_loaded;                // 0x0
@@ -89,11 +89,11 @@ struct s_weapon_data {
 
 	first_4_bytes;
 
-	STAT_ASSRT(next_set, 0x4);
+	STAT_ASSERT(next_set, 0x4);
 
 	s_trigger_state triggers[2];                    // 0x34, size == 0x50
 
-	//STAT_ASSRT(triggers, sizeof(s_trigger_state) * 2);
+	//STAT_ASSERT(triggers, sizeof(s_trigger_state) * 2);
 	//INTELLISENSE_HACK(triggers);
 
 
@@ -115,7 +115,7 @@ struct s_weapon_data {
 
 INTELLISENSE_HACK(s_weapon_datum_network_data)
 
-//STAT_ASSRT(s_weapon_data, (k_object_size_weapon - k_object_size_item));
+//STAT_ASSERT(s_weapon_data, (k_object_size_weapon - k_object_size_item));
 //static_assert(sizeof(s_weapon_data) == ());
 /* OG struct:
  struct s_weapon_data {

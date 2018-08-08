@@ -15,7 +15,7 @@ namespace Yelo::TagGroups {
 
 	//I'll admit this is less than ideal, however, I do believe this is the more sensible way of managing static asserts in simpler structures.
 	//We're testing for issues in the current struct, hopefully the child structures will be guaranteed correct by a similar assert.
-	STAT_ASSRT(light_color_direction, sizeof(real_rgb_color) + sizeof(real_vector3d));
+	STAT_ASSERT(light_color_direction, sizeof(real_rgb_color) + sizeof(real_vector3d));
 
 	namespace coll {
 		struct bsp3d_node {
@@ -23,27 +23,27 @@ namespace Yelo::TagGroups {
 			long back_child;
 			long front_child;
 		};
-		STAT_ASSRT(bsp3d_node, 0xC);
+		STAT_ASSERT(bsp3d_node, 0xC);
 
 		struct collision_leaf {
 			short flags;
 			short reference_count;
 			long  first_reference;
 		};
-		STAT_ASSRT(collision_leaf, 0x8);
+		STAT_ASSERT(collision_leaf, 0x8);
 
 		struct bsp2d_reference {
 			long plane;
 			long bsp2d_node;
 		};
-		STAT_ASSRT(bsp2d_reference, 0x8);
+		STAT_ASSERT(bsp2d_reference, 0x8);
 
 		struct bsp2d_node {
 			real_plane2d plane;
 			long         left_child;
 			long         right_child;
 		};
-		STAT_ASSRT(bsp2d_node, 0x14);
+		STAT_ASSERT(bsp2d_node, 0x14);
 
 		struct collision_surface {
 			long                      plane;
@@ -52,7 +52,7 @@ namespace Yelo::TagGroups {
 			sbyte                     breakable_surface;
 			short                     material;
 		};
-		STAT_ASSRT(collision_surface, 0xC);
+		STAT_ASSERT(collision_surface, 0xC);
 
 		struct collision_edge {
 			long start_vertex;
@@ -62,13 +62,13 @@ namespace Yelo::TagGroups {
 			long left_surface;
 			long right_surface;
 		};
-		STAT_ASSRT(collision_edge, 0x18);
+		STAT_ASSERT(collision_edge, 0x18);
 
 		struct collision_vertex {
 			real_point3d point;
 			long         first_edge;
 		};
-		STAT_ASSRT(collision_vertex, sizeof(real_point3d) + 0x4);
+		STAT_ASSERT(collision_vertex, sizeof(real_point3d) + 0x4);
 
 		struct collision_bsp {
 			tag_block<bsp3d_node>     bsp3d_nodes;
@@ -83,7 +83,7 @@ namespace Yelo::TagGroups {
 			tag_block<collision_edge>    edges;
 			tag_block<collision_vertex>  vertices;
 		};
-		STAT_ASSRT(collision_bsp, 0x60);
+		STAT_ASSERT(collision_bsp, 0x60);
 	};
 
 	struct s_object_lighting {
@@ -103,19 +103,19 @@ namespace Yelo::TagGroups {
 		real_vector3d   shadow_vector;
 		real_rgb_color  shadow_color;
 	};
-	STAT_ASSRT(s_object_lighting, 0x74); //, "s_object_lighting stat assert fail");
+	STAT_ASSERT(s_object_lighting, 0x74); //, "s_object_lighting stat assert fail");
 
 	struct structure_collision_material {
 		tag_reference shader; // 'shdr'
 		short         runtime_pad16;
 		short         runtime_shader_material_type; // Enums::material_type or NONE if shdr is null
 	};
-	STAT_ASSRT(structure_collision_material, 0x14);
+	STAT_ASSERT(structure_collision_material, 0x14);
 
 	struct structure_node {
 		sbsp_stri unk_node_info;
 	};
-	STAT_ASSRT(structure_node, 0x6);
+	STAT_ASSERT(structure_node, 0x6);
 
 
 	struct structure_leaf {
@@ -133,7 +133,7 @@ namespace Yelo::TagGroups {
 		long index;
 	};
 
-	STAT_ASSRT(structure_surface_reference, 0x8);
+	STAT_ASSERT(structure_surface_reference, 0x8);
 
 	struct sbsp_tag {
 		static inline int                       group_tag = (int) 'sbsp';

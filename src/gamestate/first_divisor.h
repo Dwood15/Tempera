@@ -14,7 +14,7 @@ namespace obj {
 			//Also known as YELO//Open Saucey territory.
 			sbyte _unused[32];
 
-		}; STAT_ASSRT(s_header_data, 0x14C);
+		}; STAT_ASSERT(s_header_data, 0x14C);
 
 		struct s_memory_pool_block {
 			typedef void **reference_t;

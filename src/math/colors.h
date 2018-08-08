@@ -4,9 +4,14 @@
 
 //#pragma clang diagnostic push
 //#pragma clang diagnostic ignored "-Weverything"
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wpadded"
+#endif
 #include <d3dx9math.h>
+#ifdef __GNUC__
 #pragma GCC diagnostic warning "-Wpadded"
+#endif
+
 //#pragma clang diagnostic pop
 
 //TODO: Investigate why this is the way it is.
@@ -18,7 +23,7 @@ struct rgb_color {
 	byte green;
 	byte blue;
 };
-STAT_ASSRT(rgb_color, 0x3);
+STAT_ASSERT(rgb_color, 0x3);
 
 // 0 - 255, represents a color
 struct argb_color {
@@ -47,7 +52,7 @@ struct vect2 : public D3DXVECTOR2 {
 	using D3DXVECTOR2::D3DXVECTOR2;
 };
 
-STAT_ASSRT(vect2, sizeof(D3DXVECTOR2));
+STAT_ASSERT(vect2, sizeof(D3DXVECTOR2));
 
 // #define vect3 D3DXVECTOR3
 

@@ -462,11 +462,11 @@ namespace Yelo {
 			// }
 		}
 
-		void HsTypesInitialize() {
+		static void HsTypesInitialize() {
 			HsTypesInitializeTypeCastingProcedures();
 		}
 
-		void HsTypesDispose() {
+		static void HsTypesDispose() {
 
 		}
 
@@ -659,7 +659,7 @@ namespace Yelo {
 			// // TagGroups::s_object_definition::k_group_tag,
 		};
 
-	::std::array<const char *, Enums::k_number_of_hs_types> hs_type_names = {{
+	constexpr ::std::array<const char *, Enums::k_number_of_hs_types> hs_type_names = {{
 			"unparsed",
 			"special_form",      // NOTE: changed spaces to underscores
 			"function_name",   // NOTE: changed spaces to underscores
@@ -719,7 +719,7 @@ namespace Yelo {
 			"scenery_name",
 		}};
 
-	::std::array<const char *, Enums::k_number_of_hs_script_types> hs_script_type_names = {{
+	constexpr ::std::array<const char *, Enums::k_number_of_hs_script_types> hs_script_type_names = {{
 			"startup",
 			"dormant",
 			"continuous",
@@ -728,7 +728,7 @@ namespace Yelo {
 		}};
 
 		// should be in game/game.cpp
-	::std::array<const char *, k_number_of_game_difficulty_levels> g_game_difficulty_level_names = {{
+	constexpr ::std::array<const char *, k_number_of_game_difficulty_levels> g_game_difficulty_level_names = {{
 			"easy",
 			"normal",
 			"hard",
@@ -736,7 +736,7 @@ namespace Yelo {
 		}};
 		// should be in game/game_allegiance.cpp
 
-	::std::array<const char *, k_number_of_game_teams > g_game_team_names                         = {{
+	constexpr ::std::array<const char *, k_number_of_game_teams > g_game_team_names                         = {{
 			"default",
 			"player_update",
 			"human",
@@ -749,7 +749,7 @@ namespace Yelo {
 			"unused9"
 		}};
 		// should be in ai/ai_scenario_definitions.cpp
-	::std::array<const char *, Enums::k_number_of_actor_default_states> g_ai_default_state_names = {{
+		constexpr ::std::array<const char *, Enums::k_number_of_actor_default_states> g_ai_default_state_names = {{
 			"none",
 			"sleep",
 			"alert",
@@ -764,7 +764,7 @@ namespace Yelo {
 			"flee"
 		}};
 		// should be in ai/actor_types.cpp
-	::std::array<const char *, Enums::k_number_of_actor_types> g_actor_type_names = {{
+		constexpr ::std::array<const char *, Enums::k_number_of_actor_types> g_actor_type_names = {{
 			"elite",
 			"jackal",
 			"grunt",
@@ -784,7 +784,7 @@ namespace Yelo {
 		}};
 
 		// should be in interface/hud_definitions.cpp
-	::std::array<const char *, Enums::k_number_of_hud_anchors> g_hud_anchor_names                = {{
+		constexpr ::std::array<const char *, Enums::k_number_of_hud_anchors> g_hud_anchor_names                = {{
 			"top_left",
 			"top_right",
 			"bottom_left",
@@ -792,14 +792,15 @@ namespace Yelo {
 			"center"
 		}};
 
-		STAT_ASSERT(size_t, sizeof(unsigned long));
-
-	::std::array<const string_list, Enums::_hs_type_enum__count> hs_enum_table = {{
-			string_list{static_cast<unsigned long>(::std::size(g_game_difficulty_level_names)), &g_game_difficulty_level_names[0]},
-			string_list{static_cast<unsigned long>(::std::size(g_game_team_names)), &g_game_team_names[0]},
-			string_list{static_cast<unsigned long>(::std::size(g_ai_default_state_names)), &g_ai_default_state_names[0]},
-			string_list{static_cast<unsigned long>(::std::size(g_actor_type_names)), &g_actor_type_names[0]},
-			string_list{static_cast<unsigned long>(::std::size(g_hud_anchor_names)), &g_hud_anchor_names[0]},
-		}};
+		//This isn't used anywhere so it's really not a big deal
+#ifndef __GNUC__
+		// static ::std::array<const string_list, Enums::_hs_type_enum__count> hs_enum_table = {{
+		// 	string_list{static_cast<unsigned long>(::std::size(g_game_difficulty_level_names)), &g_game_difficulty_level_names[0]},
+		// 	string_list{static_cast<unsigned long>(::std::size(g_game_team_names)), &g_game_team_names[0]},
+		// 	string_list{static_cast<unsigned long>(::std::size(g_ai_default_state_names)), &g_ai_default_state_names[0]},
+		// 	string_list{static_cast<unsigned long>(::std::size(g_actor_type_names)), &g_actor_type_names[0]},
+		// 	string_list{static_cast<unsigned long>(::std::size(g_hud_anchor_names)), &g_hud_anchor_names[0]},
+		// }};
+#endif
 	};
 };

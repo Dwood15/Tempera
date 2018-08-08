@@ -66,6 +66,17 @@ struct memory_pool {
 // Core Halo Structures
 ////////////////////////////////////////
 
+struct _core_0 {
+	data_header<void>      *Unknown;
+	data_header<void>      *ObjectListHeader;
+	data_header<void>      *ListObjectReference;
+	data_header<void>      *HSGlobals;
+	data_header<void>      *HSThread;
+	data_header<void>      *ScriptNode;
+	s_players_globals_data *PlayersGlobals;
+	data_header<void>      *Teams;
+	data_header<player>    *Players;
+};
 
 struct _core_2 {
 	Yelo::data_header<void> *Unknown;

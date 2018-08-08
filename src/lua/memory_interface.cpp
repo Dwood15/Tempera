@@ -1,5 +1,3 @@
-#pragma once
-
 #include <limits>
 #include <engine_interface.h>
 #include "memory_interface.h"

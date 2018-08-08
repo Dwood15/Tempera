@@ -20,7 +20,6 @@ set(A_ACTORS_H
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_looking.h
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_moving.h
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_perception.h
-	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_stimulus.h
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_structures.h
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actors.h
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/tranform_manager.h)

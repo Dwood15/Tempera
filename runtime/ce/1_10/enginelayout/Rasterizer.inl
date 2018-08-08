@@ -1,9 +1,5 @@
 #pragma once
 
-#include "../../../../../../../BlamSauce/math/matrix_math.h"
-#include "../../../../../../../BlamSauce/render/rasterizer/dx9.hpp"
-#include "../../../../../../../BlamSauce/render/render.hpp"
-
 #ifdef ENGINE_DPTR
 #undef ENGINE_DPTR
 #endif

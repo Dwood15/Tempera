@@ -1,8 +1,8 @@
 #pragma once
 
+#include <cstddef>
 #include "../structures.h"
 
-#include <cstddef>
 
 namespace Yelo::Scripting {
 	struct hs_function_definition;
@@ -18,6 +18,7 @@ namespace Yelo::Scripting {
 		};
 	};
 
+#if FALSE
 	class c_hs_library {
 
 		static size_t                                g_functions_yelo_start_index; ///< Starting index of OS-defined functions
@@ -26,7 +27,7 @@ namespace Yelo::Scripting {
 
 		static size_t                                     g_external_globals_yelo_start_index; ///< Starting index of OS-defined globals
 		static size_t                                     g_external_globals_next_register_index;
-		static::std::vector<hs_global_definition *> g_external_globals; //(Yelo::Enums::k_hs_external_globals_count_upgrade);
+		static std::vector<hs_global_definition *> g_external_globals; //(Yelo::Enums::k_hs_external_globals_count_upgrade);
 	public:
 
 		void Initialize() {}
@@ -170,5 +171,7 @@ namespace Yelo::Scripting {
 		}
 	};
 
-	::std::vector<hs_global_definition *> c_hs_library::g_external_globals =::std::vector<hs_global_definition *>(896);
+	static std::vector<hs_global_definition *> c_hs_library::g_external_globals = std::vector<hs_global_definition *>(896);
+	#endif
+
 };

@@ -9,6 +9,7 @@ set(SCENARIO_SRC
 set(SCENARIO_H
 	${S_YELO_H}
 	${CMAKE_CURRENT_SOURCE_DIR}/scenario.h
+	${CMAKE_CURRENT_SOURCE_DIR}/scenario_location.h
 	${CMAKE_CURRENT_SOURCE_DIR}/definitions.h
 	${CMAKE_CURRENT_SOURCE_DIR}/structures.h
 	${CMAKE_CURRENT_SOURCE_DIR}/structure_bsp.h

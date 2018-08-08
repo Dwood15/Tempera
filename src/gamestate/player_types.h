@@ -61,25 +61,25 @@ struct player {
 	::std::byte    Unknown16;
 };
 
-STAT_ASSRT(sbyte, 1);
+STAT_ASSERT(sbyte, 1);
 using namespace Yelo;
 struct s_player_hud_messages {
 	byte unk[0x460];
 };
-STAT_ASSRT(s_player_hud_messages, 0x460);
+STAT_ASSERT(s_player_hud_messages, 0x460);
 
 
 
 struct s_hud_messaging_state {
 	s_player_hud_messages hmi[MAX_PLAYER_COUNT_LOCAL];
 	byte                  unknown[0x28];
-};   STAT_ASSRT(s_hud_messaging_state, 0x28 + (0x460 * MAX_PLAYER_COUNT_LOCAL));
+};   STAT_ASSERT(s_hud_messaging_state, 0x28 + (0x460 * MAX_PLAYER_COUNT_LOCAL));
 
 //this _fucking_ struct.
 //	struct s_hud_message_state_player {
 //		char unk[0x82];
 //		s_hud_messaging_state scripted_hud_messages[4];
-//	}; STAT_ASSRT(s_hud_message_state_player, 0x)
+//	}; STAT_ASSERT(s_hud_message_state_player, 0x)
 
 struct s_custom_blip {
 	sbyte x;
@@ -90,7 +90,7 @@ struct s_blip : s_custom_blip {
 	//end custom blip location
 	blip_type type; // set to _blip_type_none when not used
 	sbyte     size;    // a la object's size (tiny, large, etc)
-}; STAT_ASSRT(s_blip, 0x4);
+}; STAT_ASSERT(s_blip, 0x4);
 
 struct s_team_data {
 	s_blip object_blips[MAX_CUSTOM_BLIPS];            // objects belonging to just this team
@@ -106,12 +106,12 @@ struct s_team_data {
 	sbyte         active_object_blips_count;
 	unsigned char  : 8;
 	unsigned short : 16;
-}; STAT_ASSRT(s_team_data, 0x84);
+}; STAT_ASSERT(s_team_data, 0x84);
 
 struct s_local_player {
 	s_team_data nearby_team_objects[k_number_of_game_teams]; //0x0
 	datum_index nearby_object_indexes[MAX_CUSTOM_BLIPS];
-}; STAT_ASSRT(s_local_player, 0x568);
+}; STAT_ASSERT(s_local_player, 0x568);
 
 struct s_motion_sensor {
 	s_local_player local_players[MAX_PLAYER_COUNT_LOCAL];
@@ -123,7 +123,7 @@ struct s_motion_sensor {
 		sbyte   padB;
 		//Open Sauce has this as 2 bytes of pad, but that. There's 2 bytes on the front of the pointer. :)
 	}              update_data;
-}; STAT_ASSRT(s_motion_sensor, 0x8 + (0x568 * MAX_PLAYER_COUNT_LOCAL));
+}; STAT_ASSERT(s_motion_sensor, 0x8 + (0x568 * MAX_PLAYER_COUNT_LOCAL));
 
 
 struct s_network_game_player {
@@ -136,7 +136,7 @@ struct s_network_game_player {
 	// we can use them safely for player operations in multiplayer code
 	sbyte   team_index;         // 0x1E
 	sbyte   player_list_index;   // 0x1F
-}; STAT_ASSRT(s_network_game_player, 0x20);
+}; STAT_ASSERT(s_network_game_player, 0x20);
 
 struct s_game_engine_state_message {
 	long        message_index;
@@ -172,21 +172,11 @@ struct s_players_globals_data {
 	unsigned long combined_pvs_local[MAX_PLAYERS_IN_GAME];                    // 0x58 combined pvs of all local players
 };
 
-STAT_ASSRT(s_players_globals_data, 0x10 + (0x4 * 2 * MAX_PLAYER_COUNT_LOCAL) + (0x4 * 2 * MAX_PLAYERS_IN_GAME));
+STAT_ASSERT(s_players_globals_data, 0x10 + (0x4 * 2 * MAX_PLAYER_COUNT_LOCAL) + (0x4 * 2 * MAX_PLAYERS_IN_GAME));
 
 // static s_players_globals_data *players_global_data = *(s_players_globals_data **) 0x815918;
 
-struct _core_0 {
-	data_header<void>      *Unknown;
-	data_header<void>      *ObjectListHeader;
-	data_header<void>      *ListObjectReference;
-	data_header<void>      *HSGlobals;
-	data_header<void>      *HSThread;
-	data_header<void>      *ScriptNode;
-	s_players_globals_data *PlayersGlobals;
-	data_header<void>      *Teams;
-	data_header<player>    *Players;
-};
+
 
 struct s_player_control {
 	datum_index         unit_index;                                                                      // 0x0

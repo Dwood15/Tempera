@@ -1,4 +1,5 @@
 
+#include <mem.h>
 #include "macros_generic.h"
 
 #pragma once
@@ -188,7 +189,7 @@ namespace Yelo {
 		///
 		/// <returns>	not FALSE if it succeeds, FALSE if it fails. </returns>
 		template <typename T, size_t size>
-		inline BOOL WriteMemory(void *address, const T (&src)[size]) {
+		inline bool WriteMemory(void *address, const T (&src)[size]) {
 			return WriteMemory(address, src, sizeof(T) * size);
 		}
 

@@ -441,9 +441,11 @@ namespace Yelo {
 	inline
 	bool ArrayIsZero(T (&array)[kLength], size_t index = 0) {
 		T           zero = T();
-		for (size_t x    = index; x < kLength; x++)
-			if (memcmp(&array[x], &zero, sizeof(zero)) != 0)
+		for (size_t x    = index; x < kLength; x++) {
+			if (memcmp(&array[x], &zero, sizeof(zero)) != 0) {
 				return false;
+			}
+		}
 
 		return true;
 	}
@@ -503,8 +505,7 @@ namespace Yelo {
 	template <typename T, size_t kDstLength>
 	inline
 	bool ArrayCopyPtr(T (&dst)[kDstLength], size_t dst_index, const T *src, size_t src_index, size_t count) {
-		return memcpy_s(&dst[dst_index], sizeof(T) * (kDstLength - dst_index),
-							 &src[src_index], sizeof(T) * count) == k_errnone;
+		return memcpy_s(&dst[dst_index], sizeof(T) * (kDstLength - dst_index), &src[src_index], sizeof(T) * count) == k_errnone;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////

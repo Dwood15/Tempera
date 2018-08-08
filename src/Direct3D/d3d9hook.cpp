@@ -12,7 +12,6 @@
 #define WIN32_LEAN_AND_MEAN
 
 
-#include <fstream>
 #include <addlog.h>
 #include "d3d9hook.h"
 #include "textures.h"
@@ -116,7 +115,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 		if (!core) {
 			static bool printOnce = true;
 			if(printOnce) {
-				Print("Tried to get core for PrintObjects, couldn't.");
+				::PrintLn<true>("Tried to get core for PrintObjects, couldn't.");
 				printOnce = false;
 			}
 			return;
@@ -260,7 +259,9 @@ long __stdcall hkSetStreamSource(IDirect3DDevice9 *pDevice, UINT StreamNumber, I
 //    in the vTable
 
 // vTable is just a huge table of pointers to every d3d9 function
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wendif-labels"
+#endif
 #include <detours.h>
 
 DWORD __stdcall CD3D::hkD3DHook(void *lpVoid) {

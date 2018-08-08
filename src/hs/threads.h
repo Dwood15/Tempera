@@ -85,12 +85,15 @@ namespace Yelo::Scripting {
 		};
 
 		STAT_ASSERT(s_stack_frame, 0x10)
+
+#ifdef __GNUC__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Weverything"
 
 #include <PopPack.h>
 
 #pragma clang diagnostic pop
+#endif
 
 		Yelo::Enums::hs_thread_type type;
 		unsigned short              flags;
@@ -165,10 +168,10 @@ namespace Yelo::Scripting {
 		/// </param>
 		///
 		/// <returns>	null if it fails, else a pointer to the requested memory. </returns>
-		void *StackAllocate(size_t size, unsigned long alignment_bit = Flags::k_alignment_32bit, short *stack_offset = nullptr);
-
-		template <typename T>
-		T *StackAllocate(size_t count = 1, unsigned long alignment_bit = Flags::k_alignment_32bit, short *stack_offset = nullptr);
+		// void *StackAllocate(size_t size, unsigned long alignment_bit = Flags::k_alignment_32bit, short *stack_offset = nullptr);
+		//
+		// template <typename T>
+		// T *StackAllocate(size_t count = 1, unsigned long alignment_bit = Flags::k_alignment_32bit, short *stack_offset = nullptr);
 
 		struct s_main_state {
 			datum_index thread_index;

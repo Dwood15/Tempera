@@ -33,6 +33,10 @@ CMyCamera::CMyCamera(_camera *cam) {
 CMyCamera::~CMyCamera() {
 }
 
+_camera *CMyCamera::GetCameraStaticAddress() {
+	return nullptr;//CAMERA_ADDRESS;
+}
+
 void CMyCamera::CreateViewMatrix(vect3 Eye, vect3 LookAt, vect3 Up) {
 	vEye    = Eye;
 	vLookAt = LookAt;

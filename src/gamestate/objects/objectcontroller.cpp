@@ -1,3 +1,4 @@
+#include "objectcontroller.h"
 #include "../../core.h"
 #include "../../CurrentEngine.h"
 
@@ -22,7 +23,7 @@ void ObjectController::SetHoldDistance(float dist) {
 	}
 }
 
-ObjectController::ObjectController(Core *newcore) : ocCore(newcore) {
+ObjectController::ObjectController() {
 	nearest_h    = NULL;
 	selected_h   = NULL;
 	holding      = false;
@@ -172,7 +173,7 @@ void ObjectController::SetSelectedObject() {
 }
 
 void ObjectController::LogInfo() {
-	if (selected_h == NULL || (int) selected_h->address == NULL) {
+	if (!selected_h || !selected_h->address) {
 		return;
 	}
 	auto core = CurrentEngine.GetCore();

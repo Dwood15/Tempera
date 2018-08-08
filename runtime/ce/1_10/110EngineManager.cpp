@@ -5,6 +5,11 @@
 #include "function_rewrite.h"
 #include "../../../src/gamestate/player_types.h"
 
+#include "../../../src/lua/script_manager.h"
+#include "../../../src/hs/structures.h"
+#include "../../../src/CurrentEngine.h"
+#include "hs_function_table_references.h"
+
 using namespace feature_management;
 using namespace feature_management::engines;
 
@@ -117,11 +122,6 @@ constexpr::std::pair<uintptr_t, short> short_patches[]{
 	{0x50F5EB, (short) 0x9090}, //render_player_frame_jg_patch
 };
 
-#include "../../../src/lua/script_manager.h"
-#include "../../../src/hs/structures.h"
-#include "../../../src/CurrentEngine.h"
-#include "hs_function_table_references.h"
-
 void __declspec(naked) CE110::OnPlayerActionUpdate() {
 #ifndef __GNUC__
 	s_player_action *current_action;
@@ -208,7 +208,7 @@ void CE110::WriteHooks() {
 	//uintptr_t hud_scripted_globals_sizeofs[]          = { 0x4AC7A7, 0x4AC7AF };
 	uintptr_t hud_messaging_globals_sizeofs[] = {0x4AC7DD, 0x4AC7EA};
 	uintptr_t hud_messaging_state_size        = 0x4AC936;
-	//static_assert(sizeof(s_hud_messaging_state)  == 0x122, "stat_assrt_fail: s hud msging state");
+	//static_assert(sizeof(s_hud_messaging_state)  == 0x122, "STAT_ASSERT_fail: s hud msging state");
 	//memset , or rather, rep stosd assumes full integer (0x4) size in this case.
 	calls::patchValue<uintptr_t>(hud_messaging_state_size, sizeof(::s_hud_messaging_state) / 4);
 	uintptr_t motion_sensor_sizeofs[] = {0x4AC8B3, 0x4AC8BC + 0x4};
