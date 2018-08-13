@@ -55,12 +55,15 @@ struct vect2 : public D3DXVECTOR2 {
 STAT_ASSERT(vect2, sizeof(D3DXVECTOR2));
 
 // #define vect3 D3DXVECTOR3
-
+#include "real_math.h"
 struct vect3 : public D3DXVECTOR3 {
 	using D3DXVECTOR3::D3DXVECTOR3;
 	// vect3() : D3DXVECTOR3() {}
 	//
 	// vect3(float x, float y, float z) : D3DXVECTOR3(x, y, z) {}
+	inline operator float *() { return reinterpret_cast<float *>(this); }
+	inline operator real_point3d *() { return reinterpret_cast<real_point3d *>(this); }
+
 };
 
 STAT_ASSERT(vect3, sizeof(D3DXVECTOR3));

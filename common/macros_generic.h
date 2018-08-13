@@ -122,33 +122,10 @@ STAT_ASSERT(ushort, 0x2);
 
 #pragma endregion
 
-#pragma region maximums
-constexpr uint MAX_PLAYER_COUNT_LOCAL = 1;
 
-#ifndef MAX_GAMEPAD_COUNT
-#define MAX_GAMEPAD_COUNT            6
-#endif
-
-#ifndef MAX_PLAYERS_IN_GAME
-#define MAX_PLAYERS_IN_GAME         16
-#endif
-#ifndef MAX_ATTACHMENTS_PER_OBJECT
-#define MAX_ATTACHMENTS_PER_OBJECT  8
-#endif
-#define MAX_MAGAZINES_PER_WEAPON    2
-#define MAX_CUSTOM_BLIPS            16
-#pragma region models
-#define   k_maximum_regions_per_model            8
-
-#define   k_maximum_nodes_per_model            64
-#define   k_maximum_nodes_per_model_halo_stock   44 // 'Cause Xbox1 has limits
-#define   k_maximum_nodes_per_model_geometry_part 22
-#define   k_number_of_rows_per_node_matrix      4
-
-#pragma endregion
-#pragma endregion
-
+#ifndef NONE
 #define NONE                  -1
+#endif
 
 // Name of the section where we'll place executable data
 //#define API_CODEDATA_SECTION_NAME   ".yelo"
@@ -163,10 +140,7 @@ constexpr uint MAX_PLAYER_COUNT_LOCAL = 1;
 #endif
 
 //TODO: Move to enums
-//0x006AC4DC; Halo PC 1.07
-#define FOV_XBOUND 0.024f
-#define FOV_YBOUND 0.012f
-#define OBJECT_CLIP 17
+
 
 #define __trueinline extern __forceinline
 

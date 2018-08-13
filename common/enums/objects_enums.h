@@ -43,4 +43,8 @@ namespace Yelo::Enums {
 	enum group_tags : unsigned int {
 		sbsp_group_tag = 'sbsp'
 	};
+
+
 };
+
+constexpr int MAX_ATTACHMENTS_PER_OBJECT  = 8;

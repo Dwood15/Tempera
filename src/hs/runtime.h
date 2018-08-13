@@ -6,7 +6,7 @@
 
 #include "../game/time/time.hpp"
 #include "object_lists.h"
-#include "library/yelo_definitions.h"
+#include "yelo_definitions.h"
 #include "types/types.h"
 
 #pragma once

@@ -17,7 +17,7 @@ static short *spawn_count         = (short *) 0x624A9C;
 ///num windows to render. Fills with black for invalid.    f
 static short *render_window_count = (short *) 0x6B4098;
 bool         *at_main_menu        = (bool *) 0x6B4051;
-static Core  *core;
+static std::shared_ptr<Core>  core;
 
 void ForgeState::UpdateGlobals() {
 	if (last_respawn_count != *to_respawn_count) {

@@ -103,6 +103,15 @@ Core::~Core() {
 ////////////////////////////////////////
 // Player Methods
 
+s_player_control *Core::GetPlayerControl(unsigned short idx) {
+	if (idx < MAX_PLAYER_COUNT_LOCAL) {
+		return &player_control_globals_data->local_players[idx];
+	}
+
+	return nullptr;
+}
+
+
 // Returns a player structure address, by player index
 player *Core::GetPlayer(short index) {
 	return reinterpret_cast<player *>((unsigned long) core_0->Players->first + (index * core_0->Players->size));

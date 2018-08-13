@@ -6,7 +6,7 @@
 #include "../memory/datum_index.h"
 #include "../cseries/yelo_base.h"
 #include "../memory/data_base.h"
-#include "library/library.h"
+#include "library.h"
 #include "hs_value_union.h"
 #include "../memory/array.h"
 

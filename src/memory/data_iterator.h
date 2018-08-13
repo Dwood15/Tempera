@@ -4,6 +4,8 @@
 #include "data.h"
 
 namespace Yelo::Memory {
+	struct s_data_array;
+
 	struct s_data_iterator {
 		s_data_array *data;
 		short        next_index;
@@ -34,7 +36,7 @@ namespace Yelo::Memory {
 		}
 	};
 
-	static_assert(sizeof(s_data_iterator) == 0x10);
+	STAT_ASSERT(s_data_iterator, 0x10);
 };
 
 namespace Yelo::TagGroups {
@@ -46,16 +48,5 @@ namespace Yelo::TagGroups {
 };
 
 namespace Yelo::blam {
-	static void data_iterator_new(Memory::s_data_iterator &iterator, Yelo::Memory::s_data_array *data) {
-		data_verify(data);
-
-		if (!data->is_valid) {
-			throw "invalid data array passed"; // __FUNCTION__);
-		}
-		iterator.data          = data;
-		iterator.next_index    = 0;
-		iterator.finished_flag = false;
-		iterator.index         = datum_index::null();
-		iterator.signature     = reinterpret_cast<uintptr_t>(data) ^ Enums::k_data_iterator_signature;
-	}
+	static void data_iterator_new(Memory::s_data_iterator &iterator, Yelo::Memory::s_data_array *data);
 };

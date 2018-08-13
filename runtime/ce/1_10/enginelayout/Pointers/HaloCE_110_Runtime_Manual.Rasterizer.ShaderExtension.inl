@@ -4,8 +4,5 @@
 
 	See license\OpenSauce\Halo1_CE for specific license information
 */
-#pragma once // should actually only ever be included by hs_compile.cpp...
 
-namespace Yelo
-{
-};
+#define K_RASTERIZER_ENVIRONMENT_LIGHTMAP_END_FUNC 0x44B900

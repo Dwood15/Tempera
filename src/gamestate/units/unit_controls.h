@@ -1,7 +1,7 @@
 #pragma once
 #include <cstddef>
 #include "macros_generic.h"
-#include "../math/real_math.h"
+#include "../../math/real_math.h"
 
 struct s_persistent_control {
 	long          ticks_remaining;                              // 0x210

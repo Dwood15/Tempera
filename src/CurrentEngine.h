@@ -102,7 +102,7 @@ namespace feature_management::engines {
 
 		const char *GetCurrentMajorVerString();
 
-		Core *GetCore();
+		std::shared_ptr<Core> &GetCore();
 
 		/**
  		* Called before VirtualProtect is run.

@@ -22,6 +22,7 @@ set(A_ACTORS_H
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_perception.h
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actor_structures.h
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/actors.h
+	${CMAKE_CURRENT_SOURCE_DIR}/actors/unit_transform_definitions.h
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/tranform_manager.h)
 
 set(AI_CXX
@@ -40,3 +41,5 @@ set(AI_H
 	${CMAKE_CURRENT_SOURCE_DIR}/prop_structures.h
 	${CMAKE_CURRENT_SOURCE_DIR}/props.h
 	PARENT_SCOPE)
+
+add_custom_target(AI SOURCES ${AI_H})

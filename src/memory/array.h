@@ -1,5 +1,6 @@
 #pragma once
 
+#include "data_array.h"
 #include "datum_index.h"
 #include "data.h"
 
@@ -109,8 +110,6 @@ namespace Yelo {
 				return Iterator::GetEndHack(*this);
 			}
 
-			void Verify() const { blam::data_verify(&Header); }
-
 			void Dispose() { blam::data_dispose(&Header); }
 
 			void MakeValid() { blam::data_make_valid(&Header); }
@@ -127,6 +126,5 @@ namespace Yelo {
 
 			void Delete(datum_index index) { return blam::datum_delete(&Header, index); }
 		};
-
 	};
 };

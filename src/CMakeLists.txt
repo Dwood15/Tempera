@@ -46,7 +46,6 @@ set(SRC_CXX
 	PARENT_SCOPE)
 
 set(SRC_H
-	${AI_H}
 	${GAME_H}
 	${SCRIPTING_H}
 	${SCENARIO_H}

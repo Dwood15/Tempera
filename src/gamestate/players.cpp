@@ -1,0 +1,80 @@
+#pragma once
+
+#include <enums/weapon_enums.h>
+#include "players.h"
+
+const Yelo::TagGroups::scenario_player *get_scenario_location(Yelo::TagGroups::scenario *scen, ushort idx) {
+	if (idx < scen->player_starting_locations.Count) {
+		return &scen->player_starting_locations.Definitions[idx];
+	}
+	return nullptr;
+}
+
+void players_set_local_player_unit(unsigned short requested_plyr_idx, datum_index player_unit) {
+	if (!eCore) {
+		eCore = CurrentEngine.GetCore();
+	}
+
+	auto control      = eCore->GetPlayerControl(requested_plyr_idx);
+	auto current_unit = control->unit_index;
+
+	static auto set_actively_controlled = CurrentEngine.getFunctionBegin("unit_set_actively_controlled");
+
+	if (!set_actively_controlled) {
+		return;
+	}
+
+	if (!current_unit.IsNull()) {
+		reinterpret_cast<s_unit_datum *>(eCore->GetGenericObject(current_unit.index))->unit.controlling_player_index = datum_index::null();
+#ifndef __GNUC__
+		__asm xor cl, cl
+		calls::DoCall<Convention::m_cdecl, void, datum_index>(*set_actively_controlled, current_unit);
+#else
+
+#endif
+		throw "implementation incomplete and unverified";
+	}
+}
+
+void unit_set_actively_controlled(datum_index u, bool is_controlled) {
+	auto unit = reinterpret_cast<s_unit_datum *>(eCore->GetGenericObject(u.index));
+
+	bool isAi;
+	if (!unit->unit.actor_index.IsNull() || !unit->unit.swarm_actor_index.IsNull() || !unit->unit.controlling_player_index.IsNull()) {
+		isAi = true;
+	}
+
+	long_flags newFlags;
+	if (unit->unit_object.damage.flags & 4 || !isAi) {
+		//Todo: Properly label these enums
+		unit->unit.flags &= 0xFFFFFFFE;
+		newFlags = unit->unit.flags & 0xFFFFFFBF;
+	} else {
+		unit->unit.flags |= 1;
+		newFlags = unit->unit.flags | 0x40;
+	}
+	unit->unit.flags = newFlags;
+
+	static auto item_in_unit_inventory = CurrentEngine.getFunctionBegin("item_in_unit_inventory");
+
+	if (item_in_unit_inventory) {
+		for (uint i = 0; i < MAX_WEAPONS_PER_UNIT; i++) {
+			auto current = unit->unit.weapon_object_indices[i];
+
+			if (!current.IsNull()) {
+				//TODO: double check the value of param # 2
+				::calls::DoCall<Convention::m_fastcall, void, ushort, datum_index>(*item_in_unit_inventory, static_cast<ushort>(current.index), current);
+			}
+		}
+	}
+
+	static auto unit_update_driver_and_gunner = CurrentEngine.getFunctionBegin("unit_update_driver_and_gunner");
+
+#ifndef __GNUC__
+	__asm mov eax, u.index
+	::calls::DoCall(*unit_update_driver_and_gunner);
+#else
+
+#endif
+	throw "implementation is unverified.";
+}

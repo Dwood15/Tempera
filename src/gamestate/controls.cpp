@@ -1,7 +1,7 @@
 #include "controls.h"
 #include "../CurrentEngine.h"
 
-extern Core * eCore;
+extern std::shared_ptr<Core> eCore;
 
 void Control::HandleActionOverride(ushort idx, s_unit_control_data * from) {
 	if (CurrentEngine.ShouldOverrideAction(idx)) {

@@ -1,5 +1,5 @@
 #Project: Tempera
-#File: CMakeLists.txt
+#File: FindTinyDNN.cmake
 #Copyright � 2018 dwood
 # - GNU GPLv3
 
@@ -30,8 +30,9 @@ include_directories(AFTER ${GAME_LIB_DIRS} ${COMMON})
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 find_path(MDB_PATH FindMariaDB.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 find_path(LUA_PATH FindLua.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH} ${MDB_PATH})
+find_path(TDN_PATH FindTinyDNN.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
+#C:\Users\Dwood\Documents\GitHub\tiny-dnn\tiny_dnn
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH} ${MDB_PATH} ${TDN_PATH})
 
 find_package(HaloCE REQUIRED)
 find_package(Lua REQUIRED)
@@ -42,6 +43,7 @@ endif ()
 
 find_package(DirectX REQUIRED)
 find_package(MariaDB REQUIRED)
+find_package(TinyDNN)
 
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
@@ -148,7 +150,18 @@ set(COMMON_H
 	common/enums/geometry_enums.h
 	common/enums/yelo_enums.h
 	common/enums/memory_enums.h
-	)
+	src/gamestate/teams/teams.h
+	common/enums/unit_enums.h
+	common/enums/model_enums.h
+	common/enums/player_enums.h
+	common/enums/weapon_enums.h
+	src/hs/yelo_definitions.cpp
+	#	src/engine/engine_functions.cpp
+	src/engine/engine_functions.h
+	src/memory/data_array.h
+	common/enums/network_enums.h)
+
+add_custom_target(HeadersTarget SOURCES ${SRC_H})
 
 add_library(dinput8 SHARED
 			${COMMON_H}
@@ -157,9 +170,11 @@ add_library(dinput8 SHARED
 			${RUNTIME_H}
 			${RUNTIME_CXX}
 			${SRC_CXX}
+			src/gamestate/objects/yelo_objects.h
 			main.cpp
+#			src/gamestate/objects/yelo_objects.cpp
 			common/addlog.cpp
-			)
+			src/memory/data.cpp)
 
 #The compiler is defaulting to the Windows 10 SDK, which requires external DLL's (xinput1_4.dll is not found error)
 #I manually force it to use my directx sdk xinput.

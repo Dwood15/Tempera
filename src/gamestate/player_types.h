@@ -11,6 +11,7 @@
 
 #include <macros_generic.h>
 #include "enums/generic_enums.h"
+#include "enums/player_enums.h"
 #include "../math/real_math.h"
 #include "../memory/datum_index.h"
 
@@ -175,8 +176,6 @@ struct s_players_globals_data {
 STAT_ASSERT(s_players_globals_data, 0x10 + (0x4 * 2 * MAX_PLAYER_COUNT_LOCAL) + (0x4 * 2 * MAX_PLAYERS_IN_GAME));
 
 // static s_players_globals_data *players_global_data = *(s_players_globals_data **) 0x815918;
-
-
 
 struct s_player_control {
 	datum_index         unit_index;                                                                      // 0x0

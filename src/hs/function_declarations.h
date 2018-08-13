@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../script_extensions/hs_base.h"
+#include "script_extensions/hs_base.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -726,7 +726,7 @@ namespace Yelo::Scripting {
 
 
 #include "globals_declarations.h"
-#include "../script_extensions/hs_base.h"
+#include "script_extensions/hs_base.h"
 // #include "../../network/server/network_server_manager_structures.hpp"
 // #include "../../network/server/network_server_manager.hpp"
 // #include "../../network/networking.h"

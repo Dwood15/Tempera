@@ -2,6 +2,7 @@
 
 #include "effects_enums.h"
 #include "geometry_enums.h"
+#include "player_enums.h"
 
 namespace Yelo::Flags {
 	enum hs_yelo_definition_flags : unsigned short {

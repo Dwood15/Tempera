@@ -1,6 +1,6 @@
 #pragma once
 
-#include "unit_controls.h"
+#include "units/unit_controls.h"
 
 namespace Input {
 	struct ControlSettings {

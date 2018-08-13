@@ -156,4 +156,134 @@ namespace Yelo::Enums {
 	enum action_class : short {
 		_action_class_passive = 1,
 	};
+
+	enum actor_variant_transform_keyframe_rider_handling : short {
+		_actor_variant_transform_keyframe_rider_handling_none,
+		_actor_variant_transform_keyframe_rider_handling_kill,
+		_actor_variant_transform_keyframe_rider_handling_eject,
+
+		_actor_variant_transform_keyframe_rider_handling
+	};
+
+	enum actor_variant_transform_keyframe_effect_target : short {
+		_actor_variant_transform_keyframe_effect_target_self,
+		_actor_variant_transform_keyframe_effect_target_riders,
+
+		_actor_variant_transform_keyframe_effect_target
+	};
+
+	enum actor_variant_transform_team_handling : short {
+		_actor_variant_transform_team_handling_inherit_from_old_actor,
+		_actor_variant_transform_team_handling_inherit_from_attacker,
+		_actor_variant_transform_team_handling_override,
+
+		_actor_variant_transform_team
+	};
+
+	enum actor_variant_transform_in_actor_state_handling : short {
+		_actor_variant_transform_in_actor_state_handling_inherit,
+		_actor_variant_transform_in_actor_state_handling_override,
+		_actor_variant_transform_in_actor_state_handling_actor_default,
+
+		_actor_variant_transform_in_actor_state_handling
+	};
+
+	enum actor_variant_transform_in_actor_action_handling : short {
+		_actor_variant_transform_in_actor_action_handling_default,
+		_actor_variant_transform_in_actor_action_handling_inherit,
+		_actor_variant_transform_in_actor_action_handling_override,
+
+		_actor_variant_transform_in_actor_action_handling
+	};
+
+	enum actor_variant_transform_in_encounter_squad_handling : short {
+		_actor_variant_transform_in_encounter_squad_handling_inherit_from_old_actor,
+		_actor_variant_transform_in_encounter_squad_handling_inherit_from_attacker,
+		_actor_variant_transform_in_encounter_squad_handling_free_actor,
+
+		_actor_variant_transform_in_encounter_squad_handling
+	};
+
+	enum actor_variant_transform_in_vitality_handling : short {
+		_actor_variant_transform_in_vitality_handling_neither,
+		_actor_variant_transform_in_vitality_handling_both,
+		_actor_variant_transform_in_vitality_handling_shield_only,
+		_actor_variant_transform_in_vitality_handling_health_only,
+
+		_actor_variant_transform_in_vitality_handling
+	};
+
+	enum actor_variant_transform_out_threshold_type : short {
+		_actor_variant_transform_out_threshold_type_both,
+		_actor_variant_transform_out_threshold_type_shield_amount_only,
+		_actor_variant_transform_out_threshold_type_health_amount_only,
+
+		_actor_variant_transform_out_threshold_type
+	};
+
+	enum actor_variant_transform_out_damage_type : short {
+		_actor_variant_transform_out_damage_type_both,
+		_actor_variant_transform_out_damage_type_weapon_only,
+		_actor_variant_transform_out_damage_type_melee_only,
+
+		_actor_variant_transform_out_damage_type
+	};
+
+	constexpr int k_maximum_number_of_mounted_weapon_units = 8;
+
+	enum ai_sound_volume {
+		k_number_of_ai_sound_volumes = 5,
+	};
+
+	enum ai_unit_effect {
+		k_number_of_ai_unit_effects = 4,
+	};
+
+	enum ai_spatial_effect {
+		_ai_spatial_effect_environmental_noise,
+		_ai_spatial_effect_weapon_impact,
+		_ai_spatial_effect_weapon_detonation,
+
+		k_number_of_ai_spatial_effects
+	};
+};
+
+namespace Yelo::Flags {
+	enum actor_variant_transform_collection_transform_flags {
+		_actor_variant_transform_collection_transform_flags_scripted_only,
+
+		_actor_variant_transform_collection_transform_flags
+	};
+
+	enum actor_variant_transform_in_target_flags {
+		_actor_variant_transform_in_target_flags_try_to_use_existing_unit,
+		_actor_variant_transform_in_target_flags_drop_weapon,
+		_actor_variant_transform_in_target_flags_inherit_seated_units,
+		_actor_variant_transform_in_target_flags_delete_attached_actors,
+
+		_actor_variant_transform_in_target_flags
+	};
+
+	enum actor_variant_transform_out_attachment_flags {
+		_actor_variant_transform_out_attachment_flags_destroy_attachments_on_death,
+
+		_actor_variant_transform_out_attachment_flags
+	};
+
+	enum actor_variant_transform_out_flags {
+		_actor_variant_transform_out_flags_invicible_during_transform_out_bit,
+
+		_actor_variant_transform_out_flags
+	};
+
+	enum actor_variant_transform_out_criteria_flags {
+		_actor_variant_transform_out_criteria_flags_transform_on_damage_only_bit,
+		_actor_variant_transform_out_criteria_flags_ignore_friendly_fire_bit,
+		_actor_variant_transform_out_criteria_flags_transform_on_actor_action_bit,
+		_actor_variant_transform_out_criteria_flags_transform_on_actor_state_bit,
+		_actor_variant_transform_out_criteria_flags_transform_on_shield_range_bit,
+		_actor_variant_transform_out_criteria_flags_transform_on_health_range_bit,
+
+		_actor_variant_transform_out_criteria_flags
+	};
 };

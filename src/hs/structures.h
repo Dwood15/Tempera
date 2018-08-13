@@ -1,10 +1,10 @@
 #pragma once
 
-#include "macros_generic.h"
 #include <enums/hs_enums.h>
-#include "hs.h"
-#include "hs_value_union.h"
+#include "macros_generic.h"
 #include "../memory/array.h"
+#include "hs_value_union.h"
+#include "hs.h"
 
 namespace Yelo::Scripting {
 	typedef void (__cdecl *proc_hs_parse)(long function_index, datum_index expression_index);
@@ -74,6 +74,18 @@ namespace Yelo::Scripting {
 	};
 	STAT_ASSERT(hs_global_definition, 0x10);
 
+	struct s_hs_library_fixup {
+		size_t index;
+		union {
+			void *address;
+
+			hs_function_definition *function;
+			hs_global_definition   *global;
+		};
+	};
+
+	STAT_ASSERT(s_hs_library_fixup, 0x8);
+
 	struct hs_syntax_node : Memory::s_datum_base {
 		union {
 			Enums::hs_type constant_type;
@@ -105,7 +117,6 @@ namespace Yelo::Scripting {
 	};
 
 	STAT_ASSERT(hs_syntax_node, 0x14);
-
 
 	struct s_hs_globals_datum : Yelo::Memory::s_datum_base {
 		unsigned short yelo_flags;

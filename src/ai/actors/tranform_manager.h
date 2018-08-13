@@ -1,23 +1,9 @@
 #pragma once
-/*
-	Yelo: Open Sauce SDK
-		Halo 1 (CE) Edition
 
-	See license\OpenSauce\Halo1_CE for specific license information
-*/
-
-#include <precompile.h>
-
-#include "../../game/allegiance.h"
+#include <enums/generic_enums.h>
 #include "../../memory/datum_index.h"
-#include "../../game/objects/units/unit_transform_definition.hpp"
-#include "../../models/models.hpp"
-#include "../../hs/library/library.h"
-
-namespace Yelo::Enums {
-	enum game_team : short;
-	enum unit_animation_keyframe : short;
-};
+#include "unit_transform_definitions.h"
+#include "../../hs/library.h"
 
 namespace Yelo::AI::Transform {
 	/// <summary>	Manager for actor variant transforms. </summary>
@@ -34,7 +20,7 @@ namespace Yelo::AI::Transform {
 
 		struct s_actor_variant_transform_state {
 			datum_index::index_t m_unit_index;
-			Enums::game_team     m_instigator_team;
+			::game_team     m_instigator_team;
 			datum_index          m_instigator_encounter;
 			short                m_instigator_squad;
 			sbyte                m_transform_entry_index;
@@ -137,7 +123,7 @@ namespace Yelo::AI::Transform {
 		/// <param name="unit_datum">	[in] If non-null, the old unit's datum. </param>
 		/// <param name="health">	 	The health value. </param>
 		/// <param name="shield">	 	The shield value. </param>
-		void HandleVitality(const Enums::actor_variant_transform_in_vitality_handling operation, Objects::s_unit_datum *unit_datum, const real health, const real shield) const;
+		void HandleVitality(const Enums::actor_variant_transform_in_vitality_handling operation, s_unit_datum *unit_datum, const real health, const real shield) const;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>
@@ -150,9 +136,8 @@ namespace Yelo::AI::Transform {
 		/// <param name="override_team">	The override team. </param>
 		///
 		/// <returns>	The chosen team. </returns>
-		Enums::game_team
-		HandleTeam(const Yelo::Enums::actor_variant_transform_team_handling option, const Enums::game_team attacked_team, const Enums::game_team attacker_team,
-					  const Enums::game_team override_team) const;
+		game_team HandleTeam(const Yelo::Enums::actor_variant_transform_team_handling option, const game_team attacked_team, const game_team attacker_team,
+					  const game_team override_team) const;
 
 #pragma endregion
 
@@ -180,8 +165,8 @@ namespace Yelo::AI::Transform {
 		///
 		/// <returns>	The new unit index. </returns>
 		datum_index
-		CreateUnitReuse(const datum_index unit_index, Objects::s_unit_datum *unit_datum, const Enums::actor_variant_transform_team_handling team_option, const Enums::game_team instigator_team,
-							 const Enums::game_team override_team) const;
+		CreateUnitReuse(const datum_index unit_index, s_unit_datum *unit_datum, const Enums::actor_variant_transform_team_handling team_option, const game_team instigator_team,
+							 const game_team override_team) const;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Creates a new unit. </summary>
@@ -194,8 +179,8 @@ namespace Yelo::AI::Transform {
 		/// <param name="State">		  	The state. </param>
 		///
 		/// <returns>	The new unit index. </returns>
-		datum_index CreateUnitNew(const datum_index unit_index, Objects::s_unit_datum *unit_datum, const datum_index new_unit_type, const Enums::actor_variant_transform_team_handling team_option,
-										  const Enums::game_team instigator_team, const Enums::game_team override_team) const;
+		datum_index CreateUnitNew(const datum_index unit_index, s_unit_datum *unit_datum, const datum_index new_unit_type, const Enums::actor_variant_transform_team_handling team_option,
+										  const game_team instigator_team, const game_team override_team) const;
 
 #pragma endregion
 
@@ -258,8 +243,8 @@ namespace Yelo::AI::Transform {
 		/// <param name="destination_marker_index">	The index of the destination marker. </param>
 		/// <param name="attachment_team">		   	The attachment's team. </param>
 		/// <param name="attachment_scale">		   	The attachment's scale. </param>
-		void AttachObject(const datum_index unit_index, const Objects::s_unit_datum *unit_datum, const datum_index object_type, const tag_string &object_marker_name,
-								const tag_string &destination_marker_name, const long destination_marker_index, const Enums::game_team attachment_team, const real attachment_scale) const;
+		void AttachObject(const datum_index unit_index, const s_unit_datum *unit_datum, const datum_index object_type, const tag_string &object_marker_name,
+								const tag_string &destination_marker_name, const long destination_marker_index, const game_team attachment_team, const real attachment_scale) const;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Attach the transform definition's attachment objects to the target unit. </summary>
@@ -268,7 +253,7 @@ namespace Yelo::AI::Transform {
 		/// <param name="unit_datum">		   	The unit datum. </param>
 		/// <param name="instigator_team">	   	The instigator team. </param>
 		/// <param name="transform_definition">	[in] The transform out definition. </param>
-		void AttachObjects(const datum_index unit_index, const Objects::s_unit_datum *unit_datum, const Enums::game_team instigator_team,
+		void AttachObjects(const datum_index unit_index, const s_unit_datum *unit_datum, const game_team instigator_team,
 								 const TagGroups::actor_variant_transform_out_definition &transform_definition) const;
 
 #pragma endregion
@@ -283,7 +268,7 @@ namespace Yelo::AI::Transform {
 		/// <param name="instigator_team">		   	The instigator team. </param>
 		/// <param name="transform_out_definition">	[in] The transform out definition. </param>
 		/// <param name="transform_in_definition"> 	[in] The transform in definition. </param>
-		void TransformOut(const datum_index unit_index, Objects::s_unit_datum *unit_datum, const Enums::game_team instigator_team,
+		void TransformOut(const datum_index unit_index, s_unit_datum *unit_datum, const game_team instigator_team,
 								const TagGroups::actor_variant_transform_out_definition &transform_out_definition, const TagGroups::actor_variant_transform_in_definition &transform_in_definition,
 								s_actor_variant_transform_state &transform_state) const;
 
@@ -293,13 +278,13 @@ namespace Yelo::AI::Transform {
 		/// <param name="unit_index">	  	Datum index of the unit. </param>
 		/// <param name="unit_datum">	  	[in] The unit datum. </param>
 		/// <param name="transform_state">	State of the transform. </param>
-		void TransformIn(const datum_index unit_index, Objects::s_unit_datum *unit_datum, s_actor_variant_transform_state &transform_state) const;
+		void TransformIn(const datum_index unit_index, s_unit_datum *unit_datum, s_actor_variant_transform_state &transform_state) const;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Ends the transform by making the created actor vulnerable. </summary>
 		///
 		/// <param name="unit_datum">	[in] If non-null, the unit datum. </param>
-		void TransformEnd(const datum_index unit_index, Objects::s_unit_datum *unit_datum) const;
+		void TransformEnd(const datum_index unit_index, s_unit_datum *unit_datum) const;
 
 #pragma endregion
 
@@ -318,7 +303,7 @@ namespace Yelo::AI::Transform {
 		/// <param name="unit_index">	Datum index of the unit. </param>
 		/// <param name="unit_datum">	[in] If non-null, the unit datum. </param>
 		/// <param name="keyframe">  	The keyframe. </param>
-		void TransformingOutKeyframe(const datum_index unit_index, Objects::s_unit_datum *unit_datum, const Enums::unit_animation_keyframe keyframe);
+		void TransformingOutKeyframe(const datum_index unit_index, s_unit_datum *unit_datum, const Enums::unit_animation_keyframe keyframe);
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Transforming in keyframe handler. </summary>
@@ -326,7 +311,7 @@ namespace Yelo::AI::Transform {
 		/// <param name="unit_index">	Datum index of the unit. </param>
 		/// <param name="unit_datum">	[in] If non-null, the unit datum. </param>
 		/// <param name="keyframe">  	The keyframe. </param>
-		void TransformingInKeyframe(const datum_index unit_index, Objects::s_unit_datum *unit_datum, const Enums::unit_animation_keyframe keyframe);
+		void TransformingInKeyframe(const datum_index unit_index, s_unit_datum *unit_datum, const Enums::unit_animation_keyframe keyframe);
 
 #pragma endregion
 
@@ -442,7 +427,7 @@ namespace Yelo::AI::Transform {
 #pragma region Validation
 
 	bool c_actor_variant_transform_manager::UnitIsValid(const datum_index unit_index) const {
-		auto *unit_datum = blam::object_try_and_get_and_verify_type<Objects::s_unit_datum>(unit_index);
+		auto *unit_datum = blam::object_try_and_get_and_verify_type<s_unit_datum>(unit_index);
 		if (!unit_datum) {
 			return false;
 		}
@@ -486,7 +471,7 @@ namespace Yelo::AI::Transform {
 			return false;
 		}
 
-		auto *unit_datum = blam::object_try_and_get_and_verify_type<Objects::s_unit_datum>(actor_datum->meta.unit_index);
+		auto *unit_datum = blam::object_try_and_get_and_verify_type<s_unit_datum>(actor_datum->meta.unit_index);
 		if (!unit_datum) {
 			return false;
 		}
@@ -511,7 +496,7 @@ namespace Yelo::AI::Transform {
 #pragma region Find Transform
 
 	bool c_actor_variant_transform_manager::TestVitalityCriteria(const datum_index unit_index, const TagGroups::actor_variant_transform_out_definition &transform_out_definition) const {
-		auto &unit_datum = *blam::object_get_and_verify_type<Objects::s_unit_datum>(unit_index);
+		auto &unit_datum = *blam::object_get_and_verify_type<s_unit_datum>(unit_index);
 
 		// Test whether the transform is valid based on the unit's vitality
 		bool health_within_range = (unit_datum.object.damage.health >= transform_out_definition.health_range.lower) && (unit_datum.object.damage.health <= transform_out_definition.health_range.upper);
@@ -566,8 +551,8 @@ namespace Yelo::AI::Transform {
 
 	sbyte c_actor_variant_transform_manager::FindDamageTransform(const TagBlock<TagGroups::actor_variant_transform_collection_transform> &transformations, const datum_index unit_index,
 																					 const datum_index instigator_unit_index, const bool damage_is_melee) const {
-		auto &unit_datum            = *blam::object_get_and_verify_type<Objects::s_unit_datum>(unit_index);
-		auto *instigator_unit_datum = (instigator_unit_index.IsNull() ? nullptr : blam::object_try_and_get_and_verify_type<Objects::s_unit_datum>(instigator_unit_index));
+		auto &unit_datum            = *blam::object_get_and_verify_type<s_unit_datum>(unit_index);
+		auto *instigator_unit_datum = (instigator_unit_index.IsNull() ? nullptr : blam::object_try_and_get_and_verify_type<s_unit_datum>(instigator_unit_index));
 
 		auto                                                                                 test_transform = [&](const TagGroups::actor_variant_transform_collection_transform &transform) -> bool {
 			auto &transform_out_definition = *transform.transform_out_ptr;
@@ -585,7 +570,7 @@ namespace Yelo::AI::Transform {
 				}
 			}
 
-			auto &unit_datum = *blam::object_get_and_verify_type<Objects::s_unit_datum>(unit_index);
+			auto &unit_datum = *blam::object_get_and_verify_type<s_unit_datum>(unit_index);
 
 			if (!TEST_FLAG(transform_out_definition.criteria_flags, Flags::_actor_variant_transform_out_criteria_flags_transform_on_health_range_bit)
 				 && !TEST_FLAG(transform_out_definition.criteria_flags, Flags::_actor_variant_transform_out_criteria_flags_transform_on_shield_range_bit)) {
@@ -629,7 +614,7 @@ namespace Yelo::AI::Transform {
 		return FindTransform(transformations,
 									[&](const TagGroups::actor_variant_transform_collection_transform &transform) -> bool {
 										auto &transform_out_definition = *transform.transform_out_ptr;
-										auto &unit_datum               = *blam::object_get_and_verify_type<Objects::s_unit_datum>(unit_index);
+										auto &unit_datum               = *blam::object_get_and_verify_type<s_unit_datum>(unit_index);
 										auto &actor_datum              = *Actors()[unit_datum.unit.actor_index];
 
 										// Ignore transforms that are on unit damage only
@@ -673,7 +658,7 @@ namespace Yelo::AI::Transform {
 
 #pragma region Tag Options
 
-	void c_actor_variant_transform_manager::HandleVitality(const Enums::actor_variant_transform_in_vitality_handling operation, Objects::s_unit_datum *unit_datum, const real health,
+	void c_actor_variant_transform_manager::HandleVitality(const Enums::actor_variant_transform_in_vitality_handling operation, s_unit_datum *unit_datum, const real health,
 																			 const real shield) const {
 		switch (operation) {
 			case Enums::_actor_variant_transform_in_vitality_handling_both:
@@ -689,8 +674,8 @@ namespace Yelo::AI::Transform {
 		}
 	}
 
-	Enums::game_team c_actor_variant_transform_manager::HandleTeam(const Enums::actor_variant_transform_team_handling option, const Enums::game_team attacked_team, const Enums::game_team attacker_team,
-																						const Enums::game_team override_team) const {
+	game_team c_actor_variant_transform_manager::HandleTeam(const Enums::actor_variant_transform_team_handling option, const game_team attacked_team, const game_team attacker_team,
+																						const game_team override_team) const {
 		switch (option) {
 			case Enums::_actor_variant_transform_team_handling_inherit_from_old_actor:
 				return attacked_team;
@@ -775,8 +760,8 @@ namespace Yelo::AI::Transform {
 		}
 	}
 
-	void c_actor_variant_transform_manager::AttachObject(const datum_index unit_index, const Objects::s_unit_datum *unit_datum, const datum_index object_type, const tag_string &object_marker_name,
-																		  const tag_string &destination_marker_name, const long destination_marker_index, const Enums::game_team attachment_team,
+	void c_actor_variant_transform_manager::AttachObject(const datum_index unit_index, const s_unit_datum *unit_datum, const datum_index object_type, const tag_string &object_marker_name,
+																		  const tag_string &destination_marker_name, const long destination_marker_index, const game_team attachment_team,
 																		  const real attachment_scale) const {
 		// If there is only 1 marker do not append a marker index to the name
 		const char * destination_marker = destination_marker_name;
@@ -817,11 +802,11 @@ namespace Yelo::AI::Transform {
 		blam::object_attach_to_marker(unit_index, destination_marker_name, attachment_object, object_marker_name);
 	}
 
-	void c_actor_variant_transform_manager::AttachObjects(const datum_index unit_index, const Objects::s_unit_datum *unit_datum, const Enums::game_team instigator_team,
+	void c_actor_variant_transform_manager::AttachObjects(const datum_index unit_index, const s_unit_datum *unit_datum, const game_team instigator_team,
 																			const TagGroups::actor_variant_transform_out_definition &transform_definition) const {
 		for (auto &attachment : transform_definition.attachments) {
 			// Get the attachments team and random scale
-			Enums::game_team attachment_team = HandleTeam(attachment.team_handling, unit_datum->object.owner_team, instigator_team, attachment.team_override);
+			game_team attachment_team = HandleTeam(attachment.team_handling, unit_datum->object.owner_team, instigator_team, attachment.team_override);
 
 			real attachment_scale = Yelo::Random::GetReal(attachment.attachment_scale);
 
@@ -888,8 +873,8 @@ namespace Yelo::AI::Transform {
 		blam::actor_create_for_unit(false, unit_index, target.actor_variant, encounter_index, squad_index, 0, NONE, false, initial_state, return_state, NONE, 0);
 	}
 
-	datum_index c_actor_variant_transform_manager::CreateUnitReuse(const datum_index unit_index, Objects::s_unit_datum *unit_datum, const Enums::actor_variant_transform_team_handling team_option,
-																						const Enums::game_team instigator_team, const Enums::game_team override_team) const {
+	datum_index c_actor_variant_transform_manager::CreateUnitReuse(const datum_index unit_index, s_unit_datum *unit_datum, const Enums::actor_variant_transform_team_handling team_option,
+																						const game_team instigator_team, const game_team override_team) const {
 		SET_FLAG(unit_datum->object.flags, Flags::_object_yelo_is_transforming_out_bit, false);
 
 		// Set the existing unit's team
@@ -898,9 +883,9 @@ namespace Yelo::AI::Transform {
 		return unit_index;
 	}
 
-	datum_index c_actor_variant_transform_manager::CreateUnitNew(const datum_index unit_index, Objects::s_unit_datum *unit_datum, const datum_index new_unit_type,
-																					 const Enums::actor_variant_transform_team_handling team_option, const Enums::game_team instigator_team,
-																					 const Enums::game_team override_team) const {
+	datum_index c_actor_variant_transform_manager::CreateUnitNew(const datum_index unit_index, s_unit_datum *unit_datum, const datum_index new_unit_type,
+																					 const Enums::actor_variant_transform_team_handling team_option, const game_team instigator_team,
+																					 const game_team override_team) const {
 		// Create the new unit based on the target_unit's data
 		Objects::s_object_placement_data unit_placement_data;
 		PlacementDataNewAndCopy(unit_placement_data, unit_index, new_unit_type);
@@ -915,7 +900,7 @@ namespace Yelo::AI::Transform {
 
 #pragma region Transform Sequence
 
-	void c_actor_variant_transform_manager::TransformOut(const datum_index unit_index, Objects::s_unit_datum *unit_datum, const Enums::game_team instigator_team,
+	void c_actor_variant_transform_manager::TransformOut(const datum_index unit_index, s_unit_datum *unit_datum, const game_team instigator_team,
 																		  const TagGroups::actor_variant_transform_out_definition &transform_out_definition,
 																		  const TagGroups::actor_variant_transform_in_definition &transform_in_definition, s_actor_variant_transform_state &transform_state) const {
 		// Freeze the actor
@@ -937,7 +922,7 @@ namespace Yelo::AI::Transform {
 		transform_state.m_transform_stage = _transform_stage_transform_out_begun;
 	}
 
-	void c_actor_variant_transform_manager::TransformIn(const datum_index unit_index, Objects::s_unit_datum *unit_datum, s_actor_variant_transform_state &transform_state) const {
+	void c_actor_variant_transform_manager::TransformIn(const datum_index unit_index, s_unit_datum *unit_datum, s_actor_variant_transform_state &transform_state) const {
 		auto &transform_entry          = m_transform_collection->actor_variant_transforms[transform_state.m_transform_entry_index];
 		auto &transform                = transform_entry.transforms[transform_state.m_transform_index];
 		auto &transform_in_definition  = *transform.transform_in_ptr;
@@ -1003,7 +988,7 @@ namespace Yelo::AI::Transform {
 
 			delete_unit = true;
 		}
-		auto *new_unit_datum = blam::object_get_and_verify_type<Objects::s_unit_datum>(new_unit_index);
+		auto *new_unit_datum = blam::object_get_and_verify_type<s_unit_datum>(new_unit_index);
 
 		// Force the base seat animation to "stand", if we don't do this the unit could be "flaming" and a weapon might not be added
 		new_unit_datum->unit.animation.base_seat = Enums::_unit_base_seat_stand;
@@ -1048,7 +1033,7 @@ namespace Yelo::AI::Transform {
 		transform_state.m_transform_stage = _transform_stage_transform_in_begun;
 	}
 
-	void c_actor_variant_transform_manager::TransformEnd(const datum_index unit_index, Objects::s_unit_datum *unit_datum) const {
+	void c_actor_variant_transform_manager::TransformEnd(const datum_index unit_index, s_unit_datum *unit_datum) const {
 		// Unfreeze the actor
 		blam::actor_braindead(unit_datum->unit.actor_index, false);
 
@@ -1104,7 +1089,7 @@ namespace Yelo::AI::Transform {
 		if (!UnitIsValid(unit_index)) {
 			return;
 		}
-		auto &unit_datum  = *blam::object_try_and_get_and_verify_type<Objects::s_unit_datum>(unit_index);
+		auto &unit_datum  = *blam::object_try_and_get_and_verify_type<s_unit_datum>(unit_index);
 		auto &actor_datum = *Actors()[unit_datum.unit.actor_index];
 
 		// If the actor variant has no transforms defined, return
@@ -1129,7 +1114,7 @@ namespace Yelo::AI::Transform {
 		auto &transform = transform_entry.transforms[transform_index];
 
 		// Get the instigators team
-		auto *instigator_unit_datum = blam::object_try_and_get_and_verify_type<Objects::s_unit_datum>(damage_data->responsible_unit_index);
+		auto *instigator_unit_datum = blam::object_try_and_get_and_verify_type<s_unit_datum>(damage_data->responsible_unit_index);
 		auto instigator_team        = (instigator_unit_datum ? instigator_unit_datum->object.owner_team : Enums::_game_team_none);
 
 		// Get a free transform state entry, if an entry is unavailable skip the transform
@@ -1168,7 +1153,7 @@ namespace Yelo::AI::Transform {
 			return;
 		}
 
-		auto *unit_datum = blam::object_try_and_get_and_verify_type<Objects::s_unit_datum>(unit_index);
+		auto *unit_datum = blam::object_try_and_get_and_verify_type<s_unit_datum>(unit_index);
 		if (!unit_datum) {
 			return;
 		}
@@ -1217,7 +1202,7 @@ namespace Yelo::AI::Transform {
 				FreeTransformState(unit_index);
 			}
 		} else if (UnitIsValid(unit_index)) {
-			auto &unit_datum  = *blam::object_try_and_get_and_verify_type<Objects::s_unit_datum>(unit_index);
+			auto &unit_datum  = *blam::object_try_and_get_and_verify_type<s_unit_datum>(unit_index);
 			auto &actor_datum = *Actors()[unit_datum.unit.actor_index];
 
 			// If the actor variant has no transforms defined, return
@@ -1256,7 +1241,7 @@ namespace Yelo::AI::Transform {
 #pragma region Animation
 
 	void c_actor_variant_transform_manager::DoTransformKeyframeAction(const datum_index unit_index, const TagGroups::actor_variant_transform_keyframe_action &action) {
-		auto &unit_datum      = *blam::object_get_and_verify_type<Objects::s_unit_datum>(unit_index);
+		auto &unit_datum      = *blam::object_get_and_verify_type<s_unit_datum>(unit_index);
 		auto &unit_definition = *blam::tag_get<TagGroups::s_unit_definition>(unit_datum.object.definition_index);
 
 	::std::vector<datum_index> riders;
@@ -1292,7 +1277,7 @@ namespace Yelo::AI::Transform {
 					break;
 				case Enums::_actor_variant_transform_keyframe_effect_target_riders:
 					for (auto &rider : riders) {
-						auto &rider_unit_datum = *blam::object_get_and_verify_type<Objects::s_unit_datum>(rider);
+						auto &rider_unit_datum = *blam::object_get_and_verify_type<s_unit_datum>(rider);
 
 						damage_data.location        = rider_unit_datum.object.location;
 						damage_data.damage_position = rider_unit_datum.object.position;
@@ -1332,7 +1317,7 @@ namespace Yelo::AI::Transform {
 		}
 	}
 
-	void c_actor_variant_transform_manager::TransformingOutKeyframe(const datum_index unit_index, Objects::s_unit_datum *unit_datum, const Enums::unit_animation_keyframe keyframe) {
+	void c_actor_variant_transform_manager::TransformingOutKeyframe(const datum_index unit_index, s_unit_datum *unit_datum, const Enums::unit_animation_keyframe keyframe) {
 		auto &transform_state = *FindTransformState(unit_index);
 
 		auto &transform_entry          = m_transform_collection->actor_variant_transforms[transform_state.m_transform_entry_index];
@@ -1350,7 +1335,7 @@ namespace Yelo::AI::Transform {
 		}
 	}
 
-	void c_actor_variant_transform_manager::TransformingInKeyframe(const datum_index unit_index, Objects::s_unit_datum *unit_datum, const Enums::unit_animation_keyframe keyframe) {
+	void c_actor_variant_transform_manager::TransformingInKeyframe(const datum_index unit_index, s_unit_datum *unit_datum, const Enums::unit_animation_keyframe keyframe) {
 		auto &transform_state = *FindTransformState(unit_index);
 
 		auto &transform_entry         = m_transform_collection->actor_variant_transforms[transform_state.m_transform_entry_index];
@@ -1374,7 +1359,7 @@ namespace Yelo::AI::Transform {
 			return;
 		}
 
-		auto *unit_datum = blam::object_try_and_get_and_verify_type<Objects::s_unit_datum>(unit_index);
+		auto *unit_datum = blam::object_try_and_get_and_verify_type<s_unit_datum>(unit_index);
 		if (!unit_datum) {
 			return;
 		}
@@ -1399,7 +1384,7 @@ namespace Yelo::AI::Transform {
 			return false;
 		}
 
-		auto *unit_datum = blam::object_try_and_get_and_verify_type<Objects::s_unit_datum>(unit_index);
+		auto *unit_datum = blam::object_try_and_get_and_verify_type<s_unit_datum>(unit_index);
 		if (!unit_datum) {
 			return false;
 		}
@@ -1517,7 +1502,7 @@ namespace Yelo::AI::Transform {
 			  !current_unit.IsNull();
 			  current_unit = blam::object_list_get_next(unit_index_list, list_reference)) {
 			// Only transform actors with a matching actor variant type
-			auto *unit_datum = blam::object_try_and_get_and_verify_type<Objects::s_unit_datum>(current_unit);
+			auto *unit_datum = blam::object_try_and_get_and_verify_type<s_unit_datum>(current_unit);
 			if (unit_datum && !unit_datum->unit.actor_index.IsNull()) {
 				auto *actor_datum = AI::Actors()[unit_datum->unit.actor_index];
 				if (actor_datum->meta.actor_variant_definition_index != tag_index) {
@@ -1532,7 +1517,7 @@ namespace Yelo::AI::Transform {
 	}
 
 	bool c_actor_variant_transform_manager::ActorIsTransforming(const datum_index unit_index) {
-		auto *unit_datum = blam::object_try_and_get_and_verify_type<Objects::s_unit_datum>(unit_index);
+		auto *unit_datum = blam::object_try_and_get_and_verify_type<s_unit_datum>(unit_index);
 		if (unit_datum) {
 			if (TEST_FLAG(unit_datum->object.flags, Flags::_object_yelo_is_transforming_out_bit)
 				 || TEST_FLAG(unit_datum->object.flags, Flags::_object_yelo_is_transforming_in_bit)) {

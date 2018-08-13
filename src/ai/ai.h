@@ -1,30 +1,12 @@
 /* See GPLv3 for licensing information*/
 #pragma once
-#include <precompile.h>
 
 #include "actors/actor_structures.h"
+#include "../memory/datum_index.h"
 
 namespace Yelo {
 	namespace Enums {
-		enum {
-			k_maximum_number_of_mounted_weapon_units = 8,
-		};
 
-		enum ai_sound_volume {
-			k_number_of_ai_sound_volumes = 5,
-		};
-
-		enum ai_unit_effect {
-			k_number_of_ai_unit_effects = 4,
-		};
-
-		enum ai_spatial_effect {
-			_ai_spatial_effect_environmental_noise,
-			_ai_spatial_effect_weapon_impact,
-			_ai_spatial_effect_weapon_detonation,
-
-			k_number_of_ai_spatial_effects
-		};
 	};
 
 	namespace AI {
@@ -43,7 +25,7 @@ namespace Yelo {
 
 			// If the actor isn't in a vehicle...there's no vehicle to exit
 			auto *unit_datum = blam::object_get_and_verify_type<Yelo::Objects::s_unit_datum>(actor_datum->meta.unit_index);
-			if (unit_datum->object.parent_object_index.IsNull() || unit_datum->unit.vehicle_seat_index == NONE) {
+			if (unit_datum->object.parent_object_index.IsNull() || unit_datum->unit.vehicle_seat_index == -1) {
 				return false;
 			}
 
@@ -72,7 +54,7 @@ namespace Yelo {
 			auto &prop_unit_datum  = *blam::object_get_and_verify_type<Objects::s_unit_datum>(prop->unit_index);
 
 			// If the prop is not sitting in the same parent, don't ignore it
-			if (actor_unit_datum.object.parent_object_index.IsNull() || (prop_unit_datum.unit.vehicle_seat_index == NONE) ||
+			if (actor_unit_datum.object.parent_object_index.IsNull() || (prop_unit_datum.unit.vehicle_seat_index == -1) ||
 				 (actor_unit_datum.object.parent_object_index != prop_unit_datum.object.parent_object_index)) {
 				return false;
 			}
@@ -89,7 +71,7 @@ namespace Yelo {
 
 		bool __cdecl ActorShouldPanicAboutMountedUnit(const datum_index unit_index) {
 			auto &unit_datum = *blam::object_get_and_verify_type<Objects::s_unit_datum>(unit_index);
-			if (unit_datum.unit.vehicle_seat_index == NONE) {
+			if (unit_datum.unit.vehicle_seat_index == -1) {
 				return true;
 			}
 
@@ -98,8 +80,7 @@ namespace Yelo {
 				return true;
 			}
 
-			auto ignored_by_mounted_ai
-			Flags::_unit_seat_extensions_flags_ignored_by_mounted_ai_bit
+			auto ignored_by_mounted_ai = ::_unit_seat_extensions_flags_ignored_by_mounted_ai_bit
 			return !TEST_FLAG(seat_extension_definition->flags, ignored_by_mounted_ai);
 		}
 

@@ -98,16 +98,7 @@ namespace obj {
 	// When running in editor tools, this and the max number of objects is increased by 5x
 	constexpr int k_object_memory_pool_allocation_size{0x200000};
 
-	enum object_header_flags : byte {
-		_object_header_active_bit,
-		_object_header_visible_bit,
-		_object_header_newly_created_bit, // true until after the first call to the
-		_object_header_being_deleted_bit,
-		_object_header_child_bit, // attached to another object (at a marker/node)
-		_object_header_connected_to_map_bit,
-		_object_header_automatic_deactivation_bit,
-		_object_header_unk7_bit,
-	};
+
 
 	enum objects_find_flags : unsigned long {
 		_objects_find_collideable_bit,

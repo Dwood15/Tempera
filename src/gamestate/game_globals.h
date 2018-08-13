@@ -22,35 +22,23 @@ namespace game_options {
 		s_game_options options;
 	}; STAT_ASSERT(s_game_globals, 0x114);
 
-	/*
-struct s_main_globals
-{
-	UNKNOWN_TYPE(uint32); // time related
-	PAD32;
-	LARGE_INTEGER performance_counter;
-	UNKNOWN_TYPE(bool);
-	bool is_taking_screenshot;
-	PAD16;
-	real delta_time;
-	Enums::game_connection game_connection;
-
 	struct s_screenshot {
 		int16 counter;
-		void* movie; // screenshot bitmap
+		void *movie; // screenshot bitmap
 		PAD32; PAD32;
 		int32 movie_frame_index;
 		UNKNOWN_TYPE(real);
-	}screenshot;
+	};
 
 	struct s_map {
-		bool reset_map;
-		bool switch_to_campaign;
-		bool revert_map;
-		bool skip_cinematic;
-		bool save_map;
-		bool save_map_nonsafe;
-		bool save_map_with_timeout;
-		bool is_saving_map;
+		bool  reset_map;
+		bool  switch_to_campaign;
+		bool  revert_map;
+		bool  skip_cinematic;
+		bool  save_map;
+		bool  save_map_nonsafe;
+		bool  save_map_with_timeout;
+		bool  is_saving_map;
 		int32 saving_map_timeout_countdown;
 		int32 saving_map_timeout_timer;
 		UNKNOWN_TYPE(int32);
@@ -63,47 +51,68 @@ struct s_main_globals
 			bool save;
 			bool load;
 			bool load_at_startup;
-		}core;
+		}    core;
 
 		int16 switch_to_structure_bsp; // if not NONE, switches to the scenario's bsp by index
-		bool main_menu_scenario_loaded;
-		bool main_menu_scenario_load;
-	}map;
+		bool  main_menu_scenario_loaded;
+		bool  main_menu_scenario_load;
+	};
 
-	UNUSED_TYPE(bool);
-	UNKNOWN_TYPE(bool);
-	UNKNOWN_TYPE(bool);
-	bool quit;
-	UNKNOWN_TYPE(int32);
-	UNKNOWN_TYPE(int32);
-	UNKNOWN_TYPE(int32);
-	bool set_game_connection_to_film_playback;
-	bool time_is_stopped;
-	bool start_time;
-	UNUSED_TYPE(bool);
+#include <enums/network_enums.h>
 
-	bool skip_frames;
-	PAD8;
-	int16 skip_frames_count;
+	struct s_main_globals {
+		unsigned int tiem_rel_padA; // time related
+		long: 32;
+		long long performance_counter;
+		bool : 8;
+		bool is_taking_screenshot;
+		short : 16;
+		float           delta_time;
+		game_connection game_connection;
 
-	int16 lost_map_count;
-	int16 respawn_count;
+		s_screenshot screenshot;
 
-	UNKNOWN_TYPE(bool);
-	PAD24;
-	UNKNOWN_TYPE(bool);
-	char scenario_tag_path[256];
-	char multiplayer_map_name[256];
-	char queued_map[256];
+		s_map map;
 
-	UNKNOWN_TYPE(bool);
-	UNKNOWN_TYPE(tag_string);
-	PAD(0, 8 + 1); // char[8+1]
-	PAD8;
-	PAD32;
-};
+		bool : 8;
+		bool : 8;
+		bool : 8;
 
-*/
+		bool quit;
+		int32 : 32;
+		int32 : 32;
+		int32 : 32;
+		bool set_game_connection_to_film_playback;
+		bool time_is_stopped;
+		bool start_time;
+		bool : 8;
+
+		bool skip_frames;
+		bool : 8;
+
+		int16 skip_frames_count;
+
+		int16 lost_map_count;
+		int16 respawn_count;
+
+		bool  : 8;
+		bool  : 8;
+		short : 16;
+
+		bool : 8;
+		char scenario_tag_path[256];
+		char multiplayer_map_name[256];
+		char queued_map[256];
+
+		bool : 8;
+		tag_string unknownTypeA;
+		char       padA[9]; // char[8+1]
+		bool : 8;
+		long : 32;
+
+	};
+
+
 	// struct s_game_globals_tag {
 	// enum {
 	// 	k_group_tag = 'matg'

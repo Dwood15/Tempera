@@ -6,6 +6,7 @@
 #include "../scenario/structures.h"
 #include "../math/real_math.h"
 #include "../memory/array.h"
+#include <enums/generic_enums.h>
 
 namespace Yelo {
 	namespace Enums {

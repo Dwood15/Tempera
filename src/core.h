@@ -74,6 +74,8 @@ public:
 
 	short GetMaxObjects();
 
+	s_player_control * GetPlayerControl(unsigned short idx);
+
 	Core() = default;
 
 	Core(LPCoreAddressList list);
@@ -119,4 +121,4 @@ public:
 };
 
 static CD3D cd3d;
-static Core *eCore = reinterpret_cast<Core *> (-1);
+static std::shared_ptr <Core> eCore;

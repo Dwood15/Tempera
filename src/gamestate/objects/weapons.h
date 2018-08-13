@@ -1,6 +1,7 @@
 #pragma once
-#include "real_math.h"
-#include "../gamestate/objects.h"
+#include <enums/weapon_enums.h>
+#include "../../math/real_math.h"
+#include "../objects.h"
 
 struct s_weapon_datum_network_data {
 	real_point3d  position;

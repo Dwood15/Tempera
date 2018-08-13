@@ -93,10 +93,10 @@ bool GlobalEngine::IsCustomEd() {
 }
 
 bool GlobalEngine::IsCoreInitialized() {
-	auto IsNegOne = eCore == reinterpret_cast<Core *>(-1);
-	auto IsZero   = eCore == reinterpret_cast<Core *>(0);
-
-	return !IsNegOne && !IsZero;
+	if (eCore) {
+		return true;
+	}
+	return false;
 }
 
 void GlobalEngine::InitializeMemoryUpgrades() {
@@ -275,8 +275,8 @@ size_t GlobalEngine::GetNumberOfFunctionTableReferences() {
 
 void GlobalEngine::RefreshCore() {
 	if (this->HasSupport()) {
+		eCore = std::make_shared<Core>();
 		if (this->IsSapien()) {
-			eCore = new Core;
 
 			eCore->core_0 = new _core_0;
 			eCore->core_1 = new _core_1;
@@ -296,11 +296,9 @@ void GlobalEngine::RefreshCore() {
 
 		if (this->IsCustomEd()) {
 			if (this->IsCoreInitialized()) {
-				delete eCore;
-				eCore = (Core *) -1;
+				eCore = std::make_shared<Core>(Core(CE110::GetCoreAddressList()));
 			}
 
-			eCore = new Core(CE110::GetCoreAddressList());
 			eCore->game_time_globals = *reinterpret_cast<Yelo::GameState::s_game_time_globals **>(0x68CD70);
 
 			eCore->main_globals_game_connection_type = (ushort *) 0x6B47B0;
@@ -405,7 +403,7 @@ s_player_action GlobalEngine::GetPlayerActionOverride(ushort idx, s_unit_control
 	return newControl;
 }
 
-Core *GlobalEngine::GetCore() {
+std::shared_ptr<Core> &GlobalEngine::GetCore() {
 	if (!IsCoreInitialized()) {
 		RefreshCore();
 	}
@@ -566,7 +564,7 @@ void main_setup_connection_init() {
 	// CALL_LUA_BY_EVENT(post_initialize);
 }
 
-static Core *mCore = 0x0;
+static std::shared_ptr<Core> mCore = 0x0;
 
 void game_tick(int current_frame_tick) {
 	static LuaScriptManager *state = 0;
@@ -582,7 +580,7 @@ void game_tick(int current_frame_tick) {
 	}
 
 	state->lua_on_tick(current_frame_tick, mCore->game_time_globals->elapsed_time);
-	static::std::optional<uintptr_t> got = FUNC_GET(game_tick);
+	static ::std::optional<uintptr_t> got = FUNC_GET(game_tick);
 
 	if (got) {
 		// PrintLn("Game_tick call");

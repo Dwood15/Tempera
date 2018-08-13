@@ -13,6 +13,7 @@
 
 
 #include <addlog.h>
+#include <enums/player_enums.h>
 #include "d3d9hook.h"
 #include "textures.h"
 #include "../core.h"
@@ -108,8 +109,8 @@ bool isOffScreen(vect3 screenpos) {
 }
 
 void PrintObjectTags(IDirect3DDevice9 *pDevice) {
-	static Core * core = (Core *)-1;
-	if(core == (Core *)-1 && CurrentEngine.IsCoreInitialized()) {
+	static std::shared_ptr<Core> core;
+	if(core && !CurrentEngine.IsCoreInitialized()) {
 		core = CurrentEngine.GetCore();
 
 		if (!core) {
@@ -122,7 +123,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 		}
 	}
 
-	if (core == (Core*)-1) {
+	if (!core) {
 		return;
 	}
 
