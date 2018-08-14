@@ -2,10 +2,11 @@
 
 #include <macros_generic.h>
 #include <enums/generic_enums.h>
+#include "../memory/datum_index.h"
 #include "../math/colors.h"
 #include "../math/real_math.h"
-#include "../tags/group/base.h"
 #include "../game/objects/object_lights.h"
+#include "../tags/group/tagreference.h"
 
 namespace Yelo::TagGroups {
 	struct light_color_direction {

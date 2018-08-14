@@ -2,7 +2,8 @@
 #include "hs_enums.h"
 
 namespace Yelo::Enums {
-
+	/// <summary>	when true, all 'model' references are loaded or get as gbxmodels </summary>
+	constexpr bool g_gbxmodel_group_enabled = true;
 	constexpr int	k_tag_string_length  = 31; // character count in a [tag_string] type
 	constexpr int	k_long_string_length = 255; // character count in a [long_string] type
 	constexpr int	k_string_id_length = 127;

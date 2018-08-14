@@ -9,6 +9,7 @@
 
 #include <enums/objects_enums.h>
 #include <enums/model_enums.h>
+#include <enums/generic_enums.h>
 
 #pragma pack(push)
 #pragma pack(1)
@@ -319,7 +320,7 @@ struct s_unit_data {
 	unsigned long                 pad10_unknown;
 	long                          death_time;                                    // 0x41C // game time when this unit died
 	short                         feign_death_timer;                              // 0x420
-	byteswaps::unit_camo_regrowth camo_regrowth;                  // 0x422
+	Yelo::Enums::unit_camo_regrowth camo_regrowth;                  // 0x422
 	real                          stun;                                          // 0x424
 	short                         stun_timer;                                    // 0x428
 	short                         killing_spree_count;                              // 0x42A
@@ -632,6 +633,6 @@ namespace Yelo::blam {
 
 	template <typename T>
 	T *object_try_and_get_and_verify_type(datum_index object_index) {
-		return CAST_PTR(T *, object_try_and_get_and_verify_type(object_index, T::k_object_types_mask));
+		return reinterpret_cast<T *>( object_try_and_get_and_verify_type(object_index, T::k_object_types_mask));
 	}
 };

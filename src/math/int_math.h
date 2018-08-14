@@ -1,4 +1,5 @@
 #pragma once
+#include <macros_generic.h>
 
 struct sbsp_stri {
 	union {

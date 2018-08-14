@@ -3,6 +3,8 @@ set(SCRIPTING_SRC
 	${CMAKE_CURRENT_SOURCE_DIR}/threads.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/objects.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/object_lists.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/yelo_definitions.cpp
+
 	PARENT_SCOPE)
 
 

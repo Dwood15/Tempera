@@ -3,7 +3,6 @@
 #include "../../math/real_math.h"
 #include "../../math/colors.h"
 #include "macros_generic.h"
-#include "../../tags/group/base.h"
 #include "../../tags/group/tagblock.h"
 
 namespace Yelo::TagGroups {

@@ -150,16 +150,15 @@ set(COMMON_H
 	common/enums/geometry_enums.h
 	common/enums/yelo_enums.h
 	common/enums/memory_enums.h
-	src/gamestate/teams/teams.h
 	common/enums/unit_enums.h
 	common/enums/model_enums.h
 	common/enums/player_enums.h
 	common/enums/weapon_enums.h
-	src/hs/yelo_definitions.cpp
-	#	src/engine/engine_functions.cpp
+	common/enums/network_enums.h
+	src/gamestate/teams/teams.h
 	src/engine/engine_functions.h
 	src/memory/data_array.h
-	common/enums/network_enums.h)
+	)
 
 add_custom_target(HeadersTarget SOURCES ${SRC_H})
 

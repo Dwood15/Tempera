@@ -1,6 +1,7 @@
 #pragma once
 
 #include <enums/generic_enums.h>
+#include <enums/yelo_enums.h>
 #include <enums/scenario_enums.h>
 #include "../../tags/group/markup.h"
 
@@ -95,7 +96,7 @@ namespace Yelo::TagGroups {
 
 		long pad2[20]; // 80
 
-		project_yellow_globals() : version(project_yelo_info::k_version) {
+		project_yellow_globals() : version(Yelo::Enums::project_yelo_info::k_version) {
 			flags = FLAG(Flags::_project_yellow_null_definition_bit) | FLAG(Flags::_project_yellow_invalid_version_bit);
 			explicit_references.tag_index = datum_index::null();
 		}
@@ -230,7 +231,7 @@ namespace Yelo::TagGroups {
 
 		long pad6[23]; // 92
 
-		project_yellow(const bool invalid = false) : version(project_yelo_info::k_version) {
+		project_yellow(const bool invalid = false) : version(Yelo::Enums::project_yelo_info::k_version) {
 			flags = FLAG(Flags::_project_yellow_null_definition_bit);
 
 			if (invalid) {

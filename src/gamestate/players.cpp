@@ -1,7 +1,10 @@
 #pragma once
 
 #include <enums/weapon_enums.h>
+#include <macros_generic.h>
+#include "../memory/datum_index.h"
 #include "players.h"
+#include "../core.h"
 
 const Yelo::TagGroups::scenario_player *get_scenario_location(Yelo::TagGroups::scenario *scen, ushort idx) {
 	if (idx < scen->player_starting_locations.Count) {
@@ -27,6 +30,8 @@ void players_set_local_player_unit(unsigned short requested_plyr_idx, datum_inde
 	if (!current_unit.IsNull()) {
 		reinterpret_cast<s_unit_datum *>(eCore->GetGenericObject(current_unit.index))->unit.controlling_player_index = datum_index::null();
 #ifndef __GNUC__
+		//MS-style inline assembly is not available: Unable to find targets for this triple (no targets are registered)
+		//Bullshit CLion stuff
 		__asm xor cl, cl
 		calls::DoCall<Convention::m_cdecl, void, datum_index>(*set_actively_controlled, current_unit);
 #else
@@ -71,7 +76,7 @@ void unit_set_actively_controlled(datum_index u, bool is_controlled) {
 	static auto unit_update_driver_and_gunner = CurrentEngine.getFunctionBegin("unit_update_driver_and_gunner");
 
 #ifndef __GNUC__
-	__asm mov eax, u.index
+	__asm mov ax, u.index
 	::calls::DoCall(*unit_update_driver_and_gunner);
 #else
 

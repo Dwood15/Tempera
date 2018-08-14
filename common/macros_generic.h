@@ -3,7 +3,6 @@
  */
 #pragma once
 
-
 #ifndef shitty_macros
 #define shitty_macros
 
@@ -58,6 +57,7 @@ typedef unsigned int   uint;
 typedef unsigned short ushort;
 typedef unsigned long  long_flags;
 typedef signed char    byte_enum;
+typedef unsigned char  byte_flags;
 typedef short          int16;
 
 //sanity checks.
@@ -121,7 +121,6 @@ STAT_ASSERT(ushort, 0x2);
 #pragma endregion
 
 #pragma endregion
-
 
 #ifndef NONE
 #define NONE                  -1
@@ -205,8 +204,6 @@ typedef wchar_t       wstring256[256];
 typedef unsigned long tag;
 
 // an enumerated value in a 1 byte range
-typedef signed char   byte_enum;
-typedef unsigned char byte_flags;
 
 typedef signed long    long_enum;
 typedef unsigned short short_flags;
@@ -216,14 +213,13 @@ typedef unsigned int  uintptr_t;
 typedef unsigned long tag;
 typedef char          tag_string[32];
 typedef const char    *cstring;
-typedef char *tag_reference_name_reference;
+typedef char          *tag_reference_name_reference;
 
 /// <summary>	The integral type used to represent game ticks. </summary>
 typedef long  game_ticks_t;
 /// <summary>	The integral type used to represent (relative) game timers. </summary>
 /// <remarks>	Steps are in ticks. Generally used for countdowns </remarks>
 typedef short game_time_t;
-
 
 #define pad_tag_string unsigned long : 32; unsigned long : 32; unsigned long : 32; unsigned long : 32; unsigned long : 32; unsigned long : 32; unsigned long : 32; unsigned long : 32
 
@@ -247,8 +243,8 @@ typedef short game_time_t;
 
 namespace Yelo {
 	struct string_list {
-		unsigned long       count;
-		const char **strings;
+		unsigned long count;
+		const char    **strings;
 
 		const char **begin() const { return strings; }
 
@@ -340,7 +336,6 @@ namespace Yelo {
 	};
 };
 
-
 namespace Yelo::Enums {
 	constexpr int k_maximum_number_of_local_players = 4;
 	constexpr int k_multiplayer_maximum_players     = 16;
@@ -349,3 +344,7 @@ namespace Yelo::Enums {
 	// This is 1 in Stubbs, I'm positive team_data uses k_multiplayer_maximum_players.
 	constexpr int k_multiplayer_maximum_teams = k_multiplayer_maximum_players;
 };
+
+/// Cast the pointer [ptr] to a pointer of type [type]
+#define CAST_PTR(type, ptr)      (reinterpret_cast<type>(ptr))
+#define CAST_PTR_OP(type)      reinterpret_cast<type>

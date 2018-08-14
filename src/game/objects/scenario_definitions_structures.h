@@ -3,7 +3,6 @@
 
 #include "macros_generic.h"
 #include "../../models/bsp_definitions.h"
-#include "../../tags/group/base.h"
 
 namespace Yelo::TagGroups {
 	struct scenario_object_name {

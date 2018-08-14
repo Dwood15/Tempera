@@ -7,7 +7,6 @@
 #include "../math/int_math.h"
 #include "../math/colors.h"
 #include "../tags/group/markup.h"
-#include "../tags/group/base.h"
 #include "../tags/group/tagreference.h"
 #include "../models/animations/recorded_animation_definitions.h"
 #include "../game/objects/scenario_definitions_structures.h"

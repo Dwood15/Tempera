@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../../tags/group/base.h"
+#include <macros_generic.h>
+#include "../../tags/group/tagdata.h"
 
 namespace Yelo::TagGroups {
 	struct recorded_animation_definition {
@@ -12,12 +13,12 @@ namespace Yelo::TagGroups {
 		short length_of_animation;
 		unsigned short : 16;
 		unsigned long  : 32;
-		tag_data event_stream;
+		Yelo::tag_data event_stream;
 
-		inline byte_enum ToRecordedAnimationVersion() const { return CAST(byte_enum, version) - 1; }
+		inline byte_enum ToRecordedAnimationVersion() const { return static_cast<byte_enum>( version) - 1; }
 	};
 
-	static_assert(sizeof(recorded_animation_definition) == 0x40);
+	STAT_ASSERT(recorded_animation_definition, 0x40);
 };
 
 // namespace Scripting

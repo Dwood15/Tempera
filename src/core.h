@@ -121,4 +121,5 @@ public:
 };
 
 static CD3D cd3d;
+#include <memory>
 static std::shared_ptr <Core> eCore;

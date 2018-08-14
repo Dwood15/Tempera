@@ -7,10 +7,6 @@
 #define CAST(type, value)      (static_cast<type>(value))
 #define CAST_OP(type)         static_cast<type>
 
-/// Cast the pointer [ptr] to a pointer of type [type]
-#define CAST_PTR(type, ptr)      (reinterpret_cast<type>(ptr))
-#define CAST_PTR_OP(type)      reinterpret_cast<type>
-
 /// Casts to [type] while removing any qualifiers of [value]
 /// [const], [volatile], and [__unaligned]
 #define CAST_QUAL(type, value)   (const_cast<type>(value))

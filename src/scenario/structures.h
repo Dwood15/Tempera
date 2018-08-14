@@ -3,7 +3,6 @@
 #include "macros_generic.h"
 #include "../math/real_math.h"
 #include "../math/colors.h"
-#include "../tags/group/base.h"
 
 namespace Yelo::Scenario {
 	// made up name

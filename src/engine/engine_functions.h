@@ -1,6 +1,7 @@
 #include "../math/real_math.h"
 #include "../memory/datum_index.h"
 #include "../gamestate/objects/objectcontroller.h"
+#include "../CurrentEngine.h"
 
 namespace Yelo::blam {
 	real_point3d *object_get_origin(datum_index idx, real_point3d &out_origin) {

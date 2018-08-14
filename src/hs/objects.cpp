@@ -7,6 +7,7 @@
 #include "../engine/engine_functions.h"
 #include "object_lists.h"
 #include "../gamestate/objects/yelo_objects.h"
+#include "../cseries/yelo_base.h"
 
 namespace Yelo::Objects {
 	static void *scripting_objects_distance_to_object_evaluate(void **arguments) {

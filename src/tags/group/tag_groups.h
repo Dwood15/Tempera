@@ -38,5 +38,43 @@ namespace Yelo::TagGroups {
 		const uint _group = *((const uint *) name);
 		return (tag) ((_group >> 24) | ((_group >> 8) & 0xFF00) | (((_group << 8) & 0xFF0000) | ((_group << 24) & 0xFF000000)));
 	}
+
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wpadded"
+#endif
+
+#pragma pack(push, 1)
+
+	// Union hack to use a group tag as a string
+	union group_tag_to_string {
+		struct {
+			tag group;
+			unsigned char : 8; // null terminator
+		};
+
+		char str[sizeof(tag) + 1];
+
+		group_tag_to_string &Terminate() {
+			str[4] = '\0';
+			return *this;
+		}
+
+		group_tag_to_string &TagSwap() {
+			TagGroups::TagSwap(group);
+			return *this;
+		}
+
+		const char *ToString() {
+			return Terminate().TagSwap().str;
+		}
+	};
+
+#pragma pack(pop)
+
+#ifdef __GNUC__
+#pragma GCC diagnostic warning "-Wpadded"
+#endif
+	STAT_ASSERT(group_tag_to_string, sizeof(tag) + 0x1);
+
 };
 

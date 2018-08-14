@@ -1,6 +1,7 @@
 #pragma once
-
+#include <macros_generic.h>
 namespace Yelo {
+	// Halo1's editor allocates 256 characters for all tag_reference names, even if they're empty
 	// Template'd tag block for allowing more robust code.
 	template <typename T>
 	struct TagBlock {
@@ -82,8 +83,47 @@ namespace Yelo {
 
 		bool empty() const { return Count == 0; }
 
-		size_t size() const { return CAST(size_t, Count); }
+		auto size() const { return static_cast<size_t>(Count); }
 	};
 
 	STAT_ASSERT(TagBlock<char>, 0xC);
 };
+
+template <typename T = int>
+class tag_block {
+	typedef T *iter;
+
+	union {
+		// element count for this block
+		long count;
+
+		//size -> in bytes.
+		long size;
+	};
+
+	union {
+		void *address;
+		T    *definitions;
+	};
+
+	Yelo::tag_block_definition *definition;
+
+	T *Elements() { return reinterpret_cast<T *>(address); }
+
+	size_t get_element_size() {
+		return definition->element_size;
+	}
+
+	long constexpr Count() { return size / sizeof(T); }
+
+	iter begin() { return definitions; }
+
+	iter end() { return definitions + Count(); }
+
+};
+
+STAT_ASSERT(tag_block<int>, 0xC);
+STAT_ASSERT(tag_block<short>, 0xC);
+STAT_ASSERT(tag_block<char>, 0xC);
+
+#define pad_tag_block PAD32 PAD32 PAD32
