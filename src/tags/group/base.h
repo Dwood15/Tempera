@@ -1,4 +1,5 @@
 #pragma once
+
 #include <memory.h>
 
 #include "../../cseries/yelo_base.h"
@@ -47,10 +48,6 @@ class tag_block {
 	iter end() { return definitions + Count(); }
 
 };
-	static_assert(sizeof(tag_block<int>) == 0xC);
-	static_assert(sizeof(tag_block<short>) == 0xC);
-	static_assert(sizeof(tag_block<char>) == 0xC);
-
 
 
 namespace Yelo {
@@ -76,7 +73,7 @@ namespace Yelo {
 		void clear() {
 			auto reference = (*this);
 
-		std::memset(reference.name, 0, Enums::k_max_tag_name_length + 1);
+			std::memset(reference.name, 0, Enums::k_max_tag_name_length + 1);
 			reference.name_length = 0;
 			reference.group_tag   = NONE;
 			reference.tag_index   = datum_index::null();
@@ -92,7 +89,7 @@ namespace Yelo {
 		}
 	};
 
-	static_assert(sizeof(tag_reference) == 0x10);
+	STAT_ASSERT(tag_reference, 0x10);
 
 	struct tag_data {
 		// byte count of this data blob
@@ -135,7 +132,7 @@ namespace Yelo {
 
 		// Get the address of a block element which exists at [element_index]
 
-		template<typename T>
+		template <typename T>
 		void *__cdecl tag_data_get_pointer(T &data, long offset, long size) {
 			//YELO_ASSERT(size >= 0);
 			//YELO_ASSERT(offset >= 0 && offset + size <= data.size);
@@ -181,6 +178,7 @@ namespace Yelo {
 #endif
 
 #pragma pack(push, 1)
+
 		union group_tag_to_string {
 			struct {
 				tag group;
@@ -189,21 +187,27 @@ namespace Yelo {
 
 			char str[sizeof(tag) + 1];
 
-			group_tag_to_string &Terminate() { str[4] = '\0';			return *this; }
+			group_tag_to_string &Terminate() {
+				str[4] = '\0';
+				return *this;
+			}
 
-			group_tag_to_string &TagSwap() 	{ TagGroups::TagSwap(group);return *this; }
+			group_tag_to_string &TagSwap() {
+				TagGroups::TagSwap(group);
+				return *this;
+			}
 
 			const char *ToString() {
 				return Terminate().TagSwap().str;
 			}
 		};
+
 #pragma pack(pop)
 
 #ifdef __GNUC__
 #pragma GCC diagnostic warning "-Wpadded"
 #endif
 		STAT_ASSERT(group_tag_to_string, sizeof(tag) + 0x1);
-
 
 	};
 };

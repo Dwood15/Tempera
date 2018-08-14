@@ -55,7 +55,7 @@ void unit_set_actively_controlled(datum_index u, bool is_controlled) {
 	}
 	unit->unit.flags = newFlags;
 
-	static auto item_in_unit_inventory = CurrentEngine.getFunctionBegin("item_in_unit_inventory");
+	static std::optional<uintptr_t> item_in_unit_inventory = CurrentEngine.getFunctionBegin("item_in_unit_inventory");
 
 	if (item_in_unit_inventory) {
 		for (uint i = 0; i < MAX_WEAPONS_PER_UNIT; i++) {

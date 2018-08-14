@@ -21,4 +21,4 @@ struct machine
 }; // Size: 0xFE
 
 auto get_scenario_location(Yelo::TagGroups::scenario * scen, uint loc_ix);
-void players_set_local_player_unit(ushort requested_plyr_idx, datum_index player_unit);
+void players_set_local_player_unit(ushort requested_plyr_idx, Yelo::datum_index player_unit);

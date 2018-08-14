@@ -22,7 +22,9 @@ struct s_garbage_data {
 	short ticks_until_gc;
 	unsigned short:16;
 	__int32 _unused[5];
-}; static_assert(sizeof(s_garbage_data) == (k_object_size_garbage - k_object_size_item));
+};
+
+STAT_ASSERT(s_garbage_data, (k_object_size_garbage - k_object_size_item));
 
 struct s_item_data {
 	unsigned long       flags;                    // 0x1F4
@@ -41,7 +43,6 @@ struct s_item_data {
 	real_vector3d       __unk_type0;        // 0x218
 	real_euler_angles2d __unk_type1;    // 0x224
 };
-
 STAT_ASSERT(s_item_data, (k_object_size_item - k_object_size_object));
 
 INTELLISENSE_HACK(s_item_data)
@@ -56,7 +57,6 @@ struct s_object_header_block_reference {
 	unsigned short size;
 	unsigned short offset;
 };
-
 STAT_ASSERT(s_object_header_block_reference, 0x4);
 
 //should be populated during the object type's process_update_delta
@@ -78,10 +78,7 @@ struct s_object_datum_network_delta_data {
 	unsigned char __pad__unk3[3];
 	signed long   timestamp;                        // 0x58
 };
-
 STAT_ASSERT(s_object_datum_network_delta_data, 0x44);
-
-
 
 struct s_object_datum_damage_data {
 	float             maximum_health;                    // 0xD8
