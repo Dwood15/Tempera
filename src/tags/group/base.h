@@ -49,6 +49,9 @@ class tag_block {
 
 };
 
+STAT_ASSERT(tag_block<int>, 0xC);
+STAT_ASSERT(tag_block<short>, 0xC);
+STAT_ASSERT(tag_block<char>, 0xC);
 
 namespace Yelo {
 	// Halo1's editor allocates 256 characters for all tag_reference names, even if they're empty
