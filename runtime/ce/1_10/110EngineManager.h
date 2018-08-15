@@ -140,26 +140,7 @@ namespace feature_management::engines {
 
 		}
 
-		static void UpdateHSFunctionCounts(long count) { 
-			//count = _upgrade_globals.functions.count;
-
-			static long *K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit[] = {
-				(reinterpret_cast<long *>(0x4864FA)),
-			};
-
-			for (auto ptr : K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit) {
-				*ptr = count;
-			}
-
-			static short *references[] = {
-				(short *)0x4861E1,
-				(short *)0x486F14,
-			};
-
-			for (auto ptr : references) {
-				*ptr = CAST(short, count);
-			}
-		}
+		static void UpdateHSFunctionCounts(short count);
 
 		//////////////////////////////////////////////////////////////////////////
 
@@ -182,12 +163,11 @@ namespace feature_management::engines {
 
 		static void WriteHooks();
 
-
 		static void InitializeMemoryUpgrades();
 		static auto GetHsFunctionTableReferenceList();
 
-		static __forceinline auto GetHsFunctionTable();
-		static __forceinline auto GetHsFunctionTableCount();
+		constexpr auto GetHsFunctionTable();
+		constexpr auto GetHsFunctionTableCount();
 		static __forceinline auto GetHsFunctionTableCountReferences16();
 		static __forceinline auto GetHsFunctionTableCountReferences32();
 	};

@@ -56,7 +56,10 @@ struct LPCoreAddressList {
 	uint game_state_globals_ptr;
 	uint crc_checksum_buffer;
 
+	uint player_control_globals_data;
+	uint game_time_globals;
 	uint players_global_data;
+	uint game_globals_conn_type;
 };
 
 

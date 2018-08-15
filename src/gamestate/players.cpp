@@ -4,7 +4,7 @@
 #include <macros_generic.h>
 #include "../memory/datum_index.h"
 #include "players.h"
-#include "../core.h"
+#include "../CurrentEngine.h"
 
 const Yelo::TagGroups::scenario_player *get_scenario_location(Yelo::TagGroups::scenario *scen, ushort idx) {
 	if (idx < scen->player_starting_locations.Count) {
@@ -14,11 +14,7 @@ const Yelo::TagGroups::scenario_player *get_scenario_location(Yelo::TagGroups::s
 }
 
 void players_set_local_player_unit(unsigned short requested_plyr_idx, datum_index player_unit) {
-	if (!eCore) {
-		eCore = CurrentEngine.GetCore();
-	}
-
-	auto control      = eCore->GetPlayerControl(requested_plyr_idx);
+	auto control      = CurrentEngine.GetPlayerControl(requested_plyr_idx);
 	auto current_unit = control->unit_index;
 
 	static auto set_actively_controlled = CurrentEngine.getFunctionBegin("unit_set_actively_controlled");
@@ -28,7 +24,7 @@ void players_set_local_player_unit(unsigned short requested_plyr_idx, datum_inde
 	}
 
 	if (!current_unit.IsNull()) {
-		reinterpret_cast<s_unit_datum *>(eCore->GetGenericObject(current_unit.index))->unit.controlling_player_index = datum_index::null();
+		reinterpret_cast<s_unit_datum *>(CurrentEngine.GetGenericObject(current_unit.index))->unit.controlling_player_index = datum_index::null();
 #ifndef __GNUC__
 		//MS-style inline assembly is not available: Unable to find targets for this triple (no targets are registered)
 		//Bullshit CLion stuff
@@ -42,7 +38,7 @@ void players_set_local_player_unit(unsigned short requested_plyr_idx, datum_inde
 }
 
 void unit_set_actively_controlled(datum_index u, bool is_controlled) {
-	auto unit = reinterpret_cast<s_unit_datum *>(eCore->GetGenericObject(u.index));
+	auto unit = reinterpret_cast<s_unit_datum *>(CurrentEngine.GetGenericObject(u.index));
 
 	bool isAi;
 	if (!unit->unit.actor_index.IsNull() || !unit->unit.swarm_actor_index.IsNull() || !unit->unit.controlling_player_index.IsNull()) {

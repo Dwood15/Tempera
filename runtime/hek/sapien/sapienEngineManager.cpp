@@ -6,13 +6,11 @@
 
 using namespace feature_management::engines;
 
-// void __declspec(naked) Sapien::OnPlayerActionUpdate() {
-
 //__cdecl makes the _caller_ clean up the stack. __stdcall means our function cleans up the stack
 
-//This is this way, because clang's a pussy-ass bitch
 void __declspec(naked) Sapien::OnPlayerActionUpdate() {
-#ifndef __GNUC__
+	//Clang and gcc are pussy-ass bitches
+#if !defined(__GNUC__) && !defined(__CLANG__)
 	__asm mov     dword ptr[esp+18h], ecx
 	__asm mov     dword ptr[esp+14h], edi
 	__asm retn
@@ -21,7 +19,6 @@ void __declspec(naked) Sapien::OnPlayerActionUpdate() {
 
 const defined_functionrange *Sapien::GetFunctionMap() {
 #include "function_map.txt"
-
 	return sapien_function_map;
 }
 
@@ -40,9 +37,29 @@ void Sapien::WriteHooks() {
 	calls::WriteSimpleHook(0x52C865, &Sapien::OnPlayerActionUpdate); //6 bytes off.
 	calls::patchValue<byte>(0x52C869, 0x90); //
 	calls::patchValue<unsigned short>(0x52C86A, 0x9090); //
-
 }
 
-Core Sapien::GetCoreAddressList() {
-	return Core();
+//Why? Because I (Dwood) may be really really dumb
+static auto core0 = new _core_0;
+static auto core1 = new _core_1;
+
+LPCoreAddressList Sapien::GetCoreAddressList() {
+	LPCoreAddressList add_list;
+
+	core0->PlayersGlobals = *(s_players_globals_data **) 0x1057538;
+	core0->Teams          = *(data_header<void> **) 0x1057548;
+	core0->Players        = *(data_header<player> **) 0x105754C;
+
+	// object_list_header_data
+	core1->Object = *(data_header<object_header> **) 0x107F2E4;
+
+	add_list.core_0 = reinterpret_cast<uint>(core0);
+	add_list.core_1 = reinterpret_cast<uint>(core1);
+
+	add_list.at_main_menu      = 0xDBD909;
+	add_list.game_time_globals = 0xBD8A18;
+
+	add_list.player_control_globals_data = 0xDF76B0; // = player_control_globals *
+
+	return add_list;
 }

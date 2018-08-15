@@ -31,7 +31,6 @@ set(SRC_CXX
 	src/Direct3D/d3d9hook.cpp
 	${AI_CXX}
 	${DINPUT_CXX}
-	${CMAKE_CURRENT_SOURCE_DIR}/core.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/CurrentEngine.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/forge.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/math/math.cpp
@@ -60,7 +59,6 @@ set(SRC_H
 	${DINPUT_H}
 	${LUA_H}
 	${CMAKE_CURRENT_SOURCE_DIR}/core_types.h
-	${CMAKE_CURRENT_SOURCE_DIR}/core.h
 	${CMAKE_CURRENT_SOURCE_DIR}/CurrentEngine.h
 	${CMAKE_CURRENT_SOURCE_DIR}/forge.h
 	${TAGS_H}

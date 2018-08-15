@@ -1,13 +1,6 @@
-/*
-	Yelo: Open Sauce SDK
-		Halo 1 (CE) Edition
-
-	See license\OpenSauce\Halo1_CE for specific license information
-*/
 #pragma once
 
 #include "../group/groups_structures.h"
-#include "../group/base.h"
 #include "../group/tagreference.h"
 #include "enums/tag_enums.h"
 

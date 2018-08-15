@@ -11,12 +11,10 @@
 */
 #define WIN32_LEAN_AND_MEAN
 
-
 #include <addlog.h>
 #include <enums/player_enums.h>
 #include "d3d9hook.h"
 #include "textures.h"
-#include "../core.h"
 #include "../gamestate/camera.h"
 #include "../CurrentEngine.h"
 #include "../gamestate/objects/objectcontroller.h"
@@ -109,25 +107,16 @@ bool isOffScreen(vect3 screenpos) {
 }
 
 void PrintObjectTags(IDirect3DDevice9 *pDevice) {
-	static std::shared_ptr<Core> core;
-	if(core && !CurrentEngine.IsCoreInitialized()) {
-		core = CurrentEngine.GetCore();
-
-		if (!core) {
-			static bool printOnce = true;
-			if(printOnce) {
-				::PrintLn<true>("Tried to get core for PrintObjects, couldn't.");
-				printOnce = false;
-			}
-			return;
+	if (!CurrentEngine.IsCoreInitialized()) {
+		static bool printOnce = true;
+		if(printOnce) {
+			::PrintLn<true>("Tried to get Data for use in PrintObjects, couldn't.");
+			printOnce = false;
 		}
-	}
-
-	if (!core) {
 		return;
 	}
 
-	static short maxObjects = core->GetMaxObjects();
+	static short maxObjects = CurrentEngine.GetMaxObjects();
 
 	object_data   *obj          = NULL;
 	object_header *objh         = NULL;
@@ -144,13 +133,13 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 
 	for (unsigned short i = 0; i < maxObjects; i++) {
-		objh = core->GetObjectHeader(i);
-		obj  = core->GetGenericObject(i);
+		objh = CurrentEngine.GetObjectHeader(i);
+		obj  = CurrentEngine.GetGenericObject(i);
 		if (obj == NULL) {
 			continue;
 		}
 
-		screenpos = core->MyCamera->ScreenPos(obj->World);
+		screenpos = CurrentEngine.MyCamera->ScreenPos(obj->World);
 
 		// Offscreen check
 		if (isOffScreen(screenpos)) {
@@ -172,7 +161,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 		D3DCOLOR color = tGreen;
 
-		ObjName = core->GetObjectName(i);
+		ObjName = CurrentEngine.GetObjectName(i);
 
 
 		if (obj->IsPlayer()) {
@@ -180,17 +169,17 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 		}
 
-		if (core->ObjectControl->IsSelected(objh)) {
+		if (CurrentEngine.ObjectControl->IsSelected(objh)) {
 			color = tOrange;
 
-		} else if (core->ObjectControl->IsNearest(objh)) {
+		} else if (CurrentEngine.ObjectControl->IsNearest(objh)) {
 			color = tBlue;
 		}
 
 		cd3d.myDrawText(pDevice, cd3d.Font, true, (int) screenpos.x, (int) screenpos.y, 1000, 1000, color, tBlack, ObjName);
 	}
 
-	core->ObjectControl->SetNearest(temp_nearest);
+	CurrentEngine.ObjectControl->SetNearest(temp_nearest);
 }
 
 long __stdcall hkEndScene(IDirect3DDevice9 *pDevice) {

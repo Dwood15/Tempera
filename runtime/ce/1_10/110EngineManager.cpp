@@ -1,4 +1,5 @@
 #include <utility>
+#include <macros_generic.h>
 #include <enums/memory_enums.h>
 #include "../../common/addlog.h"
 #include "110EngineManager.h"
@@ -33,10 +34,10 @@ LPCoreAddressList CE110::GetCoreAddressList() {
 	CurrentCore.DEVMODE_HOOK_ADDRESS      = 0x004836DB;
 	CurrentCore.CONSOLE_TEXT_HOOK_ADDRESS = 0x00499AB0;
 
-	CurrentCore.to_respawn_count    = 0x6B4802; //short *
-	CurrentCore.spawn_count         = 0x624A9C; //short *
-	CurrentCore.render_window_count = 0x6B4098; //short *
-	CurrentCore.at_main_menu        = 0x6B4051; //short *
+	CurrentCore.to_respawn_count    = 0x6B4802;
+	CurrentCore.spawn_count         = 0x624A9C;
+	CurrentCore.render_window_count = 0x6B4098;
+	CurrentCore.at_main_menu        = 0x6B4051;
 
 	CurrentCore.hud_scripted_globals = 0x6B44A8;
 	CurrentCore.hud_messaging_state  = 0x677624;
@@ -51,6 +52,8 @@ LPCoreAddressList CE110::GetCoreAddressList() {
 	//static s_players_globals_data *players_global_data       = *(s_players_globals_data **) 0x815918;
 	CurrentCore.players_global_data = 0x815918;
 
+	CurrentCore.game_time_globals              = 0x68CD70;
+	CurrentCore.game_globals_conn_type = 0x6B47B0;
 	return CurrentCore;
 }
 
@@ -123,17 +126,23 @@ constexpr::std::pair<uintptr_t, short> short_patches[]{
 };
 
 void __declspec(naked) CE110::OnPlayerActionUpdate() {
-#ifndef __GNUC__
+//ahhhhhhhhhhhhhhhhhhhhhh
+//clangd is being horrendously dumb
+
+//Postmortem: this didn't work btw, I actually just ended up disabling clangd. /shrug
+#if defined(_MSC_VER) && !defined(__CLANG__)
 	s_player_action *current_action;
 
 	__asm mov     dword ptr[esp+18h], -1
 	__asm mov current_action, ebp
 	__asm retn
+#else
+	IMPLEMENTATION_REQUIRED
 #endif
 }
 
 void __declspec(naked) CE110::OnUnitControlUpdate(int client_update_idx) {
-#ifndef __GNUC__
+#if !defined(__GNUC__) && !defined(__CLANG__)
 	unsigned short unit_idx;
 	s_unit_control_data *from_control_data;
 
@@ -143,43 +152,46 @@ void __declspec(naked) CE110::OnUnitControlUpdate(int client_update_idx) {
 	Control::UnitControl(unit_idx, from_control_data, client_update_idx);
 
 	__asm retn
+#else
+	IMPLEMENTATION_REQUIRED
 #endif
 }
 
-auto GetHsFunctionTable() {
-	static auto **const hs_function_table = reinterpret_cast<Yelo::Scripting::hs_function_definition **>(0x624118);
-	return hs_function_table;
+void CE110::UpdateHSFunctionCounts(short count) {
+		//count = _upgrade_globals.functions.count;
+
+		//K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit
+		calls::patchValue<long>(0x4864FA, count);
+
+		//K_HS_FUNCTION_TABLE_COUNT_REFERENCES_16bit
+		calls::patchValue<short>(0x4861E1, count);
+		calls::patchValue<short>(0x486F14, count);
 }
 
-auto CE110::GetHsFunctionTableCount() {
-	static auto *const hs_function_table_count = reinterpret_cast<long *>(0x5F9C10);
-	return hs_function_table_count;
+constexpr auto CE110::GetHsFunctionTable() {
+	return reinterpret_cast<Yelo::Scripting::hs_function_definition **>(0x624118);
+}
+
+constexpr auto CE110::GetHsFunctionTableCount() {
+	return reinterpret_cast<long *>(0x5F9C10);
 }
 
 void CE110::InitializeHSMemoryUpgrades() {
-	static unsigned int *K_MAX_HS_SYNTAX_NODES_PER_SCENARIO_UPGRADE_ADDRESS_LIST[] = {
-		(reinterpret_cast<uint *>(0x485D7B)),
-	};
 
-	static unsigned int *K_TOTAL_SCENARIO_HS_SYNTAX_DATA_UPGRADE_ADDRESS_LIST[] = {
-		//CAST_PTR(uint*, PLATFORM_VALUE(0x485E93, 0x47D783)), // don't modify this one, modify the size check using the address below
-		(reinterpret_cast<uint *>(0x485DCA)),
-	};
+	//K_MAX_HS_SYNTAX_NODES_PER_SCENARIO_UPGRADE_ADDRESS_LIST
+	calls::patchValue<uint>(0x485D7B, Enums::k_maximum_hs_syntax_nodes_per_scenario_upgrade);
 
-	for (auto ptr : K_MAX_HS_SYNTAX_NODES_PER_SCENARIO_UPGRADE_ADDRESS_LIST) {
-		*ptr = Enums::k_maximum_hs_syntax_nodes_per_scenario_upgrade;
-	}
+	//CAST_PTR(uint*, PLATFORM_VALUE(0x485E93, 0x47D783)), // don't modify this one, modify the size check using the address below
+	//TODO: Above Comment may be irrelevant - needs confirmation
+	//K_TOTAL_SCENARIO_HS_SYNTAX_DATA_UPGRADE_ADDRESS_LIST
+	calls::patchValue<uint>(0x485DCA, Enums::k_total_scenario_hs_syntax_data_upgrade);
 
-	for (auto ptr : K_TOTAL_SCENARIO_HS_SYNTAX_DATA_UPGRADE_ADDRESS_LIST) {
-		*ptr = Enums::k_total_scenario_hs_syntax_data_upgrade;
-	}
-
-	byte *ADDRESS_OF_SCENARIO_HS_SYNTAX_DATA_SIZE_CHECK = (reinterpret_cast<byte *>(0x485D77));
 
 	// change from 'jz' (0x74) to 'jge' (0x7D)
 	// This allows us to support scenarios with original script nodes, or with
-	// Yelo based script nodes, which are larger (because of memory upgrades, duh)
-	*ADDRESS_OF_SCENARIO_HS_SYNTAX_DATA_SIZE_CHECK = Yelo::Enums::_x86_opcode_jge_short;
+	// Yelo based script nodes, which are larger (mem upgrades)
+	// ADDRESS_OF_SCENARIO_HS_SYNTAX_DATA_SIZE_CHECK
+	calls::patchValue<byte>(0x485D77, Yelo::Enums::_x86_opcode_jge_short);
 
 	// Currently, no code is ran in Update. SO WE CAN IGNORE IT.
 	// Memory::CreateHookRelativeCall(&Update, reinterpret_cast<void *>(HS_UPDATE_HOOK), Enums::_x86_opcode_retn);

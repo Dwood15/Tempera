@@ -5,8 +5,7 @@
 
 namespace Yelo::blam {
 	real_point3d *object_get_origin(datum_index idx, real_point3d &out_origin) {
-		static auto core    = CurrentEngine.GetCore();
-		auto        current = core->GetGenericObject(idx.index);
+		auto        current = CurrentEngine.GetGenericObject(idx.index);
 		real_point3d *real_current = std::addressof(out_origin);
 
 		if (current->parent_object_index.IsNull()) {

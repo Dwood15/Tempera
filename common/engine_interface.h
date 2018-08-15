@@ -1,5 +1,6 @@
 #pragma once
 #include <macros_generic.h>
+#include <array>
 
 /**
  * @brief MPP == MAX PLAYER PATCH _B == BYTE
@@ -25,6 +26,13 @@ namespace calls {
 	template <typename T>
 	void patchValue(uintptr_t to_patch, T replace_with) {
 		*(T *) to_patch = replace_with;
+	}
+
+	template<typename T, uint num>
+	void patchList(T replace_with, std::array<uintptr_t, num> list[]) {
+		for(auto ptr : list) {
+			patchValue<T>(ptr, replace_with);
+		}
 	}
 
 	static const unsigned int calc_addr_offset(const uintptr_t dest, int real_address) {

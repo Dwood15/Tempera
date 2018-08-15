@@ -6,8 +6,7 @@
 
 #include <macros_generic.h>
 #include "memory/datum_index.h"
-
-
+#include "gamestate/player_types.h"
 
 struct lruv_cache_block {
 	long              unk0;

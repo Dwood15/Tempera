@@ -50,12 +50,10 @@ int l_IsPlayerSpawned(lua_State *L) {
 		return 1;
 	}
 
-	auto Core = CurrentEngine.GetCore();
-
 	const auto idx = lua_tointeger(L, 1);
 
 	if (idx >= 0 && idx <= 15) {
-		lua_pushboolean(L, Core->IsPlayerSpawned(idx));
+		lua_pushboolean(L, CurrentEngine.IsPlayerSpawned(idx));
 		return 1;
 	}
 
@@ -76,17 +74,15 @@ int l_GetPlayerAddress(lua_State *L) {
 		return 1;
 	}
 
-	auto Core = CurrentEngine.GetCore();
-
 	const auto idx = lua_tointeger(L, 1);
 
 	if (idx >= 0 && idx <= 15) {
-		if (!Core->IsPlayerSpawned(idx)) {
+		if (!CurrentEngine.IsPlayerSpawned(idx)) {
 			lua_pushinteger(L, -1);
 			return 1;
 		}
 
-		lua_pushinteger(L, reinterpret_cast<int>(Core->GetPlayer(idx)));
+		lua_pushinteger(L, reinterpret_cast<int>(CurrentEngine.GetPlayer(idx)));
 		return 1;
 	}
 
@@ -413,7 +409,7 @@ void LuaScriptManager::InitializeLua(const::std::string &filename) {
 	});
 
 	registerGlobalLuaFunction("AreWeInMainMenu", [](lua_State *L) {
-		lua_pushboolean(L, CurrentEngine.GetCore()->AreWeInMainMenu());
+		lua_pushboolean(L, CurrentEngine.AreWeInMainMenu());
 		return 1;
 	});
 
@@ -422,42 +418,6 @@ void LuaScriptManager::InitializeLua(const::std::string &filename) {
 	registerGlobalLuaFunction("CallVoidEngineFunctionByFunctionMapName", l_CallVoidEngineFunctionByFunctionMapName);
 
 	//Some helpers for controlling the player.
-	registerGlobalLuaFunction("SetPlayerPrimaryTriggerFlag", [](lua_State *L) {
-		return LuaSetPlayerFunctionNoArg(L, [](ushort idx) {
-			CurrentEngine.SetPlayerPrimaryTriggerFlag(idx);
-		});
-	});
-
-	registerGlobalLuaFunction("SetPlayerTriggerPressure", [](lua_State *L) {
-		return LuaSetPlayerFunctionWithArg(L, [](ushort idx, float t) {
-			CurrentEngine.SetPlayerTriggerPressure(t, idx);
-		});
-	});
-
-	registerGlobalLuaFunction("SetPlayerXLook", [](lua_State *L) {
-		return LuaSetPlayerFunctionWithArg(L, [](ushort idx, float t) {
-			CurrentEngine.SetPlayerLookX(t, idx);
-		});
-	});
-
-	registerGlobalLuaFunction("SetPlayerYLook", [](lua_State *L) {
-		return LuaSetPlayerFunctionWithArg(L, [](ushort idx, float t) {
-			CurrentEngine.SetPlayerLookY(t, idx);
-		});
-	});
-
-	registerGlobalLuaFunction("SetPlayerXVelocity", [](lua_State *L) {
-		return LuaSetPlayerFunctionWithArg(L, [](ushort idx, float t) {
-			CurrentEngine.SetPlayerXVelocity(t, idx);
-		});
-	});
-
-	registerGlobalLuaFunction("SetPlayerYVelocity", [](lua_State *L) {
-		return LuaSetPlayerFunctionWithArg(L, [](ushort idx, float t) {
-			CurrentEngine.SetPlayerYVelocity(t, idx);
-		});
-	});
-
 	registerGlobalLuaFunction("MakePlayerJump", [](lua_State *L) {
 		return LuaSetPlayerFunctionNoArg(L, [](ushort idx) {
 			CurrentEngine.MakePlayerJump(idx);

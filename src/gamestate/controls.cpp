@@ -1,8 +1,6 @@
 #include "controls.h"
 #include "../CurrentEngine.h"
 
-extern std::shared_ptr<Core> eCore;
-
 void Control::HandleActionOverride(ushort idx, s_unit_control_data * from) {
 	if (CurrentEngine.ShouldOverrideAction(idx)) {
 
@@ -23,17 +21,15 @@ void Control::HandleActionOverride(ushort idx, s_unit_control_data * from) {
 }
 
 void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client_update_idx) {
-	auto core = CurrentEngine.GetCore();
-
 	// Print("Updating player: 0x%x", core);
 
-	auto to = reinterpret_cast<s_unit_datum *>(core->GetGenericObject(unit_idx));
+	auto to = reinterpret_cast<s_unit_datum *>(CurrentEngine.GetGenericObject(unit_idx));
 
 	if(to->unit.controlling_player_index.handle != static_cast<uint>(-1))	{
 		HandleActionOverride(to->unit.controlling_player_index.index, from);
 	}
 
-	if (*core->main_globals_game_connection_type == 2) {
+	if (*CurrentEngine.main_globals_game_connection_type == 2) {
 		if ((from->control_flags.control_flags_a >> 8) & 0b00101000) {
 			to->unit.pad11_networkpcOnly = 1;
 		} else {

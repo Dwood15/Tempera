@@ -2,7 +2,7 @@
 
 /*	See license\OpenSauce\OpenSauce for specific license information */
 #include "../math/real_math.h"
-#include "../tags/group/base.h"
+#include "../tags/group/tagblock.h"
 #include <enums/ai_enums.h>
 
 namespace Yelo {

@@ -4,9 +4,9 @@
 #include <enums/generic_enums.h>
 #include <enums/ai_enums.h>
 #include <enums/unit_enums.h>
-#include "../../tags/group/base.h"
 #include "../../math/real_math.h"
 #include "../../tags/group/tagblock.h"
+#include "../../tags/group/tagreference.h"
 
 namespace Yelo::TagGroups {
 	struct actor_variant_transform_keyframe_action {

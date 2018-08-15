@@ -1,9 +1,11 @@
 #pragma once
 
 #include "../../math/real_math.h"
+#include "../../math/int_math.h"
 #include "../../math/colors.h"
 #include "macros_generic.h"
 #include "../../tags/group/tagblock.h"
+#include "../../tags/group/tagreference.h"
 
 namespace Yelo::TagGroups {
 	struct s_actor_definition {

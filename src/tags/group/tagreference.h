@@ -46,7 +46,8 @@ namespace Yelo {
 		template<typename T>
 		bool tag_data_resize(TagData<T>& data, size_t new_size = 0)
 		{
-			return tag_data_resize(data.to_tag_data(), new_size);
+			// return tag_data_resize(data.to_tag_data(), new_size);
+			return false;
 		}
 	};
 

@@ -3,7 +3,7 @@
 #include <addlog.h>
 #include "forge.h"
 #include "math/colors.h"
-#include "core.h"
+#include "CurrentEngine.h"
 
 static short last_respawn_count       = 0x0;
 static short last_spawn_count         = 0x0;
@@ -17,7 +17,6 @@ static short *spawn_count         = (short *) 0x624A9C;
 ///num windows to render. Fills with black for invalid.    f
 static short *render_window_count = (short *) 0x6B4098;
 bool         *at_main_menu        = (bool *) 0x6B4051;
-static std::shared_ptr<Core>  core;
 
 void ForgeState::UpdateGlobals() {
 	if (last_respawn_count != *to_respawn_count) {
@@ -37,15 +36,10 @@ void ForgeState::UpdateGlobals() {
 }
 
 void ForgeState::HandleMainMenuOptions() {
-	if (!core) {
-		//Don't want to mess with shit if it's not initialized properly.
-		return;
-	}
-
 	if (GetAsyncKeyState(VK_F1) & 1) {
 		//Player spawn count set to 2.
 		*(short *) 0x624A9C = (short) 0x2;
-		core->ConsoleText(hGreen, "Number players to spawn in next sp map: +1!");
+		CurrentEngine.ConsoleText(hGreen, "Number players to spawn in next sp map: +1!");
 	}
 }
 
@@ -75,12 +69,9 @@ int __stdcall ForgeState::MainLoop() {
 	Sleep(600);
 	//automatically spawn the maximum number of local players at the beginning of the game.
 	//*(short *) 0x624A9C = (short)MAX_PLAYER_COUNT_LOCAL;
-	if (!core) {
-		core = CurrentEngine.GetCore();
-	}
 	cd3d.hkD3DHook(NULL);
 	// core->ConsoleText(hGreen, "Number players to spawn in next sp map: 3!");
-	core->ConsoleText(hGreen, "Tempera initialized.");
+	CurrentEngine.ConsoleText(hGreen, "Tempera initialized.");
 	PrintHelp();
 
 	while (1) {

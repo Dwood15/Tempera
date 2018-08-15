@@ -26,6 +26,8 @@ struct TAssertEquality {
 
 #define STAT_ASSERT(object, size) static_assert( TAssertEquality<sizeof(object), size>::_cResult);
 
+#define IMPLEMENTATION_REQUIRED static_assert(false, "This features requires implementation to compile on this darget.")
+
 /*auto numDigits = [](unsigned long num, unsigned long dig = 0) constexpr {
 	
 	while()

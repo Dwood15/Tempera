@@ -1,10 +1,10 @@
 #pragma once
 
 #include <versions.h>
-#include "../../../src/core.h"
 
 namespace feature_management::engines {
 	class Sapien : public IEngine<Sapien> {
+
 
 	public:
 		Sapien() = default;
@@ -17,7 +17,7 @@ namespace feature_management::engines {
 
 		static void __stdcall OnPlayerActionUpdate();
 
-		static Core GetCoreAddressList();
+		static LPCoreAddressList GetCoreAddressList();
 
 		static inline char *DEBUG_FILENAME = const_cast<char*>("tempera.hek.sapien.debug.log");
 

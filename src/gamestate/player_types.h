@@ -69,12 +69,11 @@ struct s_player_hud_messages {
 };
 STAT_ASSERT(s_player_hud_messages, 0x460);
 
-
-
 struct s_hud_messaging_state {
 	s_player_hud_messages hmi[MAX_PLAYER_COUNT_LOCAL];
 	byte                  unknown[0x28];
-};   STAT_ASSERT(s_hud_messaging_state, 0x28 + (0x460 * MAX_PLAYER_COUNT_LOCAL));
+};
+STAT_ASSERT(s_hud_messaging_state, 0x28 + (0x460 * MAX_PLAYER_COUNT_LOCAL));
 
 //this _fucking_ struct.
 //	struct s_hud_message_state_player {
@@ -86,12 +85,16 @@ struct s_custom_blip {
 	sbyte x;
 	sbyte y;
 };
+STAT_ASSERT(s_custom_blip, 0x2);
+
 
 struct s_blip : s_custom_blip {
 	//end custom blip location
 	blip_type type; // set to _blip_type_none when not used
 	sbyte     size;    // a la object's size (tiny, large, etc)
-}; STAT_ASSERT(s_blip, 0x4);
+};
+
+STAT_ASSERT(s_blip, 0x4);
 
 struct s_team_data {
 	s_blip object_blips[MAX_CUSTOM_BLIPS];            // objects belonging to just this team

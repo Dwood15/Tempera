@@ -8,7 +8,6 @@
 
 #include "groups_structures.h"
 #include "tag_groups.h"
-#include "base.h"
 
 namespace Yelo {
 	namespace TagGroups {

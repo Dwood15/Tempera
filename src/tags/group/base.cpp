@@ -1,6 +1,5 @@
 #include <memory>
 #include "macros_generic.h"
-#include "base.h"
 namespace Yelo {
 	namespace blam {
 		// Clear the values of a tag reference so that it references no tag

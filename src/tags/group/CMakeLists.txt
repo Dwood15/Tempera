@@ -1,5 +1,4 @@
 set(GROUP_H
-	${CMAKE_CURRENT_SOURCE_DIR}/base.h
 	${CMAKE_CURRENT_SOURCE_DIR}/markup.h
 	${CMAKE_CURRENT_SOURCE_DIR}/c_tag_iterator.h
 	${CMAKE_CURRENT_SOURCE_DIR}/groups_structures.h

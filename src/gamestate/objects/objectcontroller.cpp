@@ -1,5 +1,4 @@
 #include "objectcontroller.h"
-#include "../../core.h"
 #include "../../CurrentEngine.h"
 
 void ObjectController::SetHoldDistance(float dist) {
@@ -18,7 +17,7 @@ void ObjectController::SetHoldDistance(float dist) {
 	}
 
 	if (!debounce) {
-		CurrentEngine.GetCore()->ConsoleText(hRed, "Unable to change distance of object further!\n");
+		CurrentEngine.ConsoleText(hRed, "Unable to change distance of object further!\n");
 		debounce = true;
 	}
 }
@@ -35,38 +34,38 @@ void ObjectController::MoveObjXY() {
 		return;
 	}
 
-	if (CurrentEngine.GetCore()->ObjectControl->IsHoldingObject()) {
+	if (CurrentEngine.ObjectControl->IsHoldingObject()) {
 		return;
 	}
 
-	auto core = CurrentEngine.GetCore();
+	auto camera = CurrentEngine.camera;
 
-	float z_diff     = selected_h->address->World.z - core->camera->vWorld.z;
-	float multiplier = abs(z_diff / core->camera->vLookAt.z);
+	float z_diff     = selected_h->address->World.z -camera->vWorld.z;
+	float multiplier = abs(z_diff /camera->vLookAt.z);
 
-	selected_h->address->World.x = core->camera->vWorld.x + core->camera->vLookAt.x * multiplier;
-	selected_h->address->World.y = core->camera->vWorld.y + core->camera->vLookAt.y * multiplier;
+	selected_h->address->World.x =camera->vWorld.x +camera->vLookAt.x * multiplier;
+	selected_h->address->World.y = camera->vWorld.y + camera->vLookAt.y * multiplier;
 }
 
 void ObjectController::MoveObjFront() {
-	auto core = CurrentEngine.GetCore();
+	auto camera = CurrentEngine.camera;
 
 	if (!CanHoldObject()) {
-		core->ConsoleText(hRed, "Didn't grab anything: nothing has been selected!");
+		CurrentEngine.ConsoleText(hRed, "Didn't grab anything: nothing has been selected!");
 		return;
 	}
 
 	if (!holding) {
-		float z_diff = selected_h->address->World.z - core->camera->vWorld.z;
-		float y_diff = selected_h->address->World.y - core->camera->vWorld.y;
-		float x_diff = selected_h->address->World.x - core->camera->vWorld.x;
+		float z_diff = selected_h->address->World.z - camera->vWorld.z;
+		float y_diff = selected_h->address->World.y - camera->vWorld.y;
+		float x_diff = selected_h->address->World.x - camera->vWorld.x;
 		HoldDistance = sqrt(z_diff * z_diff + y_diff * y_diff + x_diff * x_diff);
 		holding      = true;
 	}
 
-	selected_h->address->World.x = core->camera->vWorld.x + core->camera->vLookAt.x * HoldDistance;
-	selected_h->address->World.y = core->camera->vWorld.y + core->camera->vLookAt.y * HoldDistance;
-	selected_h->address->World.z = core->camera->vWorld.z + core->camera->vLookAt.z * HoldDistance;
+	selected_h->address->World.x = camera->vWorld.x + camera->vLookAt.x * HoldDistance;
+	selected_h->address->World.y = camera->vWorld.y + camera->vLookAt.y * HoldDistance;
+	selected_h->address->World.z = camera->vWorld.z + camera->vLookAt.z * HoldDistance;
 }
 
 void ObjectController::IncreaseHoldDistance(unsigned int numSteps) {
@@ -106,10 +105,8 @@ bool ObjectController::CanSelectObject() {
 }
 
 void ObjectController::RemoveSelection() {
-	auto core = CurrentEngine.GetCore();
-
-	core->ObjectControl->selected_h = (object_header *) -1;
-	core->ConsoleText(hGreen, "Removed selection.");
+	CurrentEngine.ObjectControl->selected_h = (object_header *) -1;
+	CurrentEngine.ConsoleText(hGreen, "Removed selection.");
 }
 
 void ObjectController::DropHeldObject() {
@@ -117,18 +114,14 @@ void ObjectController::DropHeldObject() {
 		return;
 	}
 
-	auto core = CurrentEngine.GetCore();
-
-	core->ConsoleText(hBlue, "Got set holding = false");
+	CurrentEngine.ConsoleText(hBlue, "Got set holding = false");
 	holding = false;
 }
 
 void ObjectController::UpdateHeldObject() {
 	if (!IsHoldingObject()) {
 		ToggleHoldiong();
-		auto core = CurrentEngine.GetCore();
-
-		core->ConsoleText(hBlue, "Got set holding = true");
+		CurrentEngine.ConsoleText(hBlue, "Got set holding = true");
 	}
 
 	MoveObjFront();
@@ -163,12 +156,11 @@ bool ObjectController::IsSelected(object_header *objh) {
 }
 
 void ObjectController::SetSelectedObject() {
-	auto core = CurrentEngine.GetCore();
 	if (!CanSelectObject()) {
-		core->ConsoleText(hRed, "Unable to update single selection.");
+		CurrentEngine.ConsoleText(hRed, "Unable to update single selection.");
 		return;
 	}
-	core->ConsoleText(hGreen, "Added single selection.");
+	CurrentEngine.ConsoleText(hGreen, "Added single selection.");
 	selected_h = nearest_h;
 }
 
@@ -176,7 +168,7 @@ void ObjectController::LogInfo() {
 	if (!selected_h || !selected_h->address) {
 		return;
 	}
-	auto core = CurrentEngine.GetCore();
-	core->ConsoleText(hBlue, "Selected object name: %s", core->GetObjectName(selected_h->address));
-	core->MyCamera->ScreenPos(selected_h->address->World, true);
+
+	CurrentEngine.ConsoleText(hBlue, "Selected object name: %s", CurrentEngine.GetObjectName(selected_h->address));
+	CurrentEngine.MyCamera->ScreenPos(selected_h->address->World, true);
 }
