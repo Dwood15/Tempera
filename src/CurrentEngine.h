@@ -80,7 +80,7 @@ namespace feature_management::engines {
 
 		player *GetPlayer(short index);
 
-		bool AreWeInMainMenu();
+		const bool AreWeInMainMenu();
 		auto GetGameTimeGlobals();
 
 		bool IsPlayerSpawned(short index);
@@ -182,7 +182,7 @@ namespace feature_management::engines {
 
 		GlobalEngine();
 
-		void RefreshCore();
+		void RefreshCore(bool force = false);
 
 		auto GetHsFunctionTableCountReferences16();
 		auto GetHsFunctionTableCountReferences32();

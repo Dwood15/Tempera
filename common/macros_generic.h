@@ -47,7 +47,6 @@ static_assert(numDigits(1001) == 4); */
 
 //#define STAT_ASSERT(object, size) static_assert(size_check<object, size>());
 
-
 typedef float          real;
 typedef int            int32;
 typedef long           byte_swap_code_t;

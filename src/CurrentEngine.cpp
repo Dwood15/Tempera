@@ -136,7 +136,7 @@ constexpr bool GlobalEngine::equal(const char *lhs, const char *rhs) {
 }
 
 auto GlobalEngine::ScenarioGlobals() {
-	if (!this->IsCoreInitialized() || !scenario_globals) {
+	if (!core_initialized || !scenario_globals) {
 		return static_cast<Yelo::Scenario::s_scenario_globals *>(nullptr);
 	}
 
@@ -286,16 +286,16 @@ void GlobalEngine::SetCoreAddressList(LPCoreAddressList add_list) {
 
 	main_globals_game_connection_type = reinterpret_cast<ushort *>(add_list.game_globals_conn_type);
 
-
 	game_state_globals_location_ptr = reinterpret_cast<uintptr>(add_list.game_state_globals_location_ptr);
-	at_main_menu                = reinterpret_cast<bool *>(add_list.at_main_menu);
-	player_control_globals_data = *reinterpret_cast<s_player_control_globals_data **>(add_list.player_control_globals_data); // = player_control_globals *
-	game_time_globals           = *reinterpret_cast<Yelo::GameState::s_game_time_globals **>(add_list.game_time_globals);
+	at_main_menu                    = reinterpret_cast<bool *>(add_list.at_main_menu);
+	player_control_globals_data     = *reinterpret_cast<s_player_control_globals_data **>(add_list.player_control_globals_data); // = player_control_globals *
+	game_time_globals               = *reinterpret_cast<Yelo::GameState::s_game_time_globals **>(add_list.game_time_globals);
 
+	core_initialized = true;
 }
 
-void GlobalEngine::RefreshCore() {
-	if (core_initialized) {
+void GlobalEngine::RefreshCore(bool force) {
+	if (core_initialized && !force) {
 		return;
 	}
 
@@ -309,7 +309,6 @@ void GlobalEngine::RefreshCore() {
 
 	if (this->IsCustomEd()) {
 		SetCoreAddressList(CE110::GetCoreAddressList());
-
 	}
 
 }
@@ -394,11 +393,12 @@ bool GlobalEngine::HasSupport() {
 
 	return false;
 }
+
 short GlobalEngine::GetElapsedTime() {
 	return game_time_globals->elapsed_time;
 }
 
-datum_index * GlobalEngine::GetLocalPlayers() {
+datum_index *GlobalEngine::GetLocalPlayers() {
 	return players_globals->local_player_players;
 }
 
@@ -531,7 +531,6 @@ void game_tick(int current_frame_tick) {
 #undef CALL_LUA_BY_EVENT
 #undef PRINTED
 
-
 typedef std::string string;
 
 typedef void (*pConsoleCMD)(char *command);
@@ -657,12 +656,28 @@ namespace feature_management::engines {
 		return MapHeader->MapName;
 	}
 
-	bool GlobalEngine::AreWeInMainMenu() {
-		if (CurrentEngine.IsSapien()) {
+	const bool GlobalEngine::AreWeInMainMenu() {
+		if (!HasSupport()) {
+			throw "Main menu check called invalid fashion";
+		}
+
+		if (!IsCoreInitialized()) {
+			throw "AreWeInMainMenu called way too early in the cycle.";
+		}
+
+		if (IsSapien()) {
 			return false;
 		}
 
-		return *at_main_menu;
+		if (!this->at_main_menu) {
+			this->RefreshCore();
+
+			if (!this->at_main_menu) {
+				throw "This is complete bullshit. We cannot continue. RefreshCore check fails after refresh.";
+			}
+		}
+
+		return *this->at_main_menu;
 	}
 
 	////////////////////////////////////////
