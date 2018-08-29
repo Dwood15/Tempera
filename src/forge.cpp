@@ -60,7 +60,7 @@ void ForgeState::PrintHelp() {
 }
 
 //TODO: Launch thread later on in the load cycle
-int __stdcall ForgeState::MainLoop() {
+int ForgeState::MainLoop() {
 	if (CurrentEngine.IsHek()) {
 		PrintLn("Forge doesn't support anything but Halo PC 1.10 right now. Working on expanding horizons.");
 		return 0;

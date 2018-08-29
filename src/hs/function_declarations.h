@@ -797,13 +797,7 @@ namespace Yelo::Scripting {
 				}
 			}
 		}
-		{
-			hs_global_definition ****definitions = reinterpret_cast<hs_global_definition ****>(K_HS_EXTERNAL_GLOBALS_REFERENCES);
-			const size_t k_count =::std::size(K_HS_EXTERNAL_GLOBALS_REFERENCES);
 
-			for (size_t x = 0; x < k_count; x++)
-				*definitions[x] = &_upgrade_globals.globals.table[0];
-		}
 		//////////////////////////////////////////////////////////////////////////
 	}
 

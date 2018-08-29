@@ -125,6 +125,51 @@ constexpr::std::pair<uintptr_t, short> short_patches[]{
 	{0x50F5EB, (short) 0x9090}, //render_player_frame_jg_patch
 };
 
+
+void CE110::UpdateGlobalHSFunctionCounts(long count) {
+		//count = _upgrade_globals.globals.count;
+
+		long  *K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_32bit[] = {
+			reinterpret_cast<long *>(0x4865AA),
+			reinterpret_cast<long *>(0x48BCDA),
+			reinterpret_cast<long *>(0x48CAFB),
+			reinterpret_cast<long *>(0x48CC0F),
+			reinterpret_cast<long *>(0x48CC6D),
+			reinterpret_cast<long *>(0x48CD70),
+			reinterpret_cast<long *>(0x48D38A),
+		};
+
+		for (auto ptr : K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_32bit)
+			*ptr = count;
+
+		static short *K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_16bit[] = {
+			(reinterpret_cast<short *>(0x4860F1)),
+		};
+
+		for (auto ptr : K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_16bit)
+			*ptr = static_cast<short>(count);
+
+		void *K_HS_EXTERNAL_GLOBALS_REFERENCES[] = {
+			reinterpret_cast<void *>(0x48607C),
+			reinterpret_cast<void *>(0x4860AC),
+			reinterpret_cast<void *>(0x4860D9),
+			reinterpret_cast<void *>(0x486410),
+			reinterpret_cast<void *>(0x4865A5),
+			reinterpret_cast<void *>(0x4891E2),
+			reinterpret_cast<void *>(0x48BC6E),
+			reinterpret_cast<void *>(0x48D1E6),
+			reinterpret_cast<void *>(0x48DB1B),
+			reinterpret_cast<void *>(0x48DC87),
+		};
+
+		hs_global_definition ****definitions = reinterpret_cast<hs_global_definition ****>(K_HS_EXTERNAL_GLOBALS_REFERENCES);
+		const size_t k_count =::std::size(K_HS_EXTERNAL_GLOBALS_REFERENCES);
+
+		for (size_t x = 0; x < k_count; x++)
+			*definitions[x] = &_upgrade_globals.globals.table[0];
+
+}
+
 void __declspec(naked) CE110::OnPlayerActionUpdate() {
 //ahhhhhhhhhhhhhhhhhhhhhh
 //clangd is being horrendously dumb
