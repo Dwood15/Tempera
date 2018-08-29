@@ -1,5 +1,6 @@
 .idea/
 bin/
+cache/
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
@@ -13,7 +14,7 @@ install_manifest.txt
 
 # OSX
 # =========================
-
+.vs/
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -57,3 +58,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+.vs/config/applicationhost.config
