@@ -18,7 +18,7 @@ cmake-build-debug-mingw_ian
 
 # OSX
 # =========================
-
+.vs/
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -62,7 +62,9 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-cmake-build-debug/compile_commands.json
+cmake-build-debug/
 
 *.cbp
 *.lib
+
+
