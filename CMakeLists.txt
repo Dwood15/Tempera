@@ -28,14 +28,16 @@ set(COMMON ${CMAKE_CURRENT_SOURCE_DIR}/common/)
 include_directories(AFTER ${GAME_LIB_DIRS} ${COMMON})
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
+find_path(YMLCPP_PATH FindYamlCpp.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 find_path(MDB_PATH FindMariaDB.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 find_path(LUA_PATH FindLua.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 find_path(TDN_PATH FindTinyDNN.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 #C:\Users\Dwood\Documents\GitHub\tiny-dnn\tiny_dnn
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH} ${MDB_PATH} ${TDN_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${YMLCPP_PATH} ${GAME_PATH} ${MDB_PATH} ${TDN_PATH})
 
 find_package(HaloCE REQUIRED)
 find_package(Lua REQUIRED)
+find_package(YamlCpp REQUIRED)
 
 if (LUA_Debug)
 	message(STATUS "Post-Find debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
@@ -47,7 +49,7 @@ find_package(TinyDNN)
 
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
-include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${INCLUDE}/detours ${LUA_INCLUDE_DIR} ${MARIADB_INCLUDE_DIR})
+include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${INCLUDE}/detours ${TINYDNN_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${YAMLCPP_INCLUDE_DIR} ${MARIADB_INCLUDE_DIR})
 
 # Defines Debug by default.
 if (NOT CMAKE_BUILD_TYPE)
@@ -130,6 +132,11 @@ endif ()
 file(GLOB DETOURS_GLOB libs/detours.lib)
 file(GLOB LUA_GLOB libs/LUA.lib)
 
+if(YAMLCPP_FOUND)
+	add_library(ycpp STATIC IMPORTED)
+	set_target_properties(ycpp PROPERTIES IMPORTED_LOCATION ${YAMLCPP_LIBRARY})
+endif()
+
 if (MARIADB_FOUND)
 	add_library(mdb STATIC IMPORTED)
 	set_target_properties(mdb PROPERTIES IMPORTED_LOCATION ${MARIADB_LIBRARY})
@@ -183,7 +190,7 @@ add_library(dinput8 SHARED
 set(XINPUTLIB "D:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
 #D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
 #Version.Lib is required for looking up current EXE's runtime information.
-target_link_libraries(dinput8 ${MARIADB_LIBRARY} ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
+target_link_libraries(dinput8 ${MARIADB_LIBRARY} ${YAMLCPP_LIBRARY} ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
 
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")

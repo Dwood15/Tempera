@@ -10,8 +10,7 @@ CMakeScripts
 Makefile
 cmake_install.cmake
 install_manifest.txt
-cmake-build-debug-mingw/
-cmake-build-debug-mingw_ian
+cmake-build-*
 # =========================
 # Operating System Files
 # =========================
