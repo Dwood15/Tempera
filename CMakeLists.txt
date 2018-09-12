@@ -48,13 +48,15 @@ set(TARGET_GAME_VER "HALO_CE_1_10")
 add_subdirectory(runtime)
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
+find_path(YMLCPP_PATH FindYamlCpp.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 find_path(MDB_PATH FindMariaDB.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${DX_PATH} ${GAME_PATH} ${MDB_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${DX_PATH} ${YMLCPP_PATH} ${GAME_PATH} ${MDB_PATH})
 
 find_package(HaloCE REQUIRED)
 find_package(DirectX REQUIRED)
 find_package(MariaDB REQUIRED)
+find_package(YamlCpp REQUIRED)
 #TODO: JSON SERIALIZATION/DESERIALIZATION
 #https://github.com/nlohmann/json#serialization--deserialization
 
@@ -83,7 +85,7 @@ if (NOT MSVC OR NOT MSVC_VERSION)
 
 	message(STATUS "Mingw detected.")
 	set(COMPILER_REL_FLDR mingw)
-	set(CMAKE_CXX_`FLAGS "-std=c++17\ -fpermissive")
+	set(CMAKE_CXX_FLAGS "-std=c++17\ -fpermissive")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS}\ -g\ -m32\ -masm=intel")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g -m32 -masm=intel")
 elseif (MSVC)
@@ -175,11 +177,7 @@ add_library(dinput8 SHARED
 add_precompiled_header(dinput8 ${CMAKE_CURRENT_SOURCE_DIR}/precompile.h FORCEINCLUDE)
 
 
-
-
-
-
-target_link_libraries(dinput8 ${DETOURS_GLOB} ${LUA53_GLOB} ${MARIADB_LIBRARY} ${CAPSTONE_STATIC_GLOB} ${DirectX_LIBRARIES})
+target_link_libraries(dinput8 ${DETOURS_GLOB} ${LUA53_GLOB} ${YAMLCPP_LIBRARY} ${MARIADB_LIBRARY} ${CAPSTONE_STATIC_GLOB} ${DirectX_LIBRARIES})
 
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")
