@@ -696,10 +696,6 @@ namespace Yelo::Scripting {
 		} globals;
 	};
 
-	static s_upgrade_globals _upgrade_globals       = {
-		{0, Enums::k_hs_script_functions_count_upgrade},
-		{0, Enums::k_hs_external_globals_count_upgrade}
-	};
 
 	static void InitializeLibraryFixups() {
 		NullifyScriptLibraryFixups();

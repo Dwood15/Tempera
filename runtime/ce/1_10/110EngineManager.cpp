@@ -10,6 +10,7 @@
 #include "../../../src/hs/structures.h"
 #include "../../../src/CurrentEngine.h"
 #include "hs_function_table_references.h"
+#include "../../../src/hs/function_declarations.h"
 
 using namespace feature_management;
 using namespace feature_management::engines;
@@ -125,6 +126,10 @@ constexpr::std::pair<uintptr_t, short> short_patches[]{
 	{0x50F5EB, (short) 0x9090}, //render_player_frame_jg_patch
 };
 
+static Yelo::Scripting::s_upgrade_globals _upgrade_globals       = {
+	{0, Enums::k_hs_script_functions_count_upgrade},
+	{0, Enums::k_hs_external_globals_count_upgrade}
+};
 
 void CE110::UpdateGlobalHSFunctionCounts(long count) {
 		//count = _upgrade_globals.globals.count;
@@ -162,7 +167,7 @@ void CE110::UpdateGlobalHSFunctionCounts(long count) {
 			reinterpret_cast<void *>(0x48DC87),
 		};
 
-		hs_global_definition ****definitions = reinterpret_cast<hs_global_definition ****>(K_HS_EXTERNAL_GLOBALS_REFERENCES);
+	Yelo::Scripting::hs_global_definition ****definitions = reinterpret_cast<Yelo::Scripting::hs_global_definition ****>(K_HS_EXTERNAL_GLOBALS_REFERENCES);
 		const size_t k_count =::std::size(K_HS_EXTERNAL_GLOBALS_REFERENCES);
 
 		for (size_t x = 0; x < k_count; x++)
