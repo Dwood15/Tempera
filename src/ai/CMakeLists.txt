@@ -26,11 +26,13 @@ set(A_ACTORS_H
 	${CMAKE_CURRENT_SOURCE_DIR}/actors/tranform_manager.h)
 
 set(AI_CXX
+	${CMAKE_CURRENT_SOURCE_DIR}/ai_yelo/AI.cpp
 	PARENT_SCOPE)
 
 set(AI_H
 	${A_ACTIONS_H}
 	${A_ACTORS_H}
+	${CMAKE_CURRENT_SOURCE_DIR}/ai_yelo/AI.h
 	${CMAKE_CURRENT_SOURCE_DIR}/ai.h
 	${CMAKE_CURRENT_SOURCE_DIR}/ai_communication.h
 	${CMAKE_CURRENT_SOURCE_DIR}/ai_scenario_definitions.h

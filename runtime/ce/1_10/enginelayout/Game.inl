@@ -297,7 +297,6 @@ static auto const GAME_ENGINE_UPDATE_HOOK = 0x460D51;
 static auto *const main_globals = reinterpret_cast<Yelo::GameEngine::s_main_globals *>(0x6B4798);
 
 static auto *const physical_memory_globals = reinterpret_cast<s_physical_memory_map_globals *>(0x647458);
-static auto const PHYSICAL_MEMORY_INITIALIZE = 0x445230;
 enum DATA_PTR_PHYSICAL_MEMORY_ALLOCATION_SIZE { PTR_PHYSICAL_MEMORY_ALLOCATION_SIZE = 0x445258 };
 static_assert(PTR_PHYSICAL_MEMORY_ALLOCATION_SIZE != 0);
 

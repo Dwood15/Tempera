@@ -11,9 +11,8 @@
 // yelo globals		- project_yellow_globals
 // blam scenario	- scenario
 
-#include "../cache/cache_files.hpp"
-#include "../hs/hs_yelo.hpp"
 #include "yelo_global_definitions.h"
+#include "../../cache/cache_files.h"
 
 namespace Yelo::Scenario {
 	using namespace TagGroups;
@@ -38,15 +37,11 @@ namespace Yelo::Scenario {
 		// sets the bit when they protect the cache, we don't want
 		// to undo their courtesy
 		if (!g_project_yellow->IsNull() && !g_project_yellow->IsCacheProtected()) {
-			bool is_protected = TagGroups::Instances()[0].group_tag == Enums::k_protected_group_tag;
-
-			SET_FLAG(g_project_yellow->flags, Flags::_project_yellow_cache_is_protected_bit, is_protected);
+			SET_FLAG(g_project_yellow->flags, Flags::_project_yellow_cache_is_protected_bit, false);
 		}
 
 		if (!VerifyYeloScriptDefinitions()) {
-			PrepareToDropError(
-				"This map's yelo script definitions appear to differ from this build of OS. "
-				"We're probably about to crash...");
+			PrepareToDropError("This map's yelo script definitions appear to differ from this build of OS. We're probably about to crash...");
 		}
 	}
 
@@ -82,41 +77,19 @@ namespace Yelo::Scenario {
 		InitializeForNewYeloDefinitions(yelo_index, yelo_globals_index);
 	}
 
-	static bool VerifyYeloScriptDefinitions() {
-		bool                                   mismatch = false;
-
-		// Verify that the map's project_yellow's script definitions are included in this
-		// build of Yelo.
-		const Yelo::TagBlock<const s_scripting_definitions> &user_script_block = g_project_yellow->user_scripting;
-		if (user_script_block.Count == 1 &&
-			 !Scripting::DefinitionsMatch(user_script_block[0])) {
-			mismatch = true;
-		}
-
-		// Verify that the map's project_yellow_globals's script definitions are included in this
-		// build of Yelo.
-		const Yelo::TagBlock<const s_scripting_definitions> &global_script_block = g_py_globals->yelo_scripting;
-		if (global_script_block.Count == 1 &&
-			 !Scripting::DefinitionsMatch(global_script_block[0])) {
-			mismatch = true;
-		}
-
-		return !mismatch;
-	}
-
 	// should be called in scenario_tags_unload
 	void ProjectYellowDisposeFromOldMap() {
 		InitializeForNewYeloDefinitions(datum_index::null, datum_index::null());
 	}
 
 	const TagGroups::project_yellow_globals *GetYeloGlobals() {
-		assert(g_py_globals);
+		// assert(g_py_globals);
 
 		return g_py_globals;
 	}
 
 	const TagGroups::project_yellow *GetYelo() {
-		assert(g_project_yellow);
+		// assert(g_project_yellow);
 
 		return g_project_yellow;
 	}

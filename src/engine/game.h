@@ -53,7 +53,7 @@ namespace blam {
 	//////////////////////////////////////////////////////////////////////////
 	// game_allegiance.c
 	bool game_team_is_enemy(signed long team, signed long team_to_test) {
-		return calls::DoCall<Convention::m_fastcall, bool, short, short>(CurrentEngine.getFunctionBegin("game_team_is_enemy"), team, team_to_test);
+		return calls::DoCall<Convention::m_fastcall, bool, short, short>(*CurrentEngine.getFunctionBegin("game_team_is_enemy"), team, team_to_test);
 	}
 
 	//////////////////////////////////////////////////////////////////////////

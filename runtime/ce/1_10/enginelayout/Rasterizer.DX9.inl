@@ -22,7 +22,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////
-// DX9.cpp
+// dx9.cpp
 static auto *const Params = reinterpret_cast<D3DPRESENT_PARAMETERS *>(K_PARAMS);
 static auto *const Caps = reinterpret_cast<D3DCAPS9 *>(K_CAPS);
 static auto **const D3D = reinterpret_cast<IDirect3D9 **>(K_D3D);;
@@ -65,7 +65,7 @@ static auto const RASTERIZER_DRAW_STATIC_TRIANGLES_STATIC_VERTICES__DRAW_INDEXED
 static auto const RASTERIZER_DRAW_DYNAMIC_TRIANGLES_STATIC_VERTICES2__DRAW_INDEXED_PRIMITIVE_HOOK = K_RASTERIZER_DRAW_DYNAMIC_TRIANGLES_STATIC_VERTICES2__DRAW_INDEXED_PRIMITIVE_HOOK;
 
 //////////////////////////////////////////////////////////////////////////
-// DX9/rasterizer_dx9_shaders_vshader9.cpp
+// dx9/rasterizer_dx9_shaders_vshader9.cpp
 static auto *const rasterizer_dx9_effect_collection = reinterpret_cast<s_rasterizer_dx9_effect_collection *>(K_RASTERIZER_DX9_EFFECT_COLLECTION);
 static auto *const rasterizer_effect_shaders = reinterpret_cast<s_effect_shader_entry *>(K_RASTERIZER_EFFECT_SHADERS);
 static auto *const vsf_table = reinterpret_cast<s_vsf_entry *>(K_VSF_TABLE);

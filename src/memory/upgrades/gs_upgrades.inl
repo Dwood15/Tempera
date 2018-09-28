@@ -1,13 +1,10 @@
-/*
-	Yelo: Open Sauce SDK
-		Halo 1 (CE) Edition
-
-	See license\OpenSauce\Halo1_CE for specific license information
-*/
+#include <winnt.h>
+#include <memoryapi.h>
+#include "../memory_interface_base.hpp"
 
 // This memory upgrade design can only work with a DLL override system
 static void PhysicalMemoryReInitialize() {
-	static const uintptr_t INITIALIZE = GET_FUNC_PTR(PHYSICAL_MEMORY_INITIALIZE);
+	static const uintptr_t INITIALIZE = 0x445230;
 
 	s_physical_memory_map_globals *globals = PhysicalMemoryMapGlobals();
 

@@ -1,13 +1,5 @@
-/*
-	Yelo: Open Sauce SDK
-		Halo 1 (CE) Edition
-
-	See license\OpenSauce\Halo1_CE for specific license information
-*/
-
-#include <YeloLib/Halo1/ai/c_actor_variant_transform_manager.hpp>
-#include <YeloLib/Halo1/saved_games/game_state_yelo.hpp>
-#include <YeloLib/Halo1/units/units_yelo.hpp>
+#include "../../memory/upgrades/game_state_yelo.hpp"
+#include "../actors/tranform_manager.h"
 
 namespace Yelo
 {
@@ -27,8 +19,8 @@ namespace Yelo
 
 		void Initialize()
 		{
-			Objects::Units::Animations::SetAnimationStateKeyframeHandler(Enums::_unit_animation_state_yelo_unit_transforming,
-				[](const datum_index unit_index, const Enums::unit_animation_keyframe keyframe) { g_actor_variant_transform_manager.TriggerUnitTransformKeyframe(unit_index, keyframe); });
+			Objects::Units::Animations::SetAnimationStateKeyframeHandler(_unit_animation_state_yelo_unit_transforming,
+				[](const datum_index unit_index, unit_animation_keyframe keyframe) { g_actor_variant_transform_manager.TriggerUnitTransformKeyframe(unit_index, keyframe); });
 		}
 
 		void InitializeForNewGameState()
@@ -47,7 +39,7 @@ namespace Yelo
 			g_actor_variant_transform_manager.ClearInProgressTransforms();
 		}
 
-		void HandleGameStateLifeCycle(shortlife_state)
+		void HandleGameStateLifeCycle(short life_state)
 		{
 			if(life_state == Enums::_game_state_life_cycle_before_load)
 			{

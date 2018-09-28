@@ -157,5 +157,23 @@ namespace Yelo {
 		static tag __cdecl tag_get_group_tag(datum_index tag_index) {
 			return cache_file_tag_get_instance(tag_index)->group_tag;
 		}
+
+		const void* tag_get(tag group_tag, datum_index tag_index) {
+			using TagGroups::group_tag_to_string;
+
+			auto* tag_instance = cache_file_tag_get_instance(tag_index);
+
+			// YELO_ASSERT_DISPLAY(tag_instance->MatchesGroup(group_tag),
+			// 						  "expected tag group '%s' but got '%s' for %08x",
+			// 						  group_tag_to_string { group_tag }.ToString(),
+			// 						  group_tag_to_string { tag_instance->group_tag }.ToString(),
+			// 						  tag_index);
+			//
+			// YELO_ASSERT_DISPLAY(tag_instance->base_address != nullptr,
+			// 						  "can't get() a tag (%08x) with a base address!",
+			// 						  tag_index);
+
+			return tag_instance->base_address;
+		}
 	};
 };

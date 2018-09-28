@@ -165,54 +165,10 @@ namespace Yelo {
 			};
 		};
 
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// <summary>	Copies the bytes of a buffer to a foreign memory space. </summary>
-		/// 
-		/// <remarks>	Changes the protection of the foreign memory while copying, then reverts it back. </remarks>
-		///
-		/// <param name="address">	Start of the foreign memory space. </param>
-		/// <param name="src">	  	Buffer to copy from. </param>
-		/// <param name="size">   	The size of the buffer. </param>
-		///
-		/// <returns>	not FALSE if it succeeds, FALSE if it fails. </returns>
-		bool WriteMemory(void *address, const void *src, size_t size) {
-			return address == memcpy(address, src, size);
-		}
-
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// <summary>	Copies the bytes of a buffer to a foriegn memory space. </summary>
-		///
-		/// <param name="address">	Start of the foreign memory space. </param>
-		/// <param name="src">   	Buffer to copy from. </param>
-		///
-		/// <returns>	not FALSE if it succeeds, FALSE if it fails. </returns>
-		template <typename T, size_t size>
-		inline bool WriteMemory(void *address, const T (&src)[size]) {
-			return WriteMemory(address, src, sizeof(T) * size);
-		}
-
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// <summary>	Overwrites a range of foreign memory with a specific byte. </summary>
-		///
-		/// <param name="address">	Start address of the foreign memory to overwrite. </param>
-		/// <param name="value">  	The byte value to use when overwriting. </param>
-		/// <param name="count">  	Number of times to write the byte. </param>
-		void WriteMemory(void *address, int value, size_t count) {
-			memset(address, value, count);
-		}
-
 
 #pragma warning( push )
 #pragma warning( disable : 4311 ) // bitching about this typecast
 #pragma warning( disable : 4312 ) // bitching about typecast
-
-		// makes the 32 bits at [address] equal [value]
-		BOOL WriteMemory(void *address, void *value) {
-			*reinterpret_cast<unsigned __int32 *>(address) = reinterpret_cast<uintptr_t>(value);
-			return true;
-		}
 
 		// At [hook_address] writes 'call [hook]' plus user specified end opcode (total: 6 bytes)
 		void CreateHookRelativeCall(void *hook, void *hook_address, byte end) {

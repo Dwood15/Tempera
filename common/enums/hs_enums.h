@@ -4,6 +4,16 @@
 #include "geometry_enums.h"
 #include "player_enums.h"
 
+
+
+namespace Yelo::Enums {
+		// How many values we allow in the runtime data game state for each type (ie, integers, real, etc)
+		constexpr int k_runtime_data_max_values_count = 64;
+
+		// This is a partially made up constant, though when dev-mode is >= this, it outputs messages to the console
+		constexpr int k_developer_mode_level_debug_output = 4;
+};
+
 namespace Yelo::Flags {
 	enum hs_yelo_definition_flags : unsigned short {
 		_hs_yelo_definition_internal_bit,

@@ -4,6 +4,8 @@
 #include "../../memory/datum_index.h"
 #include "unit_transform_definitions.h"
 #include "../../hs/library.h"
+#include "../../gamestate/objects/damage.h"
+#include "actor_structures.h"
 
 namespace Yelo::AI::Transform {
 	/// <summary>	Manager for actor variant transforms. </summary>
@@ -303,7 +305,7 @@ namespace Yelo::AI::Transform {
 		/// <param name="unit_index">	Datum index of the unit. </param>
 		/// <param name="unit_datum">	[in] If non-null, the unit datum. </param>
 		/// <param name="keyframe">  	The keyframe. </param>
-		void TransformingOutKeyframe(const datum_index unit_index, s_unit_datum *unit_datum, const Enums::unit_animation_keyframe keyframe);
+		void TransformingOutKeyframe(const datum_index unit_index, s_unit_datum *unit_datum, const unit_animation_keyframe keyframe);
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Transforming in keyframe handler. </summary>
@@ -311,7 +313,7 @@ namespace Yelo::AI::Transform {
 		/// <param name="unit_index">	Datum index of the unit. </param>
 		/// <param name="unit_datum">	[in] If non-null, the unit datum. </param>
 		/// <param name="keyframe">  	The keyframe. </param>
-		void TransformingInKeyframe(const datum_index unit_index, s_unit_datum *unit_datum, const Enums::unit_animation_keyframe keyframe);
+		void TransformingInKeyframe(const datum_index unit_index, s_unit_datum *unit_datum, const unit_animation_keyframe keyframe);
 
 #pragma endregion
 
@@ -366,7 +368,7 @@ namespace Yelo::AI::Transform {
 		///
 		/// <param name="unit_index">	Datum index of the unit. </param>
 		/// <param name="keyframe">  	The keyframe. </param>
-		void TriggerUnitTransformKeyframe(const datum_index unit_index, const Enums::unit_animation_keyframe keyframe);
+		void TriggerUnitTransformKeyframe(const datum_index unit_index, const unit_animation_keyframe keyframe);
 
 #pragma endregion
 
@@ -438,9 +440,9 @@ namespace Yelo::AI::Transform {
 		}
 
 		// If the unit is dead or already transforming, return
-		if (TEST_FLAG(unit_datum->object.damage.flags, Flags::_object_killed_bit)
-			 || TEST_FLAG(unit_datum->object.flags, Flags::_object_yelo_is_transforming_out_bit)
-			 || TEST_FLAG(unit_datum->object.flags, Flags::_object_yelo_is_transforming_in_bit)) {
+		if (TEST_FLAG(unit_datum->unit_object.damage.flags, Flags::_object_killed_bit)
+			 || TEST_FLAG(unit_datum->unit_object.flags, Flags::_object_yelo_is_transforming_out_bit)
+			 || TEST_FLAG(unit_datum->unit_object.flags, Flags::_object_yelo_is_transforming_in_bit)) {
 			return false;
 		}
 
@@ -482,9 +484,9 @@ namespace Yelo::AI::Transform {
 		}
 
 		// If the unit is dead or already transforming, return
-		if (TEST_FLAG(unit_datum->object.damage.flags, Flags::_object_killed_bit)
-			 || TEST_FLAG(unit_datum->object.flags, Flags::_object_yelo_is_transforming_out_bit)
-			 || TEST_FLAG(unit_datum->object.flags, Flags::_object_yelo_is_transforming_in_bit)) {
+		if (TEST_FLAG(unit_datum->unit_object.damage.flags, Flags::_object_killed_bit)
+			 || TEST_FLAG(unit_datum->unit_object.flags, Flags::_object_yelo_is_transforming_out_bit)
+			 || TEST_FLAG(unit_datum->unit_object.flags, Flags::_object_yelo_is_transforming_in_bit)) {
 			return false;
 		}
 

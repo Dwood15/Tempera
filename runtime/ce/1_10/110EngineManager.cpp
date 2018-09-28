@@ -218,12 +218,17 @@ void CE110::UpdateHSFunctionCounts(short count) {
 		calls::patchValue<short>(0x486F14, count);
 }
 
-constexpr auto CE110::GetHsFunctionTable() {
+constexpr Yelo::Scripting::hs_function_definition ** CE110::GetHsFunctionTable() {
 	return reinterpret_cast<Yelo::Scripting::hs_function_definition **>(0x624118);
 }
 
-constexpr auto CE110::GetHsFunctionTableCount() {
+constexpr long * CE110::GetHsFunctionTableCount() {
 	return reinterpret_cast<long *>(0x5F9C10);
+}
+
+void CE110::NullifyScriptFunction(Yelo::Enums::hs_function_enumeration function)  {
+	if (function > NONE && function < Enums::k_hs_function_enumeration_count)
+		NullifyScriptFunction(*Yelo::Scripting::hs_yelo_functions[function] );
 }
 
 void CE110::InitializeHSMemoryUpgrades() {
@@ -247,9 +252,252 @@ void CE110::InitializeHSMemoryUpgrades() {
 	// Memory::CreateHookRelativeCall(&Update, reinterpret_cast<void *>(HS_UPDATE_HOOK), Enums::_x86_opcode_retn);
 }
 
+
+Yelo::Scripting::s_fixup_globals _fixup_globals           = {
+	{ // fixups
+		{0x11C, &Yelo::Scripting::function_debug_pvs_definition},
+		{0x11D, &Yelo::Scripting::function_radiosity_start_definition},
+		{0x11E, &Yelo::Scripting::function_radiosity_save_definition},
+		{0x11F, &Yelo::Scripting::function_radiosity_debug_point_definition},
+
+		{0x170, &Yelo::Scripting::function_debug_teleport_player_definition},
+
+		{0x17D, &Yelo::Scripting::function_hud_team_icon_set_pos_definition},
+		{0x17E, &Yelo::Scripting::function_hud_team_icon_set_scale_definition},
+		{0x17F, &Yelo::Scripting::function_hud_team_background_set_pos_definition},
+		{0x180, &Yelo::Scripting::function_hud_team_background_set_scale_definition},
+
+		{0x1A8, &Yelo::Scripting::function_reload_shader_transparent_chicago_definition},
+		{0x1A9, &Yelo::Scripting::function_rasterizer_reload_effects_definition},
+
+		{0x21C, &Yelo::Scripting::function_oid_watch_definition},
+		{0x21D, &Yelo::Scripting::function_oid_dump_definition},
+		{0x21E, &Yelo::Scripting::function_oid_status_definition},
+
+		{0x112, &Yelo::Scripting::global_radiosity_quality_definition, true},
+		{0x113, &Yelo::Scripting::global_radiosity_step_count_definition, true},
+		{0x114, &Yelo::Scripting::global_radiosity_lines_definition, true},
+		{0x115, &Yelo::Scripting::global_radiosity_normals_definition, true},
+
+		{NONE}
+	},
+};
+
+void CE110::NullifyScriptFunction(Yelo::Scripting::hs_function_definition &function) {
+	ScriptFunctionSetEvaluteProc(function, reinterpret_cast<Yelo::Scripting::proc_hs_evaluate>((reinterpret_cast<void *>(HS_NULL_EVALUATE))));
+}
+
+void CE110::NullifyScriptFunctionWithParams(Yelo::Scripting::hs_function_definition &function) {
+	ScriptFunctionWithParamsSetEvaluteProc(function, reinterpret_cast<Yelo::Scripting::proc_hs_evaluate>((reinterpret_cast<void *>(PTR_HS_NULL_WITH_PARAMS_EVALUATE))));
+}
+
+
+void CE110::NullifyScriptFunctionWithParams(Yelo::Enums::hs_function_enumeration function) {
+	if (function > NONE && function < Yelo::Enums::k_hs_function_enumeration_count)
+		NullifyScriptFunctionWithParams(*Yelo::Scripting::hs_yelo_functions[function]);
+}
+
 void CE110::InitializeMemoryUpgrades() {
 	InitializeHSMemoryUpgrades();
 	//InitializeLibrary();
+
+	auto NullifyScriptLibraryFixups = [](){
+		if (!CurrentEngine.IsSapien()) {
+			// NullifyScriptFunctionWithParams(Yelo::Scripting::function_debug_pvs_definition);
+			// NullifyScriptFunctionWithParams(Yelo::Scripting::function_radiosity_start_definition);
+			// NullifyScriptFunctionWithParams(Yelo::Scripting::function_radiosity_save_definition);
+			// NullifyScriptFunctionWithParams(Yelo::Scripting::function_radiosity_debug_point_definition);
+			// NullifyScriptFunctionWithParams(Yelo::Scripting::function_oid_watch_definition);
+			// NullifyScriptFunctionWithParams(Yelo::Scripting::function_oid_dump_definition);
+			// NullifyScriptFunctionWithParams(Yelo::Scripting::function_oid_status_definition);
+		}
+
+		// NullifyScriptFunctionWithParams(Yelo::Scripting::function_debug_teleport_player_definition);
+		//
+		// NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_icon_set_pos_definition);
+		// NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_icon_set_scale_definition);
+		// NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_background_set_pos_definition);
+		// NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_background_set_scale_definition);
+		//
+		// NullifyScriptFunctionWithParams(Yelo::Scripting::function_reload_shader_transparent_chicago_definition);
+		// NullifyScriptFunctionWithParams(Yelo::Scripting::function_rasterizer_reload_effects_definition);
+
+	};
+
+	auto InitializeLibraryFixups = [](){
+
+		//////////////////////////////////////////////////////////////////////////
+		// Add back functions/globals which don't appear in the release builds (and the like).
+		// The expressions don't do anything...unless you find a reason to implement them...
+		Yelo::Scripting::s_fixup_globals::fixup *fixups = _fixup_globals.fixups;
+		while (fixups->index != NONE) {
+			if (!fixups->is_global) {
+				_upgrade_globals.functions.table[fixups->index] = fixups->function.function;
+				_upgrade_globals.functions.count++;
+			} else {
+				_upgrade_globals.globals.table[fixups->index] = fixups->function.global;
+				_upgrade_globals.globals.count++;
+			}
+
+			fixups++;
+		}
+		//////////////////////////////////////////////////////////////////////////
+	};
+
+	void InitializeLibrary() {
+		// Moved this code here to stop the compiler from creating dynamic initializers for them
+		// Be sure you're not calling HSFunctionTable or HSExternalGlobals before InitializeLibrary has ran
+		hs_external_globals = reinterpret_cast<const Scripting::hs_global_definition **>(Yelo::Scripting::hs_external_globals);
+
+		//GET_HS_FUNCTION(null).evaluate = CAST_PTR(proc_hs_evaluate, GET_FUNC_VPTR(HS_NULL_EVALUTE);
+
+		//////////////////////////////////////////////////////////////////////////
+		InitializeLibraryFixups();
+
+		//////////////////////////////////////////////////////////////////////////
+		// Add the game's functions/globals to our upgraded memory
+		static const rsize_t K_HS_FUNCTION_TABLE_COUNT = 0x211;
+
+		static const rsize_t K_HS_EXTERNAL_GLOBALS_COUNT = 0x1EC - 1; // NOTE: we don't copy the 'rasterizer_frame_drop_ms' definition as its not defined in the tools
+
+
+		for (rsize_t x = 0, index = 0; x < K_HS_FUNCTION_TABLE_COUNT; index++) {
+			if (_upgrade_globals.functions.table[index] == nullptr) {
+				_upgrade_globals.functions.table[index] = Yelo::Scripting::hs_function_table[x++];
+				_upgrade_globals.functions.count++;
+			}
+		}
+
+		for (rsize_t x = 0, index = 0; x < K_HS_EXTERNAL_GLOBALS_COUNT; index++) {
+			if (_upgrade_globals.globals.table[index] == nullptr) {
+				Yelo::Scripting::hs_global_definition &glob = *(_upgrade_globals.globals.table[index] = Yelo::Scripting::hs_external_globals[x++]);
+				_upgrade_globals.globals.count++;
+			}
+		}
+		//////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////
+		// Add Yelo's functions/globals to our upgraded memory
+		{
+			_upgrade_globals.functions.yelo_start_index = _upgrade_globals.functions.count;
+			for (size_t x = 0; x < Yelo::Scripting::K_HS_YELO_FUNCTION_COUNT; x++, _upgrade_globals.functions.count++)
+				_upgrade_globals.functions.table[_upgrade_globals.functions.count] = Yelo::Scripting::hs_yelo_functions[x];
+
+			_upgrade_globals.globals.yelo_start_index = _upgrade_globals.globals.count;
+			for (size_t x = 0; x < Yelo::Scripting::K_HS_YELO_GLOBALS_COUNT; x++, _upgrade_globals.globals.count++)
+				_upgrade_globals.globals.table[_upgrade_globals.globals.count] = Yelo::Scripting::hs_yelo_globals[x];
+		}
+		//////////////////////////////////////////////////////////////////////////
+
+
+		//////////////////////////////////////////////////////////////////////////
+		// Update the game code to use OUR function/global definition tables
+		{
+			void ** table_references = CurrentEngine.GetHsFunctionTableReferences();
+			if (table_references != nullptr) {
+				Yelo::Scripting::hs_function_definition ****definitions = reinterpret_cast<Yelo::Scripting::hs_function_definition ****>(table_references);
+				const size_t           k_count         = CurrentEngine.GetNumberOfFunctionTableReferences();
+
+				for (size_t x = 0; x < k_count; x++) {
+					*definitions[x] = &_upgrade_globals.functions.table[0];
+				}
+			}
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+
+#pragma warning( push )
+#pragma warning( disable : 4311 ) // bitching about this typecast
+#pragma warning( disable : 4312 ) // bitching about typecast
+
+			static uintptr_t hs_return_address             = HS_RETURN;
+			static uintptr_t hs_arguments_evaluate_address = HS_ARGUMENTS_EVALUATE;
+			static uintptr_t hs_function_table_address     = reinterpret_cast<uintptr_t>(&_upgrade_globals.functions.table[0]);
+
+			uintptr_t *temp = nullptr;
+
+			// with params functions
+			{
+				temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_has_param[(5 + 3)]));
+				*temp = hs_function_table_address;
+
+				temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_has_param[(32 + 2)]));
+				*temp = reinterpret_cast<uintptr_t>(&hs_arguments_evaluate_address);
+
+				temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_has_param[(55 + 2)]));
+				*temp = reinterpret_cast<uintptr_t>(&hs_return_address);
+			}
+
+			// no params functions
+			{
+				temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_no_param[(10 + 2)]));
+				*temp = reinterpret_cast<uintptr_t>(&hs_return_address);
+			}
+
+#pragma warning( pop )
+
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_dump_view_state, Yelo::Camera::DumpViewStateEvaluate);
+
+		//InitializeScriptFunction(Yelo::Enums::_hs_function_test_networking, Yelo::MessageDeltas::TestToNetwork);
+
+		Yelo::Scripting::InitializeMiscFunctions();
+
+		//PHYSICS
+		Scripting::InitializeScriptFunction(Enums::_hs_function_physics_get_gravity, []()
+		{
+			//TypeHolder result;
+			//result.pointer = nullptr;
+
+			////result.real = GameState::Physics()->gravity;
+
+			return nullptr;//result.pointer;
+		});
+
+
+		Scripting::InitializeScriptFunctionWithParams(Enums::_hs_function_physics_set_gravity, [](void** arguments) {
+			struct s_arguments {
+				real gravity_fraction;
+			}* args = CAST_PTR(s_arguments*, arguments);
+
+			// GameState::Physics()->SetGravityScale(args->gravity_fraction);
+
+			return nullptr;
+		});
+
+		Scripting::InitializeScriptFunction(Enums::_hs_function_physics_constants_reset, []() {
+			//GameState::Physics()->Reset();
+
+			return nullptr;
+		});
+
+		Scripting::InitializeScriptFunctionWithParams(Enums::_hs_function_data_array_info, [](void** arguments) {
+			struct s_arguments {
+				cstring data_array_name;
+			}* args = CAST_PTR(s_arguments*, arguments);
+
+			//DataArrayInfoDumpToConsole(args->data_array_name);
+
+			return nullptr;
+		});
+		//END PHYSICS
+
+		GameState::RuntimeData::InitializeScripting();
+
+		//////////////////////////////////////////////////////////////////////////
+		constexpr bool allow = true;
+		{
+			static byte code[] = {
+				0xB0, 0x01, 0xC3,   // implicitly allow expression access to everything
+				0x8A, 0xD1, 0xC0   // default expression access to the game's settings
+			};
+			if constexpr (allow) {
+				memory::WriteMemory(HS_VALID_ACCESS_FLAGS, code, 3);
+			}
+			else {
+				memory::WriteMemory(HS_VALID_ACCESS_FLAGS, code + 3, 3);
+			}
+		}
+	}
 }
 
 void CE110::WriteHooks() {

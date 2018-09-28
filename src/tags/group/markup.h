@@ -1,10 +1,9 @@
 #pragma once
 
 // [arg2] = documentation
-#define TAG_FLAG8(name, ...)            Yelo::byte_flags name##_bit : 1
+#define TAG_FLAG8(name, ...)            byte name##_bit : 1
 
 // [arg2] = documentation
-#define TAG_FLAG16(name, ...)            unsigned short name##_bit : 1
 
 // [arg2] = documentation
 #define TAG_FLAG(name, ...)               Yelo::long_flags name##_bit : 1

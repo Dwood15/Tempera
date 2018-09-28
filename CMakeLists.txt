@@ -167,7 +167,7 @@ set(COMMON_H
 	src/gamestate/teams/teams.h
 	src/engine/engine_functions.h
 	src/memory/data_array.h
-	)
+	src/render/rasterizer/postprocessing/Scripting.cpp src/render/rasterizer/postprocessing/Scripting.h common/enums/postprocessing.h common/enums/bitmaps.h common/enums/shaders.h src/gamestate/objects/damage.h common/enums/materials.h src/gamestate/objects/damage.cpp)
 
 add_custom_target(HeadersTarget SOURCES ${SRC_H})
 

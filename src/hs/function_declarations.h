@@ -13,7 +13,7 @@
 	Yelo::Scripting::hs_function_definition function_##name##_definition = {	\
 		HS_TYPE(ret),0,															\
 		#name,																	\
-		CAST_PTR(Yelo::Scripting::proc_hs_parse, nullptr),
+		CAST_PTR(Yelo::Scripting::proc_hs_parse, nullptr),	\
 		nullptr,																\
 		info,																	\
 		nullptr,																\
@@ -48,9 +48,6 @@
 		FLAG(Yelo::Flags::_hs_access_enabled_bit)							\
 	}
 
-
-#define HS_GLOBAL2(name, type, valuece, valueded) \
-		Yelo::Scripting::hs_global_definition global_##name##_definition = {#name, HS_TYPE(type), 0, CAST_PTR(void*,valuece), FLAG(Yelo::Flags::_hs_access_enabled_bit)}
 //////////////////////////////////////////////////////////////////////////
 
 namespace Yelo::Scripting {
@@ -150,8 +147,7 @@ namespace Yelo::Scripting {
 	};
 
 	// HS_FUNCTION(scenario_faux_zones_reset, void, "depreceated, do not use");
-	Yelo::Scripting::hs_function_definition function_scenario_faux_zone_current
-	_switch_variant_definition = {
+	Yelo::Scripting::hs_function_definition function_switch_variant_definition = {
 		Enums::_hs_type_bool,
 		0,
 		"scenario_faux_zone_current_switch_variant",
@@ -429,7 +425,7 @@ namespace Yelo::Scripting {
 		// &GET_HS_FUNCTION(test_networking),
 	};
 
-	static const long K_HS_YELO_FUNCTION_COUNT =::std::size(hs_yelo_functions);
+	static const long K_HS_YELO_FUNCTION_COUNT = ::std::size(hs_yelo_functions);
 
 	// Validate our definition list has the same amount as our exposed enumeration count
 	static_assert(::std::size(hs_yelo_functions) == Enums::k_hs_function_enumeration_count);
@@ -610,15 +606,17 @@ namespace Yelo::Scripting {
 	HS_GLOBAL(radiosity_normals, bool, nullptr);
 	//////////////////////////////////////////////////////////////////////////
 
+	union globalOrFunction {
+		void *address;
+
+		hs_function_definition *function;
+		hs_global_definition   *global;
+	};
+
 	struct s_fixup_globals {
 		struct fixup {
 			long index;
-			union {
-				void *address;
-
-				hs_function_definition *function;
-				hs_global_definition   *global;
-			};
+			globalOrFunction function;
 			bool is_global;
 			unsigned char : 8;
 			unsigned short : 16;
@@ -628,57 +626,7 @@ namespace Yelo::Scripting {
 #pragma warning( disable : 4200 ) // nonstandard extension used : zero-sized array in struct/union, Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
 		fixup fixups[];
 #pragma warning( pop )
-	}                 _fixup_globals           = {
-		{ // fixups
-			{0x11C, &Yelo::Scripting::function_debug_pvs_definition},
-			{0x11D, &Yelo::Scripting::function_radiosity_start_definition},
-			{0x11E, &Yelo::Scripting::function_radiosity_save_definition},
-			{0x11F, &Yelo::Scripting::function_radiosity_debug_point_definition},
-
-			{0x170, &Yelo::Scripting::function_debug_teleport_player_definition},
-
-			{0x17D, &Yelo::Scripting::function_hud_team_icon_set_pos_definition},
-			{0x17E, &Yelo::Scripting::function_hud_team_icon_set_scale_definition},
-			{0x17F, &Yelo::Scripting::function_hud_team_background_set_pos_definition},
-			{0x180, &Yelo::Scripting::function_hud_team_background_set_scale_definition},
-
-			{0x1A8, &Yelo::Scripting::function_reload_shader_transparent_chicago_definition},
-			{0x1A9, &Yelo::Scripting::function_rasterizer_reload_effects_definition},
-
-			{0x21C, &Yelo::Scripting::function_oid_watch_definition},
-			{0x21D, &Yelo::Scripting::function_oid_dump_definition},
-			{0x21E, &Yelo::Scripting::function_oid_status_definition},
-
-			{0x112, &Yelo::Scripting::global_radiosity_quality_definition, true},
-			{0x113, &Yelo::Scripting::global_radiosity_step_count_definition, true},
-			{0x114, &Yelo::Scripting::global_radiosity_lines_definition, true},
-			{0x115, &Yelo::Scripting::global_radiosity_normals_definition, true},
-
-			{NONE}
-		},
 	};
-
-	static void NullifyScriptLibraryFixups() {
-		if (!CurrentEngine.IsSapien()) {
-			NullifyScriptFunctionWithParams(Yelo::Scripting::function_debug_pvs_definition);
-			NullifyScriptFunctionWithParams(Yelo::Scripting::function_radiosity_start_definition);
-			NullifyScriptFunctionWithParams(Yelo::Scripting::function_radiosity_save_definition);
-			NullifyScriptFunctionWithParams(Yelo::Scripting::function_radiosity_debug_point_definition);
-			NullifyScriptFunctionWithParams(Yelo::Scripting::function_oid_watch_definition);
-			NullifyScriptFunctionWithParams(Yelo::Scripting::function_oid_dump_definition);
-			NullifyScriptFunctionWithParams(Yelo::Scripting::function_oid_status_definition);
-		}
-
-		NullifyScriptFunctionWithParams(Yelo::Scripting::function_debug_teleport_player_definition);
-
-		NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_icon_set_pos_definition);
-		NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_icon_set_scale_definition);
-		NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_background_set_pos_definition);
-		NullifyScriptFunctionWithParams(Yelo::Scripting::function_hud_team_background_set_scale_definition);
-
-		NullifyScriptFunctionWithParams(Yelo::Scripting::function_reload_shader_transparent_chicago_definition);
-		NullifyScriptFunctionWithParams(Yelo::Scripting::function_rasterizer_reload_effects_definition);
-	}
 
 	struct s_upgrade_globals {
 		struct {
@@ -697,26 +645,7 @@ namespace Yelo::Scripting {
 	};
 
 
-	static void InitializeLibraryFixups() {
-		NullifyScriptLibraryFixups();
-
-		//////////////////////////////////////////////////////////////////////////
-		// Add back functions/globals which don't appear in the release builds (and the like).
-		// The expressions don't do anything...unless you find a reason to implement them...
-		s_fixup_globals::fixup *fixups = _fixup_globals.fixups;
-		while (fixups->index != NONE) {
-			if (!fixups->is_global) {
-				_upgrade_globals.functions.table[fixups->index] = fixups->function;
-				_upgrade_globals.functions.count++;
-			} else {
-				_upgrade_globals.globals.table[fixups->index] = fixups->global;
-				_upgrade_globals.globals.count++;
-			}
-
-			fixups++;
-		}
-		//////////////////////////////////////////////////////////////////////////
-	}
+	static void InitializeLibraryFixups();
 
 
 

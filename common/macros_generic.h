@@ -349,3 +349,11 @@ namespace Yelo::Enums {
 /// Cast the pointer [ptr] to a pointer of type [type]
 #define CAST_PTR(type, ptr)      (reinterpret_cast<type>(ptr))
 #define CAST_PTR_OP(type)      reinterpret_cast<type>
+
+#ifdef _MSC_VER
+	#define naked  __declspec(naked)
+#elif defined(__GNUC__)
+	#define naked __attribute(naked)
+#else
+	#define naked
+#endif

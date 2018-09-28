@@ -21,6 +21,54 @@ namespace Yelo::Enums {
 
 typedef Yelo::Enums::CallingConventions Convention;
 
+namespace memory {
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Copies the bytes of a buffer to a foreign memory space. </summary>
+	///
+	/// <remarks>	Changes the protection of the foreign memory while copying, then reverts it back. </remarks>
+	///
+	/// <param name="address">	Start of the foreign memory space. </param>
+	/// <param name="src">	  	Buffer to copy from. </param>
+	/// <param name="size">   	The size of the buffer. </param>
+	///
+	/// <returns>	not FALSE if it succeeds, FALSE if it fails. </returns>
+	bool WriteMemory(void *address, const void *src, size_t size) {
+		return address == memcpy(address, src, size);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Copies the bytes of a buffer to a foriegn memory space. </summary>
+	///
+	/// <param name="address">	Start of the foreign memory space. </param>
+	/// <param name="src">   	Buffer to copy from. </param>
+	///
+	/// <returns>	not FALSE if it succeeds, FALSE if it fails. </returns>
+	template <typename T, size_t size>
+	inline bool WriteMemory(void *address, const T (&src)[size]) {
+		return WriteMemory(address, src, sizeof(T) * size);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Overwrites a range of foreign memory with a specific byte. </summary>
+	///
+	/// <param name="address">	Start address of the foreign memory to overwrite. </param>
+	/// <param name="value">  	The byte value to use when overwriting. </param>
+	/// <param name="count">  	Number of times to write the byte. </param>
+	void WriteMemory(void *address, int value, size_t count) {
+		memset(address, value, count);
+	}
+
+
+	// makes the 32 bits at [address] equal [value]
+	BOOL WriteMemory(void *address, void *value) {
+		*reinterpret_cast<unsigned __int32 *>(address) = reinterpret_cast<uintptr_t>(value);
+		return true;
+	}
+
+}
+
+
+
 namespace calls {
 
 	template <typename T>
@@ -28,12 +76,12 @@ namespace calls {
 		*(T *) to_patch = replace_with;
 	}
 
-	template<typename T, uint num>
-	void patchList(T replace_with, std::array<uintptr_t, num> list[]) {
-		for(auto ptr : list) {
-			patchValue<T>(ptr, replace_with);
-		}
-	}
+	// template<typename T, uint num>
+	// void patchList(T replace_with, std::array<uintptr_t, num> list[]) {
+	// 	for(auto ptr : list) {
+	// 		patchValue<T>(ptr, replace_with);
+	// 	}
+	// }
 
 	static const unsigned int calc_addr_offset(const uintptr_t dest, int real_address) {
 		int real_address_offset = (real_address) - ((int) dest) - 4;
@@ -125,8 +173,6 @@ namespace calls {
 		return func_to_call(args...);
 	};
 };
-//#pragma clang diagnostic pop
-
 
 template <typename Func, typename i_t = int, i_t max = MAX_PLAYER_COUNT_LOCAL>
 void force_loop_players(Func f) {
