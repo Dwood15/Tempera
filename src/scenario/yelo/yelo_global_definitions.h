@@ -15,7 +15,7 @@ namespace Yelo::TagGroups {
 		tag_reference definition;
 
 		unsigned long : 32; // future flags
-		tag_block<void *> padA[2];
+		tag_block padA[2];
 	};
 	/* !-- UI --! */
 
@@ -69,7 +69,7 @@ namespace Yelo::TagGroups {
 		tag_reference explicit_references;
 		long pad0[8];
 
-		tag_block<void *> pad1;
+		tag_block pad1;
 
 		/* !-- UI --! */
 		struct {

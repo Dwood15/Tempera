@@ -1,11 +1,15 @@
 #pragma once
 
 #include <macros_generic.h>
+#include <functional>
 #include "yelo_objects.h"
 #include "../objects.h"
+#include "../../models/animations/model_definitions.h"
+#include "../../game/objects/objects.h"
+
 namespace Yelo::Objects {
 	template <typename ObjectType>
-	ObjectType *IteratorNext(s_object_iterator &iter) {
+	ObjectType *IteratorNext(Yelo::Objects::s_object_iterator &iter) {
 		// YELO_ASSERT_DISPLAY(TEST_FLAG(iter.type_mask, ObjectType::k_object_type), "Wrong object_type given to IteratorNext<T>");
 
 		return CAST_PTR(ObjectType * , blam::object_iterator_next(iter));
@@ -51,8 +55,7 @@ namespace Yelo::Objects {
 		return step_count == 0 ? object_index : datum_index::null();
 	}
 
-	//TagGroups::s_object_definition
-	void *GetObjectDefinition(const datum_index object_index) {
+	TagGroups::s_object_definition *GetObjectDefinition(const datum_index object_index) {
 		return nullptr;
 		// if (object_index.IsNull()) {
 		// 	return nullptr;
@@ -63,8 +66,7 @@ namespace Yelo::Objects {
 		// return blam::tag_get<TagGroups::s_object_definition>(object->definition_index);
 	}
 
-	//TagGroups::model_animation_graph
-	void const *GetObjectAnimations(const datum_index object_index) {
+	TagGroups::model_animation_graph const *GetObjectAnimations(const datum_index object_index) {
 		return nullptr;
 		// if (object_index.IsNull()) {
 		// 	return nullptr;
@@ -93,10 +95,10 @@ namespace Yelo::Objects {
 	}
 
 	static void PerformActionOnChildrenByType(const datum_index parent, const long_flags object_type_mask, const std::function<void(const datum_index)> &action_performer) {
-		const auto    *object_header_datums = nullptr; //Objects::ObjectHeader().Datums();
+		const auto    *object_header_datums = (*reinterpret_cast<Yelo::Objects::object_header_data_t **>(0x7FB710))->Datums(); //Objects::ObjectHeader().Datums();
 		const auto    *parent_object        = object_header_datums[parent.index]._object;
 		s_object_data *child_object;
-
+		//NOT_IMPLEMENTED;
 		for (datum_index child_index = parent_object->first_object_index; !child_index.IsNull(); child_index = child_object->next_object_index) {
 			child_object = object_header_datums[child_index.index]._object;
 
@@ -125,7 +127,7 @@ namespace Yelo::Objects {
 			}
 		};
 
-		PerformActionOnChildrenByType(parent, Enums::_object_type_mask_unit, func);
+		PerformActionOnChildrenByType(parent, _object_type_mask_unit, func);
 	}
 
 	void DetachChildActors(const datum_index parent) {
@@ -136,7 +138,7 @@ namespace Yelo::Objects {
 			}
 		};
 
-		PerformActionOnChildrenByType(parent, Enums::_object_type_mask_unit, func);
+		PerformActionOnChildrenByType(parent, _object_type_mask_unit, func);
 	}
 
 	void DestroyChildrenByDefinition(const datum_index parent, const datum_index definition) {
@@ -147,7 +149,7 @@ namespace Yelo::Objects {
 			}
 		};
 
-		PerformActionOnChildrenByType(parent, Enums::_object_type_mask_all, func);
+		PerformActionOnChildrenByType(parent, _object_type_mask_all, func);
 	}
 
 	void DeleteChildrenByDefinition(const datum_index parent, const datum_index definition) {
@@ -158,7 +160,7 @@ namespace Yelo::Objects {
 			}
 		};
 
-		PerformActionOnChildrenByType(parent, Enums::_object_type_mask_all, func);
+		PerformActionOnChildrenByType(parent, _object_type_mask_all, func);
 	}
 
 	void DetachChildrenByDefinition(const datum_index parent, const datum_index definition) {
@@ -169,7 +171,7 @@ namespace Yelo::Objects {
 			}
 		};
 
-		PerformActionOnChildrenByType(parent, Enums::_object_type_mask_all, func);
+		PerformActionOnChildrenByType(parent, _object_type_mask_all, func);
 	}
 };
 

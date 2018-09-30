@@ -3,7 +3,7 @@
 #include <enums/postprocessing.h>
 #include <d3dx9effect.h>
 #include <vector>
-#include "../../c_effect_render_set.hpp"
+#include "../../c_effect_render_set.h"
 #include "../../../dx9/shaders/shader_postprocess_generic_definitions.hpp"
 #include "../../../dx9/shaders/effect_postprocess_generic_definitions.hpp"
 #include "../../../dx9/shaders/shader_postprocess_definitions.hpp"

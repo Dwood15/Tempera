@@ -124,6 +124,26 @@ STAT_ASSERT(s_halo_pc_network, 0xC);
 
 #include "../scenario/scenario_location.h"
 
+
+struct s_object_placement_data {
+	datum_index   definition_index;
+	unsigned long flags;
+	datum_index   player_index;
+	datum_index   owner_object_index;
+	int : 32;
+	game_team      owner_team;
+	int16          region_permutation; // variant id
+	real_point3d   position;
+	float          unkAngleMaybe; // angle?
+	real_vector3d  transitional_velocity;
+	real_vector3d  forward;
+	real_vector3d  up;
+	real_vector3d  angular_velocity;
+	real_rgb_color change_colors[k_number_of_object_change_colors];
+};
+
+STAT_ASSERT(s_object_placement_data, 0x88);
+
 //s_object_data is also in forge's definitions. \\TODO: Rework and look at again.
 struct s_object_data {
 	Yelo::datum_index                   definition_index;                                            // 0x0
@@ -180,6 +200,9 @@ struct s_object_data {
 	s_object_header_block_reference node_orientations;                                // 0x1E8 real_orientation3d[node_count]
 	s_object_header_block_reference node_orientations2;                                // 0x1EC real_orientation3d[node_count]
 	s_object_header_block_reference node_matrix_block;                                // 0x1F0 real_matrix4x3[node_count]
+
+	void CopyToPlacementData(s_object_placement_data& data);
+	bool VerifyType(long_flags type_mask);
 };
 STAT_ASSERT(s_object_data, object_sizes::k_object_size_object);
 
@@ -379,7 +402,7 @@ struct s_object_header_datum {
 	unsigned short      cluster_index;        //0x6
 	unsigned short      data_size;            //0x8
 
-	union magic {
+	union {
 		void *address;
 
 		s_object_data *_object;
@@ -394,9 +417,10 @@ struct s_object_header_datum {
 		struct s_biped_datum   *_biped;
 		struct s_vehicle_datum *_vehicle;
 	};
-	STAT_ASSERT(magic, 0x4)
+	//STAT_ASSERT(magic, 0x4)
 
-}; //static_assert(sizeof(s_object_header_datum) == 0xC);
+};
+STAT_ASSERT(s_object_header_datum, 0xC);
 
 // Objects include bipeds, scenery, weapons, vehicles, powerups, projectiles, etc
 
@@ -487,26 +511,6 @@ struct s_object_iterator {
 	bool IsEndHack() const { return signature == 'hack'; }
 };
 
-struct s_object_placement_data {
-	datum_index   definition_index;
-	unsigned long flags;
-	datum_index   player_index;
-	datum_index   owner_object_index;
-	int : 32;
-	game_team      owner_team;
-	int16          region_permutation; // variant id
-	real_point3d   position;
-	float          unkAngleMaybe; // angle?
-	real_vector3d  transitional_velocity;
-	real_vector3d  forward;
-	real_vector3d  up;
-	real_vector3d  angular_velocity;
-	real_rgb_color change_colors[k_number_of_object_change_colors];
-};
-
-STAT_ASSERT(s_object_placement_data, 0x88);
-
-
 struct _core_1 {
 	data_header<void>          *Widget;
 	data_header<void>          *Unknown;
@@ -574,7 +578,7 @@ public:
 	// float                             Radius;                              // 0x00AC - Radius of object. In Radians. (-1 to 1)
 	// float                             Scale;                               // 0x00B0 - Seems to be some random float for all objects (all same objects have same value)
 	// short                             Type;                                // 0x00B4 - (0 = Biped) (1 = Vehicle) (2 = Weapon) (3 = Equipment) (4 = Garbage) (5 = Projectile) (6 = Scenery) (7 = Machine) (8 = Control) (9 = Light Fixture) (10 = Placeholder) (11 = Sound Scenery)
-	// PAD16;                                    //PAD
+	// short : 16;                                    //PAD
 	// game_team OwnerTeam;                           // 0x00B8
 	// short     NameListIdx;                           // 0x00BA
 	// short     MovingTime;                            // 0x00BC
@@ -627,12 +631,3 @@ public:
 
 */
 #pragma pack(pop)
-
-namespace Yelo::blam {
-	s_object_data *object_try_and_get_and_verify_type(datum_index object_index, long_flags expected_types);
-
-	template <typename T>
-	T *object_try_and_get_and_verify_type(datum_index object_index) {
-		return reinterpret_cast<T *>( object_try_and_get_and_verify_type(object_index, T::k_object_types_mask));
-	}
-};

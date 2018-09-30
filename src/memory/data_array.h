@@ -1,4 +1,5 @@
 #pragma once
+
 #include "datum_index.h"
 #include "data_base.h"
 
@@ -49,8 +50,8 @@ namespace Yelo::Memory {
 			return max_datum - NumberOfInvalidDatums();
 		}
 	};
-	STAT_ASSERT(s_data_array, 0x38)
 
+	STAT_ASSERT(s_data_array, 0x38);
 
 	static s_data_array *DataNewAndMakeValid(const char *name, long maximum_count, size_t datum_size) {
 		//
@@ -64,4 +65,47 @@ namespace Yelo::Memory {
 		// return data;
 		return (s_data_array *) -1;
 	}
-}
+};
+
+namespace Yelo::blam {
+	//Intended to be a complete replacement for the in-game data_new :)
+	//TODO: TEST + confirm works. _Looks_ functionally similar to the original data_new.
+	template <typename T, int max_count>
+	static Yelo::Memory::s_data_array *data_new(const char *name);
+
+	static void data_dispose(Yelo::Memory::s_data_array *data);
+
+	//This replaces the engine version of data_delete_all
+	//TODO: TEST
+	static void data_delete_all(Yelo::Memory::s_data_array *data);
+
+	static void data_make_valid(Yelo::Memory::s_data_array *data);
+
+	static void data_make_invalid(Yelo::Memory::s_data_array *data);
+
+	static datum_index data_next_index(Yelo::Memory::s_data_array *data, datum_index cursor);
+
+
+	static void datum_initialize(Yelo::Memory::s_data_array *data, ushort *location);
+
+	//TODO: TEST AND VERIFY
+	static datum_index datum_new_at_index(Yelo::Memory::s_data_array *data, datum_index index);
+
+	// creates a new element in [data] and returns the datum index
+	//TODO: TEST AND VERIFY
+	static datum_index datum_new(Yelo::Memory::s_data_array *data);
+
+	// Delete the data associated with the [index] handle in [data]
+	//TODO: TEST AND VERIFY
+	static void datum_delete(Yelo::Memory::s_data_array *data, datum_index datum);
+
+	// Get the data associated with [index] from the [data] array
+	//TODO: TEST AND VERIFY
+	template <typename T>
+	static void *datum_get(Yelo::Memory::s_data_array *data, datum_index index);
+
+	// Get the data associated with [index] from the [data] array
+	// Returns nullptr if the handle is invalid
+	//TODO: TEST AND VERIFY
+	static void *datum_try_and_get(Yelo::Memory::s_data_array *data, datum_index index);
+};

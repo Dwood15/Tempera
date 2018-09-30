@@ -1,20 +1,19 @@
 #pragma once
 
 // [arg2] = documentation
+
+// [arg2] = documentation
 #define TAG_FLAG8(name, ...)            byte name##_bit : 1
 
 // [arg2] = documentation
-
-// [arg2] = documentation
-#define TAG_FLAG(name, ...)               Yelo::long_flags name##_bit : 1
+#define TAG_FLAG(name, ...)               unsigned long name##_bit : 1
 
 // [arg2] = enum type
 // [arg3] = documentation
-#define TAG_ENUM8(name, ...)            Yelo::byte_enum name
+#define TAG_ENUM8(name, ...)            byte_enum name
 
 // [arg2] = enum type
 // [arg3] = documentation
-#define TAG_ENUM(name, ...)               short name
 
 // [arg2] = enum type
 // [arg3] = documentation
@@ -35,3 +34,6 @@
 
 #define TAG_BLOCK_GET_ELEMENT(block_ptr, index, type)  &(block_ptr->Elements<type>()[index])
 
+
+#define TAG_FIELD(type, name, ...)			type name
+#define TAG_FLAG16(name, ...)				unsigned short name##_bit : 1

@@ -2,7 +2,6 @@
 
 #include "data_array.h"
 #include "datum_index.h"
-#include "data.h"
 
 namespace Yelo {
 	namespace Memory {

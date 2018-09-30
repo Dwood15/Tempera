@@ -2,6 +2,7 @@
 #include <macros_generic.h>
 
 #include "../../memory/datum_index.h"
+#include "../../cache/cache_files.h"
 
 namespace Yelo {
 	// Template'd tag_data for more robust code dealing with known
@@ -124,18 +125,18 @@ namespace Yelo {
 		// Returns false if not, or tag_index is invalid.
 		bool TagIsInstanceOf(Yelo::datum_index tag_index, tag group_tag);
 
-		// template <typename T>
-		// inline bool TagIsInstanceOf(datum_index tag_index) {
-		// 	return TagIsInstanceOf(tag_index, T::k_group_tag);
-		// }
+		template <typename T>
+		inline bool TagIsInstanceOf(datum_index tag_index) {
+			return TagIsInstanceOf(tag_index, T::k_group_tag);
+		}
 
 		// 'Unsafe' in that it returns the tag as non-const and doesn't do any bounds checking
 		// Useful when you're using tag_iterator and known you're getting some good input
 		template <typename T>
 		inline T *TagGetUnsafe(Yelo::datum_index tag_index) {
-			extern void *TagGetUnsafeImpl(datum_index tag_index);
+			Cache::s_cache_tag_instance const& instance = Instances()[tag_index.index];
 
-			return reinterpret_cast<T *>(TagGetUnsafeImpl(tag_index));
+			return reinterpret_cast<T *>(instance.base_address);
 		}
 	}
 };

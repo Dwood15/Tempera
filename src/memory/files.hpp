@@ -1,14 +1,10 @@
-/*
-	Yelo: Open Sauce SDK
-
-	See license\OpenSauce\Halo1_CE for specific license information
-*/
 #pragma once
 
 #include <windows.h>
 #include <fileapi.h>
 #include "macros_generic.h"
-
+#include <direct.h>
+#include <Shlwapi.h>
 namespace Yelo {
 	namespace Enums {
 		enum file_io_open_error {
@@ -189,6 +185,30 @@ namespace Yelo {
 		}
 
 		///-------------------------------------------------------------------------------------------------
+		/// <summary>	Appends a directory slash to a path string. </summary>
+		/// <param name="path">			 	[in,out] The character buffer containing the path. </param>
+		/// <param name="length">		 	The length of the buffer. </param>
+		/// <param name="separator_char">	(Optional) The separator character to append. </param>
+		/// <returns>	true if it succeeds, false if it fails. </returns>
+		///-------------------------------------------------------------------------------------------------
+		bool AppendDirectorySlash(char *path, uint length, const char separator_char = '\\') {
+			const char *final_char = strrchr(path, '\0');
+
+			if (!final_char)
+				return false;
+
+			char separator[2] = {0, 0};
+			separator[0] = separator_char;
+
+			errno_t result = k_errnone;
+			final_char--;
+			if (*final_char != separator_char)
+				result = strcat_s(path, length, separator);
+
+			return (result == k_errnone);
+		}
+
+		///-------------------------------------------------------------------------------------------------
 		/// <summary>	Combines a set of directories into a single path string. </summary>
 		/// <param name="destination"> 	[out] The destination buffer for the path. </param>
 		/// <param name="append_slash">	true to append a slash to the end. </param>
@@ -215,30 +235,6 @@ namespace Yelo {
 				AppendDirectorySlash(destination, MAX_PATH);
 
 			return success;
-		}
-
-		///-------------------------------------------------------------------------------------------------
-		/// <summary>	Appends a directory slash to a path string. </summary>
-		/// <param name="path">			 	[in,out] The character buffer containing the path. </param>
-		/// <param name="length">		 	The length of the buffer. </param>
-		/// <param name="separator_char">	(Optional) The separator character to append. </param>
-		/// <returns>	true if it succeeds, false if it fails. </returns>
-		///-------------------------------------------------------------------------------------------------
-		bool AppendDirectorySlash(char *path, uint length, const char separator_char = '\\') {
-			const char *final_char = strrchr(path, '\0');
-
-			if (!final_char)
-				return false;
-
-			char separator[2] = {0, 0};
-			separator[0] = separator_char;
-
-			errno_t result = k_errnone;
-			final_char--;
-			if (*final_char != separator_char)
-				result = strcat_s(path, length, separator);
-
-			return (result == k_errnone);
 		}
 
 		///-------------------------------------------------------------------------------------------------

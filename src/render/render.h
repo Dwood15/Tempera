@@ -27,13 +27,13 @@ struct s_render_window
 struct s_render_fog
 {
 	word_flags flags; // same flags as in the tag definition
-	PAD16;
+	short : 16;
 	real_rgb_color atmospheric_color;
 	real atmospheric_maximum_density,
 		atmospheric_minimum_distance,
 		atmospheric_maximum_distance;
 	UNKNOWN_TYPE(int16);
-	PAD16;
+	short : 16;
 	real_plane3d plane; // copied from the bsp's fog planes
 	real_rgb_color color; // copied from tag definition
 	real max_density; // copied from tag definition

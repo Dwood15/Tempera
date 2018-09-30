@@ -35,10 +35,10 @@ namespace Yelo {
 
 			byte tag_padding[74];
 			short runtime_structure_reference_index;
-			tag_block<void*> squads;
-			tag_block<void*> platoons;
-			tag_block<void*> firing_positions;
-			tag_block<void*> starting_locations;
+			tag_block squads;
+			tag_block platoons;
+			tag_block firing_positions;
+			tag_block starting_locations;
 		};
 
 		STAT_ASSERT(s_encounter_definition, 0xB0);
@@ -73,10 +73,10 @@ namespace Yelo {
 			unsigned long : 32;
 			short manual_structure_reference_index;
 			short runtime_structure_reference_index;
-			tag_block<void*> commands;
-			tag_block<void*> points;
+			tag_block commands;
+			tag_block points;
 
-			tag_block<void*> padA[2];
+			tag_block padA[2];
 		};
 
 		static_assert(sizeof(s_ai_command_list) == 0x60);

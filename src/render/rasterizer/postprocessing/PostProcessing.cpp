@@ -5,11 +5,11 @@
 #include <string>
 
 #include "PostProcessing_RenderStates.inl"
-#include "c_post_processing_main.hpp"
+#include "c_post_processing_main.h"
 #include "PostProcessing_Systems.inl"
-#include "c_quad_manager.hpp"
+#include "c_quad_manager.h"
 #include "../../../cseries/MacrosCpp.h"
-#include "PostProcessing.hpp"
+#include "PostProcessing.h"
 #include "../Rasterizer.hpp"
 #ifdef API_DEBUG
 #define RENDER_STATE(state) "##state##", state

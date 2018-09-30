@@ -8,7 +8,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/time)
 #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/yelo_extra)
 
 set(GAME_SRC
-	${OBJECTS_SRC}
+	${OBJECTS_CXX}
 	PARENT_SCOPE)
 
 set(GAME_H

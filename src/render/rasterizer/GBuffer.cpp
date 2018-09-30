@@ -698,7 +698,7 @@ skip_disable_velocity:
 			return hr;
 		}
 
-		bool		c_gbuffer_system::SetViewProj(IDirect3DDevice9* device, CONST float* pConstantData, UINT Vector4fCount)
+		bool c_gbuffer_system::SetViewProj(IDirect3DDevice9* device, const float* pConstantData, UINT Vector4fCount)
 		{
 			if(Render::IsRenderingReflection() == false && g_system_enabled && !g_wvp_stored)
 			{

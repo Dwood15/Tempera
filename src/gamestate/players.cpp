@@ -33,7 +33,7 @@ void players_set_local_player_unit(unsigned short requested_plyr_idx, datum_inde
 #else
 
 #endif
-		throw "implementation incomplete and unverified";
+		NOT_IMPLEMENTED;
 	}
 }
 
@@ -77,5 +77,5 @@ void unit_set_actively_controlled(datum_index u, bool is_controlled) {
 #else
 
 #endif
-	throw "implementation is unverified.";
+	NOT_IMPLEMENTED;
 }

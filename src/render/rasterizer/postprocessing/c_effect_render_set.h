@@ -1,6 +1,6 @@
 #pragma once
 
-#include "c_effect_instance.hpp"
+#include "c_effect_instance.h"
 
 namespace Yelo::Rasterizer::PostProcessing {
 	class c_effect_render_set {

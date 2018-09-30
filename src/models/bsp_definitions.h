@@ -74,8 +74,8 @@ namespace Yelo::TagGroups {
 		short                                first_lens_flare_marker_index;
 		short                                lens_flare_marker_count;
 		Yelo::TagBlock<long>                 surface_indices;
-		tag_block<int>                       mirrors;
-		tag_block<int>                       portals;
+		Yelo::TagBlock<int>                       mirrors;
+		Yelo::TagBlock<int>                       portals;
 	};
 
 	STAT_ASSERT(structure_cluster, 0x68);
@@ -133,8 +133,8 @@ namespace Yelo::TagGroups {
 	// TODO: move to structures\leaf_map.hpp
 	struct s_leaf_map {
 		Yelo::TagGroups::coll::collision_bsp *collision; // initialized by postprocess proc, only valid in tags builds
-		tag_block<void *>                    leaves;
-		tag_block<void *>                    portals;
+		Yelo::TagBlock<void *>                    leaves;
+		Yelo::TagBlock<void *>                    portals;
 	};
 
 	STAT_ASSERT(s_leaf_map, 0x1C);
@@ -142,7 +142,7 @@ namespace Yelo::TagGroups {
 	STAT_ASSERT(Yelo::TagBlock<structure_leaf>, 0xC);
 	STAT_ASSERT(Yelo::TagBlock<structure_surface_reference>, 0xC);
 	STAT_ASSERT(Yelo::TagBlock<structure_surface>, 0xC);
-	STAT_ASSERT(tag_block<void *>, 0xC);
+	STAT_ASSERT(Yelo::TagBlock<void *>, 0xC);
 
 #pragma pack(push, 1)
 	struct structure_bsp {
@@ -166,27 +166,27 @@ namespace Yelo::TagGroups {
 		Yelo::TagBlock<structure_surface>           surfaces;
 
 		Yelo::TagBlock<structure_bsp_lightmap> lightmaps;
-		tag_block<void *>                      bsp_padA; // Useless? Removed in H2
+		Yelo::TagBlock<void *>                      bsp_padA; // Useless? Removed in H2
 
-		tag_block<void *> lens_flares;
-		tag_block<void *> lens_flare_markers;
+		Yelo::TagBlock<void *> lens_flares;
+		Yelo::TagBlock<void *> lens_flare_markers;
 
 		Yelo::TagBlock<structure_cluster> clusters;
 		tag_data                          cluster_data;
-		tag_block<void *>                 cluster_portals;
-		tag_block<void *>                 bsp_padB; // Useless? Removed in H2
+		Yelo::TagBlock<void *>                 cluster_portals;
+		Yelo::TagBlock<void *>                 bsp_padB; // Useless? Removed in H2
 
-		tag_block<void *>                       breakable_surfaces;
-		tag_block<void *>                       fog_planes;
+		Yelo::TagBlock<void *>                       breakable_surfaces;
+		Yelo::TagBlock<void *>                       fog_planes;
 		Yelo::TagBlock<s_structure_fog_region>  fog_regions;
 		Yelo::TagBlock<s_structure_fog_palette> fog_palette;
-		tag_block<void *>                       bsp_padC; // Useless? Removed in H2
-		tag_block<void *>                       bsp_padD; // Useless? Removed in H2
+		Yelo::TagBlock<void *>                       bsp_padC; // Useless? Removed in H2
+		Yelo::TagBlock<void *>                       bsp_padD; // Useless? Removed in H2
 
 		Yelo::TagBlock<structure_weather_palette_entry> weather_palette;
-		tag_block<void *>                               weather_polyhedra;
-		tag_block<void *>                               bsp_padE; // Useless? Removed in H2 (new block was added)
-		tag_block<void *>                               bsp_padF; // Useless? Removed in H2 (new block was added)
+		Yelo::TagBlock<void *>                               weather_polyhedra;
+		Yelo::TagBlock<void *>                               bsp_padE; // Useless? Removed in H2 (new block was added)
+		Yelo::TagBlock<void *>                               bsp_padF; // Useless? Removed in H2 (new block was added)
 
 		Yelo::TagBlock<byte> pathfinding_surfaces;
 		Yelo::TagBlock<byte> pathfinding_edges;
@@ -196,12 +196,12 @@ namespace Yelo::TagGroups {
 
 		tag_data sound_pas_data;
 
-		tag_block<void *> bsp_padG; // Useless? Removed in H2
-		tag_block<void *> bsp_padH; // Useless? Removed in H2
+		Yelo::TagBlock<void *> bsp_padG; // Useless? Removed in H2
+		Yelo::TagBlock<void *> bsp_padH; // Useless? Removed in H2
 
-		tag_block<void *> markers;
-		tag_block<void *> detail_objects;
-		tag_block<void *> runtime_decals;
+		Yelo::TagBlock<void *> markers;
+		Yelo::TagBlock<void *> detail_objects;
+		Yelo::TagBlock<void *> runtime_decals;
 
 		unsigned long long  PadLast; // Useless? Removed in H2
 		s_leaf_map        leaf_map;

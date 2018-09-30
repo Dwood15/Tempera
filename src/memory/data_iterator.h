@@ -1,11 +1,8 @@
 #pragma once
 #include <macros_generic.h>
 #include "datum_index.h"
-#include "data.h"
-
+#include "data_array.h"
 namespace Yelo::Memory {
-	struct s_data_array;
-
 	struct s_data_iterator {
 		s_data_array *data;
 		short        next_index;
@@ -49,4 +46,6 @@ namespace Yelo::TagGroups {
 
 namespace Yelo::blam {
 	static void data_iterator_new(Memory::s_data_iterator &iterator, Yelo::Memory::s_data_array *data);
+
+	static void *data_iterator_next(Yelo::Memory::s_data_iterator &iterator);
 };

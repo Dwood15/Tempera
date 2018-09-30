@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../../../tags/group/tagreference.h"
-#include "../../../"
 
 namespace Yelo::TagGroups {
 	struct s_unit_camera_track {

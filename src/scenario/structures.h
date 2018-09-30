@@ -60,7 +60,7 @@ namespace Yelo::Scenario {
 	// 	enum { k_group_tag = 'sky ' };
 	// 	tag_reference         model;
 	// 	tag_reference         animation;
-	// 	tag_block<void *>     padA[2];
+	// 	tag_block     padA[2];
 	// 	struct s_ambient_radiosity {
 	// 		real_rgb_color color;
 	// 		real           power;
@@ -68,7 +68,7 @@ namespace Yelo::Scenario {
 	// 	s_sky_atmospheric_fog outdoor_fog, indoor_fog;
 	// 	tag_reference         indoor_fog_screen; // 'fog '
 	// 	unsigned long : 32; // this could be angle 'Global Sky Rotation' (a la Halo 2). TODO: try to find references to this field offset
-	// 	tag_block<void *> padC[3]; // s_sky_light
+	// 	tag_block padC[3]; // s_sky_light
 	// };
 	// STAT_ASSERT(s_sky_definition, 0xD0);
 };

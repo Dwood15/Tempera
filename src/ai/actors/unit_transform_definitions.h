@@ -46,7 +46,7 @@ namespace Yelo::TagGroups {
 		Enums::actor_variant_transform_in_vitality_handling vitality_override;
 		real shield_override;
 		real health_override;
-		tag_block<void *> padC[2];
+		tag_block padC[2];
 	};
 	STAT_ASSERT(actor_variant_transform_in_target, 0xAC);
 
@@ -54,7 +54,7 @@ namespace Yelo::TagGroups {
 		enum { k_group_tag = 'avti' };
 
 		Yelo::TagBlock<actor_variant_transform_in_target> targets;
-		tag_block<void *> padC[2];
+		tag_block padC[2];
 	};
 	STAT_ASSERT(actor_variant_transform_in_definition, 0x24);
 #pragma endregion
@@ -64,7 +64,7 @@ namespace Yelo::TagGroups {
 		tag_reference unit;
 		Enums::actor_variant_transform_out_damage_type damage_type;
 		signed short:16;
-		tag_block<void *> padC;
+		tag_block padC;
 	};
 	STAT_ASSERT(actor_variant_transform_out_instigator, 0x20);
 
@@ -77,7 +77,7 @@ namespace Yelo::TagGroups {
 		Enums::actor_variant_transform_team_handling team_handling;
 		::game_team team_override;
 		real_bounds attachment_scale;
-		tag_block<void *> padC[2];
+		tag_block padC[2];
 	};
 	STAT_ASSERT(actor_variant_transform_out_attachment, 0x78);
 
@@ -93,7 +93,7 @@ namespace Yelo::TagGroups {
 		unsigned short actor_state;
 		real_bounds shield_range;
 		real_bounds health_range;
-		tag_block<void *> padB[2];
+		tag_block padB[2];
 
 		Yelo::TagBlock<actor_variant_transform_out_instigator> instigators;
 
@@ -103,7 +103,7 @@ namespace Yelo::TagGroups {
 		unsigned short attachment_flags;
 		signed short:16;
 		Yelo::TagBlock<actor_variant_transform_out_attachment> attachments;
-		tag_block<void *> padC[2];
+		tag_block padC[2];
 	};
 	STAT_ASSERT(actor_variant_transform_out_definition, 0x94);
 #pragma endregion
@@ -120,14 +120,14 @@ namespace Yelo::TagGroups {
 		actor_variant_transform_out_definition *transform_out_ptr;
 		tag_reference transform_in;
 		actor_variant_transform_in_definition *transform_in_ptr;
-		tag_block<void *> padC[2];
+		tag_block padC[2];
 	};
 	STAT_ASSERT(actor_variant_transform_collection_transform, 0x74);
 
 	struct actor_variant_transform_collection_entry {
 		tag_reference actor_variant;
 		Yelo::TagBlock<actor_variant_transform_collection_transform> transforms;
-		tag_block<void *> padC[2];
+		tag_block padC[2];
 	};
 	STAT_ASSERT(actor_variant_transform_collection_entry, 0x34);
 
@@ -135,7 +135,7 @@ namespace Yelo::TagGroups {
 		enum { k_group_tag = 'avtc' };
 
 		Yelo::TagBlock<actor_variant_transform_collection_entry> actor_variant_transforms;
-		tag_block<void *> padA[2];
+		tag_block padA[2];
 	};
 	STAT_ASSERT(actor_variant_transform_collection_definition, 0x24);
 #pragma endregion

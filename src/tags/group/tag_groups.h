@@ -1,6 +1,8 @@
 #pragma once
 
 #include "macros_generic.h"
+#include "../../memory/datum_index.h"
+#include "../../memory/data_iterator.h"
 
 namespace Yelo::TagGroups {
 	// Patches stock tag_groups with new fields where they once had useless padding
@@ -78,3 +80,41 @@ namespace Yelo::TagGroups {
 
 };
 
+namespace Yelo::blam {
+	void tag_groups_initialize();
+	void tag_groups_dispose();
+	void tag_groups_initialize_for_new_map();
+	void tag_groups_dispose_from_old_map();
+	void tag_groups_dump_memory();
+	uint  tag_groups_checksum();
+
+
+	datum_index find_tag_instance(tag group_tag, cstring name);
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Initialize a tag instance iterator for the given group tag </summary>
+	///
+	/// <param name="iter">			   	[out] The iterator to initialize </param>
+	/// <param name="group_tag_filter">
+	/// 	(Optional) the group tag to filter results by. Use [NONE] for [group_tag_filter] to
+	/// 	iterate all tag groups.
+	/// </param>
+	void tag_iterator_new(TagGroups::s_tag_iterator& iter, const tag group_tag_filter = NONE);
+	template<typename T> inline
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Initialize a tag instance iterator for the given group tag </summary>
+	///
+	/// <param name="iter">	[out] The iterator to initialize </param>
+	void tag_iterator_new(TagGroups::s_tag_iterator& iter)
+	{
+		tag_iterator_new(iter, T::k_group_tag);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Increment a tags instance iterator to the next instance </summary>
+	///
+	/// <param name="iter">	[in,out] The iterator to increment </param>
+	///
+	/// <returns>	Returns the next datum's index or [datum_index::null] when finished iterating </returns>
+	datum_index tag_iterator_next(TagGroups::s_tag_iterator& iter);
+}

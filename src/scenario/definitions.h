@@ -150,7 +150,7 @@ namespace Yelo::TagGroups {
 		tag_reference     directional_lightmap_1;
 		tag_reference     directional_lightmap_2;
 		tag_reference     directional_lightmap_3;
-		tag_block<void *> padB[2];
+		tag_block padB[2];
 	};
 
 	struct s_scenario_bsp_sky_set_sky {
@@ -169,7 +169,7 @@ namespace Yelo::TagGroups {
 		short                                             bsp_index;
 		Yelo::TagBlock<const s_scenario_bsp_lightmap_set> lightmap_sets;
 		TagBlock<const s_scenario_bsp_sky_set>            sky_sets;
-		tag_block<void *>                                 padA[3];
+		tag_block                                 padA[3];
 	};
 
 	struct scenario_structure_bsp_reference {
@@ -193,15 +193,15 @@ namespace Yelo::TagGroups {
 		scenario_type type;
 		unsigned short             flags;
 
-		tag_block<int>    padA; // scenario_child_scenario_reference
+		tag_block    padA; // scenario_child_scenario_reference
 		angle             local_north;
 		tag_data          padB;
 		long              padAA[34]; // 136
-		tag_block<void *> scenario_functionA;
-		tag_block<void *> scenario_functionB;
+		tag_block scenario_functionA;
+		tag_block scenario_functionB;
 		tag_data          padCC; // editor_scenario_data
-		tag_block<void *> padDD; // editor_comment_definition
-		tag_block<void *> h2_scenario_environment_object; // Halo2. scenario_environment_object
+		tag_block padDD; // editor_comment_definition
+		tag_block h2_scenario_environment_object; // Halo2. scenario_environment_object
 		long              padAB[53]; // 212
 
 		Yelo::TagBlock<const scenario_object_name> object_names;
@@ -233,7 +233,7 @@ namespace Yelo::TagGroups {
 		Yelo::TagBlock<const s_scenario_sound_scenery>      sound_scenery;
 		Yelo::TagBlock<const scenario_object_palette_entry> sound_scenery_palette;
 
-		tag_block<void *> padEE[2];
+		tag_block padEE[2];
 
 		long padUnk60[15]; // 60
 
@@ -244,15 +244,15 @@ namespace Yelo::TagGroups {
 		Yelo::TagBlock<const scenario_netpoint>                              netgame_flags;
 		Yelo::TagBlock<scenario_netgame_equipment>                           netgame_equipment;
 		Yelo::TagBlock<const scenario_starting_equipment>                    starting_equipment;
-		tag_block<void *>                                                    tb_padA1;
-		tag_block<void *>                                                    tb_padA2;
-		tag_block<void *>                                                    tb_padA3;
-		tag_block<void *>                                                    tb_padA4;
+		tag_block                                                    tb_padA1;
+		tag_block                                                    tb_padA2;
+		tag_block                                                    tb_padA3;
+		tag_block                                                    tb_padA4;
 
 		long padkUnk36[9]; // 36
 
-		tag_block<void *> pad_tbunkA[4];
-		tag_block<void *> pad_tbunkB[7];
+		tag_block pad_tbunkA[4];
+		tag_block pad_tbunkB[7];
 
 		tag_data hs_syntax_data;
 		tag_data hs_string_data;
@@ -262,8 +262,8 @@ namespace Yelo::TagGroups {
 		Yelo::TagBlock<const hs_tag_reference>   references;
 		Yelo::TagBlock<const hs_source_file>     source_files;
 
-		tag_block<void *> h2_cs_script_data;
-		tag_block<void *> tb_unknownASDF;
+		tag_block h2_cs_script_data;
+		tag_block tb_unknownASDF;
 
 		Yelo::TagBlock<const scenario_cutscene_flag>         cutscene_flags;
 		Yelo::TagBlock<const scenario_cutscene_camera_point> cutscene_camera_points;

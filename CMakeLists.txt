@@ -150,6 +150,7 @@ set(COMMON_H
 	common/macros_generic.h
 	common/struct_helper.h
 	common/enums/control_enums.h
+	common/enums/damage.h
 	common/enums/effects_enums.h
 	common/enums/generic_enums.h
 	common/enums/hs_enums.h
@@ -164,10 +165,12 @@ set(COMMON_H
 	common/enums/player_enums.h
 	common/enums/weapon_enums.h
 	common/enums/network_enums.h
-	src/gamestate/teams/teams.h
-	src/engine/engine_functions.h
-	src/memory/data_array.h
-	src/render/rasterizer/postprocessing/Scripting.cpp src/render/rasterizer/postprocessing/Scripting.h common/enums/postprocessing.h common/enums/bitmaps.h common/enums/shaders.h src/gamestate/objects/damage.h common/enums/materials.h src/gamestate/objects/damage.cpp)
+	common/enums/postprocessing.h
+	common/enums/bitmaps.h
+	common/enums/shaders.h
+	common/enums/materials.h
+	common/enums/animations.h
+	common/enums/damage.h common/enums/math.h src/render/rasterizer/dx9/dx9_render_targets.h common/enums/render.h src/game/game_engine.h common/enums/engine.h common/enums/game_variants.h src/game/networking/client_manager_structures.h src/game/networking/game_globals.h src/gamestate/game_engine.cpp src/gamestate/game_engine.h src/gamestate/game_types.h common/enums/vehicle.h src/gamestate/objects/vehicle_remapper.h)
 
 add_custom_target(HeadersTarget SOURCES ${SRC_H})
 

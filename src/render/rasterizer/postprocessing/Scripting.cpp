@@ -3,7 +3,7 @@
 #include "Scripting.h"
 #include "../../../math/colors.h"
 #include "../../../cseries/yelo_base.h"
-#include "PostProcessing.hpp"
+#include "PostProcessing.h"
 #include "Generic/Internal/c_system_internal.hpp"
 
 namespace Yelo {

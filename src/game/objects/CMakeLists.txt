@@ -8,7 +8,7 @@ set(O_WEAPONS_H
 #	${CMAKE_CURRENT_SOURCE_DIR}/weapon/weapons.h
 	)
 
-set(OBJECTS_SRC
+set(OBJECTS_CXX
 	PARENT_SCOPE)
 
 set(OBJECTS_H
@@ -16,11 +16,11 @@ set(OBJECTS_H
 #	${CMAKE_CURRENT_SOURCE_DIR}/damage_upgrades.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/grenade_hooks.inl
 #	${CMAKE_CURRENT_SOURCE_DIR}/index_resolution.hpp
-#	${CMAKE_CURRENT_SOURCE_DIR}/object_definitions.hpp
-#	${CMAKE_CURRENT_SOURCE_DIR}/object_lights.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/object_definitions.h
+	${CMAKE_CURRENT_SOURCE_DIR}/object_lights.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/object_structures.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/object_types.h
-#	${CMAKE_CURRENT_SOURCE_DIR}/objects.h
+	${CMAKE_CURRENT_SOURCE_DIR}/objects.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/objects_yelo.h
 #	${CMAKE_CURRENT_SOURCE_DIR}/placeholder_definitions.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/scenario_definitions_structures.h

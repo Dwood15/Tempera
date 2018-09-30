@@ -47,7 +47,7 @@ namespace Yelo
 				}m_flags;
 
 				Enums::pp_component_status status;
-				PAD16;
+				short : 16;
 			}m_members;
 
 			/////////////////////////////////////////////////

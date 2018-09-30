@@ -6,10 +6,10 @@
 */
 
 #include "../dx9/shaders/shader_postprocess_definitions.hpp"
-#include "PostProcessingErrorReporting.hpp"
-#include "c_post_processing_main.hpp"
+#include "PostProcessingErrorReporting.h"
+#include "c_post_processing_main.h"
 #include "../../../cseries/yelo_base.h"
-#include "c_shader_include_manager.hpp"
+#include "c_shader_include_manager.h"
 
 namespace Yelo {
 	namespace Rasterizer {

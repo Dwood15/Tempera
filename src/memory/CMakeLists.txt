@@ -9,7 +9,7 @@ set(MEMORY_H
 	${CMAKE_CURRENT_SOURCE_DIR}/array_yelo.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/bitstream.h
 	${CMAKE_CURRENT_SOURCE_DIR}/circular_queue.h
-	${CMAKE_CURRENT_SOURCE_DIR}/data.h
+	${CMAKE_CURRENT_SOURCE_DIR}/data_array.h
 	${CMAKE_CURRENT_SOURCE_DIR}/data_base.h
 	${CMAKE_CURRENT_SOURCE_DIR}/data_iterator.h
 	${CMAKE_CURRENT_SOURCE_DIR}/datum_index.h

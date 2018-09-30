@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../dx9/shaders/shader_postprocess_definitions.hpp"
-#include "c_quad_manager.hpp"
+#include "c_quad_manager.h"
 #include "ShaderSources/c_shader_data_base.hpp"
 
 namespace Yelo::Rasterizer::PostProcessing {

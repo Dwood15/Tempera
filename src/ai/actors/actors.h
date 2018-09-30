@@ -40,7 +40,7 @@ namespace Yelo {
 		// void actor_freeze(const datum_index actor_index);
 		//
 		// // static auto actor_b_braindead = K_ACTOR_SET_BRAINDEAD;
-		// void actor_braindead(const datum_index actor_index, const bool braindead);
+		 void actor_braindead(const datum_index actor_index, const bool braindead);
 
 		// static auto actor_c_f_unit = K_ACTOR_CREATE_FOR_UNIT;
 		// datum_index

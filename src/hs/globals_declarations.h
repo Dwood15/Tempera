@@ -3,7 +3,7 @@
 #include "function_declarations.h"
 #include "../ai/ai_yelo/AI.Transform.inl"
 #include "../render/rasterizer/postprocessing/Scripting.h"
-#include "../render/rasterizer/ShaderExtension/ShaderExtension.hpp"
+#include "../render/rasterizer/ShaderExtension/ShaderExtension.h"
 #include "../render/rasterizer/GBuffer.hpp"
 
 namespace Yelo::Scripting {
@@ -13,17 +13,28 @@ namespace Yelo::Scripting {
 	// Yelo::Scripting::hs_global_definition global_rasterizer_rt_display_definition = {
 	// 	"rasterizer_rt_display", Enums::_hs_type_short, 0, reinterpret_cast<void *>(&Yelo::dx9::c_gbuffer_system::g_debug_index), (1 << (Yelo::Flags::_hs_access_enabled_bit))
 	// };
-	Yelo::Scripting::hs_global_definition global_rasterizer_rt_display_definition              = {
+	Yelo::Scripting::hs_global_definition global_rasterizer_rt_display_definition = {
 		"rasterizer_rt_display", Enums::_hs_type_short, 0, reinterpret_cast<void *>(&Yelo::DX9::c_gbuffer_system::g_debug_index),
 		(1 << (Yelo::Flags::_hs_access_enabled_bit))
 	};
+
+	//Usability hack to get the OS haloscript extensions to compile.
+	static bool stored_false = false;
+	static bool stored_true  = true;
+
 	HS_GLOBAL2(rasterizer_gbuffer_enabled, bool, &DX9::c_gbuffer_system::g_system_enabled, nullptr);
 
-	HS_GLOBAL2(pp_external_post_processes_enabled, bool, &Rasterizer::PostProcessing::Scripting::Globals::Enabled_External(), nullptr);
-	HS_GLOBAL2(pp_internal_post_processes_enabled, bool, &Rasterizer::PostProcessing::Scripting::Globals::Enabled_Internal(), nullptr);
-	HS_GLOBAL2(pp_fxaa_enabled, bool, &Rasterizer::PostProcessing::Scripting::Globals::Enabled_FXAA(), nullptr);
-	HS_GLOBAL2(pp_motion_blur_enabled, bool, &Rasterizer::PostProcessing::Scripting::Globals::Enabled_MotionBlur(), nullptr);
-	HS_GLOBAL2(pp_motion_blur_amount, real, &Rasterizer::PostProcessing::Scripting::Globals::MotionBlur_Amount(), nullptr);
+	Yelo::Scripting::hs_global_definition global_pp_external_post_processes_enabled_definition = {
+		"pp_external_post_processes_enabled",
+		Enums::_hs_type_bool,
+		0,
+		(reinterpret_cast<void *>(&stored_false)),
+		(1 << (Yelo::Flags::_hs_access_enabled_bit))
+	};
+	HS_GLOBAL2(pp_internal_post_processes_enabled, bool, &stored_true, nullptr);
+	HS_GLOBAL2(pp_fxaa_enabled, bool, &stored_true, nullptr);
+	HS_GLOBAL2(pp_motion_blur_enabled, bool, &stored_false, nullptr);
+	HS_GLOBAL2(pp_motion_blur_amount, real, &stored_false, nullptr);
 
 	HS_GLOBAL2(ai_transforms_enabled, bool, &AI::Transform::TransformsEnabled(), nullptr);
 

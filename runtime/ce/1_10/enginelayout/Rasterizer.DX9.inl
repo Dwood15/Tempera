@@ -23,14 +23,14 @@
 
 //////////////////////////////////////////////////////////////////////////
 // dx9.cpp
-static auto *const Params = reinterpret_cast<D3DPRESENT_PARAMETERS *>(K_PARAMS);
-static auto *const Caps = reinterpret_cast<D3DCAPS9 *>(K_CAPS);
-static auto **const D3D = reinterpret_cast<IDirect3D9 **>(K_D3D);;
-static auto **const Device = reinterpret_cast<IDirect3DDevice9 **>(K_DEVICE);;
-static auto **const DInput8 = reinterpret_cast<IDirectInput8 **>(K_DINPUT8);;
-static auto **const DInput8DeviceKeyboard = reinterpret_cast<IDirectInputDevice8 **>(K_DINPUT8DEVICEKEYBOARD);;
-static auto **const DInput8DeviceMouse = reinterpret_cast<IDirectInputDevice8 **>(K_DINPUT8DEVICEMOUSE);;
-static auto **const DInput8DeviceJoysticks = reinterpret_cast<IDirectInputDevice8 **>(K_DINPUT8DEVICEJOYSTICKS);;
+static auto *const Params = reinterpret_cast<D3DPRESENT_PARAMETERS *>(0x75B760);
+static auto *const Caps = reinterpret_cast<D3DCAPS9 *>(0x75C420);
+static auto **const D3D = reinterpret_cast<IDirect3D9 **>(0x6B8410);;
+static auto **const Device = reinterpret_cast<IDirect3DDevice9 **>(0x6B840C);
+static auto **const DInput8 = reinterpret_cast<IDirectInput8 **>(0x64C52C);
+static auto **const DInput8DeviceKeyboard = reinterpret_cast<IDirectInputDevice8 **>(0x64C730);;
+static auto **const DInput8DeviceMouse = reinterpret_cast<IDirectInputDevice8 **>(0x64C734);;
+static auto **const DInput8DeviceJoysticks = reinterpret_cast<IDirectInputDevice8 **>(0x64C778);;
 
 
 //////////////////////////////////////////////////////////////////////////

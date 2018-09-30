@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../c_effect_postprocess.hpp"
+#include "../c_effect_postprocess.h"
 #include "c_parameter_instance.hpp"
 
 namespace Yelo::Rasterizer::PostProcessing::Generic {

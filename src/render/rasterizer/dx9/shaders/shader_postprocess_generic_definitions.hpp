@@ -136,11 +136,11 @@ namespace Yelo
 
 		struct s_shader_postprocess_value_animation_function
 		{
-			TAG_ENUM(function, Enums::periodic_function);
+			short function;
 			struct _flags {
-				TAG_FLAG8(inverted);
-				TAG_FLAG8(multichannel_noise);
-				TAG_FLAG8(ignore_alpha);
+				byte inverted_bit:1;
+				byte multichannel_noise_bit:1;
+				byte ignore_alpha_bit:1;
 			}flags;
 			STAT_ASSERT(_flags, sizeof(byte_flags) );
 			unsigned char:8;

@@ -26,7 +26,7 @@ struct TAssertEquality {
 
 #define STAT_ASSERT(object, size) static_assert( TAssertEquality<sizeof(object), size>::_cResult);
 
-#define IMPLEMENTATION_REQUIRED static_assert(false, "This features requires implementation to compile on this darget.")
+#define IMPLEMENTATION_REQUIRED static_assert(false, "This features requires implementation to compile on this target.");
 
 /*auto numDigits = [](unsigned long num, unsigned long dig = 0) constexpr {
 	
@@ -108,7 +108,7 @@ STAT_ASSERT(ushort, 0x2);
 #define PAD128 unsigned long long : 64; unsigned long long : 64;
 
 // Add a field to a structure that pads as if it were of type [type]
-#define PAD_TYPE(type) pad_##type
+#define PAD_TYPE(type) type pad_##type
 // Add a field to a structure that markups what is thought to be a field of type [type]
 #define UNKNOWN_TYPE(type) pad_##type
 
@@ -357,3 +357,7 @@ namespace Yelo::Enums {
 #else
 	#define naked
 #endif
+
+#define NOT_IMPLEMENTED \
+	throw \
+	"Not yet implemented!";

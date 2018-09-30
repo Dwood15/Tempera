@@ -12,6 +12,7 @@ set(DINPUT_CXX
 	)
 
 add_subdirectory(ai)
+add_subdirectory(engine)
 add_subdirectory(math)
 add_subdirectory(cache)
 add_subdirectory(cseries)
@@ -29,8 +30,10 @@ add_subdirectory(tags)
 
 set(SRC_CXX
 	src/Direct3D/d3d9hook.cpp
+	${CSERIES_CXX}
 	${AI_CXX}
 	${DINPUT_CXX}
+	${ENGINE_CXX}
 	${CMAKE_CURRENT_SOURCE_DIR}/CurrentEngine.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/forge.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/math/math.cpp
@@ -40,7 +43,7 @@ set(SRC_CXX
 	${GAMESTATE_SRC}
 	${SCENARIO_SRC}
 	${GAME_SRC}
-	${RENDER_SRC}
+	${RENDER_CXX}
 	${TAGS_CXX}
 	PARENT_SCOPE)
 
@@ -53,6 +56,7 @@ set(SRC_H
 	${EFFECTS_H}
 	${MATH_H}
 	${MEMORY_H}
+	${ENGINE_H}
 	${MODELS_H}
 	${RENDER_H}
 	${D3D}

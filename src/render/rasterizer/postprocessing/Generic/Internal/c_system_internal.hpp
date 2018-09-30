@@ -9,7 +9,7 @@
 #include <enums/postprocessing.h>
 #include "c_effect_internal.hpp"
 #include "../c_shader_instance_generic.hpp"
-#include "../../c_effect_render_set.hpp"
+#include "../../c_effect_render_set.h"
 #include "c_shader_internal.hpp"
 #include "../c_effect_instance_generic.hpp"
 #include "../../Interfaces/IPostProcessingUpdatable.hpp"

@@ -123,7 +123,7 @@ INTELLISENSE_HACK(s_weapon_datum_network_data)
 			// FLAG(3) - _weapon_must_be_readied_bit
 			long_flags flags;						// 0x22C
 			word_flags owner_unit_flags;			// 0x230
-			PAD16;
+			short : 16;
 			real primary_trigger;					// 0x234
 			Enums::weapon_state weapon_state;		// 0x238
 			PAD8;
@@ -136,7 +136,7 @@ INTELLISENSE_HACK(s_weapon_datum_network_data)
 			datum_index tracked_object_index;		// 0x250
 			PAD64;									// 0x254 unused
 			int16 alt_shots_loaded;					// 0x25C
-			PAD16;									// 0x25E
+			short : 16;									// 0x25E
 			s_trigger_state triggers[Enums::k_maximum_number_of_triggers_per_weapon];	// 0x260
 			s_magazine_state magazines[Enums::k_maximum_number_of_magazines_per_weapon];// 0x2B0
 			int32 last_trigger_fire_time;			// 0x2D0

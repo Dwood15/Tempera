@@ -11,7 +11,7 @@
 #include "../../memory/datum_index.h"
 #include "../../memory/memory_interface_base.hpp"
 #include "../../cseries/MacrosCpp.h"
-#include "ShaderExtension/ShaderExtension.hpp"
+#include "ShaderExtension/ShaderExtension.h"
 #include "../lightmaps/c_lightmap_manager.hpp"
 
 namespace Yelo::Render::Lightmaps {

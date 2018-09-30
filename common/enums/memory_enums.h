@@ -46,28 +46,34 @@ namespace Yelo {
 	};
 
 	namespace Memory {
+#pragma pack(push, 1)
 		struct Opcode {
 			struct s_call {
 				byte         Op;
 				unsigned int Address;
 			};
+			STAT_ASSERT(s_call, 0x5);
 
 			struct s_call_ret : s_call {
-				byte             Ret;
-				unsigned __int16 Count;
+				byte   Ret;
+				ushort Count;
 			};
+			STAT_ASSERT(s_call_ret, sizeof(s_call) + 0x3);
 
 			// absolute call opcode
 			struct s_call_abs {
-				unsigned __int16 Op;
-				unsigned __int32 Address;
+				ushort Op;
+				ushort Address;
 			};
+			STAT_ASSERT(s_call_abs, 0x4);
 
 			// absolute call opcode with return
 			struct s_call_abs_ret : s_call_abs {
-				byte             Ret;
-				unsigned __int16 Count;
+				byte   Ret;
+				ushort Count;
 			};
+			STAT_ASSERT(s_call_abs_ret, sizeof(s_call_abs) + 0x3);
 		};
+#pragma pack(pop)
 	};
 };

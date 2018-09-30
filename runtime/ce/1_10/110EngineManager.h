@@ -13,6 +13,9 @@
 #include "../../../src/hs/structures.h"
 #include "../../../src/hs/function_declarations.h"
 
+
+static void InitializeLibraryFixups();
+
 namespace feature_management::engines {
 	class CE110 : public IEngine<CE110> {
 	private:
@@ -107,6 +110,9 @@ namespace feature_management::engines {
 
 		static void UpdateHSFunctionCounts(short count);
 
+		static void MemoryUpgradesInitialize();
+
+
 		//////////////////////////////////////////////////////////////////////////
 
 
@@ -147,7 +153,7 @@ namespace feature_management::engines {
 
 		// Initialize the function's evaluator to one which we've defined
 		// in our code. Evaluator takes no parameters but may return a value.
-		void InitializeScriptFunction(Enums::hs_function_enumeration function, Yelo::Scripting::proc_hs_yelo_function proc) {
+		static void InitializeScriptFunction(Enums::hs_function_enumeration function, Yelo::Scripting::proc_hs_yelo_function proc) {
 			if (function > NONE && function < Yelo::Enums::k_hs_function_enumeration_count) {
 				ScriptFunctionSetEvaluteProc(*Yelo::Scripting::hs_yelo_functions[function], reinterpret_cast<Scripting::proc_hs_evaluate>(Yelo::Scripting::CreateScriptFunction(proc, false)));
 			}
@@ -155,7 +161,7 @@ namespace feature_management::engines {
 
 		// Initialize the function's evaluator to one which we've defined
 		// in our code. Evaluator expects parameters and may return a value.
-		void InitializeScriptFunctionWithParams(Enums::hs_function_enumeration function, Yelo::Scripting::proc_hs_yelo_function_with_params proc) {
+		static void InitializeScriptFunctionWithParams(Enums::hs_function_enumeration function, Yelo::Scripting::proc_hs_yelo_function_with_params proc) {
 			if (function > NONE && function < Yelo::Enums::k_hs_function_enumeration_count) {
 				ScriptFunctionWithParamsSetEvaluteProc(*Yelo::Scripting::hs_yelo_functions[function], reinterpret_cast<Scripting::proc_hs_evaluate>(Yelo::Scripting::CreateScriptFunction(proc, true)));
 			}

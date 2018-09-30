@@ -1,5 +1,5 @@
 #pragma once
-
+#include <macros_generic.h>
 #include "datum_index.h"
 
 namespace Yelo::Memory {
@@ -16,7 +16,7 @@ namespace Yelo::Memory {
 		bool IsNull() const { return header == 0; }
 	};
 
-	static_assert(sizeof(s_datum_base) == 2);
+	STAT_ASSERT(s_datum_base, 2);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>
@@ -26,5 +26,6 @@ namespace Yelo::Memory {
 	struct s_datum_base_aligned : s_datum_base {
 	private:
 		unsigned short : 16;
-	}; static_assert(sizeof(s_datum_base_aligned) == 4);
+	};
+	STAT_ASSERT(s_datum_base_aligned, 4);
 };

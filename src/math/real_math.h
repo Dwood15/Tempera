@@ -163,3 +163,10 @@ struct real_matrix4x3 {
 struct real_matrix3x4 {
 	float m[4][3];
 };
+
+#include <enums/math.h>
+namespace Yelo::blam {
+	real periodic_function_evaluate(Enums::periodic_function function_type, real input);
+
+	real transition_function_evaluate(Enums::transition_function function_type, real input);
+};

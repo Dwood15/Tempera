@@ -13,6 +13,7 @@ namespace Yelo::Scenario {
 	};
 	STAT_ASSERT(s_scenario_location, 0x8);
 
+#pragma pack(push, 1)
 	struct s_sky_atmospheric_fog {
 		real_rgb_color color;
 		long long : 64;
@@ -20,5 +21,8 @@ namespace Yelo::Scenario {
 		real          start_distance;
 		real          opaque_distance;
 	};
+#pragma pack(pop)
+
 	STAT_ASSERT(s_sky_atmospheric_fog, 0x20);
+
 };

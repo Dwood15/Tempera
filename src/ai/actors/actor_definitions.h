@@ -376,7 +376,7 @@ namespace Yelo::TagGroups {
 		short forced_shader_permutation;
 		unsigned short : 16;
 		long                                          pad08[4];
-		tag_block<void *>                             pad09;
+		tag_block                             pad09;
 		Yelo::TagBlock<s_actor_variant_change_colors> change_colors;
 	};
 

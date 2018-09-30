@@ -97,16 +97,12 @@ namespace obj {
 	// Stock game state allocation size for the object memory pool
 	// When running in editor tools, this and the max number of objects is increased by 5x
 	constexpr int k_object_memory_pool_allocation_size{0x200000};
-
-
-
-	enum objects_find_flags : unsigned long {
-		_objects_find_collideable_bit,
-		_objects_find_noncollideable_bit,
-	};
-
 };
 
+enum objects_find_flags : unsigned long {
+	_objects_find_collideable_bit,
+	_objects_find_noncollideable_bit,
+};
 
 enum {
 	// Never streamed, unless the tag is loaded with _tag_load_for_editor_bit
@@ -233,7 +229,7 @@ enum outgoing_object_function {
 	k_number_of_outgoing_object_functions
 };
 
-enum object_function_reference {
+enum object_function_reference : short{
 	_object_function_reference_none,
 	_object_function_reference_a,
 	_object_function_reference_b,

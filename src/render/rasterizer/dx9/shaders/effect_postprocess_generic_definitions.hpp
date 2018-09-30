@@ -1,10 +1,7 @@
-/*
-	Yelo: Open Sauce SDK
-		Halo 1 (CE) Edition
-
-	See license\OpenSauce\Halo1_CE for specific license information
-*/
 #pragma once
+
+#include <macros_generic.h>
+#include "shader_postprocess_definitions.hpp"
 
 namespace Yelo {
 	namespace TagGroups {
@@ -32,7 +29,7 @@ namespace Yelo {
 		struct s_effect_postprocess_generic_effect_instance {
 			tag_string                           name;
 			int16                                effect_index;
-			TAG_ENUM(render_stage, Enums::postprocess_render_stage);
+			short render_stage;
 			s_effect_postprocess_quad_definition quad_definition;
 			short                                activation_operation;
 			short : 16;
@@ -41,7 +38,7 @@ namespace Yelo {
 #if 0
 			TAG_TBLOCK_(fade_controls, s_effect_postprocess_effect_fade_control);
 #else
-			tag_block<void *> pad_type1[1];
+			tag_block pad_block0;
 #endif
 			byte pad_type16[16];
 		};

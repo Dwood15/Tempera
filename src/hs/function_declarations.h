@@ -1,6 +1,7 @@
 #pragma once
 
 #include "script_extensions/hs_base.h"
+#include "../CurrentEngine.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -644,87 +645,15 @@ namespace Yelo::Scripting {
 		} globals;
 	};
 
-
-	static void InitializeLibraryFixups();
-
-
-
-
 #include "globals_declarations.h"
 #include "script_extensions/hs_base.h"
+#include "../gamestate/game_engine.h"
 // #include "../../network/server/network_server_manager_structures.hpp"
 // #include "../../network/server/network_server_manager.hpp"
 // #include "../../network/networking.h"
 // #include "../../game/engines/engine.hpp"
 
-	static void MemoryUpgradesInitialize() {
-		InitializeLibraryFixups();
 
-		//////////////////////////////////////////////////////////////////////////
-		// Add the game's functions/globals to our upgraded memory
-		static const rsize_t K_HS_FUNCTION_TABLE_COUNT = 0x211;
-
-		static const rsize_t K_HS_EXTERNAL_GLOBALS_COUNT = 0x1EC - 1; // NOTE: we don't copy the 'rasterizer_frame_drop_ms' definition as its not defined in the tools
-
-
-		for (rsize_t x = 0, index = 0;
-			  x < K_HS_FUNCTION_TABLE_COUNT;
-			  index++) {
-			if (_upgrade_globals.functions.table[index] == nullptr) {
-				_upgrade_globals.functions.table[index] = hs_function_table[x++];
-				_upgrade_globals.functions.count++;
-			}
-		}
-
-		for (rsize_t x = 0, index = 0;
-			  x < K_HS_EXTERNAL_GLOBALS_COUNT;
-			  index++) {
-			if (_upgrade_globals.globals.table[index] == nullptr) {
-				hs_global_definition &glob =
-												*(_upgrade_globals.globals.table[index] = hs_external_globals[x++]);
-				_upgrade_globals.globals.count++;
-
-				// Is this the global who we want to override for exposing opensauce status?
-				if (strcmp(glob.name, k_external_global_opensauce_override_name) == 0)
-					InitializeExternalGlobalOpenSauceOverride(glob);
-			}
-		}
-		//////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////
-		// Add Yelo's functions/globals to our upgraded memory
-		{
-			_upgrade_globals.functions.yelo_start_index = _upgrade_globals.functions.count;
-			for (size_t x = 0; x < K_HS_YELO_FUNCTION_COUNT; x++,
-				_upgrade_globals.functions.count++)
-				_upgrade_globals.functions.table[_upgrade_globals.functions.count] =
-					hs_yelo_functions[x];
-
-			_upgrade_globals.globals.yelo_start_index = _upgrade_globals.globals.count;
-			for (size_t x = 0; x < K_HS_YELO_GLOBALS_COUNT; x++,
-				_upgrade_globals.globals.count++)
-				_upgrade_globals.globals.table[_upgrade_globals.globals.count] =
-					hs_yelo_globals[x];
-		}
-		//////////////////////////////////////////////////////////////////////////
-
-
-		//////////////////////////////////////////////////////////////////////////
-		// Update the game code to use OUR function/global definition tables
-		{
-			void ** table_references = CurrentEngine.GetHsFunctionTableReferences();
-			if (table_references != nullptr) {
-				hs_function_definition ****definitions = reinterpret_cast<hs_function_definition ****>(table_references);
-				const size_t           k_count         = CurrentEngine.GetNumberOfFunctionTableReferences();
-
-				for (size_t x = 0; x < k_count; x++) {
-					*definitions[x] = &_upgrade_globals.functions.table[0];
-				}
-			}
-		}
-
-		//////////////////////////////////////////////////////////////////////////
-	}
 
 	void* scripting_game_change_version_id_evaluate(void** arguments)
 	{
@@ -748,11 +677,11 @@ namespace Yelo::Scripting {
 		}* args = reinterpret_cast<s_arguments *>(arguments);
 		TypeHolder result; result.pointer = nullptr;
 
-		if( !strcmp(args->data_name,"type") )			result.long = GameEngine::Current() != nullptr ? Yelo::GameEngine::GlobalVariant()->game_engine_index : Yelo::Enums::_game_engine_none;
-		else if( !strcmp(args->data_name,"is_teams") )		result.long = CAST(long, Yelo::GameEngine::GlobalVariant()->universal_variant.teams);
-		else if( !strcmp(args->data_name,"is_odd_man_out") )result.long = CAST(long, Yelo::GameEngine::GlobalVariant()->universal_variant.odd_man_out);
-		else if( !strcmp(args->data_name,"lives") )			result.long = Yelo::GameEngine::GlobalVariant()->universal_variant.lives;
-		else if( !strcmp(args->data_name,"score_to_win") )	result.long = Yelo::GameEngine::GlobalVariant()->universal_variant.score_to_win;
+		if( !strcmp(args->data_name,"type") )			result.int32 = GameEngine::Current() != nullptr ? Yelo::GameEngine::GlobalVariant()->game_engine_index : Yelo::Enums::_game_engine_none;
+		else if( !strcmp(args->data_name,"is_teams") )		result.int32 = CAST(long, Yelo::GameEngine::GlobalVariant()->universal_variant.teams);
+		else if( !strcmp(args->data_name,"is_odd_man_out") )result.int32 = CAST(long, Yelo::GameEngine::GlobalVariant()->universal_variant.odd_man_out);
+		else if( !strcmp(args->data_name,"lives") )			result.int32 = Yelo::GameEngine::GlobalVariant()->universal_variant.lives;
+		else if( !strcmp(args->data_name,"score_to_win") )	result.int32 = Yelo::GameEngine::GlobalVariant()->universal_variant.score_to_win;
 
 		// CTF
 		//	else if( !strcmp(args->data_name,"ctf:") )			result.long = GameEngine::GlobalVariant();
@@ -817,7 +746,7 @@ namespace Yelo::Scripting {
 		}* args = reinterpret_cast<s_arguments *>(arguments);
 		TypeHolder result; result.pointer = nullptr;
 
-		result.uint = CAST(uint,args->value) & CAST(uint,args->flags);
+		result.uint32 = CAST(uint,args->value) & CAST(uint,args->flags);
 
 		return result.pointer;
 	}
@@ -829,7 +758,7 @@ namespace Yelo::Scripting {
 		}* args = reinterpret_cast<s_arguments *>(arguments);
 		TypeHolder result; result.pointer = nullptr;
 
-		result.uint = CAST(uint,args->value) | CAST(uint,args->flags);
+		result.uint32 = CAST(uint,args->value) | CAST(uint,args->flags);
 
 		return result.pointer;
 	}
@@ -841,7 +770,7 @@ namespace Yelo::Scripting {
 		}* args = reinterpret_cast<s_arguments *>(arguments);
 		TypeHolder result; result.pointer = nullptr;
 
-		result.uint = CAST(uint,args->value) ^ CAST(uint,args->flags);
+		result.uint32 = CAST(uint,args->value) ^ CAST(uint,args->flags);
 
 		return result.pointer;
 	}
@@ -854,7 +783,7 @@ namespace Yelo::Scripting {
 		TypeHolder result; result.pointer = nullptr;
 
 		if(args->bit_count >= 0 && args->bit_count < BIT_COUNT(long))
-			result.uint = CAST(uint,args->value) << args->bit_count;
+			result.uint32 = CAST(uint,args->value) << args->bit_count;
 
 		return result.pointer;
 	}
@@ -867,7 +796,7 @@ namespace Yelo::Scripting {
 		TypeHolder result; result.pointer = nullptr;
 
 		if(args->bit_count >= 0 && args->bit_count < BIT_COUNT(long))
-			result.uint = CAST(uint,args->value) >> args->bit_count;
+			result.uint32 = CAST(uint,args->value) >> args->bit_count;
 
 		return result.pointer;
 	}
@@ -899,9 +828,9 @@ namespace Yelo::Scripting {
 		if(args->bit_index >= 0 && args->bit_index < BIT_COUNT(long))
 		{
 			uint value = CAST(uint,args->value);
-			result.uint = SET_FLAG(value, args->bit_index, args->add_or_remove);
+			result.uint32 = SET_FLAG(value, args->bit_index, args->add_or_remove);
 		}
-		else result.uint = CAST(uint,args->value);
+		else result.uint32 = CAST(uint,args->value);
 
 		return result.pointer;
 	}
@@ -930,7 +859,7 @@ namespace Yelo::Scripting {
 		{
 			uint value = CAST(uint,args->value);
 			uint flags = CAST(uint,args->flags);
-			result.uint = args->add_or_remove ? value | flags : value & ~flags;
+			result.uint32 = args->add_or_remove ? value | flags : value & ~flags;
 		}
 
 		return result.pointer;
@@ -942,7 +871,7 @@ namespace Yelo::Scripting {
 		}* args = reinterpret_cast<s_arguments *>(arguments);
 		TypeHolder result; result.pointer = nullptr;
 
-		sscanf_s(args->str, "%x", &result.uint);
+		sscanf_s(args->str, "%x", &result.uint32);
 
 		return result.pointer;
 	}
@@ -950,33 +879,34 @@ namespace Yelo::Scripting {
 
 	static void* scripting_display_scripted_ui_widget_evaluate(void** arguments)
 	{
-		struct s_arguments {
-			const char * name;
-		}* args = reinterpret_cast<s_arguments *>(arguments);
-		TypeHolder result; result.pointer = nullptr;
-
-		result.boolean = Yelo::UIWidgets::DisplayScriptedWidget(args->name);
-
-		return result.pointer;
+		// struct s_arguments {
+		// 	const char * name;
+		// }* args = reinterpret_cast<s_arguments *>(arguments);
+		// TypeHolder result; result.pointer = nullptr;
+		//
+		// result.boolean = Yelo::UIWidgets::DisplayScriptedWidget(args->name);
+		//
+		// return result.pointer;
+		return nullptr;
 	}
 
 	static void* scripting_play_bink_movie_evaluate(void** arguments)
 	{
-		struct s_arguments {
-			const char * name;
-		}* args = reinterpret_cast<s_arguments *>(arguments);
-
-		if(GameState::IsLocal())
-			Yelo::blam::bink_playback_start(args->name);
+		// struct s_arguments {
+		// 	const char * name;
+		// }* args = reinterpret_cast<s_arguments *>(arguments);
+		//
+		// if(GameState::IsLocal())
+		// 	Yelo::blam::bink_playback_start(args->name);
 
 		return nullptr;
 	}
 
 
 	static void InitializeMiscFunctions() {
-		InitializeScriptFunctionWithParams(Enums::_hs_function_game_change_version_id, scripting_game_change_version_id_evaluate);
-
-		InitializeScriptFunctionWithParams(Enums::_hs_function_game_engine_data_get_integer, scripting_game_engine_data_get_integer_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_game_change_version_id, scripting_game_change_version_id_evaluate);
+		//
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_game_engine_data_get_integer, scripting_game_engine_data_get_integer_evaluate);
 
 		// InitializeScriptFunction(Enums::_hs_function_machine_is_host, scripting_machine_is_host);
 		// InitializeScriptFunction(Enums::_hs_function_machine_is_dedi, scripting_machine_is_dedi);
@@ -1008,50 +938,50 @@ namespace Yelo::Scripting {
 
 		//////////////////////////////////////////////////////////////////////////
 		// Numbers
-		InitializeScriptFunctionWithParams(Enums::_hs_function_abs_integer, scripting_abs_integer_evaluate);
-		InitializeScriptFunctionWithParams(Enums::_hs_function_abs_real, scripting_abs_real_evaluate);
-		InitializeScriptFunctionWithParams(Enums::_hs_function_bitwise_and, scripting_bitwise_and_evaluate);
-		InitializeScriptFunctionWithParams(Enums::_hs_function_bitwise_or, scripting_bitwise_or_evaluate);
-		InitializeScriptFunctionWithParams(Enums::_hs_function_bitwise_xor, scripting_bitwise_xor_evaluate);
-		InitializeScriptFunctionWithParams(Enums::_hs_function_bitwise_lhs, scripting_bitwise_lhs_evaluate);
-		InitializeScriptFunctionWithParams(Enums::_hs_function_bitwise_rhs, scripting_bitwise_rhs_evaluate);
-		InitializeScriptFunctionWithParams(Enums::_hs_function_bit_test, scripting_bit_test_evaluate);
-		InitializeScriptFunctionWithParams(Enums::_hs_function_bit_toggle, scripting_bit_toggle_evaluate);
-		InitializeScriptFunctionWithParams(Enums::_hs_function_bit_flags_test, scripting_bit_flags_test_evaluate);
-		InitializeScriptFunctionWithParams(Enums::_hs_function_bit_flags_toggle, scripting_bit_flags_toggle_evaluate);
-		InitializeScriptFunctionWithParams(Enums::_hs_function_hex_string_to_long, scripting_hex_string_to_long_evaluate);
-		//////////////////////////////////////////////////////////////////////////
-
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_display_scripted_ui_widget, scripting_display_scripted_ui_widget_evaluate);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_play_bink_movie, scripting_play_bink_movie_evaluate);
-
-
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_set_thread_count, Networking::HTTP::Server::HTTPServerSetThreadCount);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_set_root, Networking::HTTP::Server::HTTPServerSetRoot);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_set_throttle, Networking::HTTP::Server::HTTPServerSetThrottle);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_set_ports, Networking::HTTP::Server::HTTPServerSetPorts);
-		YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_httpserver_show_config, Networking::HTTP::Server::HTTPServerShowConfig);
-		YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_httpserver_start, Networking::HTTP::Server::HTTPServerStart);
-		YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_httpserver_stop, Networking::HTTP::Server::HTTPServerStop);
-
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_log_enable, Networking::HTTP::Server::HTTPServerLogEnable);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_set_connection_ban, Networking::HTTP::Server::BanManager::HTTPServerSetConnectionBan);
-		YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_httpserver_banlist, Networking::HTTP::Server::BanManager::HTTPServerBanlist);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_banlist_file, Networking::HTTP::Server::BanManager::HTTPServerBanlistFile);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_ban_ip, Networking::HTTP::Server::BanManager::HTTPServerBanIP);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_unban_ip, Networking::HTTP::Server::BanManager::HTTPServerUnbanIP);
-
-		YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_mapdownload_start_server, Networking::HTTP::Server::MapDownload::MapDownloadStartServer);
-		YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_mapdownload_stop_server, Networking::HTTP::Server::MapDownload::MapDownloadStopServer);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_mapdownload_set_part_definitions_path, Networking::HTTP::Server::MapDownload::MapDownloadSetPartDefinitionsPath);
-		YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_mapdownload_set_host, Networking::HTTP::Server::MapDownload::MapDownloadSetHost);
-		YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_mapdownload_reload_map_part_definitions, Networking::HTTP::Server::MapDownload::MapDownloadReloadMapPartDefinitions);
-
-		// Depreceated
-		Yelo::Scripting::NullifyScriptFunctionWithParams(Yelo::Enums::_hs_function_scenario_faux_zones_reset);
-		Yelo::Scripting::NullifyScriptFunctionWithParams(Yelo::Enums::_hs_function_scenario_faux_zone_current_switch_variant);
-		Yelo::Scripting::NullifyScriptFunctionWithParams(Yelo::Enums::_hs_function_scenario_faux_zone_switch_variant);
-		Yelo::Scripting::NullifyScriptFunctionWithParams(Yelo::Enums::_hs_function_scenario_faux_zone_switch_sky);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_abs_integer, scripting_abs_integer_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_abs_real, scripting_abs_real_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_bitwise_and, scripting_bitwise_and_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_bitwise_or, scripting_bitwise_or_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_bitwise_xor, scripting_bitwise_xor_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_bitwise_lhs, scripting_bitwise_lhs_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_bitwise_rhs, scripting_bitwise_rhs_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_bit_test, scripting_bit_test_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_bit_toggle, scripting_bit_toggle_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_bit_flags_test, scripting_bit_flags_test_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_bit_flags_toggle, scripting_bit_flags_toggle_evaluate);
+		// InitializeScriptFunctionWithParams(Enums::_hs_function_hex_string_to_long, scripting_hex_string_to_long_evaluate);
+		// //////////////////////////////////////////////////////////////////////////
+		//
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_display_scripted_ui_widget, scripting_display_scripted_ui_widget_evaluate);
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_USER(Enums::_hs_function_play_bink_movie, scripting_play_bink_movie_evaluate);
+		//
+		//
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_set_thread_count, Networking::HTTP::Server::HTTPServerSetThreadCount);
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_set_root, Networking::HTTP::Server::HTTPServerSetRoot);
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_set_throttle, Networking::HTTP::Server::HTTPServerSetThrottle);
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_set_ports, Networking::HTTP::Server::HTTPServerSetPorts);
+		// YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_httpserver_show_config, Networking::HTTP::Server::HTTPServerShowConfig);
+		// YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_httpserver_start, Networking::HTTP::Server::HTTPServerStart);
+		// YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_httpserver_stop, Networking::HTTP::Server::HTTPServerStop);
+		//
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_log_enable, Networking::HTTP::Server::HTTPServerLogEnable);
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_set_connection_ban, Networking::HTTP::Server::BanManager::HTTPServerSetConnectionBan);
+		// YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_httpserver_banlist, Networking::HTTP::Server::BanManager::HTTPServerBanlist);
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_banlist_file, Networking::HTTP::Server::BanManager::HTTPServerBanlistFile);
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_ban_ip, Networking::HTTP::Server::BanManager::HTTPServerBanIP);
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_httpserver_unban_ip, Networking::HTTP::Server::BanManager::HTTPServerUnbanIP);
+		//
+		// YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_mapdownload_start_server, Networking::HTTP::Server::MapDownload::MapDownloadStartServer);
+		// YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_mapdownload_stop_server, Networking::HTTP::Server::MapDownload::MapDownloadStopServer);
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_mapdownload_set_part_definitions_path, Networking::HTTP::Server::MapDownload::MapDownloadSetPartDefinitionsPath);
+		// YELO_INIT_SCRIPT_FUNCTION_WITH_PARAMS_DEDI(Enums::_hs_function_sv_mapdownload_set_host, Networking::HTTP::Server::MapDownload::MapDownloadSetHost);
+		// YELO_INIT_SCRIPT_FUNCTION_DEDI(Enums::_hs_function_sv_mapdownload_reload_map_part_definitions, Networking::HTTP::Server::MapDownload::MapDownloadReloadMapPartDefinitions);
+		//
+		// // Depreceated
+		// Yelo::Scripting::NullifyScriptFunctionWithParams(Yelo::Enums::_hs_function_scenario_faux_zones_reset);
+		// Yelo::Scripting::NullifyScriptFunctionWithParams(Yelo::Enums::_hs_function_scenario_faux_zone_current_switch_variant);
+		// Yelo::Scripting::NullifyScriptFunctionWithParams(Yelo::Enums::_hs_function_scenario_faux_zone_switch_variant);
+		// Yelo::Scripting::NullifyScriptFunctionWithParams(Yelo::Enums::_hs_function_scenario_faux_zone_switch_sky);
 	}
 
 	HS_FUNCTION(runtime_integers_reset, void, "");

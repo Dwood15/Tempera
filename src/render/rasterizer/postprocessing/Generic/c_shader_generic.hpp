@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../dx9/shaders/shader_postprocess_generic_definitions.hpp"
-#include "../c_shader_postprocess.hpp"
+#include "../c_shader_postprocess.h"
 
 namespace Yelo::Rasterizer::PostProcessing::Generic
 	{

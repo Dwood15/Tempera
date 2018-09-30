@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../../memory/linked_list.hpp"
-#include "c_shader_postprocess.hpp"
+#include "c_shader_postprocess.h"
 
 namespace Yelo::Rasterizer::PostProcessing {
 	class c_shader_instance : public LinkedListNode<c_shader_instance> {

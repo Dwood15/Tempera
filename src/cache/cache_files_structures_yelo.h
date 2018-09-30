@@ -1,6 +1,7 @@
 #pragma once
 
 #include "macros_generic.h"
+#include <enums/yelo_enums.h>
 #include "../cseries/yelo_base.h"
 
 #include "../tags/string_ids/yelo.h"

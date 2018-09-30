@@ -2,9 +2,9 @@
 
 #include <cstring>
 #include <enums/materials.h>
+#include "../../scenario/scenario_location.h"
 #include "../../memory/datum_index.h"
 #include "../../math/real_math.h"
-#include "../../memory/data.h"
 #include "enums/generic_enums.h"
 
 namespace Yelo::Objects {

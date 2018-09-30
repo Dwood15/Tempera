@@ -12,7 +12,7 @@ namespace Model
 
 	struct s_shader_feature_mix {
 		const _enum		feature_mask;
-		PAD16;
+		short : 16;
 		const uint32	shader_index_offset;
 		const uint32	shader_index_half_offset;
 		const char		feature_mix_id[64];
@@ -674,7 +674,7 @@ no_extension:
 		Memory::WriteRelativeJmp(&Hook_SelfIlluminationInversePixelShader, GET_FUNC_VPTR(RASTERIZER_MODEL_PS_INDEX_SELF_ILLUMINATION_INV_HOOK), true);
 	}
 
-	bool		SetViewProj(IDirect3DDevice9* device, CONST float* pConstantData, UINT Vector4fCount)
+	bool		SetViewProj(IDirect3DDevice9* device, const float* pConstantData, UINT Vector4fCount)
 	{
 		if((g_ps_support > _ps_support_2_0) && g_extensions_enabled)
 		{
@@ -685,7 +685,7 @@ no_extension:
 		return true;
 	}
 
-	bool		SetSpecColor(IDirect3DDevice9* device, CONST float* pConstantData, UINT Vector4fCount)
+	bool		SetSpecColor(IDirect3DDevice9* device, const float* pConstantData, UINT Vector4fCount)
 	{
 		if((g_ps_support > _ps_support_2_0) && g_extensions_enabled)
 		{
@@ -696,7 +696,7 @@ no_extension:
 		return true;
 	}
 
-	bool		SetVertexLight(IDirect3DDevice9* device, CONST float* pConstantData, UINT Vector4fCount)
+	bool		SetVertexLight(IDirect3DDevice9* device, const float* pConstantData, UINT Vector4fCount)
 	{
 		if((g_ps_support > _ps_support_2_0) && g_extensions_enabled)
 		{

@@ -37,11 +37,11 @@ namespace Yelo
 				{
 					bool is_ready;
 					bool is_unloaded;
-					PAD16;
+					short : 16;
 				}m_flags;
 
 				Enums::pp_component_status status;
-				PAD16;
+				short : 16;
 			}m_members;
 
 			/////////////////////////////////////////////////

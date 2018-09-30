@@ -27,6 +27,7 @@ set(A_ACTORS_H
 
 set(AI_CXX
 	${CMAKE_CURRENT_SOURCE_DIR}/ai_yelo/AI.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/actors/transform_manager.cpp
 	PARENT_SCOPE)
 
 set(AI_H

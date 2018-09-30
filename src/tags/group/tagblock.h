@@ -1,5 +1,7 @@
 #pragma once
+
 #include <macros_generic.h>
+
 namespace Yelo {
 	// Halo1's editor allocates 256 characters for all tag_reference names, even if they're empty
 	// Template'd tag block for allowing more robust code.
@@ -7,18 +9,29 @@ namespace Yelo {
 	struct TagBlock {
 		typedef T       *iterator;
 		typedef const T *const_iterator;
-		typedef T value_type;
+		typedef T       value_type;
 		typedef T       &reference;
 		typedef const T &const_reference;
 		typedef T       *pointer;
 		typedef const T *const_pointer;
 
 		// Element count for this block
-		long Count;
+		union {
+			// element count for this block
+			long count;
+
+			//size -> in bytes.
+			long size;
+
+			long Count;
+		};
 
 		// Anonymous union for allowing less code for converting, and less
 		// "#pragma warning" code entries
 		union {
+			void *address;
+			T    *definitions;
+
 			// Pointer to the first tag block definition element
 			void *Address;
 
@@ -27,11 +40,18 @@ namespace Yelo {
 		};
 
 		// definition pointer for this block instance
-		const class tag_block_definition *BlockDefinition;
+		union {
+			const class tag_block_definition *BlockDefinition;
+			Yelo::tag_block_definition       *definition;
+		};
 
 		// Using the class's template 'T' parameter, calculates the total
 		// size, in bytes, the elements assume in memory
-		size_t SizeOf() const { return sizeof(T) * Count; }
+		unsigned int SizeOf() const { return sizeof(T) * Count; }
+
+		unsigned int get_element_size() {
+			return definition->element_size;
+		}
 
 		// tag_block *to_tag_block() { return reinterpret_cast<tag_block *>(&this->Count); }
 
@@ -50,6 +70,8 @@ namespace Yelo {
 			return this->Definitions[index];
 		}
 
+		T *Elements() { return reinterpret_cast<T *>(Address); }
+
 		//index not defined if not editor
 		// T *get_element(long element) { return blam::tag_block_get_element(*this, index); }
 		//
@@ -65,65 +87,31 @@ namespace Yelo {
 
 		//////////////////////////////////////////////////////////////////////////
 		// STL-like APIs
-		const_iterator begin() const { return Definitions; }
+		const_iterator begin() const { return definitions; }
 
-		iterator begin() { return Definitions; }
+		iterator begin() { return definitions; }
 
 		const_iterator const_begin() const { return Definitions; }
 
 		const_iterator const_begin() { return Definitions; }
 
-		const_iterator end() const { return Definitions + Count; }
-
 		iterator end() { return Definitions + Count; }
 
-		const_iterator const_end() const { return Definitions + Count; }
+		const_iterator end() const { return Definitions + Count; }
 
 		const_iterator const_end() { return Definitions + Count; }
 
 		bool empty() const { return Count == 0; }
-
-		auto size() const { return static_cast<size_t>(Count); }
 	};
 
 	STAT_ASSERT(TagBlock<char>, 0xC);
 };
 
-template <typename T = int>
-class tag_block {
-	typedef T *iter;
+typedef Yelo::TagBlock<uint> tag_block;
 
-	union {
-		// element count for this block
-		long count;
-
-		//size -> in bytes.
-		long size;
-	};
-
-	union {
-		void *address;
-		T    *definitions;
-	};
-
-	Yelo::tag_block_definition *definition;
-
-	T *Elements() { return reinterpret_cast<T *>(address); }
-
-	size_t get_element_size() {
-		return definition->element_size;
-	}
-
-	long constexpr Count() { return size / sizeof(T); }
-
-	iter begin() { return definitions; }
-
-	iter end() { return definitions + Count(); }
-
-};
-
-STAT_ASSERT(tag_block<int>, 0xC);
-STAT_ASSERT(tag_block<short>, 0xC);
-STAT_ASSERT(tag_block<char>, 0xC);
+STAT_ASSERT(tag_block, 0xC);
+STAT_ASSERT(tag_block, 12);
+STAT_ASSERT(tag_block, 0xC);
+STAT_ASSERT(tag_block, 0xC);
 
 #define pad_tag_block PAD32 PAD32 PAD32

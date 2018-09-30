@@ -2,15 +2,16 @@
 #include <macros_generic.h>
 #include <enums/memory_enums.h>
 #include "../../common/addlog.h"
+#include <engine_interface.h>
 #include "110EngineManager.h"
 #include "function_rewrite.h"
 #include "../../../src/gamestate/player_types.h"
-
 #include "../../../src/lua/script_manager.h"
 #include "../../../src/hs/structures.h"
 #include "../../../src/CurrentEngine.h"
 #include "hs_function_table_references.h"
 #include "../../../src/hs/function_declarations.h"
+#include "../../../src/gamestate/runtime_data.h"
 
 using namespace feature_management;
 using namespace feature_management::engines;
@@ -53,7 +54,7 @@ LPCoreAddressList CE110::GetCoreAddressList() {
 	//static s_players_globals_data *players_global_data       = *(s_players_globals_data **) 0x815918;
 	CurrentCore.players_global_data = 0x815918;
 
-	CurrentCore.game_time_globals              = 0x68CD70;
+	CurrentCore.game_time_globals      = 0x68CD70;
 	CurrentCore.game_globals_conn_type = 0x6B47B0;
 	return CurrentCore;
 }
@@ -109,7 +110,7 @@ constexpr uintptr_t regular_player_clamps[] = {
 	// MPP_B(0x51EE05, "rasterizer_detail_objects_rebuild_vertices get_render_window_ct_patch_5");
 };
 
-constexpr::std::pair<uintptr_t, char> MPPARBs[]{
+constexpr ::std::pair<uintptr_t, char> MPPARBs[]{
 	{0x476200, sizeof(s_player_control_globals_data)},//, players_initialize_sizeof_a_patch);
 	{0x47620A, sizeof(s_player_control_globals_data)}, //);
 	{0x49F897, 0x0}, //player_spawn_count_hack_fuck_off
@@ -119,67 +120,135 @@ constexpr::std::pair<uintptr_t, char> MPPARBs[]{
 	{0x4CC61A, 0xEB}//, "main_game_render_patch");
 };
 
-constexpr::std::pair<uintptr_t, short> short_patches[]{
+constexpr ::std::pair<uintptr_t, short> short_patches[]{
 	//"66 8B 41 0C 66 3D 01 00 7C EA .7F E8 0F BF C0 C3"
 	//main_get_window_ct
 	{0x4CC5BA, (short) 0x9090}, //We nop the greater than count so we actually get the proper window renderings.
 	{0x50F5EB, (short) 0x9090}, //render_player_frame_jg_patch
 };
 
-static Yelo::Scripting::s_upgrade_globals _upgrade_globals       = {
+static Yelo::Scripting::s_upgrade_globals _upgrade_globals = {
 	{0, Enums::k_hs_script_functions_count_upgrade},
 	{0, Enums::k_hs_external_globals_count_upgrade}
 };
 
+static void CE110::MemoryUpgradesInitialize() {
+	InitializeLibraryFixups();
+
+	//////////////////////////////////////////////////////////////////////////
+	// Add the game's functions/globals to our upgraded memory
+	static const rsize_t K_HS_FUNCTION_TABLE_COUNT = 0x211;
+
+	static const rsize_t K_HS_EXTERNAL_GLOBALS_COUNT = 0x1EC - 1;
+	// NOTE: we don't copy the 'rasterizer_frame_drop_ms' definition as its not defined in the tools
+
+
+	for (rsize_t x = 0, index = 0;
+		  x < K_HS_FUNCTION_TABLE_COUNT;
+		  index++) {
+		if (_upgrade_globals.functions.table[index] == nullptr) {
+			_upgrade_globals.functions.table[index] = Yelo::Scripting::hs_function_table[x++];
+			_upgrade_globals.functions.count++;
+		}
+	}
+
+	for (rsize_t x = 0, index = 0;
+		  x < K_HS_EXTERNAL_GLOBALS_COUNT;
+		  index++) {
+		if (_upgrade_globals.globals.table[index] == nullptr) {
+			Yelo::Scripting::hs_global_definition &glob =
+											*(_upgrade_globals.globals.table[index] = hs_external_globals[x++]);
+			_upgrade_globals.globals.count++;
+
+			// Is this the global who we want to override for exposing opensauce status?
+			if (strcmp(glob.name, Yelo::Scripting::k_external_global_opensauce_override_name) == 0)
+				InitializeExternalGlobalOpenSauceOverride(glob);
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////
+	// Add Yelo's functions/globals to our upgraded memory
+	{
+		_upgrade_globals.functions.yelo_start_index = _upgrade_globals.functions.count;
+		for (size_t x = 0; x < Yelo::Scripting::K_HS_YELO_FUNCTION_COUNT; x++, _upgrade_globals.functions.count++) {
+			_upgrade_globals.functions.table[_upgrade_globals.functions.count] = Yelo::Scripting::hs_yelo_functions[x];
+		}
+
+		_upgrade_globals.globals.yelo_start_index = _upgrade_globals.globals.count;
+		for (size_t x = 0; x < Yelo::Scripting::K_HS_YELO_GLOBALS_COUNT; x++, _upgrade_globals.globals.count++) {
+			_upgrade_globals.globals.table[_upgrade_globals.globals.count] = Yelo::Scripting::hs_yelo_globals[x];
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////
+	// Update the game code to use OUR function/global definition tables
+	{
+		void **table_references = CurrentEngine.GetHsFunctionTableReferences();
+		if (table_references != nullptr) {
+			Yelo::Scripting::hs_function_definition ****definitions = reinterpret_cast<Yelo::Scripting::hs_function_definition ****>(table_references);
+			const size_t           k_count         = CurrentEngine.GetNumberOfFunctionTableReferences();
+
+			for (size_t x = 0; x < k_count; x++) {
+				*definitions[x] = &_upgrade_globals.functions.table[0];
+			}
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+}
+
 void CE110::UpdateGlobalHSFunctionCounts(long count) {
-		//count = _upgrade_globals.globals.count;
+	//count = _upgrade_globals.globals.count;
 
-		long  *K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_32bit[] = {
-			reinterpret_cast<long *>(0x4865AA),
-			reinterpret_cast<long *>(0x48BCDA),
-			reinterpret_cast<long *>(0x48CAFB),
-			reinterpret_cast<long *>(0x48CC0F),
-			reinterpret_cast<long *>(0x48CC6D),
-			reinterpret_cast<long *>(0x48CD70),
-			reinterpret_cast<long *>(0x48D38A),
-		};
+	long *K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_32bit[] = {
+		reinterpret_cast<long *>(0x4865AA),
+		reinterpret_cast<long *>(0x48BCDA),
+		reinterpret_cast<long *>(0x48CAFB),
+		reinterpret_cast<long *>(0x48CC0F),
+		reinterpret_cast<long *>(0x48CC6D),
+		reinterpret_cast<long *>(0x48CD70),
+		reinterpret_cast<long *>(0x48D38A),
+	};
 
-		for (auto ptr : K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_32bit)
-			*ptr = count;
+	for (auto ptr : K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_32bit)
+		*ptr = count;
 
-		static short *K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_16bit[] = {
-			(reinterpret_cast<short *>(0x4860F1)),
-		};
+	static short *K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_16bit[] = {
+		(reinterpret_cast<short *>(0x4860F1)),
+	};
 
-		for (auto ptr : K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_16bit)
-			*ptr = static_cast<short>(count);
+	for (auto ptr : K_HS_EXTERNAL_GLOBALS_COUNT_REFERENCES_16bit)
+		*ptr = static_cast<short>(count);
 
-		void *K_HS_EXTERNAL_GLOBALS_REFERENCES[] = {
-			reinterpret_cast<void *>(0x48607C),
-			reinterpret_cast<void *>(0x4860AC),
-			reinterpret_cast<void *>(0x4860D9),
-			reinterpret_cast<void *>(0x486410),
-			reinterpret_cast<void *>(0x4865A5),
-			reinterpret_cast<void *>(0x4891E2),
-			reinterpret_cast<void *>(0x48BC6E),
-			reinterpret_cast<void *>(0x48D1E6),
-			reinterpret_cast<void *>(0x48DB1B),
-			reinterpret_cast<void *>(0x48DC87),
-		};
+	void *K_HS_EXTERNAL_GLOBALS_REFERENCES[] = {
+		reinterpret_cast<void *>(0x48607C),
+		reinterpret_cast<void *>(0x4860AC),
+		reinterpret_cast<void *>(0x4860D9),
+		reinterpret_cast<void *>(0x486410),
+		reinterpret_cast<void *>(0x4865A5),
+		reinterpret_cast<void *>(0x4891E2),
+		reinterpret_cast<void *>(0x48BC6E),
+		reinterpret_cast<void *>(0x48D1E6),
+		reinterpret_cast<void *>(0x48DB1B),
+		reinterpret_cast<void *>(0x48DC87),
+	};
 
 	Yelo::Scripting::hs_global_definition ****definitions = reinterpret_cast<Yelo::Scripting::hs_global_definition ****>(K_HS_EXTERNAL_GLOBALS_REFERENCES);
-		const size_t k_count =::std::size(K_HS_EXTERNAL_GLOBALS_REFERENCES);
+	const size_t                          k_count         = ::std::size(K_HS_EXTERNAL_GLOBALS_REFERENCES);
 
-		for (size_t x = 0; x < k_count; x++)
-			*definitions[x] = &_upgrade_globals.globals.table[0];
+	for (size_t x = 0; x < k_count; x++)
+		*definitions[x] = &_upgrade_globals.globals.table[0];
 
 }
 
 void __declspec(naked) CE110::OnPlayerActionUpdate() {
-//ahhhhhhhhhhhhhhhhhhhhhh
-//clangd is being horrendously dumb
+	//ahhhhhhhhhhhhhhhhhhhhhh
+	//clangd is being horrendously dumb
 
-//Postmortem: this didn't work btw, I actually just ended up disabling clangd. /shrug
+	//Postmortem: this didn't work btw, I actually just ended up disabling clangd. /shrug
 #if defined(_MSC_VER) && !defined(__CLANG__)
 	s_player_action *current_action;
 
@@ -193,7 +262,7 @@ void __declspec(naked) CE110::OnPlayerActionUpdate() {
 
 void __declspec(naked) CE110::OnUnitControlUpdate(int client_update_idx) {
 #if !defined(__GNUC__) && !defined(__CLANG__)
-	unsigned short unit_idx;
+	unsigned short      unit_idx;
 	s_unit_control_data *from_control_data;
 
 	__asm mov unit_idx, ax
@@ -208,27 +277,27 @@ void __declspec(naked) CE110::OnUnitControlUpdate(int client_update_idx) {
 }
 
 void CE110::UpdateHSFunctionCounts(short count) {
-		//count = _upgrade_globals.functions.count;
+	//count = _upgrade_globals.functions.count;
 
-		//K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit
-		calls::patchValue<long>(0x4864FA, count);
+	//K_HS_FUNCTION_TABLE_COUNT_REFERENCES_32bit
+	calls::patchValue<long>(0x4864FA, count);
 
-		//K_HS_FUNCTION_TABLE_COUNT_REFERENCES_16bit
-		calls::patchValue<short>(0x4861E1, count);
-		calls::patchValue<short>(0x486F14, count);
+	//K_HS_FUNCTION_TABLE_COUNT_REFERENCES_16bit
+	calls::patchValue<short>(0x4861E1, count);
+	calls::patchValue<short>(0x486F14, count);
 }
 
-constexpr Yelo::Scripting::hs_function_definition ** CE110::GetHsFunctionTable() {
+constexpr Yelo::Scripting::hs_function_definition **CE110::GetHsFunctionTable() {
 	return reinterpret_cast<Yelo::Scripting::hs_function_definition **>(0x624118);
 }
 
-constexpr long * CE110::GetHsFunctionTableCount() {
+constexpr long *CE110::GetHsFunctionTableCount() {
 	return reinterpret_cast<long *>(0x5F9C10);
 }
 
-void CE110::NullifyScriptFunction(Yelo::Enums::hs_function_enumeration function)  {
+void CE110::NullifyScriptFunction(Yelo::Enums::hs_function_enumeration function) {
 	if (function > NONE && function < Enums::k_hs_function_enumeration_count)
-		NullifyScriptFunction(*Yelo::Scripting::hs_yelo_functions[function] );
+		NullifyScriptFunction(*Yelo::Scripting::hs_yelo_functions[function]);
 }
 
 void CE110::InitializeHSMemoryUpgrades() {
@@ -252,8 +321,7 @@ void CE110::InitializeHSMemoryUpgrades() {
 	// Memory::CreateHookRelativeCall(&Update, reinterpret_cast<void *>(HS_UPDATE_HOOK), Enums::_x86_opcode_retn);
 }
 
-
-Yelo::Scripting::s_fixup_globals _fixup_globals           = {
+Yelo::Scripting::s_fixup_globals _fixup_globals = {
 	{ // fixups
 		{0x11C, &Yelo::Scripting::function_debug_pvs_definition},
 		{0x11D, &Yelo::Scripting::function_radiosity_start_definition},
@@ -284,13 +352,14 @@ Yelo::Scripting::s_fixup_globals _fixup_globals           = {
 };
 
 void CE110::NullifyScriptFunction(Yelo::Scripting::hs_function_definition &function) {
-	ScriptFunctionSetEvaluteProc(function, reinterpret_cast<Yelo::Scripting::proc_hs_evaluate>((reinterpret_cast<void *>(HS_NULL_EVALUATE))));
+	ScriptFunctionSetEvaluteProc(function,
+										  reinterpret_cast<Yelo::Scripting::proc_hs_evaluate>((reinterpret_cast<void *>(HS_NULL_EVALUATE))));
 }
 
 void CE110::NullifyScriptFunctionWithParams(Yelo::Scripting::hs_function_definition &function) {
-	ScriptFunctionWithParamsSetEvaluteProc(function, reinterpret_cast<Yelo::Scripting::proc_hs_evaluate>((reinterpret_cast<void *>(PTR_HS_NULL_WITH_PARAMS_EVALUATE))));
+	ScriptFunctionWithParamsSetEvaluteProc(function,
+														reinterpret_cast<Yelo::Scripting::proc_hs_evaluate>((reinterpret_cast<void *>(PTR_HS_NULL_WITH_PARAMS_EVALUATE))));
 }
-
 
 void CE110::NullifyScriptFunctionWithParams(Yelo::Enums::hs_function_enumeration function) {
 	if (function > NONE && function < Yelo::Enums::k_hs_function_enumeration_count)
@@ -301,7 +370,7 @@ void CE110::InitializeMemoryUpgrades() {
 	InitializeHSMemoryUpgrades();
 	//InitializeLibrary();
 
-	auto NullifyScriptLibraryFixups = [](){
+	auto NullifyScriptLibraryFixups = []() {
 		if (!CurrentEngine.IsSapien()) {
 			// NullifyScriptFunctionWithParams(Yelo::Scripting::function_debug_pvs_definition);
 			// NullifyScriptFunctionWithParams(Yelo::Scripting::function_radiosity_start_definition);
@@ -324,7 +393,7 @@ void CE110::InitializeMemoryUpgrades() {
 
 	};
 
-	auto InitializeLibraryFixups = [](){
+	auto InitializeLibraryFixups = []() {
 
 		//////////////////////////////////////////////////////////////////////////
 		// Add back functions/globals which don't appear in the release builds (and the like).
@@ -358,7 +427,8 @@ void CE110::InitializeMemoryUpgrades() {
 		// Add the game's functions/globals to our upgraded memory
 		static const rsize_t K_HS_FUNCTION_TABLE_COUNT = 0x211;
 
-		static const rsize_t K_HS_EXTERNAL_GLOBALS_COUNT = 0x1EC - 1; // NOTE: we don't copy the 'rasterizer_frame_drop_ms' definition as its not defined in the tools
+		static const rsize_t K_HS_EXTERNAL_GLOBALS_COUNT =
+										0x1EC - 1; // NOTE: we don't copy the 'rasterizer_frame_drop_ms' definition as its not defined in the tools
 
 
 		for (rsize_t x = 0, index = 0; x < K_HS_FUNCTION_TABLE_COUNT; index++) {
@@ -393,10 +463,10 @@ void CE110::InitializeMemoryUpgrades() {
 		//////////////////////////////////////////////////////////////////////////
 		// Update the game code to use OUR function/global definition tables
 		{
-			void ** table_references = CurrentEngine.GetHsFunctionTableReferences();
+			void **table_references = CurrentEngine.GetHsFunctionTableReferences();
 			if (table_references != nullptr) {
 				Yelo::Scripting::hs_function_definition ****definitions = reinterpret_cast<Yelo::Scripting::hs_function_definition ****>(table_references);
-				const size_t           k_count         = CurrentEngine.GetNumberOfFunctionTableReferences();
+				const size_t                            k_count         = CurrentEngine.GetNumberOfFunctionTableReferences();
 
 				for (size_t x = 0; x < k_count; x++) {
 					*definitions[x] = &_upgrade_globals.functions.table[0];
@@ -410,29 +480,29 @@ void CE110::InitializeMemoryUpgrades() {
 #pragma warning( disable : 4311 ) // bitching about this typecast
 #pragma warning( disable : 4312 ) // bitching about typecast
 
-			static uintptr_t hs_return_address             = HS_RETURN;
-			static uintptr_t hs_arguments_evaluate_address = HS_ARGUMENTS_EVALUATE;
-			static uintptr_t hs_function_table_address     = reinterpret_cast<uintptr_t>(&_upgrade_globals.functions.table[0]);
+		static uintptr_t hs_return_address             = HS_RETURN;
+		static uintptr_t hs_arguments_evaluate_address = HS_ARGUMENTS_EVALUATE;
+		static uintptr_t hs_function_table_address     = reinterpret_cast<uintptr_t>(&_upgrade_globals.functions.table[0]);
 
-			uintptr_t *temp = nullptr;
+		uintptr_t *temp = nullptr;
 
-			// with params functions
-			{
-				temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_has_param[(5 + 3)]));
-				*temp = hs_function_table_address;
+		// with params functions
+		{
+			temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_has_param[(5 + 3)]));
+			*temp = hs_function_table_address;
 
-				temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_has_param[(32 + 2)]));
-				*temp = reinterpret_cast<uintptr_t>(&hs_arguments_evaluate_address);
+			temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_has_param[(32 + 2)]));
+			*temp = reinterpret_cast<uintptr_t>(&hs_arguments_evaluate_address);
 
-				temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_has_param[(55 + 2)]));
-				*temp = reinterpret_cast<uintptr_t>(&hs_return_address);
-			}
+			temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_has_param[(55 + 2)]));
+			*temp = reinterpret_cast<uintptr_t>(&hs_return_address);
+		}
 
-			// no params functions
-			{
-				temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_no_param[(10 + 2)]));
-				*temp = reinterpret_cast<uintptr_t>(&hs_return_address);
-			}
+		// no params functions
+		{
+			temp = reinterpret_cast<uintptr_t *>(&(Yelo::Scripting::hs_eval_func_no_param[(10 + 2)]));
+			*temp = reinterpret_cast<uintptr_t>(&hs_return_address);
+		}
 
 #pragma warning( pop )
 
@@ -443,8 +513,7 @@ void CE110::InitializeMemoryUpgrades() {
 		Yelo::Scripting::InitializeMiscFunctions();
 
 		//PHYSICS
-		Scripting::InitializeScriptFunction(Enums::_hs_function_physics_get_gravity, []()
-		{
+		InitializeScriptFunction(Enums::_hs_function_physics_get_gravity, []() {
 			//TypeHolder result;
 			//result.pointer = nullptr;
 
@@ -453,27 +522,26 @@ void CE110::InitializeMemoryUpgrades() {
 			return nullptr;//result.pointer;
 		});
 
-
-		Scripting::InitializeScriptFunctionWithParams(Enums::_hs_function_physics_set_gravity, [](void** arguments) {
+		InitializeScriptFunctionWithParams(Enums::_hs_function_physics_set_gravity, [](void **arguments) {
 			struct s_arguments {
 				real gravity_fraction;
-			}* args = CAST_PTR(s_arguments*, arguments);
+			} *args = CAST_PTR(s_arguments*, arguments);
 
 			// GameState::Physics()->SetGravityScale(args->gravity_fraction);
 
 			return nullptr;
 		});
 
-		Scripting::InitializeScriptFunction(Enums::_hs_function_physics_constants_reset, []() {
+		InitializeScriptFunction(Enums::_hs_function_physics_constants_reset, []() {
 			//GameState::Physics()->Reset();
 
 			return nullptr;
 		});
 
-		Scripting::InitializeScriptFunctionWithParams(Enums::_hs_function_data_array_info, [](void** arguments) {
+		InitializeScriptFunctionWithParams(Enums::_hs_function_data_array_info, [](void **arguments) {
 			struct s_arguments {
 				cstring data_array_name;
-			}* args = CAST_PTR(s_arguments*, arguments);
+			} *args = CAST_PTR(s_arguments*, arguments);
 
 			//DataArrayInfoDumpToConsole(args->data_array_name);
 
@@ -491,10 +559,9 @@ void CE110::InitializeMemoryUpgrades() {
 				0x8A, 0xD1, 0xC0   // default expression access to the game's settings
 			};
 			if constexpr (allow) {
-				memory::WriteMemory(HS_VALID_ACCESS_FLAGS, code, 3);
-			}
-			else {
-				memory::WriteMemory(HS_VALID_ACCESS_FLAGS, code + 3, 3);
+				memory::WriteMemory((void *) HS_VALID_ACCESS_FLAGS, code, 3);
+			} else {
+				memory::WriteMemory((void *) HS_VALID_ACCESS_FLAGS, code + 3, 3);
 			}
 		}
 	}
@@ -603,6 +670,7 @@ void CE110::WriteHooks() {
 }
 
 #include "function_map.txt"
+
 const defined_functionrange *CE110::GetFunctionMap() {
 	return hce110_function_map;
 	//return nullptr;

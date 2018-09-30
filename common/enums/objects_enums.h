@@ -46,6 +46,21 @@ namespace Yelo::Enums {
 };
 
 namespace Yelo::Flags {
+
+	enum object_definition_flags : unsigned short
+	{
+		_object_definition_does_not_cast_shadow_bit,
+		_object_definition_transparent_self_occlusion_bit,
+		_object_definition_brighter_than_it_should_bit,
+		_object_definition_not_pathfinding_obstacle_bit,
+
+		k_number_of_object_definition_flags,
+
+		_object_definition_cast_shadow_by_default_yelo_bit = k_number_of_object_definition_flags,
+
+		k_number_of_object_definition_flags_yelo,
+	};
+
 	enum object_damage_flags {
 		_object_damage_flag_body_depleted      = 1 << 0,
 		_object_damage_flag_destroyed_a_region = 1 << 1,

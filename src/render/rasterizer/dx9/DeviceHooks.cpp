@@ -113,7 +113,7 @@ namespace Yelo
 			return device->EndScene();
 		}
 
-		static HRESULT SetVertexShaderConstantF_ViewProj(IDirect3DDevice9* device, UINT StartRegister, CONST float* pConstantData, UINT Vector4fCount)
+		static HRESULT SetVertexShaderConstantF_ViewProj(IDirect3DDevice9* device, UINT StartRegister, const float* pConstantData, UINT Vector4fCount)
 		{
 			DX9::c_gbuffer_system::SetViewProj(device, pConstantData, Vector4fCount);
 			Rasterizer::ShaderExtension::Model::SetViewProj(device, pConstantData, Vector4fCount);
@@ -121,7 +121,7 @@ namespace Yelo
 			return device->SetVertexShaderConstantF(StartRegister, pConstantData, Vector4fCount);
 		}
 
-		static HRESULT SetVertexShaderConstantF_ModelSpecColor(IDirect3DDevice9* device, UINT StartRegister, CONST float* pConstantData, UINT Vector4fCount)
+		static HRESULT SetVertexShaderConstantF_ModelSpecColor(IDirect3DDevice9* device, UINT StartRegister, const float* pConstantData, UINT Vector4fCount)
 		{
 			bool set_original = false;
 
@@ -132,7 +132,7 @@ namespace Yelo
 			return S_OK;
 		}
 
-		static HRESULT SetVertexShaderConstantF_ModelVertexLight(IDirect3DDevice9* device, UINT StartRegister, CONST float* pConstantData, UINT Vector4fCount)
+		static HRESULT SetVertexShaderConstantF_ModelVertexLight(IDirect3DDevice9* device, UINT StartRegister, const float* pConstantData, UINT Vector4fCount)
 		{
 			bool set_original = false;
 

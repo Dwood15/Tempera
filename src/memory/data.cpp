@@ -1,10 +1,14 @@
 #pragma once
 
-#include "data.h"
+#include <enums/generic_enums.h>
+#include <cstring>
+#include <WinBase.h>
+#include <exception>
+#include <addlog.h>
 #include "data_array.h"
 #include "data_iterator.h"
-
 namespace Yelo::blam {
+	using namespace Yelo::Memory;
 	static void data_iterator_new(s_data_iterator &iterator, Yelo::Memory::s_data_array *data) {
 
 		if (!data->is_valid) {
@@ -40,8 +44,8 @@ namespace Yelo::blam {
 		auto newData = reinterpret_cast<s_data_array *>(allocd);
 
 		if (newData) {
-			memset(newData, 0, sizeof(s_data_array));
-			strncpy(newData->name, name, 31u);
+			std::memset(newData, 0, sizeof(s_data_array));
+			std::strncpy(newData->name, name, 31u);
 			newData->max_datum    = size * max_count;
 			newData->datum_size   = size;
 			newData->signature    = 'd@t@';

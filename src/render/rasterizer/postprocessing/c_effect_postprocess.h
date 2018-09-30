@@ -2,7 +2,7 @@
 
 #include "c_shader_instance.hpp"
 #include "../../../memory/linked_list.hpp"
-#include "c_quad_manager.hpp"
+#include "c_quad_manager.h"
 
 namespace Yelo::Rasterizer::PostProcessing {
 	class c_effect_postprocess {

@@ -10,7 +10,7 @@ namespace Yelo::Enums {
 		_ps_support
 	};
 
-	enum shader_type {
+	enum shader_type : short {
 		_shader_type_screen,// sscr
 		_shader_type_effect,
 		_shader_type_decal,   // sdec

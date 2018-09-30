@@ -72,17 +72,17 @@ namespace Yelo::TagGroups {
 		STAT_ASSERT(collision_vertex, sizeof(real_point3d) + 0x4);
 
 		struct collision_bsp {
-			tag_block<bsp3d_node>     bsp3d_nodes;
-			tag_block<real_plane3d>   planes;
-			tag_block<collision_leaf> leaves;
+			TagBlock<bsp3d_node>     bsp3d_nodes;
+			TagBlock<real_plane3d>   planes;
+			TagBlock<collision_leaf> leaves;
 
 			//bsp2d block(s).
-			tag_block<bsp2d_reference> references;
-			tag_block<bsp2d_node>      nodes;
+			TagBlock<bsp2d_reference> references;
+			TagBlock<bsp2d_node>      nodes;
 
-			tag_block<collision_surface> surfaces;
-			tag_block<collision_edge>    edges;
-			tag_block<collision_vertex>  vertices;
+			TagBlock<collision_surface> surfaces;
+			TagBlock<collision_edge>    edges;
+			TagBlock<collision_vertex>  vertices;
 		};
 		STAT_ASSERT(collision_bsp, 0x60);
 	};
@@ -143,8 +143,8 @@ namespace Yelo::TagGroups {
 		int32                                   __pad00[5];
 		Yelo::Objects::s_object_lighting        default_lighting;
 		int32                                   __pad01;
-		tag_block<structure_collision_material> collision_materials;
-		//TODO: Structure bsp tag block ! tag_block<obj::sbsp
+		TagBlock<structure_collision_material> collision_materials;
+		//TODO: Structure bsp tag block ! TagBlock<obj::sbsp
 	};
 
 	// STAT_ASSERT(structure_leaf, 0x8 + 0x4 + 0x4);

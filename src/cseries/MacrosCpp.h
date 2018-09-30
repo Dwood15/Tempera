@@ -122,8 +122,6 @@
 #define SWAP_FLAG(flags, bit)         ( (flags) ^=FLAG(bit) )
 #define FLAG_RANGE(first_bit, last_bit)   ( (FLAG( (last_bit)+1 - (first_bit) )-1) << (first_bit) )
 
-#define MASK(count) ( (unsigned)(1 << (count)) - (unsigned)1 )
-
 // Checks to see if [flags] has only the flags it's allowed to have, enabled
 #define VALID_FLAGS(flags, flags_count) ( ((flags) & ( ~( (1<<(flags_count)) - 1))) == 0 )
 

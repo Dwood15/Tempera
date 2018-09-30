@@ -14,17 +14,13 @@ namespace Yelo::Enums {
 		k_version   = 2,
 	};
 
-	enum {
-		k_maximum_object_names_per_scenario = 512,
-	};
+	constexpr int k_maximum_object_names_per_scenario = 512;
 
-	enum {
-		k_maximum_skies_per_scenario          = 32,
-		k_maximum_structure_bsps_per_scenario = 16,
+	constexpr int k_maximum_skies_per_scenario          = 32;
+	constexpr int k_maximum_structure_bsps_per_scenario = 16;
 
 		// How much OS-upgrades [k_maximum_structure_bsps_per_scenario]
-			k_maximum_structure_bsps_per_scenario_upgrade = k_maximum_structure_bsps_per_scenario * 2,
-	};
+		constexpr int k_maximum_structure_bsps_per_scenario_upgrade = k_maximum_structure_bsps_per_scenario * 2;
 
 	enum scenario_netgame_type {
 		_scenario_netgame_type_none,

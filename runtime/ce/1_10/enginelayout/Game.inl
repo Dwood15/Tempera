@@ -251,7 +251,7 @@ static auto **const game_engine = reinterpret_cast<Yelo::GameEngine::game_engine
 	//////////////////////////////////////////////////////////////////////////
 	// FixHudRenderUnitInterface()
 	static auto const HUD_RENDER_UNIT_INTERFACE_JMP_TABLE = 0x424953;
-static auto *const hud_render_unit_interface_jmp_ptr = CAST_PTR;;
+static auto *const hud_render_unit_interface_jmp_ptr = reinterpret_cast<void ***>(0x4B466C);
 
 	//////////////////////////////////////////////////////////////////////////
 	// FixFunc4F7440()
