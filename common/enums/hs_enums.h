@@ -274,8 +274,8 @@ namespace Yelo::Enums {
 		_hs_function_game_change_version_id,
 		_hs_function_game_engine_data_get_integer,
 
-		// _hs_function_machine_is_host,
-		// _hs_function_machine_is_dedi,
+		_hs_function_machine_is_host,
+		_hs_function_machine_is_dedi,
 
 		_hs_function_abs_integer,
 		_hs_function_abs_real,
@@ -343,29 +343,8 @@ namespace Yelo::Enums {
 
 		_hs_function_vehicle_remapper_enabled,
 
-		_hs_function_sv_httpserver_set_thread_count,
-		_hs_function_sv_httpserver_set_root,
-		_hs_function_sv_httpserver_set_throttle,
-		_hs_function_sv_httpserver_set_ports,
-		_hs_function_sv_httpserver_show_config,
-		_hs_function_sv_httpserver_start,
-		_hs_function_sv_httpserver_stop,
-		_hs_function_sv_httpserver_log_enable,
-		_hs_function_sv_httpserver_set_connection_ban,
-		_hs_function_sv_httpserver_banlist,
-		_hs_function_sv_httpserver_banlist_file,
-		_hs_function_sv_httpserver_ban_ip,
-		_hs_function_sv_httpserver_unban_ip,
-
-		_hs_function_sv_mapdownload_start_server,
-		_hs_function_sv_mapdownload_stop_server,
-		_hs_function_sv_mapdownload_set_part_definitions_path,
-		_hs_function_sv_mapdownload_set_host,
-		_hs_function_sv_mapdownload_reload_map_part_definitions,
 
 		_hs_function_data_array_info,
-
-		_hs_function_test_networking,
 
 		k_hs_function_enumeration_count,
 	};

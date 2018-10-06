@@ -56,8 +56,6 @@ namespace Yelo::blam {
 // Macro glue for declaring/defining a hs function which takes various arguments for input
 #define DECLARE_HS_FUNCTION_WITH_PARAMS(name) extern hs_function_definition function_##name##_definition
 
-#define GET_HS_FUNCTION(name) Yelo::Scripting::function_##name##_definition
-
 //////////////////////////////////////////////////////////////////////////
 // Macro glue for declaring/defining a normal hs global
 #define DECLARE_HS_GLOBAL(name) extern Yelo::Scripting::hs_global_definition global_##name##_definition

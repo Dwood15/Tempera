@@ -22,11 +22,11 @@ namespace Yelo::Scripting {
 		const char           *param_info;
 		unsigned short       access;
 		short                paramc;
-		#pragma warning( push )
-		#pragma warning( disable : 4200 ) // nonstandard extension used : zero-sized array in struct/union, Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
+#pragma warning( push )
+#pragma warning( disable : 4200 ) // nonstandard extension used : zero-sized array in struct/union, Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
 		// don't access directly, use GetParameter
-		Enums::hs_type       params[];
-		#pragma warning( pop )
+		Enums::hs_type params[];
+#pragma warning( pop )
 
 		Enums::hs_type GetParameter(short index) {
 			// assert(index >= 0 && index<paramc);
@@ -54,7 +54,6 @@ namespace Yelo::Scripting {
 		const_iterator const_end() const { return params + paramc; }
 
 		const_iterator const_end() { return params + paramc; }
-
 	};
 
 	STAT_ASSERT(hs_function_definition, 0x1C); // size doesn't include [params]
@@ -125,17 +124,16 @@ namespace Yelo::Scripting {
 	};
 
 	typedef Memory::DataArray<hs_syntax_node, Yelo::Enums::k_maximum_hs_syntax_nodes_per_scenario, Enums::k_maximum_hs_syntax_nodes_per_scenario_upgrade> hs_syntax_data_t;
-	typedef Memory::DataArray<s_hs_globals_datum, Yelo::Enums::k_maximum_number_of_hs_globals> hs_globals_data_t;
-
+	typedef Memory::DataArray<s_hs_globals_datum, Yelo::Enums::k_maximum_number_of_hs_globals>                                                            hs_globals_data_t;
 
 	STAT_ASSERT(s_hs_globals_datum, 0x8);
 
 	struct s_hs_runtime_globals {
 		bool enabled;
-		unsigned char : 8;
+		unsigned char  : 8;
 		unsigned short : 16;
-		short          executing_thread_index;
-		bool           run_game_scripts;
+		short executing_thread_index;
+		bool  run_game_scripts;
 		unsigned char : 8;
 	};
 

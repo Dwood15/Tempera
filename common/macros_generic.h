@@ -337,15 +337,6 @@ namespace Yelo {
 	};
 };
 
-namespace Yelo::Enums {
-	constexpr int k_maximum_number_of_local_players = 4;
-	constexpr int k_multiplayer_maximum_players     = 16;
-
-	// for team_data (which has a maximum of 16 datums) and such.
-	// This is 1 in Stubbs, I'm positive team_data uses k_multiplayer_maximum_players.
-	constexpr int k_multiplayer_maximum_teams = k_multiplayer_maximum_players;
-};
-
 /// Cast the pointer [ptr] to a pointer of type [type]
 #define CAST_PTR(type, ptr)      (reinterpret_cast<type>(ptr))
 #define CAST_PTR_OP(type)      reinterpret_cast<type>

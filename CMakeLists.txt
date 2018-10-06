@@ -170,7 +170,7 @@ set(COMMON_H
 	common/enums/shaders.h
 	common/enums/materials.h
 	common/enums/animations.h
-	common/enums/damage.h common/enums/math.h src/render/rasterizer/dx9/dx9_render_targets.h common/enums/render.h src/game/game_engine.h common/enums/engine.h common/enums/game_variants.h src/game/networking/client_manager_structures.h src/game/networking/game_globals.h src/gamestate/game_engine.cpp src/gamestate/game_engine.h src/gamestate/game_types.h common/enums/vehicle.h src/gamestate/objects/vehicle_remapper.h)
+	common/enums/damage.h common/enums/math.h src/render/rasterizer/dx9/dx9_render_targets.h common/enums/render.h src/game/game_engine.h common/enums/engine.h common/enums/game_variants.h src/game/networking/client_manager_structures.h src/game/networking/game_globals.h src/gamestate/game_engine.cpp src/gamestate/game_engine.h src/gamestate/game_types.h common/enums/vehicle.h src/gamestate/objects/vehicle_remapper.h src/hs/function_definitions.h src/hs/function_definitions.cpp)
 
 add_custom_target(HeadersTarget SOURCES ${SRC_H})
 

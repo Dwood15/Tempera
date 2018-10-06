@@ -2,6 +2,7 @@
 
 #include <macros_generic.h>
 #include <enums/engine.h>
+#include <enums/player_enums.h>
 #include "../memory/datum_index.h"
 #include "../math/real_math.h"
 #include "objects/vehicle_remapper.h"
@@ -130,11 +131,11 @@ namespace Yelo::GameEngine {
 
 	struct s_oddball_globals {
 		int         score_to_win;
-		int         team_score[Enums::k_multiplayer_maximum_players];
-		int         individual_score[Enums::k_multiplayer_maximum_players];
-		int         undocumented1[Enums::k_multiplayer_maximum_players];
-		datum_index current_ball_owners[Enums::k_multiplayer_maximum_players]; // player_index
-		int         current_ball_held_times[Enums::k_multiplayer_maximum_players]; // game-ticks
+		int         team_score[Yelo::Enums::k_multiplayer_maximum_players];
+		int         individual_score[Yelo::Enums::k_multiplayer_maximum_players];
+		int         undocumented1[Yelo::Enums::k_multiplayer_maximum_players];
+		datum_index current_ball_owners[Yelo::Enums::k_multiplayer_maximum_players]; // player_index
+		int         current_ball_held_times[Yelo::Enums::k_multiplayer_maximum_players]; // game-ticks
 	};
 #pragma pack(pop)
 

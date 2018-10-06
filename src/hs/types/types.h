@@ -2,7 +2,7 @@
 #pragma once
 
 #include <array>
-#include <d3dx9math.inl>
+#include <d3dx9math.h>
 #include "../structures.h"
 #include "../../ai/actors/actors.h"
 #include "../../ai/actors/actor_definitions.h"

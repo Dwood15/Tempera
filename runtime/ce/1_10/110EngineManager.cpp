@@ -508,8 +508,6 @@ void CE110::InitializeMemoryUpgrades() {
 
 		// InitializeScriptFunctionWithParams(Enums::_hs_function_dump_view_state, Yelo::Camera::DumpViewStateEvaluate);
 
-		//InitializeScriptFunction(Yelo::Enums::_hs_function_test_networking, Yelo::MessageDeltas::TestToNetwork);
-
 		Yelo::Scripting::InitializeMiscFunctions();
 
 		//PHYSICS
