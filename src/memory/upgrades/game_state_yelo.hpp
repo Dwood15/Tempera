@@ -36,8 +36,7 @@ namespace Yelo
 		static_assert( k_game_state_allocation_maximum_size_for_yelo >= 0 );
 	};
 
-	namespace GameState
-	{
+	namespace GameState {
 		struct s_yelo_header_data
 		{
 			unsigned char : 8; // since the unused 32 bytes in s_header_data is more than likely a tag_string, we don't want to touch what is actually the first char (we want it to stay zero)

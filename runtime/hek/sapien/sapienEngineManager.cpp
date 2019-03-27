@@ -8,7 +8,7 @@ using namespace feature_management::engines;
 
 //__cdecl makes the _caller_ clean up the stack. __stdcall means our function cleans up the stack
 
-void __declspec(naked) Sapien::OnPlayerActionUpdate() {
+void naked Sapien::OnPlayerActionUpdate() {
 	//Clang and gcc are pussy-ass bitches
 #if !defined(__GNUC__) && !defined(__CLANG__)
 	__asm mov     dword ptr[esp+18h], ecx

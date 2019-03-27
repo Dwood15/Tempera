@@ -1,8 +1,8 @@
 #pragma once
 
+#include <Windows.h>
 #include <enums/generic_enums.h>
 #include <cstring>
-#include <WinBase.h>
 #include <exception>
 #include <addlog.h>
 #include "data_array.h"

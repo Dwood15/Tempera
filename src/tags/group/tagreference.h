@@ -42,15 +42,6 @@ namespace Yelo {
 	template <>
 	inline bool TagReference<static_cast<tag>(NONE)>::IsValid() const { return true; }
 
-	namespace blam {
-		template<typename T>
-		bool tag_data_resize(TagData<T>& data, size_t new_size = 0)
-		{
-			// return tag_data_resize(data.to_tag_data(), new_size);
-			return false;
-		}
-	};
-
 	typedef char *tag_reference_name_reference;
 
 	struct tag_reference {

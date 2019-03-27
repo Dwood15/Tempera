@@ -1,4 +1,4 @@
-#include <winnt.h>
+#include <windows.h>
 #include <memoryapi.h>
 #include "../memory_interface_base.hpp"
 

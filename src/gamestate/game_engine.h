@@ -75,7 +75,7 @@ namespace Yelo::GameEngine {
 			jmp_table[x] = *(void **) (0x424953 + (sizeof(void *) * x));
 
 		// just use the slayer variant of the code, it doesn't matter to us.
-		for (int x = Enums::k_number_of_game_engines - GAME_ENGINE_REAL_COUNT; x < std::size(jmp_table); x++)
+		for (uint x = Enums::k_number_of_game_engines - GAME_ENGINE_REAL_COUNT; x < std::size(jmp_table); x++)
 			//(HUD_RENDER_UNIT_INTERFACE_JMP_TABLE)
 			jmp_table[x] = *(void **) (0x424953 + (sizeof(void *) * (Enums::_game_engine_slayer - 1)));
 
@@ -96,7 +96,7 @@ namespace Yelo::GameEngine {
 			// jmp_table[x] = *(void **) (GET_FUNC_PTR(Func4F7440JmpTable) + (sizeof(void *) * x));
 
 		// just use the slayer variant of the code, it doesn't matter to us.
-		for (int32 x = Enums::k_number_of_game_engines - GAME_ENGINE_REAL_COUNT; x < std::size(jmp_table); x++)
+		for (uint x = Enums::k_number_of_game_engines - GAME_ENGINE_REAL_COUNT; x < std::size(jmp_table); x++)
 			jmp_table[x] = *(void **) (0x4F72CC + (sizeof(void *) * (Enums::_game_engine_slayer - 1)));
 
 		// set the game's jump table address to our's

@@ -3,6 +3,7 @@
 
 #include <enums/generic_enums.h>
 #include <enums/scenario_enums.h>
+#include <array>
 #include "../../memory/data_base.h"
 #include "../../memory/array.h"
 #include "../../memory/memory_pool.h"
@@ -84,7 +85,7 @@ namespace Yelo {
 		STAT_ASSERT(s_object_globals_data, 0x98);
 
 		struct s_object_name_list_data {
-			std::array<datum_index, Yelo::Enums::k_maximum_object_names_per_scenario> object_name_to_datum_table;
+			::std::array<datum_index, Yelo::Enums::k_maximum_object_names_per_scenario> object_name_to_datum_table;
 		};
 
 		struct s_object_iterator {
@@ -180,9 +181,6 @@ namespace Yelo {
 		// Detaches the object from its parent
 		void object_detach(datum_index object_index);
 
-		// Get the origin of [object_index]. Takes the parent object (if there is one) into account.
-		real_point3d *object_get_origin(datum_index object_index, real_point3d &return_origin);
-
 		// Get the orientation of [object_index]. Takes the parent object (if there is one) into account.
 		void object_get_orientation(datum_index object_index, real_vector3d *return_forward, real_vector3d *return_up);
 
@@ -234,7 +232,7 @@ namespace Yelo {
 
 		template <typename T>
 		inline T *object_get_and_verify_type(datum_index object_index) {
-			return reinterpret_cast<T *> (object_get_and_verify_type(object_index, T::k_object_types_mask0));
+			return reinterpret_cast<T *> (object_get_and_verify_type(object_index, T::k_object_types_mask));
 		}
 
 		void object_destroy(const datum_index object_index);

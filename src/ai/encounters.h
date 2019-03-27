@@ -7,6 +7,7 @@
 #include "../memory/data_base.h"
 #include "ai_scenario_definitions.h"
 #include "../memory/array.h"
+#include "../cseries/MacrosCpp.h"
 
 namespace Yelo {
 	namespace Enums {

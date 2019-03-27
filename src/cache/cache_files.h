@@ -61,10 +61,6 @@ namespace Yelo {
 			return DataFileTypeToString((Enums::data_file_type)(type - Enums::_data_file_reference_bitmaps));
 		}
 
-
-
-		// if true, data which is in a data file won't be loaded during the cache_file's tags load process
-		bool DontLoadExternalData();
 	};
 
 	namespace blam {
@@ -90,90 +86,5 @@ namespace Yelo {
 		// void cache_file_structure_bsp_unload(TagGroups::scenario_structure_bsp_reference *reference);
 		//
 		// bool cache_file_structure_bsp_load(TagGroups::scenario_structure_bsp_reference *reference);
-	};
-};
-
-namespace Yelo {
-
-	namespace TagGroups {
-		Cache::s_cache_tag_header *Index();
-
-		Cache::s_cache_tag_instance const *Instances(); // Don't directly use this for getting tags
-	};
-
-	namespace Cache {
-
-		// this bool is actually defined in the engine, but the only reference is in the cache_file's tags load process
-		static bool g_dont_load_external_data;
-
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// <summary>	Directory to the maps\ folder for the defined PLATFORM_TYPE. </summary>
-		///
-		/// <remarks>For editors, this is the maps path as defined by the editor profile settings. For the runtime, this is
-		/// 	just "maps\".
-		/// </remarks>
-		///
-		/// <returns>	. </returns>
-		constexpr const char *MapsDirectory() { return K_MAP_FILES_DIRECTORY; }
-
-		inline bool DontLoadExternalData() { return g_dont_load_external_data; }
-	};
-
-	namespace TagGroups {
-		// defined by the implementing shell
-		static Cache::s_cache_tag_instance **GlobalTagInstancesReference();
-
-#define blam_global_tag_instances   *(TagGroups::GlobalTagInstancesReference())
-
-		static bool TagIsInstanceOf(datum_index tag_index, tag group_tag) {
-			if (!tag_index.IsNull() && tag_index.index < Index()->count) {
-				Cache::s_cache_tag_instance const &instance = Instances()[tag_index.index];
-
-				return instance.MatchesGroup(group_tag);
-			}
-
-			return false;
-		}
-	};
-
-	namespace blam {
-		using namespace Cache;
-
-		static s_cache_tag_instance *cache_file_tag_get_instance(datum_index tag_index) {
-
-			auto *global_tag_instances = TagGroups::Instances();
-
-			// auto &cache_tag_header = *Yelo::TagGroups::Index();
-			//YELO_ASSERT_DISPLAY(tag_index.index > NONE && tag_index.index < cache_tag_header.count, "i don't think %08x is a tag index", tag_index);
-
-			auto &tag_instance = global_tag_instances[tag_index.index];
-			if (tag_index.salt != NONE) {
-				//YELO_ASSERT_DISPLAY(tag_instance.handle == tag_index, "i don't think %08x is a tag index", tag_index);
-			}
-
-			return (const_cast<s_cache_tag_instance *>(&tag_instance));
-		}
-
-		static tag __cdecl tag_get_group_tag(datum_index tag_index) {
-			return cache_file_tag_get_instance(tag_index)->group_tag;
-		}
-
-		const void* tag_get(tag group_tag, datum_index tag_index) {
-			using TagGroups::group_tag_to_string;
-
-			auto* tag_instance = cache_file_tag_get_instance(tag_index);
-
-			// YELO_ASSERT_DISPLAY(tag_instance->MatchesGroup(group_tag),
-			// 						  "expected tag group '%s' but got '%s' for %08x",
-			// 						  group_tag_to_string { group_tag }.ToString(),
-			// 						  group_tag_to_string { tag_instance->group_tag }.ToString(),
-			// 						  tag_index);
-			//
-			// YELO_ASSERT_DISPLAY(tag_instance->base_address != nullptr,
-			// 						  "can't get() a tag (%08x) with a base address!",
-			// 						  tag_index);
-
-			return tag_instance->base_address;
-		}
 	};
 };

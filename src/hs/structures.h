@@ -11,52 +11,7 @@ namespace Yelo::Scripting {
 
 	typedef void (__cdecl *proc_hs_evaluate)(long function_index, datum_index thread_index, bool initialize_stack);
 
-	// halo script function definition
-	struct hs_function_definition {
-		Yelo::Enums::hs_type return_type;
-		unsigned short       yelo_flags; // padding in halo, special flags in project yellow
-		const char           *name;
-		proc_hs_parse        parse;
-		proc_hs_evaluate     evaluate;
-		const char           *info;
-		const char           *param_info;
-		unsigned short       access;
-		short                paramc;
-#pragma warning( push )
-#pragma warning( disable : 4200 ) // nonstandard extension used : zero-sized array in struct/union, Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
-		// don't access directly, use GetParameter
-		Enums::hs_type params[];
-#pragma warning( pop )
-
-		Enums::hs_type GetParameter(short index) {
-			// assert(index >= 0 && index<paramc);
-
-			return params[index];
-		}
-
-		//////////////////////////////////////////////////////////////////////////
-		// STL-like APIs
-		typedef Enums::hs_type       *iterator;
-		typedef const Enums::hs_type *const_iterator;
-
-		const_iterator begin() const { return params; }
-
-		iterator begin() { return params; }
-
-		const_iterator const_begin() const { return params; }
-
-		const_iterator const_begin() { return params; }
-
-		const_iterator end() const { return params + paramc; }
-
-		iterator end() { return params + paramc; }
-
-		const_iterator const_end() const { return params + paramc; }
-
-		const_iterator const_end() { return params + paramc; }
-	};
-
-	STAT_ASSERT(hs_function_definition, 0x1C); // size doesn't include [params]
+	//STAT_ASSERT(hs_function_definition, 0x1C); // size doesn't include [params]
 
 	// halo script accessible value
 	struct hs_global_definition {
@@ -72,18 +27,6 @@ namespace Yelo::Scripting {
 		unsigned short padA;
 	};
 	STAT_ASSERT(hs_global_definition, 0x10);
-
-	struct s_hs_library_fixup {
-		size_t index;
-		union {
-			void *address;
-
-			hs_function_definition *function;
-			hs_global_definition   *global;
-		};
-	};
-
-	STAT_ASSERT(s_hs_library_fixup, 0x8);
 
 	struct hs_syntax_node : Memory::s_datum_base {
 		union {

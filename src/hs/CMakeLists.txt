@@ -7,11 +7,6 @@ set(SCRIPTING_SRC
 
 	PARENT_SCOPE)
 
-
-set(SCRIPTING_EXTENSIONS_H
-	${CMAKE_CURRENT_SOURCE_DIR}/script_extensions/hs_base.h
-	)
-
 set(SCRIPTING_TYPES_H
 	${CMAKE_CURRENT_SOURCE_DIR}/types/compile.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/types/traits.h
@@ -31,8 +26,8 @@ set(SCRIPTING_H
 	${CMAKE_CURRENT_SOURCE_DIR}/runtime.h
 	${CMAKE_CURRENT_SOURCE_DIR}/structures.h
 	${CMAKE_CURRENT_SOURCE_DIR}/threads.h
-	${CMAKE_CURRENT_SOURCE_DIR}/function_declarations.h
-	${CMAKE_CURRENT_SOURCE_DIR}/globals_declarations.h
+#	${CMAKE_CURRENT_SOURCE_DIR}/function_declarations.h
+#	${CMAKE_CURRENT_SOURCE_DIR}/globals_declarations.h
 	${CMAKE_CURRENT_SOURCE_DIR}/library.h
 	${CMAKE_CURRENT_SOURCE_DIR}/yelo_definitions.h
 	PARENT_SCOPE)

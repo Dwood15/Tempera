@@ -1,4 +1,8 @@
 
+#include <limits>
+#include <enums/memory_enums.h>
+#include <array>
+#include <engine_interface.h>
 #include "macros_generic.h"
 
 #pragma once
@@ -102,97 +106,6 @@ namespace Yelo::Memory {
 #pragma warning( disable : 4311 ) // bitching about this typecast
 #pragma warning( disable : 4312 ) // bitching about typecast
 
-	// [call] buffer containing the data we wish to write
-	// [address] address to put [call]
-	void Write(Opcode::s_call &call, void *address) {
-		memcpy(address, &call, sizeof(call));
-	}
-
-	// [call_buffer] is a buffer to receive the old bytes
-	// [address] address to put\overwrite a call
-	// [target] address to make the call goto
-	void WriteCall(void *call_buffer, void *address, const void *target) {
-		Opcode::s_call *call         = (reinterpret_cast<Opcode::s_call *>(call_buffer));
-		Opcode::s_call *call_address = (reinterpret_cast<Opcode::s_call *>(address));
-
-		call->Op         = call_address->Op;               // copy the old
-		call_address->Op = Enums::_x86_opcode_call_near;// set the new
-		call->Address    = call_address->Address;         // copy the old
-		call_address->Address =                     // set the new
-			// cast the pointer to a number to perform math on
-			reinterpret_cast<intptr_t>(target) - (reinterpret_cast<intptr_t>(address) + sizeof(Opcode::s_call));
-	}
-
-	// [call_ret_buffer] is a buffer to receive the old bytes
-	// [address] address to put\overwrite a call and ret
-	// [target] address to make the call goto
-	void WriteCallRet(void *call_ret_buffer, void *address, const void *target) {
-		(reinterpret_cast<Opcode::s_call_ret *>(call_ret_buffer))->Ret =
-			(reinterpret_cast<Opcode::s_call_ret *>(address))->Ret;                  // copy the old
-		WriteCall(call_ret_buffer, address, target);
-		(reinterpret_cast<Opcode::s_call_ret *>(address))->Ret = Enums::_x86_opcode_ret;   // set the new
-	}
-
-	// [call_ret_buffer] is a buffer to receive the old bytes
-	// [address] address to put\overwrite a call and ret
-	// [target] address to make the call goto
-	// [count] number of 32-bit args in the function we're modding. If there are any
-	// 64-bit arguments, count them twice!
-	void WriteCallRet(void *call_ret_buffer, void *address, const void *target, const unsigned __int16 count) {
-		(reinterpret_cast<Opcode::s_call_ret *>(call_ret_buffer))->Ret =
-			(reinterpret_cast<Opcode::s_call_ret *>(address))->Ret;                  // copy the old
-		WriteCall(call_ret_buffer, address, target);
-		(reinterpret_cast<Opcode::s_call_ret *>(address))->Ret = Enums::_x86_opcode_retn;   // set the new
-		(reinterpret_cast<Opcode::s_call_ret *>(call_ret_buffer))->Count =
-			(reinterpret_cast<Opcode::s_call_ret *>(address))->Count;                  // copy the old
-		(reinterpret_cast<Opcode::s_call_ret *>(address))->Count = (count * 4);         // set the new
-	}
-
-	// [call] buffer containing the data we wish to write
-	// [address] address to put [call]
-	void WriteRet(Opcode::s_call_ret &call, void *address) {
-		memcpy(address, &call, sizeof(call) - sizeof(unsigned long)); // don't include the retn's count
-	}
-
-	// [call] buffer containing the data we wish to write
-	// [address] address to put [call]
-	void WriteRetn(Opcode::s_call_ret &call, void *address) {
-		memcpy(address, &call, sizeof(call));
-	}
-
-	// [jmp_buffer] is a buffer to receive the old bytes
-	// [address] address to put\overwrite a jmp
-	// [target] address to make the jmp goto
-	void WriteJmp(void *jmp_buffer, void *address, const void *target) {
-		auto jmp         = reinterpret_cast<Opcode::s_call *>(jmp_buffer);
-		auto jmp_address = reinterpret_cast<Opcode::s_call *>(address);
-
-		jmp->Op         = jmp_address->Op;                  // copy the old
-		jmp_address->Op = Enums::_x86_opcode_jmp_near;   // set the new
-		jmp->Address    = jmp_address->Address;         // copy the old
-		jmp_address->Address =                     // set the new
-			reinterpret_cast<intptr_t>(target) -            // cast the pointer to a number to perform math on
-			(
-				reinterpret_cast<intptr_t>(address) + sizeof(Opcode::s_call)
-			);
-	}
-
-	// [jmp_buffer] is a buffer to receive the old jmp address
-	// [address] address to overwrite a jmp
-	// [target] address to make the jmp goto
-	// REMARKS:
-	// Jmp type can be anything as long as the address used is 32bits
-	void OverwriteJmp(void *jmp_buffer, void *address, const void *target) {
-		auto jmp_address = reinterpret_cast<Opcode::s_call *>(address);
-
-		reinterpret_cast<Opcode::s_call *>(jmp_buffer)->Address = jmp_address->Address; // copy the old
-		jmp_address->Address =            // set the new
-			reinterpret_cast<intptr_t>(target) -   // cast the pointer to a number to perform math on
-			(
-				reinterpret_cast<intptr_t>(address) + sizeof(Opcode::s_call)
-			);
-	}
-
 #pragma warning( pop )
 
 	struct s_memory_exec_change_data {
@@ -214,7 +127,7 @@ namespace Yelo::Memory {
 		/// <remarks>	Total: 5 bytes. See: [WriteRelativeJmp]. </remarks>
 		void ApplyAsRelativeJmp() {
 			this->Initialize();
-			::memory::WriteRelativeJmp(ExecAddress, MemoryAddress, WriteOpcode);
+			memory::WriteRelativeJmp(ExecAddress, MemoryAddress, WriteOpcode);
 		}
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,7 +138,7 @@ namespace Yelo::Memory {
 		/// <remarks>	Total: 5 bytes. See: [WriteRelativeCall]. </remarks>
 		void ApplyAsRelativeCall() {
 			this->Initialize();
-			::memory::WriteRelativeCall(ExecAddress, MemoryAddress, WriteOpcode);
+			memory::WriteRelativeCall(ExecAddress, MemoryAddress, WriteOpcode);
 		}
 
 		/// <summary>	Restore the memory back to it's original data. </summary>
@@ -346,7 +259,7 @@ namespace Yelo::Memory {
 			s_memory_change_data::InitializeUndoBuffer();
 
 			OverwriteMemorySansCopyArray(k_memory_address, m_new_memory);
-			g_memory_changed = true;
+			this->g_memory_changed = true;
 		}
 
 		// Revert [k_memory_address] back to the memory bytes it had when this was initialized
@@ -355,7 +268,7 @@ namespace Yelo::Memory {
 		}
 	};
 
-	uintptr_t AlignValue(uintptr_t value, unsigned alignment_bit) {
+	static uintptr_t AlignValue(uintptr_t value, unsigned alignment_bit) {
 		const uintptr_t alignment_mask = ((unsigned) (1 << (alignment_bit)) - (unsigned) 1);
 
 		if (value & alignment_mask)

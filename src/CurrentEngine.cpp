@@ -99,7 +99,7 @@ bool GlobalEngine::IsCoreInitialized() {
 void GlobalEngine::InitializeMemoryUpgrades() {
 	if (this->HasSupport() && !this->IsHek()) {
 		if (this->IsCustomEd() && this->CurrentMinor == feature_management::engines::minor::halo_1_10) {
-			CE110::InitializeMemoryUpgrades();
+			//CE110::InitializeMemoryUpgrades();
 		}
 
 	}

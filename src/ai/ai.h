@@ -5,10 +5,6 @@
 #include "../memory/datum_index.h"
 
 namespace Yelo {
-	namespace Enums {
-
-	};
-
 	namespace AI {
 		struct s_ai_globals_data;
 

@@ -10,39 +10,6 @@
 #include "../cseries/yelo_base.h"
 
 namespace Yelo::Objects {
-	static void *scripting_objects_distance_to_object_evaluate(void **arguments) {
-		struct s_arguments {
-			datum_index object_list;
-			datum_index dest_object;
-		}          *args = CAST_PTR(s_arguments*, arguments);
-		TypeHolder result;
-		result.pointer = nullptr;
-		result.real    = -1.0f;
-
-		if (!args->dest_object.IsNull()) {
-			real min_dist                                           = FLT_MAX;
-
-			// Get the destination object's origin so that we can compare it, relative to each object in the list
-			real_vector3d dest_object_origin;
-			blam::object_get_origin(args->dest_object, dest_object_origin);
-
-			// Enumerate the object list, testing each object's origin with dest
-			for (datum_index curr_list_reference, curr_object_index = blam::object_list_get_first(args->object_list, curr_list_reference);
-				  !curr_object_index.IsNull();
-				  curr_object_index = blam::object_list_get_next(args->object_list, curr_list_reference)) {
-				// Compare the current object from the list to the destination object
-				real dist = GetObjectDistanceFromPoint(curr_object_index, dest_object_origin);
-
-				// We want the smallest distance of all the objects
-				if (min_dist > dist) min_dist = dist;
-			}
-
-			if (min_dist != FLT_MAX) result.real = min_dist;
-		}
-
-		return result.pointer;
-	}
-
 	static void *scripting_object_data_get_real_evaluate(void **arguments) {
 		struct s_arguments {
 			datum_index object_index;

@@ -46,7 +46,7 @@
 static void *orig_DirectInput8Create;
 
 //Used in order to proxy direct input.
-__declspec(naked) void WINAPI Tempera_DirectInput8Create() {
+naked void WINAPI Tempera_DirectInput8Create() {
 #ifdef __GNUC__
 	throw "what the fuck did you say to me you little bitch? I have you know I graduated top of my class in the MIT";
 	#else

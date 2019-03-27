@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../math/real_math.h"
+#include "../math/int_math.h"
+
 namespace Yelo::Random {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	Initializes the random number generator's seed. </summary>

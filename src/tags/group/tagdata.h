@@ -7,21 +7,21 @@
 namespace Yelo {
 	// Template'd tag_data for more robust code dealing with known
 	// sub-structures.
-	template <typename T>
+	template<typename T>
 	struct TagData {
-		typedef T       *iterator;
+		typedef T *iterator;
 		typedef const T *const_iterator;
 		typedef T value_type;
-		typedef T       &reference;
+		typedef T &reference;
 		typedef const T &const_reference;
-		typedef T       *pointer;
+		typedef T *pointer;
 		typedef const T *const_pointer;
 
 		// Size, in bytes, of the data blob
 		long Size;
 
 		unsigned long Flags;
-		long      StreamPosition;
+		long StreamPosition;
 
 		union {
 			// Address of the data blob
@@ -42,7 +42,7 @@ namespace Yelo {
 		//
 		// const tag_data *to_tag_data() const { return reinterpret_cast<const tag_data *>(&this->Size); }
 
-		T *operator [](long index) { return &this->Definitions[index]; }
+		T *operator[](long index) { return &this->Definitions[index]; }
 
 		//////////////////////////////////////////////////////////////////////////
 		// STL-like APIs
@@ -66,26 +66,26 @@ namespace Yelo {
 
 		size_t size() const { return static_cast<size_t>(Count()); }
 
-		void resize(size_t new_size = 0)	{ return; }  //blam::tag_data_resize(this, new_size); }
+		void resize(size_t new_size = 0) { return; }  //blam::tag_data_resize(this, new_size); }
 	};
 
 	STAT_ASSERT(TagData<byte>, 0x14);
 
 	struct tag_data {
 		// byte count of this data blob
-		long                             size;
+		long size;
 		// unknown
-		long_flags                       flags;
+		long_flags flags;
 		// offset in the source tag file (relative to the start of the definition bytes)
-		long                             stream_position;
+		long stream_position;
 		// data blob bytes pointer
-		void                             *address;
+		void *address;
 		// definition pointer of this data blob instance
 		const struct tag_data_definition *definition;
 
 		// Returns a [T] pointer that is the same as [address].
 		// Just makes coding a little more cleaner
-		template <typename T>
+		template<typename T>
 		T *Elements() { return reinterpret_cast<T *>(address); }
 
 		// Returns byte pointer that is the same as [address]
@@ -100,7 +100,7 @@ namespace Yelo {
 
 	namespace blam {
 		// Get the address of a block element which exists at [element_index]
-		template <typename T>
+		template<typename T>
 		void *__cdecl tag_data_get_pointer(T &data, long offset, long size) {
 			//YELO_ASSERT(size >= 0);
 			//YELO_ASSERT(offset >= 0 && offset + size <= data.size);
@@ -108,38 +108,15 @@ namespace Yelo {
 			return data.Bytes() + offset;
 		}
 
-		template <typename T>
+		template<typename T>
 		inline T *tag_data_get_pointer(tag_data &data, long offset, long index = 0) {
 			return reinterpret_cast<T *>(tag_data_get_pointer(data, offset + (sizeof(T) * index), sizeof(T)));
 		}
 
 		//TODO: relocate this definition.
 		Yelo::datum_index tag_new(tag group_name, const char *name);
-	};
-
-	namespace TagGroups {
-		// just an endian swap
-		static void TagSwap(tag &x);
-
-		// Returns true if the tag is an instance of the group_tag or is a child group of it.
-		// Returns false if not, or tag_index is invalid.
-		bool TagIsInstanceOf(Yelo::datum_index tag_index, tag group_tag);
-
-		template <typename T>
-		inline bool TagIsInstanceOf(datum_index tag_index) {
-			return TagIsInstanceOf(tag_index, T::k_group_tag);
-		}
-
-		// 'Unsafe' in that it returns the tag as non-const and doesn't do any bounds checking
-		// Useful when you're using tag_iterator and known you're getting some good input
-		template <typename T>
-		inline T *TagGetUnsafe(Yelo::datum_index tag_index) {
-			Cache::s_cache_tag_instance const& instance = Instances()[tag_index.index];
-
-			return reinterpret_cast<T *>(instance.base_address);
-		}
 	}
-};
+}
 #define pad_tag_data PAD32 PAD32 PAD32 PAD32 PAD32
 
 

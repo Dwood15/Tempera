@@ -1,6 +1,13 @@
 
 #pragma once
 
+#include <enums/generic_enums.h>
+#include <enums/ai_enums.h>
+#include <enums/hs_enums.h>
+#include "../../memory/datum_index.h"
+#include "../../math/real_math.h"
+#include "../../memory/array.h"
+
 namespace Yelo {
 	namespace AI {
 		struct s_actor_meta_data {
@@ -507,10 +514,6 @@ namespace Yelo {
 		};
 
 		typedef Memory::DataArray<s_swarm_component_datum, 256> swarm_component_data_t;
-
-		actor_data_t * Actors() { return (actor_data_t *)nullptr; }
-
-		swarm_data_t * Swarms() { return (swarm_data_t *)nullptr; }
 
 		swarm_component_data_t &SwarmComponents();
 	};

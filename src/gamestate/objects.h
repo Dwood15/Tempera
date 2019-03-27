@@ -370,6 +370,10 @@ struct s_unit_data {
 STAT_ASSERT(s_unit_data, 0x2D8); //(Enums::k_object_size_unit - Enums::k_object_size_object));
 
 struct s_unit_datum {
+	enum {
+		k_object_types_mask = object_type::_object_type_mask_unit
+	};
+
 	s_object_data unit_object;
 	s_unit_data   unit;
 };

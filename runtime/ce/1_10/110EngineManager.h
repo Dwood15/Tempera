@@ -11,12 +11,12 @@
 #include "../../../src/scenario/definitions.h"
 #include "../../../src/models/collision_bsp.h"
 #include "../../../src/hs/structures.h"
-#include "../../../src/hs/function_declarations.h"
 
 
 static void InitializeLibraryFixups();
 
 namespace feature_management::engines {
+	using namespace Yelo;
 	class CE110 : public IEngine<CE110> {
 	private:
 		static void InitializeHSMemoryUpgrades();
@@ -45,7 +45,7 @@ namespace feature_management::engines {
 
 		static inline Yelo::TagGroups::structure_bsp ** global_structure_bsp  = reinterpret_cast<Yelo::TagGroups::structure_bsp **>(0x6E225C);
 
-		static inline datum_index * global_scenario_index = reinterpret_cast<datum_index *>(0x6397CC);
+		static inline Yelo::datum_index * global_scenario_index = reinterpret_cast<Yelo::datum_index *>(0x6397CC);
 
 		static inline short * structure_bsp_index   = reinterpret_cast<short *>(0x6397D0);
 
@@ -101,11 +101,6 @@ namespace feature_management::engines {
 
 		//////////////////////////////////////////////////////////////////////////
 		// script globals related
-		const long * hs_external_globals_count = reinterpret_cast<long *>(0x5F9D0C);
-
-		static const Yelo::Scripting::hs_global_definition ** hs_external_globals = reinterpret_cast<const Yelo::Scripting::hs_global_definition **>(0x626988);
-
-
 		static void UpdateGlobalHSFunctionCounts(long count);
 
 		static void UpdateHSFunctionCounts(short count);
@@ -124,14 +119,6 @@ namespace feature_management::engines {
 #define PLATFORM_VALUE_HACK_(args_list) PLATFORM_VALUE args_list
 #define FUNC_PTR(name, ...)	enum FUNC_PTR_##name { PTR_##name = PLATFORM_VALUE_HACK_((__VA_ARGS__)) };
 
-		enum FUNC_PTR_HS_MACRO_FUNCTION_PARSE {
-			PTR_HS_MACRO_FUNCTION_PARSE = 0x48A070
-		};
-
-		enum FUNC_PTR_HS_COMPILE_AND_EVALUATE { PTR_HS_COMPILE_AND_EVALUATE = PLATFORM_VALUE }; // currently unused
-		enum FUNC_PTR_HS_NULL_EVALUATE { PTR_HS_NULL_EVALUATE = HS_NULL_EVALUATE };
-		enum FUNC_PTR_HS_NULL_WITH_PARAMS_EVALUATE { PTR_HS_NULL_WITH_PARAMS_EVALUATE = PLATFORM_VALUE };
-
 		static IDirectInput8A *GetDInput8Device()          { return *(IDirectInput8A **) 0x64C52C; }
 
 		static IDirectInputDevice8A *GetKeyboardInput()    { return *(IDirectInputDevice8A **) 0x64C730; }
@@ -142,30 +129,6 @@ namespace feature_management::engines {
 
 		typedef void (__cdecl* proc_hs_parse)(int32 function_index, datum_index expression_index);
 		typedef void (__cdecl* proc_hs_evaluate)(int32 function_index, datum_index thread_index, bool initialize_stack);
-
-		void NullifyScriptFunction(Yelo::Scripting::hs_function_definition &function);
-
-		void NullifyScriptFunction(Yelo::Enums::hs_function_enumeration function);
-
-		void NullifyScriptFunctionWithParams(Yelo::Scripting::hs_function_definition &function);
-
-		void NullifyScriptFunctionWithParams(Yelo::Enums::hs_function_enumeration function);
-
-		// Initialize the function's evaluator to one which we've defined
-		// in our code. Evaluator takes no parameters but may return a value.
-		static void InitializeScriptFunction(Enums::hs_function_enumeration function, Yelo::Scripting::proc_hs_yelo_function proc) {
-			if (function > NONE && function < Yelo::Enums::k_hs_function_enumeration_count) {
-				ScriptFunctionSetEvaluteProc(*Yelo::Scripting::hs_yelo_functions[function], reinterpret_cast<Scripting::proc_hs_evaluate>(Yelo::Scripting::CreateScriptFunction(proc, false)));
-			}
-		}
-
-		// Initialize the function's evaluator to one which we've defined
-		// in our code. Evaluator expects parameters and may return a value.
-		static void InitializeScriptFunctionWithParams(Enums::hs_function_enumeration function, Yelo::Scripting::proc_hs_yelo_function_with_params proc) {
-			if (function > NONE && function < Yelo::Enums::k_hs_function_enumeration_count) {
-				ScriptFunctionWithParamsSetEvaluteProc(*Yelo::Scripting::hs_yelo_functions[function], reinterpret_cast<Scripting::proc_hs_evaluate>(Yelo::Scripting::CreateScriptFunction(proc, true)));
-			}
-		}
 
 		static void OnPlayerActionUpdate();
 
