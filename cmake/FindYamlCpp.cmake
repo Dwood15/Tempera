@@ -33,14 +33,14 @@ endif ()
 # Try to find the include directory
 if (NOT YAMLCPP_INCLUDE_DIR)
 	if (WIN32)
-		find_path(YAMLCPP_INCLUDE_DIR yaml.h
-				  ${PROJECT_SOURCE_DIR}/include/yaml-cpp)
+		find_path(YAMLCPP_INCLUDE_DIR yaml.
+                ${PROJECT_SOURCE_DIR}/include/yaml-cpp)
 	endif ()
 endif ()
 
 if (WIN32)
 	#cmake got stubborn, even between multiple forced cache reloads...
-	set(YAMLCPP_LIBRARY_DIR "C:\\Users\\Dwood\\Documents\\GitHub\\TemperaRedux\\libs")
+	set(YAMLCPP_LIBRARY_DIR "C:\\Users\\Dwood\\Documents\\GitHub\\Tempera\\libs")
 	# Try to find yamlcpp static library
 	find_library(YAMLCPP_LIBRARY yamlcpp.lib
 				 ${YAMLCPP_LIBRARY_DIR}

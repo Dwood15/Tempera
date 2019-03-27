@@ -3,8 +3,12 @@
 #Copyright � 2018 dwood
 # - GNU GPLv3
 
-cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
+message(STATUS "cmake version ${CMAKE_VERSION}")
 
+#Comment this shit out if you have problems compiling.
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_EXTENSIONS TRUE)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 unset(CMAKE_SHARED_LIBRARY_PREFIX)
 
@@ -28,8 +32,7 @@ set(COMMON ${CMAKE_CURRENT_SOURCE_DIR}/common/)
 include_directories(AFTER ${GAME_LIB_DIRS} ${COMMON})
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
-find_path(YMLCPP_PATH FindYamlCpp.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
-find_path(MDB_PATH FindMariaDB.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
+#find_path(MDB_PATH FindMariaDB.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 find_path(LUA_PATH FindLua.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 find_path(TDN_PATH FindTinyDNN.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 #C:\Users\Dwood\Documents\GitHub\tiny-dnn\tiny_dnn
@@ -37,155 +40,178 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${YMLCPP_PATH}
 
 find_package(HaloCE REQUIRED)
 find_package(Lua REQUIRED)
-find_package(YamlCpp REQUIRED)
+#find_package(YamlCpp REQUIRED)
 
 if (LUA_Debug)
-	message(STATUS "Post-Find debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
+    message(STATUS "Post-Find debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
 endif ()
 
 find_package(DirectX REQUIRED)
-find_package(MariaDB REQUIRED)
+#find_package(MariaDB REQUIRED)
 find_package(TinyDNN)
 
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
-include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${INCLUDE}/detours ${TINYDNN_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${YAMLCPP_INCLUDE_DIR} ${MARIADB_INCLUDE_DIR})
+#${MARIADB_INCLUDE_DIR} ${TINYDNN_INCLUDE_DIR} ${YAMLCPP_INCLUDE_DIR}
+
+include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${INCLUDE}/detours ${LUA_INCLUDE_DIR})
 
 # Defines Debug by default.
 if (NOT CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE "Debug")
-	message(STATUS "Build type not specified: Using Debug by default.")
+    set(CMAKE_BUILD_TYPE "Debug")
+    message(STATUS "Build type not specified: Using Debug by default.")
 endif (NOT CMAKE_BUILD_TYPE)
 
 add_definitions(-D_WINDOWS -D_USRDLL)
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-	#	set(CMAKE_CXX_COMPILER_ID "Clang")
-#	set(CMAKE_C_COMPILER C:\\Program\ Files\\LLVM\\bin\\clang.exe)
-#	set(CMAKE_CXX_COMPILER C:\\Program\ Files\\LLVM\\bin\\clang++.exe)
+    #	set(CMAKE_CXX_COMPILER_ID "Clang")
+    #	set(CMAKE_C_COMPILER C:\\Program\ Files\\LLVM\\bin\\clang.exe)
+    #	set(CMAKE_CXX_COMPILER C:\\Program\ Files\\LLVM\\bin\\clang++.exe)
 
-	set(CMAKE_C_FLAGS "-Wall -std=c17 -m32 ")
-	set(CMAKE_C_FLAGS_DEBUG "-g")
-	set(CMAKE_C_FLAGS_MINSIZEREL "-Os -DNDEBUG")
-	set(CMAKE_C_FLAGS_RELEASE "-O4 -DNDEBUG")
-	set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
+    set(CMAKE_C_FLAGS "-Wall -std=c17 -m32 ")
+    set(CMAKE_C_FLAGS_DEBUG "-g")
+    set(CMAKE_C_FLAGS_MINSIZEREL "-Os -DNDEBUG")
+    set(CMAKE_C_FLAGS_RELEASE "-O4 -DNDEBUG")
+    set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
 
-	#-fdelayed-template-parsing
+    #-fdelayed-template-parsing
 
-	#-wno-switch b/c of: warning: 19 enumeration values not handled in switch:
-	set(CLANG_DISABLED_WARNINGS " -Wno-unused-variable -Wno-deprecated -Wno-unused-function -Wno-switch -Wno-overloaded-virtual")
-	set(CLANG_ENABLED_WARNINGS "-Wall -Wpadded  -Wmissing-braces ")
+    #-wno-switch b/c of: warning: 19 enumeration values not handled in switch:
+    set(CLANG_DISABLED_WARNINGS " -Wno-unused-variable -Wno-deprecated -Wno-unused-function -Wno-switch -Wno-overloaded-virtual")
+    set(CLANG_ENABLED_WARNINGS "-Wall -Wpadded  -Wmissing-braces ")
 
-	set(CLANG_ONLY_OPTIONS "-fms-extensions -fms-compatibility -ferror-limit=1 -fmodules -fmodules-cache-path=${CMAKE_SOURCE_DIR}/cache -Warray-bounds-pointer-arithmetic -Wmissing-method-return-type -Wfor-loop-analysis -Wmismatched-tags -Wcomma -Watomic-properties -Wassign-enum")
+    set(CLANG_ONLY_OPTIONS "-fms-extensions -fms-compatibility -ferror-limit=1 -fmodules -fmodules-cache-path=${CMAKE_SOURCE_DIR}/cache -Warray-bounds-pointer-arithmetic -Wmissing-method-return-type -Wfor-loop-analysis -Wmismatched-tags -Wcomma -Watomic-properties -Wassign-enum")
 
-	set(CLANG_MS_WARNINGS " -Wmicrosoft-charize -Wextra-semi -Wmicrosoft-cpp-macro -Wmicrosoft-enum-value ")
-	set(CLANG_EXTRAS "-Wc++2a-extensions -Wc++2a-compat ${CLANG_MS_WARNINGS}")
+    set(CLANG_MS_WARNINGS " -Wmicrosoft-charize -Wextra-semi -Wmicrosoft-cpp-macro -Wmicrosoft-enum-value ")
+    set(CLANG_EXTRAS "-Wc++2a-extensions -Wc++2a-compat ${CLANG_MS_WARNINGS}")
 
-	set(CLANG_MACROS "-DDIRECTINPUT_VERSION=0x800 -DWIN32 -D_USRDLL -D_WINDLL -DCMAKE_LINK_WHAT_YOU_USE=TRUE")
-	set(CLANG_EXTRA_SETTINGS "-fms-extensions ")
-#-stdlib=libstdc++  -nostdlib -isystem C:/msys32/mingw64/include/c++/8.2.0  -Wno-microsoft-include
+    set(CLANG_MACROS "-DDIRECTINPUT_VERSION=0x800 -DWIN32 -D_USRDLL -D_WINDLL -DCMAKE_LINK_WHAT_YOU_USE=TRUE")
+    set(CLANG_EXTRA_SETTINGS "-fms-extensions ")
+    #-stdlib=libstdc++  -nostdlib -isystem C:/msys32/mingw64/include/c++/8.2.0  -Wno-microsoft-include
 
-	set(QUIET_GCC "-Wno-comment -Wno-multichar -Wno-unknown-pragmas -Wno-unused-local-typedefs")
+    set(QUIET_GCC "-Wno-comment -Wno-multichar -Wno-unknown-pragmas -Wno-unused-local-typedefs")
 
-	set(CMAKE_CXX_FLAGS_DEBUG "-g")
-	set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
-	set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
-	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
-	set(CMAKE_CXX_FLAGS "-Wfatal-errors -std=c++17 -m32 -masm=intel -fpermissive ${CMAKE_CXX_FLAGS_DEBUG} ${QUIET_GCC} ${CLANG_EXTRA_SETTINGS} ${CLANG_ENABLED_WARNINGS} ${CLANG_DISABLED_WARNINGS} ${CLANG_MACROS}")
+    set(CMAKE_CXX_FLAGS_DEBUG "-g")
+    set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+    set(CMAKE_CXX_FLAGS "-Wfatal-errors -std=c++17 -m32 -masm=intel -fpermissive ${CMAKE_CXX_FLAGS_DEBUG} ${QUIET_GCC} ${CLANG_EXTRA_SETTINGS} ${CLANG_ENABLED_WARNINGS} ${CLANG_DISABLED_WARNINGS} ${CLANG_MACROS}")
 
-	message(STATUS "Forcing GNU to Clang compiler because CLion is dumb.")
-	#TODO: SET CLANG STUFFS.
-	set(MSVC 0)
+    message(STATUS "Forcing GNU to Clang compiler because CLion is dumb.")
+    #TODO: SET CLANG STUFFS.
+    set(MSVC 0)
 elseif (MSVC)
-	#vc++ 2017 toolset. Available from microsoft here: http://landinghub.visualstudio.com/visual-cpp-build-tools
-	if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.17134.0")
-		#message(WARNING "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION is empty! Could not find applicable windows 10 sdk.")
-		set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION 10.0.17134.0)
-		#TODO: CHECK FOR AVAILABLE SDK VERSIONS IF NONE SET
-	endif ()
+    if (MSVC_VERSION GREATER_EQUAL "1900")
+        include(CheckCXXCompilerFlag)
+        CHECK_CXX_COMPILER_FLAG("/std:c++latest" _cpp_latest_flag_supported)
+        if (_cpp_latest_flag_supported)
+            add_compile_options("/std:c++latest")
+        endif ()
+    endif ()
 
-	#CLANGD HELPER
-	set(CMAKE_CXX_COMPILER_TARGET i686-pc-win32-msvc)
-	set(COMPILER_REL_FLDR msvc)
-	#	set(CMAKE_C_FLAGS '')
+    #vc++ 2017 toolset. Available from microsoft here: http://landinghub.visualstudio.com/visual-cpp-build-tools
+    if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.17134.0")
+        #message(WARNING "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION is empty! Could not find applicable windows 10 sdk.")
+        set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION 10.0.17134.0)
+        #TODO: CHECK FOR AVAILABLE SDK VERSIONS IF NONE SET
+    endif ()
 
-	set(COMPILER_MACROS "/D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /DDIRECTINPUT_VERSION=0x800 /D_CRT_SECURE_NO_WARNINGS")
+    #CLANGD HELPER
+    set(CMAKE_CXX_COMPILER_TARGET i686-pc-win32-msvc)
+    set(COMPILER_REL_FLDR msvc)
+    #	set(CMAKE_C_FLAGS '')
 
-	#/Zc flag tells C++ what version of cpp we're using/targeting.
-	#/Qpar-report:2 - Tells us about the compiler's optimizations of our for loops.
-	#/std:c++latest implies C++ 20. /Qpar-report:2 /Zp2\
-	set(NEW_FEATURES "/std:c++latest\ /wo4068\ /permissive-")
-	set(CMAKE_CXX_FLAGS_DEBUG "/TP\ /MP\ /MTd\ /Gy- /W3\ /Od\ /Zi\ /MP /EHsc\ ${NEW_FEATURES} /fp:fast\ /arch:SSE2 ${COMPILER_MACROS}")
-	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
+    set(COMPILER_MACROS "/D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /DDIRECTINPUT_VERSION=0x800 /D_CRT_SECURE_NO_WARNINGS")
 
-	# 4070 : Silences `OUT directive differs from filename ignoring directive` (warning)
-	#		4099 :
-	set(BASE_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ignore:4099\ /ignore:4070")
+    #/Zc flag tells C++ what version of cpp we're using/targeting.
+    #/Qpar-report:2 - Tells us about the compiler's optimizations of our for loops.
+    #/std:c++latest implies C++ 20. /Qpar-report:2 /Zp2\
+    set(NEW_FEATURES "/std:c++latest\ /wo4068\ /permissive-")
+    set(CMAKE_CXX_FLAGS_DEBUG "/TP\ /MP\ /MTd\ /Gy- /W3\ /Od\ /Zi\ /MP /EHsc\ ${NEW_FEATURES} /fp:fast\ /arch:SSE2 ${COMPILER_MACROS}")
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
 
-	set(LINKER_FLAGS "${BASE_FLAGS} /ASSEMBLYDEBUG\ /debug:fastlink\ /DEF:\"${CMAKE_CURRENT_SOURCE_DIR}/Tempera.def\"")
-	#rip alignment on win32
-	set(CMAKE_SHARED_LINKER_FLAGS ${LINKER_FLAGS})
+    # 4070 : Silences `OUT directive differs from filename ignoring directive` (warning)
+    #		4099 :
+    set(BASE_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ignore:4099\ /ignore:4070")
+
+    set(LINKER_FLAGS "${BASE_FLAGS} /ASSEMBLYDEBUG\ /debug:fastlink\ /DEF:\"${CMAKE_CURRENT_SOURCE_DIR}/Tempera.def\"")
+    #rip alignment on win32
+    set(CMAKE_SHARED_LINKER_FLAGS ${LINKER_FLAGS})
 else ()
-	message(STATUS "Unrecognized compiler/suite: ${CMAKE_CXX_COMPILER_ID}")
+    message(STATUS "Unrecognized compiler/suite: ${CMAKE_CXX_COMPILER_ID}")
 endif ()
 
 #EXTERNAL LIBS
 file(GLOB DETOURS_GLOB libs/detours.lib)
-file(GLOB LUA_GLOB libs/LUA.lib)
+file(GLOB LUA_GLOB libs/lua53.lib)
 
-if(YAMLCPP_FOUND)
-	add_library(ycpp STATIC IMPORTED)
-	set_target_properties(ycpp PROPERTIES IMPORTED_LOCATION ${YAMLCPP_LIBRARY})
-endif()
+if (YAMLCPP_FOUND)
+    add_library(ycpp STATIC IMPORTED)
+    set_target_properties(ycpp PROPERTIES IMPORTED_LOCATION ${YAMLCPP_LIBRARY})
+endif ()
 
 if (MARIADB_FOUND)
-	add_library(mdb STATIC IMPORTED)
-	set_target_properties(mdb PROPERTIES IMPORTED_LOCATION ${MARIADB_LIBRARY})
+    add_library(mdb STATIC IMPORTED)
+    set_target_properties(mdb PROPERTIES IMPORTED_LOCATION ${MARIADB_LIBRARY})
 endif ()
 
 add_subdirectory(src)
 
 set(COMMON_H
-	common/addlog.h
-	common/engine_interface.h
-	common/macros_generic.h
-	common/struct_helper.h
-	common/enums/control_enums.h
-	common/enums/damage.h
-	common/enums/effects_enums.h
-	common/enums/generic_enums.h
-	common/enums/hs_enums.h
-	common/enums/objects_enums.h
-	common/enums/ai_enums.h
-	common/enums/scenario_enums.h
-	common/enums/geometry_enums.h
-	common/enums/yelo_enums.h
-	common/enums/memory_enums.h
-	common/enums/unit_enums.h
-	common/enums/model_enums.h
-	common/enums/player_enums.h
-	common/enums/weapon_enums.h
-	common/enums/network_enums.h
-	common/enums/postprocessing.h
-	common/enums/bitmaps.h
-	common/enums/shaders.h
-	common/enums/materials.h
-	common/enums/animations.h
-	common/enums/damage.h common/enums/math.h src/render/rasterizer/dx9/dx9_render_targets.h common/enums/render.h src/game/game_engine.h common/enums/engine.h common/enums/game_variants.h src/game/networking/client_manager_structures.h src/game/networking/game_globals.h src/gamestate/game_engine.cpp src/gamestate/game_engine.h src/gamestate/game_types.h common/enums/vehicle.h src/gamestate/objects/vehicle_remapper.h src/hs/function_definitions.h src/hs/function_definitions.cpp)
+        common/addlog.h
+        common/engine_interface.h
+        common/macros_generic.h
+        common/struct_helper.h
+        common/enums/control_enums.h
+        common/enums/damage.h
+        common/enums/effects_enums.h
+        common/enums/generic_enums.h
+        common/enums/hs_enums.h
+        common/enums/objects_enums.h
+        common/enums/ai_enums.h
+        common/enums/scenario_enums.h
+        common/enums/geometry_enums.h
+        common/enums/yelo_enums.h
+        common/enums/memory_enums.h
+        common/enums/unit_enums.h
+        common/enums/model_enums.h
+        common/enums/player_enums.h
+        common/enums/weapon_enums.h
+        common/enums/network_enums.h
+        common/enums/postprocessing.h
+        common/enums/bitmaps.h
+        common/enums/shaders.h
+        common/enums/materials.h
+        common/enums/animations.h
+        common/enums/damage.h
+        common/enums/math.h
+        common/enums/vehicle.h
+        common/enums/render.h
+        common/enums/engine.h
+        common/enums/game_variants.h
+        src/render/rasterizer/dx9/dx9_render_targets.h
+        src/game/game_engine.h
+        src/game/networking/client_manager_structures.h
+        src/game/networking/game_globals.h
+        src/gamestate/game_engine.cpp
+        src/gamestate/game_engine.h
+        src/gamestate/game_types.h
+        src/gamestate/objects/vehicle_remapper.h common/engine_interface.cpp)
 
 add_custom_target(HeadersTarget SOURCES ${SRC_H})
 
 add_library(dinput8 SHARED
-			${COMMON_H}
-			${LUA_INCLUDE_DIR}
-			${SRC_H}
-			${RUNTIME_H}
-			${RUNTIME_CXX}
-			${SRC_CXX}
-			src/gamestate/objects/yelo_objects.h
-			main.cpp
-#			src/gamestate/objects/yelo_objects.cpp
-			common/addlog.cpp
-			src/memory/data.cpp)
+        ${COMMON_H}
+        ${LUA_INCLUDE_DIR}
+        ${SRC_H}
+        ${RUNTIME_H}
+        ${RUNTIME_CXX}
+        ${SRC_CXX}
+        src/gamestate/objects/yelo_objects.h
+        main.cpp
+        #			src/gamestate/objects/yelo_objects.cpp
+        common/addlog.cpp
+        src/memory/data.cpp)
 
 #The compiler is defaulting to the Windows 10 SDK, which requires external DLL's (xinput1_4.dll is not found error)
 #I manually force it to use my directx sdk xinput.
@@ -193,7 +219,9 @@ add_library(dinput8 SHARED
 set(XINPUTLIB "D:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
 #D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
 #Version.Lib is required for looking up current EXE's runtime information.
-target_link_libraries(dinput8 ${MARIADB_LIBRARY} ${YAMLCPP_LIBRARY} ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
+
+#${MARIADB_LIBRARY} ${YAMLCPP_LIBRARY}
+target_link_libraries(dinput8 ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
 
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")

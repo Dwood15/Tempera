@@ -1,5 +1,7 @@
 #pragma once
 
+#include "macros_generic.h"
+
 namespace Yelo::Enums {
 	constexpr int k_maximum_weapons_per_unit = 4;
 
@@ -59,7 +61,7 @@ namespace Yelo::Flags {
 		k_number_of_unit_definition_flags
 	};
 
-	static_assert(k_number_of_unit_definition_flags <= BIT_COUNT(long_flags));
+	static_assert(k_number_of_unit_definition_flags <= (sizeof(long_flags) * 8));
 
 	enum unit_seat_definition_flags {
 		_unit_seat_invisable_bit,
@@ -90,7 +92,7 @@ namespace Yelo::Flags {
 
 		k_number_of_unit_seat_definition_flags_yelo,
 	};
-	static_assert(k_number_of_unit_seat_definition_flags_yelo <= BIT_COUNT(long_flags));
+	static_assert(k_number_of_unit_seat_definition_flags_yelo <= (sizeof(long_flags) * 8));
 };
 
 enum unit_animation_keyframe : short {

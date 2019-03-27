@@ -54,6 +54,7 @@ typedef signed char    sbyte;
 typedef unsigned char  byte;
 typedef unsigned int   *uintptr;
 typedef unsigned int   uint32;
+typedef unsigned short   uint16;
 typedef unsigned int   uint;
 typedef unsigned short ushort;
 typedef unsigned long  long_flags;
