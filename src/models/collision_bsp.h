@@ -137,7 +137,8 @@ namespace Yelo::TagGroups {
 	STAT_ASSERT(structure_surface_reference, 0x8);
 
 	struct sbsp_tag {
-		static inline int                       group_tag = (int) 'sbsp';
+		//Used to be static inline int. This is probably fucking up the sizeof on the tag tbqh.
+		const int                       group_tag = (int) 'sbsp';
 		tag_reference                           lightmap_bitm;
 		real_bounds                             vehicle_heights; //floor, ceil
 		int32                                   __pad00[5];

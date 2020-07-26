@@ -3,9 +3,15 @@
 #include <versions.h>
 
 namespace feature_management::engines {
+	//TOTAL AND COMPLETE HACK BECAUSE
+	//FUCKING MSVC IS DEFAULTING TO STD C++17 for some god-knows-reason
+	//DESPITE FUCKING SPECIFYING C++latest.
+	//
+	namespace _sapien {
+		static const char *DEBUG_FILENAME = const_cast<char*>("tempera.hek.sapien.debug.log");
+	}
+
 	class Sapien : public IEngine<Sapien> {
-
-
 	public:
 		Sapien() = default;
 
@@ -18,8 +24,6 @@ namespace feature_management::engines {
 		static void __stdcall OnPlayerActionUpdate();
 
 		static LPCoreAddressList GetCoreAddressList();
-
-		static inline char *DEBUG_FILENAME = const_cast<char*>("tempera.hek.sapien.debug.log");
 
 		// static const char* LUAFILE = "hek.sapien.init.txt";
 		static features SupportedFeatures() {

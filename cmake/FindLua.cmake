@@ -39,10 +39,14 @@
 unset(_lua_include_subdirs)
 unset(_lua_library_names)
 unset(_lua_append_versions)
+
+message(STATUS "Cmake current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 set(_lua_additional_paths
 	~/Library/Frameworks
-	include
-	libs
+	./include
+	./libs
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/include/lua
 	lib
 	/Library/Frameworks
 	/sw # Fink
@@ -55,6 +59,7 @@ function(_lua_get_versions)
 	set(LUA_VERSIONS5 5.3 5.2 5.1 5.0)
 
 	if (Lua_FIND_VERSION_EXACT)
+		message(STATUS "lua FIND VERSION EXACT")
 		if (Lua_FIND_VERSION_COUNT GREATER 1)
 			set(_lua_append_versions ${Lua_FIND_VERSION_MAJOR}.${Lua_FIND_VERSION_MINOR})
 		endif ()
@@ -239,6 +244,8 @@ endif ()
 include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set LUA_FOUND to TRUE if
 # all listed variables are TRUE
+
+message(STATUS "LUA_LIBRARIES location: ${LUA_LIBRARIES}")
 find_package_handle_standard_args(Lua
 								  REQUIRED_VARS LUA_LIBRARIES LUA_INCLUDE_DIR
 								  VERSION_VAR LUA_VERSION_STRING)

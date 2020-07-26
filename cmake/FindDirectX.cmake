@@ -10,7 +10,7 @@
 #message(STATUS "FINDING DIRECTX")
 
 find_path(DirectX_INCLUDE_DIRS d3dx9.h PATHS
-		  "D:\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Include"
+		  "C:\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Include"
 		  ${DXSDK_DIR}/Include
 		  NO_DEFAULT_PATH)
 
@@ -23,7 +23,7 @@ find_path(DirectX_LIBRARY_PATHS d3dx9.lib PATHS
 		  "$ENV{PROGRAMFILES}/Microsoft DirectX SDK*/Lib"
 		  "$ENV{DXSDK_DIR}/Lib/x64"
 		  "$ENV{PROGRAMFILES}/Microsoft DirectX SDK*/Lib/x64"
-		  "D:\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Lib\\x86"
+		  "C:\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Lib\\x86"
 		  NO_DEFAULT_PATH)
 
 get_filename_component(DirectX_ROOT_DIR "${DirectX_INCLUDE_DIRS}/.." ABSOLUTE)

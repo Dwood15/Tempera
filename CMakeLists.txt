@@ -32,9 +32,13 @@ set(COMMON ${CMAKE_CURRENT_SOURCE_DIR}/common/)
 include_directories(AFTER ${GAME_LIB_DIRS} ${COMMON})
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
-#find_path(MDB_PATH FindMariaDB.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
+
+message(STATUS "Attempting to local lua")
 find_path(LUA_PATH FindLua.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
-find_path(TDN_PATH FindTinyDNN.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
+message(STATUS "Lua findpath executed")
+
+
+#find_path(TDN_PATH FindTinyDNN.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 #C:\Users\Dwood\Documents\GitHub\tiny-dnn\tiny_dnn
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${YMLCPP_PATH} ${GAME_PATH} ${MDB_PATH} ${TDN_PATH})
 
@@ -42,13 +46,12 @@ find_package(HaloCE REQUIRED)
 find_package(Lua REQUIRED)
 #find_package(YamlCpp REQUIRED)
 
-if (LUA_Debug)
-    message(STATUS "Post-Find debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
-endif ()
+message(STATUS "Post-Find debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
+
+
 
 find_package(DirectX REQUIRED)
-#find_package(MariaDB REQUIRED)
-find_package(TinyDNN)
+#find_package(TinyDNN)
 
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
@@ -97,14 +100,17 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
     set(CMAKE_CXX_FLAGS "-Wfatal-errors -std=c++17 -m32 -masm=intel -fpermissive ${CMAKE_CXX_FLAGS_DEBUG} ${QUIET_GCC} ${CLANG_EXTRA_SETTINGS} ${CLANG_ENABLED_WARNINGS} ${CLANG_DISABLED_WARNINGS} ${CLANG_MACROS}")
 
+    message(FATAL_ERROR "Clang and gcc unsupported ATM sorry")
     message(STATUS "Forcing GNU to Clang compiler because CLion is dumb.")
     #TODO: SET CLANG STUFFS.
     set(MSVC 0)
 elseif (MSVC)
     if (MSVC_VERSION GREATER_EQUAL "1900")
         include(CheckCXXCompilerFlag)
+        message(WARNING "using c++latest not c++ 17")
         CHECK_CXX_COMPILER_FLAG("/std:c++latest" _cpp_latest_flag_supported)
         if (_cpp_latest_flag_supported)
+            message(WARNING "Add compiler options std cpp latest and experimental")
             add_compile_options("/std:c++latest")
         endif ()
     endif ()
@@ -144,16 +150,6 @@ endif ()
 #EXTERNAL LIBS
 file(GLOB DETOURS_GLOB libs/detours.lib)
 file(GLOB LUA_GLOB libs/lua53.lib)
-
-if (YAMLCPP_FOUND)
-    add_library(ycpp STATIC IMPORTED)
-    set_target_properties(ycpp PROPERTIES IMPORTED_LOCATION ${YAMLCPP_LIBRARY})
-endif ()
-
-if (MARIADB_FOUND)
-    add_library(mdb STATIC IMPORTED)
-    set_target_properties(mdb PROPERTIES IMPORTED_LOCATION ${MARIADB_LIBRARY})
-endif ()
 
 add_subdirectory(src)
 
@@ -216,15 +212,16 @@ add_library(dinput8 SHARED
 #The compiler is defaulting to the Windows 10 SDK, which requires external DLL's (xinput1_4.dll is not found error)
 #I manually force it to use my directx sdk xinput.
 #TODO: Use DX_LIBS or whatever the variable is, to specify the 2010 dx XInput.lib explicitly.
-set(XINPUTLIB "D:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
+set(XINPUTLIB "C:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
 #D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
 #Version.Lib is required for looking up current EXE's runtime information.
 
-#${MARIADB_LIBRARY} ${YAMLCPP_LIBRARY}
+message(WARNING "Target name: ${TARGET_NAME}")
 target_link_libraries(dinput8 ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
 
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")
 
 set_target_properties(dinput8 PROPERTIES OUTPUT_NAME "dinput8")
+#target_compile_features(dinput8 PRIVATE cxx_std_17)
 

@@ -109,6 +109,7 @@ constexpr uintptr_t regular_player_clamps[] = {
 	// MPP_B(0x51EE05, "rasterizer_detail_objects_rebuild_vertices get_render_window_ct_patch_5");
 };
 
+
 constexpr ::std::pair<uintptr_t, char> MPPARBs[]{
 	{0x476200, sizeof(s_player_control_globals_data)},//, players_initialize_sizeof_a_patch);
 	{0x47620A, sizeof(s_player_control_globals_data)}, //);
@@ -127,6 +128,8 @@ constexpr ::std::pair<uintptr_t, short> short_patches[]{
 };
 
 void naked CE110::OnPlayerActionUpdate() {
+	PrintLn("\nOn PlayerActionUpdate");
+
 	//ahhhhhhhhhhhhhhhhhhhhhh
 	//clangd is being horrendously dumb
 
@@ -134,7 +137,7 @@ void naked CE110::OnPlayerActionUpdate() {
 #if defined(_MSC_VER) && !defined(__CLANG__)
 	s_player_action *current_action;
 
-	__asm mov     dword ptr[esp+18h], -1
+	__asm mov dword ptr[esp+18h], -1
 	__asm mov current_action, ebp
 	__asm retn
 #else
@@ -143,6 +146,8 @@ void naked CE110::OnPlayerActionUpdate() {
 }
 
 void naked CE110::OnUnitControlUpdate(int client_update_idx) {
+	PrintLn("\nOn UnitControl Update");
+
 #if !defined(__GNUC__) && !defined(__CLANG__)
 	unsigned short      unit_idx;
 	s_unit_control_data *from_control_data;
@@ -171,6 +176,7 @@ void CE110::WriteHooks() {
 
 	uintptr_t fp_weap_initialize[] = {0x497122, 0x49712F};
 
+	PrintLn("\nAdjustNPatchin' the fp weapons");
 	calls::adjustNPatch32(fp_weap_initialize, size_of_fp_weapons);
 
 	//uintptr_t hud_scripted_globals_sizeofs[]          = { 0x4AC7A7, 0x4AC7AF };
@@ -178,6 +184,7 @@ void CE110::WriteHooks() {
 	uintptr_t hud_messaging_state_size        = 0x4AC936;
 	//static_assert(sizeof(s_hud_messaging_state)  == 0x122, "STAT_ASSERT_fail: s hud msging state");
 	//memset , or rather, rep stosd assumes full integer (0x4) size in this case.
+	PrintLn("\nPatching the hud messaging state size");
 	calls::patchValue<uintptr_t>(hud_messaging_state_size, sizeof(::s_hud_messaging_state) / 4);
 	uintptr_t motion_sensor_sizeofs[] = {0x4AC8B3, 0x4AC8BC + 0x4};
 
@@ -188,10 +195,12 @@ void CE110::WriteHooks() {
 
 	//adjustNPatch32(hud_scripted_globals_sizeofs, 0x4);
 	//0x488 og size.
+	PrintLn("\nPatching the hud messaging globals based on sizeofs");
 	calls::adjustNPatch32(hud_messaging_globals_sizeofs, sizeof(::s_hud_messaging_state));
 	//			adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
 	//			adjustNPatch32(weapon_hud_globals_sizeofs, 0x7C);
 	//			adjustNPatch32(hud_interface_related_globals_sizeofs, 0x30);
+	PrintLn("\nPatching the motion sensor sizeofs");
 	calls::adjustNPatch32(motion_sensor_sizeofs, sizeof(s_motion_sensor));
 
 	//Gotta be able to loop over all the players + input devices, no?.
@@ -199,16 +208,21 @@ void CE110::WriteHooks() {
 	constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
 	// //Hooks
 
+	PrintLn("\nWriting the player controls hook");
 	calls::WriteSimpleHook(player_control_init_new_map_hook, &spcore::player_control::player_control_initialize_for_new_map);
 
 	//Lua Hooks
 	constexpr uintptr_t post_initialize_hook = 0x4CAABA;
+
+	PrintLn("\nWriting the lua main setup connection init hook");
 	calls::WriteSimpleHook(post_initialize_hook, &main_setup_connection_init);
 
 	constexpr uintptr_t game_tick_hook = 0x473815;
 
+	PrintLn("\nWriting the game tick hook");
 	calls::WriteSimpleHook(game_tick_hook, &game_tick);
 
+	PrintLn("\nAdditional Player action hooks");
 	//Originally: C7 44 24 18 FF FF FF FF
 	//Basically just sets some random value to -1. Couldn't tell if it was being used or not.
 	calls::patchValue<byte>(0x476CF2, 0xE8); //call
@@ -216,6 +230,7 @@ void CE110::WriteHooks() {
 	calls::patchValue<byte>(0x476CF7, 0x90); //
 	calls::patchValue<unsigned short>(0x476CF8, 0x9090);
 
+	PrintLn("\nCE110 OnUnitControl Update hook for lua");
 	calls::WriteSimpleHook(0x4770CF, &CE110::OnUnitControlUpdate);
 
 	// patchValue<uintptr_t>(player_control_init_new_map_hook, addr); //Gotta be able to loop over all the players + input devices, no?.
@@ -243,6 +258,8 @@ void CE110::WriteHooks() {
 	//			constexpr uintptr_t get_render_window_ct_patch_6 = 0x51EE05;
 	//patchValue<short>(, (short)-1);
 
+	PrintLn("\nUpgrading the max player count locals to %d", MAX_PLAYER_COUNT_LOCAL);
+
 	for (auto i : regular_player_clamps) {
 		calls::patchValue<byte>(i, MAX_PLAYER_COUNT_LOCAL);
 	}
@@ -251,13 +268,18 @@ void CE110::WriteHooks() {
 		calls::patchValue<byte>(elem.first, elem.second);
 	}
 
+	PrintLn("\nRunning the generic short patches, num: %d", sizeof(short_patches) / sizeof(::std::pair<uintptr_t, short>));
+
 	for (auto elem : short_patches) {
 		calls::patchValue<short>(elem.first, elem.second);
 	}
 
+	PrintLn("\nRender player frame clamp cmp patch - nopBytes");
 	//render player frame
 	calls::nopBytes(0x50F5F0, 0xA); //render_player_frame_cmp_patch
 	//end renderplayerframeclamp
+
+	PrintLn("\nWritten shit");
 }
 
 #include "function_map.txt"

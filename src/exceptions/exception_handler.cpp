@@ -104,6 +104,8 @@ LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo
 	auto eirecord = ExceptionInfo->ExceptionRecord;
 	auto eCode = eirecord->ExceptionCode;
 
+	DEBUG("Exception received.");
+
 	DEBUG("Error Code: 0x%X - %s @ 0x%X (%s)", eCode, seDescription(eCode), eirecord->ExceptionAddress, CurrentEngine.getMemoryRegionDescriptor((uintptr_t)eirecord->ExceptionAddress));
 
 	auto info = eirecord->ExceptionRecord;

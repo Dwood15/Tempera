@@ -24,6 +24,7 @@ This project may cause your game to crash, files to corrupt, or, if luck does no
   - Good for your health. The codebase will make you use a number of swears, probably cursing my name.
   
 ### Building Tempera Requires:
+  - lua53.lib - Used to compile directly onto 
   - detours.lib - Hooking directx functions. Looking to remove this dependency. (bundled in repository)
   - DirectX June 2010 SDK - https://www.microsoft.com/en-us/download/details.aspx?id=6812
   - Windows 10 SDK v. (10.0.16299.0) (or newer)

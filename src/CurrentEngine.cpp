@@ -1,4 +1,4 @@
-#include <filesystem>
+#include <experimental/filesystem>
 
 #include "CurrentEngine.h"
 #include "lua/script_manager.h"
@@ -185,16 +185,19 @@ IDirectInputDevice8A **GlobalEngine::GetJoystickInputs() {
 }
 
 void GlobalEngine::WriteHooks() {
-	PrintLn("\nWriting the game hooks now!");
+	PrintLn("\nInitializing to prepare to write the game hooks now!");
 	switch (this->CurrentMajor) {
 		case major::CE:
+			PrintLn("Custom Edition detected");
 			switch (this->CurrentMinor) {
 				case minor::halo_1_10:
+					PrintLn("CE_110 detected!");
 					CE110::WriteHooks();
 				default:
 					return;
 			}
 		case major::HEK:
+			PrintLn("Sapien detected");
 			switch (this->CurrentMinor) {
 				case minor::sapien:
 					Sapien::WriteHooks();
@@ -208,7 +211,7 @@ void GlobalEngine::WriteHooks() {
 
 GlobalEngine::GlobalEngine() {
 	//Get the current path.
-	auto currentPath = ::std::filesystem::current_path();
+	auto currentPath = ::std::experimental::filesystem::current_path();
 	//TODO: Something like: "GetGameRegistryPath"
 
 	// static wchar_t currentPath[MAX_PATH];
@@ -232,7 +235,7 @@ GlobalEngine::GlobalEngine() {
 		printf("Detected sapien!\n");
 		this->CurrentMajor   = major::HEK;
 		this->CurrentMinor   = minor::sapien;
-		this->DEBUG_FILENAME = Sapien::DEBUG_FILENAME;
+		this->DEBUG_FILENAME = const_cast<char *>(_sapien::DEBUG_FILENAME);
 		this->current_map    = const_cast<defined_functionrange *>(Sapien::GetFunctionMap());
 
 	}
@@ -241,7 +244,7 @@ GlobalEngine::GlobalEngine() {
 		printf("Detected haloce!\n");
 		this->CurrentMajor   = major::CE;
 		this->CurrentMinor   = minor::halo_1_10;
-		this->DEBUG_FILENAME = CE110::DEBUG_FILENAME;
+		this->DEBUG_FILENAME = CE110::GetDebugFileName();
 		this->current_map    = const_cast<defined_functionrange *>(CE110::GetFunctionMap());
 	}
 

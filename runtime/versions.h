@@ -43,8 +43,7 @@ namespace feature_management {
 		LUA_HOOKS       = 0x1,
 		DX_PROXY        = 0x2,
 		FORGE_MODE      = 0x4,
-		MARIADB_LOGGING = 0x8,
-		EVERYTHING      = LUA_HOOKS | DX_PROXY | FORGE_MODE | MARIADB_LOGGING
+		EVERYTHING      = LUA_HOOKS | DX_PROXY | FORGE_MODE
 	};
 
 	namespace engines {
@@ -108,14 +107,13 @@ namespace feature_management {
 			static bool HasSupport() { return T::SupportedFeatures() != features::NOPE; }
 
 		};
-
 		class CustomEd : public IEngine<CustomEd> {
 		public:
 			CustomEd() {}
 
 			~CustomEd() {}
 
-			static inline char *DEBUG_FILENAME     = const_cast<char*>("tempera.ce.unk.debug.log");
+			const char * DEBUG_FILENAME    = R"("tempera.ce.unk.debug.log")";
 			const char *GAME_REGISTRY_PATH = R"(Software\Microsoft\Microsoft Games\Halo CE)";
 			// static const char* HCE_LUAFILE = "hce.init.txt";
 

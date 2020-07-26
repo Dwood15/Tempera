@@ -91,12 +91,14 @@ static inline void *init(HMODULE *reason) {
 		return nullptr;
 	}
 
-	Print("Current runtime was detected!");
+	Print("The Current runtime does, in fact, have support.\n");
 
 	//TODO: dinput-agnostic tempera.
 	char path[MAX_PATH];
 	GetSystemDirectoryA(path, sizeof(path));
 	strcat(path, "\\dinput8.dll");
+
+	Print("Loading dinput8 library.\n");
 
 	*reason = LoadLibraryA(path);
 
@@ -110,22 +112,33 @@ static inline void *init(HMODULE *reason) {
 	if (SUPPORTSFEAT(LUA_HOOKS)) {
 		CurrentEngine.InitializeLuaState();
 		CurrentEngine.LuaFirstRun();
+		PrintLn("\nLua state initialized and FirstRun called");
 	}
 
 	orig_DirectInput8Create = (void*)GetProcAddress(*reason, "DirectInput8Create");
+	PrintLn("\nDinput8Create");
 
 	DWORD old;
-	VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);
+
+	PrintLn("\nCalling page execute readwrite");
+
+	bool succ = VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READWRITE, &old);
+
+	PrintLn("\nVirtualProtect called, result: [%d]", succ);
 
 	CurrentEngine.WriteHooks();
+	PrintLn("\nCurrentEngine.WriteHooks completed");
 
 	//We need to protect memory, I suppose.
 	// VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READ, &old);
 
 	//run the post_dll_load lua hook
 	if (SUPPORTSFEAT(LUA_HOOKS)) {
+		PrintLn("\nLua Hooks writing, initiating the call lua event by type now");
 		CurrentEngine.GetLuaState()->call_lua_event_by_type(LuaCallbackId::post_dll_init);
 	}
+
+	PrintLn("\nreturning the original dinput8 create now");
 
 	return orig_DirectInput8Create;
 }
@@ -144,17 +157,13 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 			//PrintLn("Created Forge Thread!");
 		}
 
-		if (SUPPORTSFEAT(MARIADB_LOGGING)) {
-			//auto sqlCon = ConnectToSqlDB("localhost" );
-			// if (sqlCon != NULL) {
-			// 	Print("Successfully Connected to Database!");
-			// 	mysql_close(sqlCon);
-			// }
-		}
+		PrintLn("\nDllMain loaded = true");
 
 		loaded = true;
 
 	} else if (fdwReason == DLL_PROCESS_DETACH && loaded) {
+		PrintLn("\nDll process detach detected");
+
 		ExitAddLog();
 		RemoveVectoredExceptionHandler(h);
 		FreeLibrary(hinstDLL);

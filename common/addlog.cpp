@@ -10,7 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
-#include <filesystem>
+#include <experimental/filesystem>
 
 #include "addlog.h"
 
@@ -102,8 +102,8 @@ void InitAddLog(HMODULE hModule, const char * filename) {
 		}
 	}
 
-	//why in hell is filesystem still experimental???
-	auto myPath =::std::filesystem::current_path() /= filename;
+	//why in hell is filesystem still experimental??? blech
+	auto myPath =::std::experimental::filesystem::current_path() /= filename;
 
 	ofile.open(myPath.filename().string(),::std::ios_base::app);
 

@@ -12,6 +12,14 @@
 #include "../../../src/models/collision_bsp.h"
 #include "../../../src/hs/structures.h"
 
+//TODO: Detect if msvc and only compile with c++latest
+//#if defined(_MSC_VER)
+//	#define F abc
+//	#define B def
+//	#define FB(arg) #arg
+//	#define FB1(arg) FB(arg)
+//	#include FB1(_MSVC_LANG)
+//#endif
 
 static void InitializeLibraryFixups();
 
@@ -26,7 +34,10 @@ namespace feature_management::engines {
 		~CE110() {}
 
 		static const defined_functionrange *GetFunctionMap();
-		static inline char *DEBUG_FILENAME = const_cast<char *>("tempera.hce.1_10.debug.log");
+		static char* GetDebugFileName() {
+			return const_cast<char *>("tempera.hce.1_10.debug.log");
+		}
+//		static inline char *DEBUG_FILENAME = const_cast<char *>("tempera.hce.1_10.debug.log");
 
 		static LPCoreAddressList GetCoreAddressList();
 
@@ -41,13 +52,17 @@ namespace feature_management::engines {
 		static auto const HS_ARGUMENTS_EVALUATE = 0x48D480;
 		static auto const HS_RETURN             = 0x48D270;
 
-		static inline Yelo::TagGroups::coll::collision_bsp ** global_collision_bsp  = reinterpret_cast<Yelo::TagGroups::coll::collision_bsp **>(0x6E2258);
 
-		static inline Yelo::TagGroups::structure_bsp ** global_structure_bsp  = reinterpret_cast<Yelo::TagGroups::structure_bsp **>(0x6E225C);
+		const Yelo::TagGroups::coll::collision_bsp **global_collision_bsp  = (const Yelo::TagGroups::coll::collision_bsp **)0x6E2258;
 
-		static inline Yelo::datum_index * global_scenario_index = reinterpret_cast<Yelo::datum_index *>(0x6397CC);
+		const Yelo::TagGroups::structure_bsp **global_structure_bsp  = (const Yelo::TagGroups::structure_bsp **)(0x6E225C);
+//		static inline Yelo::TagGroups::structure_bsp ** global_structure_bsp  = reinterpret_cast<Yelo::TagGroups::structure_bsp **>(0x6E225C);
 
-		static inline short * structure_bsp_index   = reinterpret_cast<short *>(0x6397D0);
+		const Yelo::datum_index * global_scenario_index = (const Yelo::datum_index *)(0x6397CC);
+//		static inline Yelo::datum_index * global_scenario_index = reinterpret_cast<Yelo::datum_index *>(0x6397CC);
+
+		const short * structure_bsp_index   = (const short *)(0x6397D0);
+//		static inline short * structure_bsp_index   = reinterpret_cast<short *>(0x6397D0);
 
 		//TODO
 		// recorded_animations_data_t &RecordedAnimations() { DPTR_IMP_GET_BYREF(recorded_animations); }
