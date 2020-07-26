@@ -1,5 +1,4 @@
 .idea/
-.vs/
 bin/
 cache/
 build/
@@ -61,7 +60,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-cmake-build-debug/
 
 *.cbp
 *.lib

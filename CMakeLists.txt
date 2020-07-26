@@ -101,7 +101,8 @@ if (MSVC)
 
     # 4070 : Silences `OUT directive differs from filename ignoring directive` (warning)
     #		4099 :
-    set(BASE_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ignore:4099\ /ignore:4070")
+    #LIBCMT conflicts with another lib we're already using, so we have to NODEFAULTLIB it.
+    set(BASE_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /NODEFAULTLIB:LIBCMT\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ignore:4099\ /ignore:4070")
 
     set(LINKER_FLAGS "${BASE_FLAGS} /ASSEMBLYDEBUG\ /debug:fastlink\ /DEF:\"${CMAKE_CURRENT_SOURCE_DIR}/Tempera.def\"")
     #rip alignment on win32
