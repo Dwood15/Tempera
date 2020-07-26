@@ -307,10 +307,14 @@ void GlobalEngine::RefreshCore(bool force) {
 	}
 
 	if (this->IsSapien()) {
+		PrintLn("IsSapien SetCoreAddressList");
+
 		SetCoreAddressList(Sapien::GetCoreAddressList());
 	}
 
+	PrintLn("GetCoreAddressList");
 	if (this->IsCustomEd()) {
+		PrintLn("CustomEd SetCoreAddressList");
 		SetCoreAddressList(CE110::GetCoreAddressList());
 	}
 
@@ -661,26 +665,39 @@ namespace feature_management::engines {
 
 	const bool GlobalEngine::AreWeInMainMenu() {
 		if (!HasSupport()) {
+
+			PrintLn("No Support for Current Engine");
+
 			throw "Main menu check called invalid fashion";
 		}
 
 		if (!IsCoreInitialized()) {
+
+			PrintLn("Core is not initialized for CurrentEngine");
+
 			throw "AreWeInMainMenu called way too early in the cycle.";
 		}
 
 		if (IsSapien()) {
+			PrintLn("Can't be in main menu if we're in sapien");
 			return false;
 		}
 
 		if (!this->at_main_menu) {
+			PrintLn("Not in main menu, so we can force-RefreshCore");
+
+			//Calling refreshCore here is problematic as it semi-mildly relies on side effects in order to
+			//get the core refreshed
 			this->RefreshCore();
 
 			if (!this->at_main_menu) {
+				PrintLn("RefreshCore- What the fuck are we even doing here");
+
 				throw "This is complete bullshit. We cannot continue. RefreshCore check fails after refresh.";
 			}
 		}
 
-		return *this->at_main_menu;
+		return this->at_main_menu;
 	}
 
 	////////////////////////////////////////

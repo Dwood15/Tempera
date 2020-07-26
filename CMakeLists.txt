@@ -181,7 +181,17 @@ set(XINPUTLIB "C:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\
 #Version.Lib is required for looking up current EXE's runtime information.
 
 #message(WARNING "Target name: ${TARGET_NAME}")
+
 target_link_libraries(dinput8 ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
+
+#Take tempera.init.lua script and export it with the build files
+add_custom_target(copy-files ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/lua_scripts
+        ${HaloCE_ROOT_DIR}
+        )
+#without this, cmake doesn't know to export it on file changes.
+add_dependencies(dinput8 copy-files)
 
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")

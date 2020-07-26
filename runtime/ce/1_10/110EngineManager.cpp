@@ -147,6 +147,18 @@ void naked CE110::OnPlayerActionUpdate() {
 void naked CE110::OnUnitControlUpdate(int client_update_idx) {
 	PrintLn("\nOn UnitControl Update");
 
+	static bool printOnce = false;
+
+	//cannot update a unit's control if core's not initialized.
+	if (!CurrentEngine.IsCoreInitialized()) {
+		if (!printOnce) {
+			PrintLn("\nOn UnitControl Update when core not initialized, printing once.");
+			printOnce = true;
+		}
+
+		__asm retn;
+	}
+
 #if !defined(__GNUC__) && !defined(__CLANG__)
 	unsigned short      unit_idx;
 	s_unit_control_data *from_control_data;

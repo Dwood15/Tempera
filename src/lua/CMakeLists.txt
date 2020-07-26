@@ -1,6 +1,5 @@
 set(LUA_SRC
-	${CMAKE_CURRENT_SOURCE_DIR}/memory_interface.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/script_manager.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/script_manager.cpp
 	PARENT_SCOPE)
 
 set(LUA_H

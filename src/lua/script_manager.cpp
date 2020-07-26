@@ -196,16 +196,15 @@ bool LuaScriptManager::HandleFunctionNameEvent(const char * funcName) {
 	}
 
 	lua_getglobal(L, funcName);
-	if (!lua_isfunction(L, -1)) {
-		return false;
-	}
 
-	return true;
+	return lua_isfunction(L, -1);
 }
 
 static void PassPlayerControl(lua_State * L, s_player_action * control) {
 	lua_createtable(L, 0, 6);
 
+	//TODO: I have no clue why we're using -2 as the idx on this any more.
+	//if it works tho...
 	PassInteger(L, control->control_flagsA.control_flags_a);
 	lua_setfield(L, -2, "control_flags");
 
@@ -297,8 +296,8 @@ void LuaScriptManager::lua_on_tick(ushort remaining, uint32 since_map_begin) {
 		return;
 	}
 
-	PassInteger(since_map_begin);
 	PassInteger(remaining);
+	PassInteger(since_map_begin);
 
 	PCall<2, 0>(funcName);
 }
