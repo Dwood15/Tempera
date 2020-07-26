@@ -27,17 +27,15 @@ namespace feature_management::engines {
 	using namespace Yelo;
 	class CE110 : public IEngine<CE110> {
 	private:
-		static void InitializeHSMemoryUpgrades();
+		//static void InitializeHSMemoryUpgrades();
 
 	public:
 		CE110() {}
 		~CE110() {}
 
 		static const defined_functionrange *GetFunctionMap();
-		static char* GetDebugFileName() {
-			return const_cast<char *>("tempera.hce.1_10.debug.log");
-		}
-//		static inline char *DEBUG_FILENAME = const_cast<char *>("tempera.hce.1_10.debug.log");
+
+		static constexpr const char *DEBUG_FILENAME = "tempera.hce.1_10.debug.log";
 
 		static LPCoreAddressList GetCoreAddressList();
 
@@ -51,7 +49,6 @@ namespace feature_management::engines {
 		// InitializeCreateScriptFunction()
 		static auto const HS_ARGUMENTS_EVALUATE = 0x48D480;
 		static auto const HS_RETURN             = 0x48D270;
-
 
 		const Yelo::TagGroups::coll::collision_bsp **global_collision_bsp  = (const Yelo::TagGroups::coll::collision_bsp **)0x6E2258;
 

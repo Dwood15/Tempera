@@ -235,7 +235,7 @@ GlobalEngine::GlobalEngine() {
 		printf("Detected sapien!\n");
 		this->CurrentMajor   = major::HEK;
 		this->CurrentMinor   = minor::sapien;
-		this->DEBUG_FILENAME = const_cast<char *>(_sapien::DEBUG_FILENAME);
+		this->DEBUG_FILENAME = const_cast<char *>(Sapien::DEBUG_FILENAME);
 		this->current_map    = const_cast<defined_functionrange *>(Sapien::GetFunctionMap());
 
 	}
@@ -244,7 +244,7 @@ GlobalEngine::GlobalEngine() {
 		printf("Detected haloce!\n");
 		this->CurrentMajor   = major::CE;
 		this->CurrentMinor   = minor::halo_1_10;
-		this->DEBUG_FILENAME = CE110::GetDebugFileName();
+		this->DEBUG_FILENAME = const_cast<char*>(CE110::DEBUG_FILENAME);
 		this->current_map    = const_cast<defined_functionrange *>(CE110::GetFunctionMap());
 	}
 

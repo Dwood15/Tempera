@@ -39,7 +39,7 @@ cmake-build-*
 Network Trash Folder
 Temporary Items
 .apdisk
-
+*.cpp~
 # Windows
 # =========================
 

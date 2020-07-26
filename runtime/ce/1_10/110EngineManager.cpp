@@ -128,10 +128,9 @@ constexpr ::std::pair<uintptr_t, short> short_patches[]{
 };
 
 void naked CE110::OnPlayerActionUpdate() {
-	PrintLn("\nOn PlayerActionUpdate");
-
 	//ahhhhhhhhhhhhhhhhhhhhhh
-	//clangd is being horrendously dumb
+	//clangd is dumb-- even with MSVC compat enabled they STILL
+	//Do not allow variables in naked funcs.
 
 	//Postmortem: this didn't work btw, I actually just ended up disabling clangd. /shrug
 #if defined(_MSC_VER) && !defined(__CLANG__)

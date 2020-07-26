@@ -3,13 +3,6 @@
 #include <versions.h>
 
 namespace feature_management::engines {
-	//TOTAL AND COMPLETE HACK BECAUSE
-	//FUCKING MSVC IS DEFAULTING TO STD C++17 for some god-knows-reason
-	//DESPITE FUCKING SPECIFYING C++latest.
-	//
-	namespace _sapien {
-		static const char *DEBUG_FILENAME = const_cast<char*>("tempera.hek.sapien.debug.log");
-	}
 
 	class Sapien : public IEngine<Sapien> {
 	public:
@@ -18,6 +11,8 @@ namespace feature_management::engines {
 		~Sapien() = default;
 
 		static void WriteHooks();
+
+		static constexpr char *DEBUG_FILENAME = const_cast<char*>("tempera.hek.sapien.debug.log");
 
 		static const defined_functionrange * GetFunctionMap();
 

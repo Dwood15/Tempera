@@ -1,18 +1,21 @@
 #Project: Tempera
-#File: FindTinyDNN.cmake
-#Copyright � 2018 dwood
+#Copyright � 2020 dwood
 # - GNU GPLv3
 
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 message(STATUS "cmake version ${CMAKE_VERSION}")
 
-#Comment this shit out if you have problems compiling.
-set(CMAKE_CXX_STANDARD 20)
+#Apparently having this set to 20 causes CMAKE to set std:c++17
+#because GOD KNOWS WHY
+#set(CMAKE_CXX_STANDARD 20)
+
 set(CMAKE_CXX_EXTENSIONS TRUE)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+#this forces cmake to set the name of the dll to dinput8 correctly.
 unset(CMAKE_SHARED_LIBRARY_PREFIX)
 
-#To guarantee we're building for 32 bit windows.
+#Guarantee that we're targeting 32-bit.
 unset(CMAKE_CL_64)
 
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
@@ -33,29 +36,22 @@ include_directories(AFTER ${GAME_LIB_DIRS} ${COMMON})
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 
-message(STATUS "Attempting to local lua")
 find_path(LUA_PATH FindLua.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
-message(STATUS "Lua findpath executed")
-
 
 #find_path(TDN_PATH FindTinyDNN.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 #C:\Users\Dwood\Documents\GitHub\tiny-dnn\tiny_dnn
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${YMLCPP_PATH} ${GAME_PATH} ${MDB_PATH} ${TDN_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH} ${TDN_PATH})
 
 find_package(HaloCE REQUIRED)
 find_package(Lua REQUIRED)
 #find_package(YamlCpp REQUIRED)
 
-message(STATUS "Post-Find debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
-
-
+message(STATUS "Post-Find LUA debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
 
 find_package(DirectX REQUIRED)
 #find_package(TinyDNN)
 
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
-
-#${MARIADB_INCLUDE_DIR} ${TINYDNN_INCLUDE_DIR} ${YAMLCPP_INCLUDE_DIR}
 
 include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${INCLUDE}/detours ${LUA_INCLUDE_DIR})
 
@@ -66,51 +62,15 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 add_definitions(-D_WINDOWS -D_USRDLL)
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    #	set(CMAKE_CXX_COMPILER_ID "Clang")
-    #	set(CMAKE_C_COMPILER C:\\Program\ Files\\LLVM\\bin\\clang.exe)
-    #	set(CMAKE_CXX_COMPILER C:\\Program\ Files\\LLVM\\bin\\clang++.exe)
+#TODO: Include GCC_CLANG/CMakeLists.txt
 
-    set(CMAKE_C_FLAGS "-Wall -std=c17 -m32 ")
-    set(CMAKE_C_FLAGS_DEBUG "-g")
-    set(CMAKE_C_FLAGS_MINSIZEREL "-Os -DNDEBUG")
-    set(CMAKE_C_FLAGS_RELEASE "-O4 -DNDEBUG")
-    set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
-
-    #-fdelayed-template-parsing
-
-    #-wno-switch b/c of: warning: 19 enumeration values not handled in switch:
-    set(CLANG_DISABLED_WARNINGS " -Wno-unused-variable -Wno-deprecated -Wno-unused-function -Wno-switch -Wno-overloaded-virtual")
-    set(CLANG_ENABLED_WARNINGS "-Wall -Wpadded  -Wmissing-braces ")
-
-    set(CLANG_ONLY_OPTIONS "-fms-extensions -fms-compatibility -ferror-limit=1 -fmodules -fmodules-cache-path=${CMAKE_SOURCE_DIR}/cache -Warray-bounds-pointer-arithmetic -Wmissing-method-return-type -Wfor-loop-analysis -Wmismatched-tags -Wcomma -Watomic-properties -Wassign-enum")
-
-    set(CLANG_MS_WARNINGS " -Wmicrosoft-charize -Wextra-semi -Wmicrosoft-cpp-macro -Wmicrosoft-enum-value ")
-    set(CLANG_EXTRAS "-Wc++2a-extensions -Wc++2a-compat ${CLANG_MS_WARNINGS}")
-
-    set(CLANG_MACROS "-DDIRECTINPUT_VERSION=0x800 -DWIN32 -D_USRDLL -D_WINDLL -DCMAKE_LINK_WHAT_YOU_USE=TRUE")
-    set(CLANG_EXTRA_SETTINGS "-fms-extensions ")
-    #-stdlib=libstdc++  -nostdlib -isystem C:/msys32/mingw64/include/c++/8.2.0  -Wno-microsoft-include
-
-    set(QUIET_GCC "-Wno-comment -Wno-multichar -Wno-unknown-pragmas -Wno-unused-local-typedefs")
-
-    set(CMAKE_CXX_FLAGS_DEBUG "-g")
-    set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
-    set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
-    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
-    set(CMAKE_CXX_FLAGS "-Wfatal-errors -std=c++17 -m32 -masm=intel -fpermissive ${CMAKE_CXX_FLAGS_DEBUG} ${QUIET_GCC} ${CLANG_EXTRA_SETTINGS} ${CLANG_ENABLED_WARNINGS} ${CLANG_DISABLED_WARNINGS} ${CLANG_MACROS}")
-
-    message(FATAL_ERROR "Clang and gcc unsupported ATM sorry")
-    message(STATUS "Forcing GNU to Clang compiler because CLion is dumb.")
-    #TODO: SET CLANG STUFFS.
-    set(MSVC 0)
-elseif (MSVC)
+if (MSVC)
+    set(CMAKE_VERBOSE_MAKEFILE ON)
     if (MSVC_VERSION GREATER_EQUAL "1900")
         include(CheckCXXCompilerFlag)
-        message(WARNING "using c++latest not c++ 17")
         CHECK_CXX_COMPILER_FLAG("/std:c++latest" _cpp_latest_flag_supported)
         if (_cpp_latest_flag_supported)
-            message(WARNING "Add compiler options std cpp latest and experimental")
+            message(STATUS "Add compiler options std cpp latest and experimental ${_cpp_latest_flag_supported}")
             add_compile_options("/std:c++latest")
         endif ()
     endif ()
@@ -133,8 +93,11 @@ elseif (MSVC)
     #/Qpar-report:2 - Tells us about the compiler's optimizations of our for loops.
     #/std:c++latest implies C++ 20. /Qpar-report:2 /Zp2\
     set(NEW_FEATURES "/std:c++latest\ /wo4068\ /permissive-")
+
     set(CMAKE_CXX_FLAGS_DEBUG "/TP\ /MP\ /MTd\ /Gy- /W3\ /Od\ /Zi\ /MP /EHsc\ ${NEW_FEATURES} /fp:fast\ /arch:SSE2 ${COMPILER_MACROS}")
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
+
+    message(WARNING "CMAKE CXX FLAGS: ${CMAKE_CXX_FLAGS}")
 
     # 4070 : Silences `OUT directive differs from filename ignoring directive` (warning)
     #		4099 :
@@ -216,7 +179,7 @@ set(XINPUTLIB "C:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\
 #D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
 #Version.Lib is required for looking up current EXE's runtime information.
 
-message(WARNING "Target name: ${TARGET_NAME}")
+#message(WARNING "Target name: ${TARGET_NAME}")
 target_link_libraries(dinput8 ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
 
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")

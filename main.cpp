@@ -12,7 +12,7 @@
  *	File: main.cpp
  *	Copyright � 2009 SilentK, Abyll
  *	Copyright � 2015 Kornman00 (Sean Cooper)
- *	Copyright � 2018 Dwood15 (Dason Woodhouse)
+ *	Copyright � 2018 Dwood15/Zoru (Dason Woodhouse)
  *
  *  This file is part of Tempera.
  *
