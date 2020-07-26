@@ -1,8 +1,7 @@
 #pragma once
 
+#include <windows.h>
 #include <macros_generic.h>
-
-typedef unsigned int uintptr_t;
 
 struct defined_functionrange {
 	const char funcName [140];
@@ -38,6 +37,29 @@ struct LPCoreAddressList {
 	uint CAMERA;
 	uint MAP_HEADER_ADDRESS;
 	uint TAG_INDEX_HEADER_ADDRESS;
+
+	uintptr_t CONSOLE_HOOK_ADDRESS;
+	uintptr_t DEVMODE_HOOK_ADDRESS;
+	uintptr_t CONSOLE_TEXT_HOOK_ADDRESS;
+
+	uint to_respawn_count;
+	uint spawn_count;
+	uint render_window_count;
+	uint at_main_menu;
+
+	uint hud_scripted_globals;
+	uint hud_messaging_state;
+
+	uint game_state_location_as_int;
+	uint game_state_cpu_allocation;
+	uint game_state_globals_location_ptr;
+	uint game_state_globals_ptr;
+	uint crc_checksum_buffer;
+
+	uint player_control_globals_data;
+	uint game_time_globals;
+	uint players_global_data;
+	uint game_globals_conn_type;
 };
 
 

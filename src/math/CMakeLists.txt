@@ -1,0 +1,6 @@
+set(MATH_H
+	${CMAKE_CURRENT_SOURCE_DIR}/animations.h
+	${CMAKE_CURRENT_SOURCE_DIR}/colors.h
+	${CMAKE_CURRENT_SOURCE_DIR}/int_math.h
+	${CMAKE_CURRENT_SOURCE_DIR}/real_math.h
+	PARENT_SCOPE)

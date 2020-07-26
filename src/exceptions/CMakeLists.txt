@@ -1,0 +1,8 @@
+set(EXCEPTIONS_SRC
+	${CMAKE_CURRENT_SOURCE_DIR}/exception_handler.cpp
+	PARENT_SCOPE)
+
+
+set(EXCEPTIONS_H
+	${CMAKE_CURRENT_SOURCE_DIR}/exception_handler.h
+	PARENT_SCOPE)

@@ -1,0 +1,4 @@
+module Tempera_Animations {
+    header "animations.h"
+}
+

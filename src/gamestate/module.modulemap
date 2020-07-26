@@ -1,0 +1,3 @@
+module Tempera_GameState_Objects {
+    header "objects.h"
+}

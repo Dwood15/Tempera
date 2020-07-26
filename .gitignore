@@ -1,6 +1,9 @@
 .idea/
+.vs/
 bin/
 cache/
+build/
+cmake-build-debug/
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
@@ -36,7 +39,7 @@ cmake-build-*
 Network Trash Folder
 Temporary Items
 .apdisk
-
+*.cpp~
 # Windows
 # =========================
 
@@ -58,5 +61,9 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+cmake-build-debug/
 
-.vs/config/applicationhost.config
+*.cbp
+*.lib
+
+

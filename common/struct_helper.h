@@ -1,5 +1,4 @@
 #pragma once
-#include <precompile.h>
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>
 	/// 	Class for defining an interface for blocks of data whose memory layout is not entirely mapped out.
@@ -11,7 +10,7 @@
 		enum { k_size = K_SIZE };
 
 	protected:
-		// NOTE: I would use std::array here, but I have yet to tested how well it plays with xbox modules (ie, Halo2_Xbox)
+		// NOTE: I would use::std::array here, but I have yet to tested how well it plays with xbox modules (ie, Halo2_Xbox)
 		byte m_data[K_SIZE];
 
 		template <typename T, const size_t k_offset>

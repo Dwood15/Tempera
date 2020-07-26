@@ -1,0 +1,12 @@
+module Tempera_Enums {
+    header "ai_enums.h"
+    header "cache_enums.h"
+    header "effects_enums.h"
+    header "generic_enums.h"
+    header "geometry_enums.h"
+    header "hs_enums.h"
+    header "hud_enums.h"
+    header "objects_enums.h"
+    header "scenario_enums.h"
+    header "tag_enums.h"
+}

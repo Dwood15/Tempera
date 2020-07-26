@@ -1,0 +1,17 @@
+module Tempera_Scripting {
+    module Compile {
+        header "compile.h"
+    }
+
+    module Runtime {
+        header "runtime.h"
+    }
+
+    module Structures {
+        header "structures.h"
+    }
+
+    module Threads {
+        header "threads.h"
+    }
+}
