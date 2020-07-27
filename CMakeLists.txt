@@ -192,6 +192,8 @@ add_custom_target(copy-files ALL
 #without this, cmake doesn't know to export it on file changes.
 add_dependencies(dinput8 copy-files)
 
+set(ADDITIONAL_CLEAN_FILES  "${HaloCE_ROOT_DIR}/dinput8.dll "${HaloCE_ROOT_DIR}/dinput8.ilk""  ${ADDITIONAL_CLEAN_FILES})
+
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")
 

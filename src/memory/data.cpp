@@ -117,14 +117,14 @@ namespace Yelo::blam {
 	}
 
 	static void *data_iterator_next(s_data_iterator &iterator) {
-		if (!(iterator.signature == (reinterpret_cast<uintptr_t>(iterator.data) ^ Enums::k_data_iterator_signature))) {
-			throw"uninitialized iterator passed";//::std::string(__FUNCTION__) );
+		if (iterator.signature != (reinterpret_cast<uintptr_t>(iterator.data) ^ Enums::k_data_iterator_signature)) {
+			throw ::std::exception("uninitialized iterator passed");//::std::string(__FUNCTION__) );
 		}
 
 		const s_data_array *data = iterator.data;
 		if (!data->is_valid) {
 			//std::str(data->name)
-			throw "tried to iterate when it was in an invalid state ";
+			throw ::std::exception("tried to iterate when it was in an invalid state");
 		}
 
 		datum_index::index_t absolute_index = iterator.next_index;
@@ -135,7 +135,7 @@ namespace Yelo::blam {
 			auto datum = reinterpret_cast<const s_datum_base *>(pointer);
 
 			if (!datum->IsNull()) {
-				iterator.next_index = absolute_index + 1;
+				iterator.next_index = absolute_index + (short)1;
 				iterator.index      = datum_index::Create(absolute_index, datum->GetHeader());
 				return pointer;
 			}
@@ -281,11 +281,40 @@ namespace Yelo::blam {
 	static void *datum_try_and_get(s_data_array *data, datum_index index) {
 		if (!index.IsNull() && (index.index & 0x8000u) == 0 && (signed __int16) index.index < data->max_datum) {
 			short *got = reinterpret_cast<short *>((uint) data->base_address + index.index * data->datum_size);
-			if (*got) {
-				if (!index.salt || *(short *) got == index.salt)
-					return reinterpret_cast<void *>((uint) data->base_address + index.index * data->datum_size);
+			if (got == nullptr || got == (short *)-1 || !*got) {
+				return nullptr;
 			}
+
+			if (!index.salt || *(short *) got == index.salt)
+				return reinterpret_cast<void *>((uint) data->base_address + index.index * data->datum_size);
 		}
 		return nullptr;
 	}
 };
+
+void naked Yelo::blam::data_iterator_next_wrapper() {
+	s_data_iterator *iter;
+	void * retIter;
+
+	__asm {
+	mov iter, edi
+	push ebx
+	push ebp
+	push esi
+	}
+
+	retIter = data_iterator_next(*iter);
+	iter = (s_data_iterator*)retIter;
+
+	if (retIter == nullptr || retIter == (s_data_iterator *)-1) {
+		PrintLn("Iteration attempt failed.");
+	}
+
+	__asm {
+	pop esi
+	pop ebp
+	mov eax, iter
+	pop ebx
+	retn
+	}
+}

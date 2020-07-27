@@ -16,6 +16,7 @@ using namespace feature_management;
 using namespace feature_management::engines;
 
 LPCoreAddressList CE110::GetCoreAddressList() {
+	PrintLn("Retrieving the Core AddressLists");
 	LPCoreAddressList CurrentCore;
 	CurrentCore.core_0 = 0x815900;
 	CurrentCore.core_1 = 0x7FB6F8;
@@ -55,6 +56,9 @@ LPCoreAddressList CE110::GetCoreAddressList() {
 
 	CurrentCore.game_time_globals      = 0x68CD70;
 	CurrentCore.game_globals_conn_type = 0x6B47B0;
+
+	PrintLn("Core AddressLists loaded");
+
 	return CurrentCore;
 }
 
@@ -213,6 +217,7 @@ void CE110::WriteHooks() {
 	PrintLn("\nPatching the motion sensor sizeofs");
 	calls::adjustNPatch32(motion_sensor_sizeofs, sizeof(s_motion_sensor));
 
+
 	//Gotta be able to loop over all the players + input devices, no?.
 	//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
 	constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
@@ -220,6 +225,10 @@ void CE110::WriteHooks() {
 
 	PrintLn("\nWriting the player controls hook");
 	calls::WriteSimpleHook(player_control_init_new_map_hook, &spcore::player_control::player_control_initialize_for_new_map);
+
+	PrintLn("\nWriting the update before game server iterator_next wrapper hook");
+	constexpr uintptr_t players_update_before_game_server_iterator_hook = 0x476CB0;
+	calls::WriteSimpleHook(players_update_before_game_server_iterator_hook, &Yelo::blam::data_iterator_next_wrapper);
 
 	//Lua Hooks
 	constexpr uintptr_t post_initialize_hook = 0x4CAABA;

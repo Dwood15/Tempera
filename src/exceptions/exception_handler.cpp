@@ -122,9 +122,14 @@ void SetPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, bool se
 LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo) {
 	static std::atomic<DWORD> ExceptionCount;
 
+	DEBUG("Exception being handled. \n\tBUILD DATE: " __DATE__ " TIME: " __TIME__);
+
+	Sleep(10);
+
 	if (ExceptionCount >= MAX_EXCEPTIONS_TO_LOG) {
 		DEBUG("\tAbove the exception count max, failing now :)\n");
-		return FAIL_FAST_GENERATE_EXCEPTION_ADDRESS;
+		RemoveVectoredExceptionHandler(ExceptionHandlerHandle);
+		return FAIL_FAST_NO_HARD_ERROR_DLG;
 	}
 
 	++ExceptionCount;
@@ -136,8 +141,6 @@ LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo
 	auto eiRecord = ExceptionInfo->ExceptionRecord;
 	auto eCode = eiRecord->ExceptionCode;
 
-	DEBUG("\tException received.\n");
-
 	auto exceptionAddress = eiRecord->ExceptionAddress;
 	auto regionDescriptor = CurrentEngine.getMemoryRegionDescriptor((void *)exceptionAddress);
 	DEBUG("\tErr Code: 0x%X - %s @ 0x%X (%s)\n", eCode, GetExceptionString(eCode), exceptionAddress, regionDescriptor);
@@ -147,12 +150,11 @@ LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo
 		DEBUG("Got a nested Exception! Err Code: 0x%X\n", nestedExc->ExceptionCode);
 	}
 
-	if (ExceptionCount < MAX_EXCEPTIONS_TO_LOG) {
+	if (ExceptionCount <= MAX_EXCEPTIONS_TO_LOG) {
 		DUMP_REGISTERS(ExceptionInfo->ContextRecord);
-		DEBUG("\tException handled!");
 	}
 
-	return EXCEPTION_CONTINUE_EXECUTION;
+	return EXCEPTION_EXECUTE_HANDLER;
 }
 
 #endif

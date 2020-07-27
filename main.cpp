@@ -42,7 +42,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Tempera. If not, see <http://www.gnu.org/licenses/>.
  **/
- static bool loaded = false;
+static volatile bool loaded = false;
 static void *orig_DirectInput8Create;
 
 //Used in order to proxy direct input.
@@ -57,6 +57,7 @@ naked void WINAPI Tempera_DirectInput8Create() {
 using feats = feature_management::features;
 
 static inline void *init(HMODULE *reason) {
+
 	InitializeDllImageContext((PVOID)(*reason));
 	ExceptionHandlerHandle = AddVectoredExceptionHandler(CALL_FIRST, CEInternalExceptionHandler);
 
@@ -130,14 +131,14 @@ static inline void *init(HMODULE *reason) {
 
 extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
 	if (fdwReason == DLL_PROCESS_ATTACH && !loaded) {
+		DisableThreadLibraryCalls(hinstDLL);
 		if (!init(&hinstDLL)) {
-			Print("Failed to Initialize properly. Exiting");
+			PrintLn("Failed to Initialize properly. Exiting");
 			return false;
 		}
 
 		//Don't setup and run a forge thread for an unsupported runtime target.
 		if (SUPPORTSFEATS(DX_PROXY, FORGE_MODE)) {
-			//DisableThreadLibraryCalls(hinstDLL);
 			//CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forgeMain, 0, 0, 0);
 			//PrintLn("Created Forge Thread!");
 		}

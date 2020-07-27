@@ -1,8 +1,0 @@
-module Tempera_Common {
-    module Macros_Generic {
-        header "macros_generic.h"
-    }
-
-    header "addlog.h"
-    header "engine_interface.h"
-}
