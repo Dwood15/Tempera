@@ -50,7 +50,7 @@ struct control_state {
 STAT_ASSERT(control_state, sizeof(ushort));
 
 union unit_control_flags {
-	short         control_flags_a;
+	ushort        control_flags_a;
 	control_state control_flags;
 };
 STAT_ASSERT(unit_control_flags, sizeof(short));

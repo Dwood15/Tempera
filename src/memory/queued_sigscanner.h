@@ -36,15 +36,15 @@ namespace core::util {
 		void tokenize_signature(const::std::string &signature,::std::vector<std::string> &out) {
 
 			out = {
-				istream_iterator<string>{istringstream(signature) >> skipws},
-				istream_iterator<string>{}
+				std::istream_iterator<std::string>{std::istringstream(signature) >> std::skipws},
+				std::istream_iterator<std::string>{}
 			};
 		}
 
 		sigscan_params &construct_signature(const::std::string &sig) {
 
 			auto           &scan_params{m_signatures.emplace_back(sigscan_params())};
-			vector<string> tokens;
+			std::vector<std::string> tokens;
 
 			tokenize_signature(sig, tokens);
 
@@ -148,7 +148,7 @@ namespace core::util {
 				uintptr_t(mod) + nt_headers->OptionalHeader.BaseOfCode,
 				out,
 				signature,
-				(!!length ? length : nt_headers->OptionalHeader.SizeOfCode)
+				(length != 0 ? length : nt_headers->OptionalHeader.SizeOfCode)
 			);
 		}
 

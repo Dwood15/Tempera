@@ -147,13 +147,5 @@ namespace feature_management::engines {
 		static void OnUnitControlUpdate(int client_update_idx);
 
 		static void WriteHooks();
-
-		static void InitializeMemoryUpgrades();
-		static auto GetHsFunctionTableReferenceList();
-
-		constexpr auto GetHsFunctionTable();
-		constexpr auto GetHsFunctionTableCount();
-		static __forceinline auto GetHsFunctionTableCountReferences16();
-		static __forceinline auto GetHsFunctionTableCountReferences32();
 	};
 };

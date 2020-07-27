@@ -4,7 +4,7 @@
 #include <macros_generic.h>
 
 struct defined_functionrange {
-	const char funcName [140];
+	const char * funcName;
 	const uintptr_t                               begin;
 	const uintptr_t                               end;
 
@@ -14,7 +14,7 @@ struct defined_functionrange {
 
 	bool operator ==(const defined_functionrange  &other) { return end == other.end && begin == other.begin; }
 
-	bool contains(uintptr_t &other) { return (other <= this->begin && other >= this->end); }
+	bool contains(uintptr_t other) { return (other <= end && other >= begin); }
 
 	constexpr bool operator <(defined_functionrange &other) { return begin < other.end; }
 
@@ -22,7 +22,7 @@ struct defined_functionrange {
 
 	constexpr bool operator ==(defined_functionrange &other) { return end == other.end && begin == other.begin; }
 
-	constexpr bool contains(const uintptr_t &other) const { return (other <= begin && other >= end); }
+	constexpr bool contains(const uintptr_t other) const { return (other <= end && other >= begin); }
 };
 
 struct LPCoreAddressList {

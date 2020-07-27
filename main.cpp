@@ -54,27 +54,11 @@ naked void WINAPI Tempera_DirectInput8Create() {
 #endif
 }
 
-static inline void *ConnectToSqlDB(const char *host, const char *usr, const char *pwd) {
-	// MYSQL *con = mysql_init(NULL);
-	//
-	// if (!con) {
-	// 	Print("Failed to init mysql connection.");
-	// 	return NULL;
-	// }
-	//
-	// if (mysql_real_connect(con, host, usr, pwd, NULL, 3309, NULL, 0) == NULL) {
-	// 	PrintLn("Failed to connect. Error: %s", mysql_error(con));
-	// 	mysql_close(con);
-	// 	return NULL;
-	// }
-
-	return NULL;
-}
-
 using feats = feature_management::features;
 
 static inline void *init(HMODULE *reason) {
-	h        = AddVectoredExceptionHandler(CALL_FIRST, CEInternalExceptionHandler);
+	InitializeDllImageContext((PVOID)(*reason));
+	ExceptionHandlerHandle = AddVectoredExceptionHandler(CALL_FIRST, CEInternalExceptionHandler);
 
 	// Dbg output before we get any further (initializes the console)
 	if (::AllocConsole() != 0) {
@@ -91,14 +75,15 @@ static inline void *init(HMODULE *reason) {
 		return nullptr;
 	}
 
-	Print("The Current runtime does, in fact, have support.\n");
+	PrintLn("Initialized the dll. Details: %s", PrintImageDetails());
+	PrintLn("The Current runtime does, in fact, have support.");
 
 	//TODO: dinput-agnostic tempera.
 	char path[MAX_PATH];
 	GetSystemDirectoryA(path, sizeof(path));
 	strcat(path, "\\dinput8.dll");
 
-	Print("Loading dinput8 library.\n");
+	PrintLn("Loading og dinput8 library.");
 
 	*reason = LoadLibraryA(path);
 
@@ -165,7 +150,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 		PrintLn("\nDll process detach detected");
 
 		ExitAddLog();
-		RemoveVectoredExceptionHandler(h);
+		RemoveVectoredExceptionHandler(ExceptionHandlerHandle);
 		FreeLibrary(hinstDLL);
 		loaded = false;
 	}

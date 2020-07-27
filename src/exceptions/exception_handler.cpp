@@ -11,22 +11,23 @@
 #include "exception_handler.h"
 #include "../CurrentEngine.h"
 #include <memory_map.h>
-#include <versions.h>
 #include <addlog.h>
+#include <atomic>
 
-//Not sure we need to guarantee we're in MSVC any more...
+//Not sure we need to guarantee we're in MSVC any more
 #if defined(_MSC_VER)
-static volatile DWORD ExceptionCount = 0;
 
-const void DUMP_INT_REGISTERS(PCONTEXT context) {
+static std::atomic<DWORD> ExceptionCount;
+
+void DUMP_INT_REGISTERS(PCONTEXT context) {
 	DEBUG("\tEdi 0x%08X  Esi 0x%08X  Ebx 0x%08X  Edx 0x%08X  Ecx 0x%08X  Eax 0x%08X", context->Edi, context->Esi, context->Ebx, context->Edx, context->Ecx, context->Eax);
 }
 
-const void DUMP_STK_REGISTERS(PCONTEXT context) {
+void DUMP_STK_REGISTERS(PCONTEXT context) {
 	DEBUG("\tEbp 0x%08X Eip 0x%08X Esp 0x%08X", context->Ebp, context->Eip, context->Esp);
 }
 
-const void DUMP_REGISTERS(PCONTEXT context) {
+void DUMP_REGISTERS(PCONTEXT context) {
 	DEBUG("~~~ General (INTEGER) Registers ~~~");
 	DUMP_INT_REGISTERS(context);
 	DEBUG("~~~ Stack Registers ~~~");
@@ -34,7 +35,28 @@ const void DUMP_REGISTERS(PCONTEXT context) {
 	DEBUG("\n");
 }
 
-const char *seDescription(const DWORD &code) {
+
+char* PrintImageDetails() {
+	static char imgDta[120];
+	const char* fmt = "\n\tDLL startAddress = [0x%x]"
+					  "\n\tDLL ImageSizeKB: [%d]";
+
+	sprintf(imgDta, fmt, NtHeader.baseImageLocation, NtHeader.imageSizeKB);
+
+	return imgDta;
+}
+
+void InitializeDllImageContext(PVOID imageBase) {
+	NtHeader.baseImageLocation = (unsigned long)imageBase;
+	NtHeader.pNtHeader = ImageNtHeader(imageBase);
+	NtHeader.imageSize = NtHeader.pNtHeader->OptionalHeader.SizeOfImage;
+	NtHeader.imageSizeKB = NtHeader.imageSize / 1024;
+
+	NtHeader.initialized = true;
+}
+
+
+const char *GetExceptionString(const DWORD &code) {
 	switch (code) {
 		case EXCEPTION_ACCESS_VIOLATION:
 			return "EXCEPTION_ACCESS_VIOLATION";
@@ -89,35 +111,44 @@ const char *seDescription(const DWORD &code) {
  * @param callback	- function to call upon resolution of the pageGuard. struct _EXCEPTION_POINTERS *ExceptionInfo is expected for sole argument.
  * @param setExecuteBit - Whether to use PAGE_EXECUTE_READWRITE, or PAGE_READWRITE.
  */
-const void SetPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, bool setExecuteBit = true) {
+void SetPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, bool setExecuteBit = true) {
 	DEBUG("PageGuard should be getting set now. Not implemented yet tho.");
 }
 
-
-
-
+/**
+ * This method is intended to capture basic information about exceptions and attempts to
+ * give basic information about the exception, including known method and typenames.
+ * @param ExceptionInfo
+ * @return Whether or not the application should continue running despite the exception
+ */
 LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo) {
-	ExceptionCount++;
-	//Yes, this is bad practice.
-	Sleep(ExceptionCount * 4);
+	++ExceptionCount;
+	//Yes, this is bad practice, but this helps keep from spamming too much.
+	Sleep(ExceptionCount * 3);
 
-	auto eirecord = ExceptionInfo->ExceptionRecord;
-	auto eCode = eirecord->ExceptionCode;
+	if (!NtHeader.initialized) {
+		DEBUG("\n\tNtHeader is not initialized with a received Exception\n");
+	}
 
-	DEBUG("Exception received.");
+	auto eiRecord = ExceptionInfo->ExceptionRecord;
+	auto eCode = eiRecord->ExceptionCode;
 
-	DEBUG("Error Code: 0x%X - %s @ 0x%X (%s)", eCode, seDescription(eCode), eirecord->ExceptionAddress, CurrentEngine.getMemoryRegionDescriptor((uintptr_t)eirecord->ExceptionAddress));
+	DEBUG("\tException received.\n");
 
-	auto info = eirecord->ExceptionRecord;
-	if (info != 0x0) {
-		DEBUG("Got a nested Exception! Err Code: 0x%X\n", info->ExceptionCode);
+	auto exceptionAddress = eiRecord->ExceptionAddress;
+	auto regionDescriptor = CurrentEngine.getMemoryRegionDescriptor((void *)exceptionAddress);
+	DEBUG("\tErr Code: 0x%X - %s @ 0x%X (%s)\n", eCode, GetExceptionString(eCode), exceptionAddress, regionDescriptor);
+
+	auto nestedExc = eiRecord->ExceptionRecord;
+	if (nestedExc != nullptr) {
+		DEBUG("Got a nested Exception! Err Code: 0x%X\n", nestedExc->ExceptionCode);
 	}
 
 	if (ExceptionCount < MAX_EXCEPTIONS_TO_LOG) {
 		DUMP_REGISTERS(ExceptionInfo->ContextRecord);
-		printf("Exception handled! ");
-	} else if (ExceptionCount > MAX_EXCEPTIONS_TO_LOG) {
-		printf("Above the exception count max, will fail now :)");
+		DEBUG("\tException handled!\n");
+	} else if (ExceptionCount >= MAX_EXCEPTIONS_TO_LOG) {
+		DEBUG("\tAbove the exception count max, failing now :)\n");
 		return FAIL_FAST_GENERATE_EXCEPTION_ADDRESS;
 	}
 

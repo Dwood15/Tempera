@@ -34,12 +34,12 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 	PrintLn("HandleActionOverride");
 
 	if (*CurrentEngine.main_globals_game_connection_type == 2) {
-		PrintLn("game connection type");
+		PrintLn("game connection type -- non local !?");
 
 		if ((from->control_flags.control_flags_a >> 8) & 0b00101000) {
-			to->unit.pad11_networkpcOnly = 1;
+			to->unit.pad11_networkpcOnly = true;
 		} else {
-			to->unit.pad11_networkpcOnly = 0;
+			to->unit.pad11_networkpcOnly = false;
 		}
 	}
 

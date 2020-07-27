@@ -1,5 +1,6 @@
+#ifndef HCE110_FUNC_MAP
 
-constexpr const defined_functionrange hce110_function_map[] = {
+static constexpr defined_functionrange hce110_function_map[] = {
 	{"magnitude_squared3d",                                                      0x401000, 0x40101F},
 	{"distance_squared3d",                                                       0x401020, 0x40104F},
 	{"real_seed_random_range_extended",                                          0x401050, 0x40108F},
@@ -2506,3 +2507,5 @@ constexpr const defined_functionrange hce110_function_map[] = {
 
 	{"setsockopt",                                                               0x582BA8, 0x582BAD}
 };
+#define HCE110_FUNC_MAP
+#endif

@@ -26,6 +26,14 @@ struct s_unit_control_data;
 constexpr const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
 
 namespace feature_management::engines {
+
+
+
+
+
+
+
+
 	class GlobalEngine {
 		bool core_initialized = false;
 
@@ -69,7 +77,7 @@ namespace feature_management::engines {
 		uintptr_t CONSOLE_TEXT_HOOK_ADDRESS; //CE + 1
 
 	public:
-		ushort                        *main_globals_game_connection_type;
+		ushort    *main_globals_game_connection_type;
 		_camera   *camera;
 		CMyCamera *MyCamera;
 		ObjectController *ObjectControl;
@@ -124,7 +132,7 @@ namespace feature_management::engines {
 		features              CurrentSupported = features::NOPE;
 		major                 CurrentMajor     = major::NO;
 		minor                 CurrentMinor     = minor::nope;
-		defined_functionrange *current_map;
+		defined_functionrange *current_map     = nullptr;
 		//Support Attempted
 		//::std::string GetCurrentFileName(char * args) {
 		::std::string GetCurrentFileName();
@@ -184,11 +192,6 @@ namespace feature_management::engines {
 
 		void RefreshCore(bool force = false);
 
-		auto GetHsFunctionTableCountReferences16();
-		auto GetHsFunctionTableCountReferences32();
-
-		void InitializeMemoryUpgrades();
-
 		minor GetMinorVersion() {
 			return this->CurrentMinor;
 		}
@@ -218,7 +221,7 @@ namespace feature_management::engines {
 		 * @param addr Address to look up
 		 * @return named description of the memory region.
 		 */
-		const char *getMemoryRegionDescriptor(const uintptr_t addr);
+		const char *getMemoryRegionDescriptor(const void * addr);
 
 		short GetElapsedTime();
 	};
@@ -236,6 +239,5 @@ void game_tick(int current_frame_tick);
  * Called right before game loop starts, memory has already been initialized
  */
 void main_setup_connection_init();
-
 
 static CD3D cd3d;

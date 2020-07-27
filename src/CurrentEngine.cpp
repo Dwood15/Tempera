@@ -3,8 +3,10 @@
 #include "CurrentEngine.h"
 #include "lua/script_manager.h"
 #include "ce/1_10/110EngineManager.h"
+#include "exceptions/exception_handler.h"
 #include <hek/sapien/sapienEngineManager.h>
 #include <addlog.h>
+#include <DbgHelp.h>
 
 using namespace feature_management;
 using namespace feature_management::engines;
@@ -96,14 +98,14 @@ bool GlobalEngine::IsCoreInitialized() {
 	return core_initialized;
 }
 
-void GlobalEngine::InitializeMemoryUpgrades() {
-	if (this->HasSupport() && !this->IsHek()) {
-		if (this->IsCustomEd() && this->CurrentMinor == feature_management::engines::minor::halo_1_10) {
-			//CE110::InitializeMemoryUpgrades();
-		}
-
-	}
-}
+//void GlobalEngine::InitializeMemoryUpgrades() {
+//	if (this->HasSupport() && !this->IsHek()) {
+//		if (this->IsCustomEd() && this->CurrentMinor == feature_management::engines::minor::halo_1_10) {
+//			//CE110::InitializeMemoryUpgrades();
+//		}
+//
+//	}
+//}
 
 features GlobalEngine::GetSupported() {
 	switch (this->CurrentMajor) {
@@ -210,18 +212,9 @@ void GlobalEngine::WriteHooks() {
 }
 
 GlobalEngine::GlobalEngine() {
-	//Get the current path.
-	auto currentPath = ::std::experimental::filesystem::current_path();
-	//TODO: Something like: "GetGameRegistryPath"
-
-	// static wchar_t currentPath[MAX_PATH];
-
-	// GetModuleFileNameA(hmodule, currentPath, 512);
-	//Check that the path is valid.
-
-	// if (::std::experimental::filesystem::current_path(). //::filename(currentPath)) {
-	printf("Current Path: %ls\n", currentPath.c_str());
-	// }
+	if (this->current_map != nullptr) {
+		PrintLn("Setting up GlobalEngine despite already having current map");
+	}
 
 	auto filename = GetCurrentFileName();
 
@@ -229,15 +222,12 @@ GlobalEngine::GlobalEngine() {
 
 	auto fName = ::std::string(filename.c_str());
 
-	auto found = fName.find("sapien.exe");
-
 	if (fName == "sapien.exe") {
 		printf("Detected sapien!\n");
 		this->CurrentMajor   = major::HEK;
 		this->CurrentMinor   = minor::sapien;
 		this->DEBUG_FILENAME = const_cast<char *>(Sapien::DEBUG_FILENAME);
 		this->current_map    = const_cast<defined_functionrange *>(Sapien::GetFunctionMap());
-
 	}
 
 	if (fName == "haloce.exe") {
@@ -251,18 +241,6 @@ GlobalEngine::GlobalEngine() {
 	if (this->HasSupport()) {
 		CurrentSupported = this->GetSupported();
 	}
-}
-
-auto GlobalEngine::GetHsFunctionTableCountReferences16() {
-	return nullptr;
-}
-
-auto GlobalEngine::GetHsFunctionTableCountReferences32() {
-	return nullptr;
-}
-
-void **GlobalEngine::GetHsFunctionTableReferences() {
-	return nullptr;
 }
 
 size_t GlobalEngine::GetNumberOfFunctionTableReferences() {
@@ -459,15 +437,24 @@ std::optional<uintptr_t> GlobalEngine::getFunctionBegin(const char *needle) {
 	return (uintptr_t) -1;
 }
 
-const char *GlobalEngine::getMemoryRegionDescriptor(const uintptr_t addr) {
+const char *GlobalEngine::getMemoryRegionDescriptor(const void * addr) {
 
-	PrintLn("searching for address: 0x%X", addr);
+	PrintLn("\tSearching for address: [0x%X]", addr);
 
-	if (addr < 0x200000) {
+	unsigned int endImgRng = NtHeader.baseImageLocation + NtHeader.imageSize;
+
+	if ((uintptr_t)addr >= NtHeader.baseImageLocation && (uintptr_t)addr <= (uintptr_t)endImgRng) {
+		PrintLn("\tException Location inside of tempera dinput dll, probably.");
+		return "probably_in_tempera_dll_space";
+	}
+
+	if ((uintptr_t)addr < 0x200000) {
+		PrintLn("\tAddress on the stack");
 		return "probably_in_stack";
 	}
 
-	if (addr < 0x400000) {
+	if ((uintptr_t)addr < 0x400000) {
+		PrintLn("\tAn unmapped region");
 		return "unmapped_region";
 	}
 
@@ -475,16 +462,32 @@ const char *GlobalEngine::getMemoryRegionDescriptor(const uintptr_t addr) {
 
 	dfr *funcList = current_map;
 
+	int i = 0;
+
 	for (dfr *item = funcList; item; item++) {
-		if (item->contains(addr)) {
+		++i;
+
+		if (item->end < (uintptr_t)addr)
+			continue;
+
+		bool contains = item->contains((uintptr_t)addr);
+		//The function map should be pre-sorted, so this SHOULD mean that we can
+		// break out of the loop.
+		if (item->begin <= (uintptr_t)addr) {
+			if (!contains) {
+				PrintLn("\tContains disagrees with the manual calculation");
+			}
+
 			return item->funcName;
 		}
 	}
 
-	if (addr < 0x5E9020) {
+	if ((uintptr_t)addr < 0x5E9020) {
+		PrintLn("\tUnmapped function space, probably");
 		return "function_space_unmapped";
 	}
 
+	PrintLn("\tUnmappedRegion");
 	return "unmapped_region";
 }
 
@@ -495,10 +498,23 @@ const char *GlobalEngine::getMemoryRegionDescriptor(const uintptr_t addr) {
 #define CALL_LUA_BY_EVENT(event) state->call_lua_event_by_type(LuaCallbackId::PRINTED(event))
 
 void main_setup_connection_init() {
-	static ::std::optional<uintptr_t> got = FUNC_GET(main_setup_connection);
+	//If alreadyChecked is true, we shouldn't have to update 'funcFound' ever again.
+	static bool alreadyChecked = false;
+	static ::std::optional<uintptr_t> funcFound = FUNC_GET(main_setup_connection);
 
-	if (got) {
-		calls::DoCall<Convention::m_cdecl>(*got);
+	 PrintLn("main_setup_connection_init hook called");
+
+	if (!alreadyChecked) {
+		PrintLn("Getting main setup connection");
+
+		if (funcFound)
+			PrintLn("Main setup connection found");
+
+		alreadyChecked = true;
+	}
+
+	if (funcFound) {
+		calls::DoCall<Convention::m_cdecl>(*funcFound);
 	}
 
 	static LuaScriptManager *state = 0;
@@ -522,11 +538,11 @@ void game_tick(int current_frame_tick) {
 	state->call_lua_event_by_type(LuaCallbackId::before_game_tick);
 
 	state->lua_on_tick(current_frame_tick, CurrentEngine.GetElapsedTime());
-	static ::std::optional<uintptr_t> got = FUNC_GET(game_tick);
+	static ::std::optional<uintptr_t> funcFound = FUNC_GET(game_tick);
 
-	if (got) {
+	if (funcFound) {
 		// PrintLn("Game_tick call");
-		calls::DoCall<Convention::m_cdecl, void, int>(*got, current_frame_tick);
+		calls::DoCall<Convention::m_cdecl, void, int>(*funcFound, current_frame_tick);
 		// PrintLn("Post-Game_tick call");
 	}
 

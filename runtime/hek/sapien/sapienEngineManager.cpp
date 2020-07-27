@@ -17,8 +17,8 @@ void naked Sapien::OnPlayerActionUpdate() {
 #endif
 }
 
-const defined_functionrange *Sapien::GetFunctionMap() {
 #include "function_map.txt"
+const defined_functionrange *Sapien::GetFunctionMap() {
 	return sapien_function_map;
 }
 

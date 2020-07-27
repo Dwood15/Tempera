@@ -145,8 +145,7 @@ void naked CE110::OnPlayerActionUpdate() {
 }
 
 void naked CE110::OnUnitControlUpdate(int client_update_idx) {
-	PrintLn("\nOn UnitControl Update");
-
+	//PrintLn("\nOn UnitControl Update");
 	static bool printOnce = false;
 
 	//cannot update a unit's control if core's not initialized.
@@ -294,8 +293,9 @@ void CE110::WriteHooks() {
 }
 
 #include "function_map.txt"
-
+//Basic correctness validation/checks
+static_assert(hce110_function_map[0].contains(hce110_function_map[0].begin), "Should be able to find itself");
+static_assert(!hce110_function_map[0].contains(0x0), "Should not find 0x0");
 const defined_functionrange *CE110::GetFunctionMap() {
 	return hce110_function_map;
-	//return nullptr;
 }
