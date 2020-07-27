@@ -1,12 +1,12 @@
 /*
 	Project: tempera
 	File: forge.cpp
- 	Copyright 	 2018 Dwood
+ 	Copyright 	 2020 Dwood / Zoru
 
-	This file is part of tempera.
+	This file is part of Tempera.
 
    You should have received a copy of the GNU General Public License
-   along with tempera.  If not, see <http://www.gnu.org/licenses/>.
+   along with Tempera.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "exception_handler.h"
 #include "../CurrentEngine.h"
@@ -17,22 +17,20 @@
 //Not sure we need to guarantee we're in MSVC any more
 #if defined(_MSC_VER)
 
-static std::atomic<DWORD> ExceptionCount;
-
 void DUMP_INT_REGISTERS(PCONTEXT context) {
-	DEBUG("\tEdi 0x%08X  Esi 0x%08X  Ebx 0x%08X  Edx 0x%08X  Ecx 0x%08X  Eax 0x%08X", context->Edi, context->Esi, context->Ebx, context->Edx, context->Ecx, context->Eax);
+	DEBUG("\tEdi [0x%08X]  Esi [0x%08X]  Ebx [0x%08X]  Edx [0x%08X]  Ecx [0x%08X]  [Eax 0x%08X]", context->Edi, context->Esi, context->Ebx, context->Edx, context->Ecx, context->Eax);
 }
 
 void DUMP_STK_REGISTERS(PCONTEXT context) {
-	DEBUG("\tEbp 0x%08X Eip 0x%08X Esp 0x%08X", context->Ebp, context->Eip, context->Esp);
+	DEBUG("\tEbp [0x%08X] Eip [0x%08X] Esp [0x%08X]", context->Ebp, context->Eip, context->Esp);
 }
 
 void DUMP_REGISTERS(PCONTEXT context) {
-	DEBUG("~~~ General (INTEGER) Registers ~~~");
+	DEBUG("\t~~~ General (INTEGER) Registers ~~~");
 	DUMP_INT_REGISTERS(context);
-	DEBUG("~~~ Stack Registers ~~~");
+	DEBUG("\t~~~ Stack Registers ~~~");
 	DUMP_STK_REGISTERS(context);
-	DEBUG("\n");
+	DEBUG("\t~~~~~~~~~~~");
 }
 
 
@@ -122,9 +120,14 @@ void SetPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, bool se
  * @return Whether or not the application should continue running despite the exception
  */
 LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo) {
+	static std::atomic<DWORD> ExceptionCount;
+
+	if (ExceptionCount >= MAX_EXCEPTIONS_TO_LOG) {
+		DEBUG("\tAbove the exception count max, failing now :)\n");
+		return FAIL_FAST_GENERATE_EXCEPTION_ADDRESS;
+	}
+
 	++ExceptionCount;
-	//Yes, this is bad practice, but this helps keep from spamming too much.
-	Sleep(ExceptionCount * 3);
 
 	if (!NtHeader.initialized) {
 		DEBUG("\n\tNtHeader is not initialized with a received Exception\n");
@@ -146,10 +149,7 @@ LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo
 
 	if (ExceptionCount < MAX_EXCEPTIONS_TO_LOG) {
 		DUMP_REGISTERS(ExceptionInfo->ContextRecord);
-		DEBUG("\tException handled!\n");
-	} else if (ExceptionCount >= MAX_EXCEPTIONS_TO_LOG) {
-		DEBUG("\tAbove the exception count max, failing now :)\n");
-		return FAIL_FAST_GENERATE_EXCEPTION_ADDRESS;
+		DEBUG("\tException handled!");
 	}
 
 	return EXCEPTION_CONTINUE_EXECUTION;
