@@ -36,8 +36,8 @@ void DUMP_REGISTERS(PCONTEXT context) {
 
 char* PrintImageDetails() {
 	static char imgDta[120];
-	const char* fmt = "\n\tDLL startAddress = [0x%x]"
-					  "\n\tDLL ImageSizeKB: [%d]";
+	const char* fmt = "\n\tDLL startAddress = [0x%x] |"
+					  " DLL ImageSizeKB: [%d]";
 
 	sprintf(imgDta, fmt, NtHeader.baseImageLocation, NtHeader.imageSizeKB);
 
