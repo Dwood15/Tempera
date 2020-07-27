@@ -45,6 +45,7 @@ set(_lua_additional_paths
 	~/Library/Frameworks
 	./include
 	./libs
+	${CMAKE_CURRENT_SOURCE_DIR}/libs
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 	${CMAKE_CURRENT_SOURCE_DIR}/include/lua
 	lib

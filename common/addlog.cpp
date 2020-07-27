@@ -8,9 +8,8 @@
     along with haloforge.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <iostream>
-#include <fstream>
 #include <ctime>
-#include <experimental/filesystem>
+#include <filesystem>
 
 #include "addlog.h"
 
@@ -103,7 +102,7 @@ void InitAddLog(HMODULE hModule, const char * filename) {
 	}
 
 	//why in hell is filesystem still experimental??? blech
-	auto myPath =::std::experimental::filesystem::current_path() /= filename;
+	auto myPath =::std::filesystem::current_path() /= filename;
 
 	ofile.open(myPath.filename().string(),::std::ios_base::app);
 

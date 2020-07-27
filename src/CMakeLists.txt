@@ -1,6 +1,6 @@
 set(D3D
-	src/Direct3D/d3d9hook.h
-	src/Direct3D/textures.h
+	${CMAKE_CURRENT_SOURCE_DIR}/Direct3D/d3d9hook.h
+	${CMAKE_CURRENT_SOURCE_DIR}/Direct3D/textures.h
 	)
 
 set(DINPUT_H
@@ -29,7 +29,7 @@ add_subdirectory(scenario)
 add_subdirectory(tags)
 
 set(SRC_CXX
-	src/Direct3D/d3d9hook.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Direct3D/d3d9hook.cpp
 	${CSERIES_CXX}
 	${AI_CXX}
 	${DINPUT_CXX}

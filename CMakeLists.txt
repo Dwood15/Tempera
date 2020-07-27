@@ -118,45 +118,46 @@ file(GLOB LUA_GLOB libs/lua53.lib)
 add_subdirectory(src)
 
 set(COMMON_H
-        common/addlog.h
-        common/engine_interface.h
-        common/macros_generic.h
-        common/struct_helper.h
-        common/enums/control_enums.h
-        common/enums/damage.h
-        common/enums/effects_enums.h
-        common/enums/generic_enums.h
-        common/enums/hs_enums.h
-        common/enums/objects_enums.h
-        common/enums/ai_enums.h
-        common/enums/scenario_enums.h
-        common/enums/geometry_enums.h
-        common/enums/yelo_enums.h
-        common/enums/memory_enums.h
-        common/enums/unit_enums.h
-        common/enums/model_enums.h
-        common/enums/player_enums.h
-        common/enums/weapon_enums.h
-        common/enums/network_enums.h
-        common/enums/postprocessing.h
-        common/enums/bitmaps.h
-        common/enums/shaders.h
-        common/enums/materials.h
-        common/enums/animations.h
-        common/enums/damage.h
-        common/enums/math.h
-        common/enums/vehicle.h
-        common/enums/render.h
-        common/enums/engine.h
-        common/enums/game_variants.h
-        src/render/rasterizer/dx9/dx9_render_targets.h
-        src/game/game_engine.h
-        src/game/networking/client_manager_structures.h
-        src/game/networking/game_globals.h
-        src/gamestate/game_engine.cpp
-        src/gamestate/game_engine.h
-        src/gamestate/game_types.h
-        src/gamestate/objects/vehicle_remapper.h common/engine_interface.cpp)
+	${CMAKE_CURRENT_SOURCE_DIR}/common/addlog.h
+	${CMAKE_CURRENT_SOURCE_DIR}/common/engine_interface.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/macros_generic.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/struct_helper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/control_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/damage.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/effects_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/generic_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/hs_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/objects_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/ai_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/scenario_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/geometry_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/yelo_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/memory_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/unit_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/model_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/player_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/weapon_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/network_enums.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/postprocessing.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/bitmaps.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/shaders.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/materials.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/animations.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/damage.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/math.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/vehicle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/render.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/engine.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/game_variants.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/render/rasterizer/dx9/dx9_render_targets.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/game/game_engine.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/game/networking/client_manager_structures.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/game/networking/game_globals.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/game_engine.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/game_engine.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/game_types.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects/vehicle_remapper.h
+	${CMAKE_CURRENT_SOURCE_DIR}/common/engine_interface.cpp)
 
 add_custom_target(HeadersTarget SOURCES ${SRC_H})
 
@@ -167,10 +168,10 @@ add_library(dinput8 SHARED
         ${RUNTIME_H}
         ${RUNTIME_CXX}
         ${SRC_CXX}
-        src/gamestate/objects/yelo_objects.h
-        main.cpp
-        common/addlog.cpp
-        src/memory/data.cpp)
+			${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects/yelo_objects.h
+			${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+    	${CMAKE_CURRENT_SOURCE_DIR}/common/addlog.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/memory/data.cpp)
 
 #The compiler is defaulting to the Windows 10 SDK, which requires external DLL's (xinput1_4.dll is not found error)
 #I manually force it to use my directx sdk xinput.
