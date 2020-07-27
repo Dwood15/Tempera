@@ -77,6 +77,9 @@ struct _core_0 {
 	data_header<player>    *Players;
 };
 
+constexpr uint core0_size = 0x815924-0x815900;
+static_assert(sizeof(_core_0) == core0_size);
+
 struct _core_2 {
 	Yelo::data_header<void> *Unknown;
 	Yelo::data_header<void> *Lights;

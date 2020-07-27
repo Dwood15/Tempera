@@ -46,6 +46,6 @@ namespace Yelo::TagGroups {
 
 namespace Yelo::blam {
 	static void data_iterator_new(Memory::s_data_iterator &iterator, Yelo::Memory::s_data_array *data);
-
+	void data_iterator_next_wrapper();
 	static void *data_iterator_next(Yelo::Memory::s_data_iterator &iterator);
 };

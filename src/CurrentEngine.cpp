@@ -1,5 +1,3 @@
-#include <filesystem>
-
 #include "CurrentEngine.h"
 #include "lua/script_manager.h"
 #include "ce/1_10/110EngineManager.h"
@@ -817,7 +815,7 @@ namespace feature_management::engines {
 		va_list mvalist;
 		char    cBuffer[256] = {0};
 
-		Print("Atttempting to print to Console!");
+		PrintLn("Attempting to print to Console!");
 		DWORD dwOldProtect = 0;
 		BYTE  bOrig[6]     = {0x83, 0xEC, 0x10, 0x57, 0x8B, 0xF8};
 
