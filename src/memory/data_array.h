@@ -40,7 +40,7 @@ namespace Yelo::Memory {
 			short invalid_count  = 0;
 
 			for (int x = 0, max_count = max_datum; x < max_count; x++, datum_address += datum_size)
-				if (reinterpret_cast<const s_datum_base *>(datum_address)->IsNull())
+				if (reinterpret_cast<const Yelo::Memory::s_datum_base *>(datum_address)->IsNull())
 					invalid_count++;
 
 			return invalid_count;

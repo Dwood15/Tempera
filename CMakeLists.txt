@@ -2,7 +2,7 @@
 #Copyright � 2020 dwood
 # - GNU GPLv3
 
-cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 message(STATUS "cmake version ${CMAKE_VERSION}")
 
 #Apparently having this set to 20 causes CMAKE to set std:c++17
@@ -23,6 +23,11 @@ set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
 set(LUA_Debug true)
 
 set(PROJECT_NAME tempera)
+
+#Latest version of CMAKE... is a bitch.
+#https://cmake.org/cmake/help/v3.15/policy/CMP0091.html#policy:CMP0091
+#Have to do this in order to statically link the MT dll below
+cmake_policy(SET CMP0091 NEW)
 
 project(${PROJECT_NAME} C CXX)
 
@@ -87,25 +92,38 @@ if (MSVC)
     set(COMPILER_REL_FLDR msvc)
     #	set(CMAKE_C_FLAGS '')
 
-    set(COMPILER_MACROS "/D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /DDIRECTINPUT_VERSION=0x800 /D_CRT_SECURE_NO_WARNINGS")
+    set(COMPILER_MACROS "/D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /DDIRECTINPUT_VERSION=0x800\ /D_CRT_SECURE_NO_WARNINGS")
 
     #/Zc flag tells C++ what version of cpp we're using/targeting.
     #/Qpar-report:2 - Tells us about the compiler's optimizations of our for loops.
     #/std:c++latest implies C++ 20. /Qpar-report:2 /Zp2\
-    set(NEW_FEATURES "/std:c++latest\ /wo4068\ /permissive-")
+    set(NEW_FEATURES "/std:c++latest\ /wo4068")
 
-    set(CMAKE_CXX_FLAGS_DEBUG "/TP\ /MP\ /MTd\ /Gy- /W3\ /Od\ /Zi\ /MP /EHsc\ ${NEW_FEATURES} /fp:fast\ /arch:SSE2 ${COMPILER_MACROS}")
+	#Apparently MTd is going out of fashion?
+    set(CMAKE_CXX_FLAGS_DEBUG "/TP\ /MP\ /MTd\ /Gy- /W3\ /Od\ /Zi\ /MP\ /EHsc\ ${NEW_FEATURES}\ /fp:fast\ /arch:SSE2\ ${COMPILER_MACROS}")
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
 
-    message(WARNING "CMAKE CXX FLAGS: ${CMAKE_CXX_FLAGS}")
+
+#	CMAKE_CXX_FLAGS
+#	CMAKE_CXX_FLAGS_DEBUG
+#	CMAKE_CXX_FLAGS_RELEASE
+#
+#	CMAKE_C_FLAGS_DEBUG
+#	CMAKE_C_FLAGS_RELEASE
+
 
     # 4070 : Silences `OUT directive differs from filename ignoring directive` (warning)
     #		4099 :
     #LIBCMT conflicts with another lib we're already using, so we have to NODEFAULTLIB it.
-    set(BASE_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /NODEFAULTLIB:LIBCMT\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ignore:4099\ /ignore:4070")
+	# /NODEFAULTLIB:LIBCMT\
+    set(BASE_FLAGS "/MANIFEST\ /NXCOMPAT\ /DEBUG\ /MACHINE:X86\ /SAFESEH:NO\ /INCREMENTAL:NO\ /SUBSYSTEM:WINDOWS\ /MANIFESTUAC:NO\ /OPT:NOICF\ /NOLOGO\ /ignore:4099\ /ignore:4070")
+	message(WARNING "LINKER FLAGS: ${BASE_FLAGS}")
 
     set(LINKER_FLAGS "${BASE_FLAGS} /ASSEMBLYDEBUG\ /debug:fastlink\ /DEF:\"${CMAKE_CURRENT_SOURCE_DIR}/Tempera.def\"")
-    #rip alignment on win32
+
+	message(WARNING "LINKER FLAGS: ${LINKER_FLAGS}")
+
+	#rip alignment on win32
     set(CMAKE_SHARED_LINKER_FLAGS ${LINKER_FLAGS})
 else ()
     message(STATUS "Unrecognized compiler/suite: ${CMAKE_CXX_COMPILER_ID}")
@@ -168,21 +186,23 @@ add_library(dinput8 SHARED
         ${RUNTIME_H}
         ${RUNTIME_CXX}
         ${SRC_CXX}
-			${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects/yelo_objects.h
-			${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+#        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects/yelo_objects.h
+		${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     	${CMAKE_CURRENT_SOURCE_DIR}/common/addlog.cpp
-			${CMAKE_CURRENT_SOURCE_DIR}/src/memory/data.cpp)
+		${CMAKE_CURRENT_SOURCE_DIR}/src/memory/data.cpp)
 
 #The compiler is defaulting to the Windows 10 SDK, which requires external DLL's (xinput1_4.dll is not found error)
 #I manually force it to use my directx sdk xinput.
 #TODO: Use DX_LIBS or whatever the variable is, to specify the 2010 dx XInput.lib explicitly.
 set(XINPUTLIB "C:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
+
 #D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
 #Version.Lib is required for looking up current EXE's runtime information.
 
 #message(WARNING "Target name: ${TARGET_NAME}")
 
 target_link_libraries(dinput8 ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib Dbghelp.lib ${DETOURS_GLOB})
+set_property(TARGET dinput8 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 #Take tempera.init.lua script and export it with the build files
 add_custom_target(copy-files ALL
@@ -193,11 +213,12 @@ add_custom_target(copy-files ALL
 #without this, cmake doesn't know to export it on file changes.
 add_dependencies(dinput8 copy-files)
 
-set(ADDITIONAL_CLEAN_FILES  "${HaloCE_ROOT_DIR}/dinput8.dll "${HaloCE_ROOT_DIR}/dinput8.ilk""  ${ADDITIONAL_CLEAN_FILES})
+#Files we don't actually give a shit about are getting exported to the build directory.
+#This will (at least) clean them out.
+set(ADDITIONAL_CLEAN_FILES  "${HaloCE_ROOT_DIR}/dinput8.dll ${HaloCE_ROOT_DIR}/dinput8.ilk " ${ADDITIONAL_CLEAN_FILES})
 
 set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")
 
 set_target_properties(dinput8 PROPERTIES OUTPUT_NAME "dinput8")
 #target_compile_features(dinput8 PRIVATE cxx_std_17)
-

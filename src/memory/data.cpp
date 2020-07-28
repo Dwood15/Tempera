@@ -5,6 +5,7 @@
 #include <cstring>
 #include <exception>
 #include <addlog.h>
+#include "data_base.h"
 #include "data_array.h"
 #include "data_iterator.h"
 namespace Yelo::blam {
@@ -116,33 +117,37 @@ namespace Yelo::blam {
 		return result;
 	}
 
-	static void *data_iterator_next(s_data_iterator &iterator) {
-		if (iterator.signature != (reinterpret_cast<uintptr_t>(iterator.data) ^ Enums::k_data_iterator_signature)) {
+	static s_data_iterator  *data_iterator_next(s_data_iterator *iterator) {
+		if (iterator->signature != (reinterpret_cast<uintptr_t>(iterator->data) ^ Enums::k_data_iterator_signature)) {
 			throw ::std::exception("uninitialized iterator passed");//::std::string(__FUNCTION__) );
 		}
 
-		const s_data_array *data = iterator.data;
+		auto data = iterator->data;
 		if (!data->is_valid) {
 			//std::str(data->name)
 			throw ::std::exception("tried to iterate when it was in an invalid state");
 		}
 
-		datum_index::index_t absolute_index = iterator.next_index;
+		datum_index::index_t absolute_index = iterator->next_index;
 		long                 datum_size     = data->datum_size;
 		byte                 *pointer       = reinterpret_cast<byte *>(data->base_address) + (datum_size * absolute_index);
 
-		for (short last_datum  = data->last_datum; absolute_index < last_datum; pointer += datum_size, absolute_index++) {
-			auto datum = reinterpret_cast<const s_datum_base *>(pointer);
+
+		short last_datum = data->last_datum;
+		//kinda hoping this replicates the OG logic
+		if (absolute_index < last_datum) {
+			auto datum = reinterpret_cast<const Yelo::Memory::s_datum_base *>(pointer);
 
 			if (!datum->IsNull()) {
-				iterator.next_index = absolute_index + (short)1;
-				iterator.index      = datum_index::Create(absolute_index, datum->GetHeader());
-				return pointer;
+				++iterator->next_index;
+				iterator->index      = datum_index::Create(iterator->next_index, datum->GetHeader());
+				return (s_data_iterator *)pointer;
 			}
 		}
-		iterator.next_index    = absolute_index; // will equal last_datum at this point
-		iterator.finished_flag = true;
-		iterator.index         = datum_index::null();
+
+		iterator->next_index    = absolute_index; // will equal last_datum at this point
+		iterator->finished_flag = true;
+		iterator->index         = datum_index::null();
 		return nullptr;
 	}
 
@@ -294,7 +299,6 @@ namespace Yelo::blam {
 
 void naked Yelo::blam::data_iterator_next_wrapper() {
 	s_data_iterator *iter;
-	void * retIter;
 
 	__asm {
 	mov iter, edi
@@ -303,10 +307,9 @@ void naked Yelo::blam::data_iterator_next_wrapper() {
 	push esi
 	}
 
-	retIter = data_iterator_next(*iter);
-	iter = (s_data_iterator*)retIter;
+	iter = data_iterator_next(iter);
 
-	if (retIter == nullptr || retIter == (s_data_iterator *)-1) {
+	if (iter == nullptr || iter == (s_data_iterator *)-1) {
 		PrintLn("Iteration attempt failed.");
 	}
 

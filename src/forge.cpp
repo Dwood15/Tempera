@@ -71,7 +71,6 @@ void ForgeState::PrintHelp() {
 	//*(short *) 0x624A9C = (short)MAX_PLAYER_COUNT_LOCAL;
 	cd3d.hkD3DHook(NULL);
 	// core->ConsoleText(hGreen, "Number players to spawn in next sp map: 3!");
-	CurrentEngine.ConsoleText(hGreen, "Tempera initialized.");
 	PrintHelp();
 
 	while (1) {

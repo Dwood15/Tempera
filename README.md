@@ -1,5 +1,15 @@
 # Tempera
 
+## Building Tempera
+  ### Step 1: Install Prerequisites 
+     
+  - DirectX June 2010 SDK - https://www.microsoft.com/en-us/download/details.aspx?id=6812
+  - MSVC Build tools - (Visual Studio not required) - https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16 
+    - Windows 10 SDK - (10.0.18362.0 or newer) 
+  - CMake, 
+
+
+
 ### A project seeking to:
 Tempera aims to:
   - Add Local Splitscreen Multiplayer to Halo Custom Edition for PC
@@ -26,7 +36,7 @@ This project may cause your game to crash, files to corrupt, or, if luck does no
 ### Building Tempera Requires:
   - lua53.lib - Used to compile directly onto 
   - detours.lib - Hooking directx functions. Looking to remove this dependency. (bundled in repository)
-  - DirectX June 2010 SDK - https://www.microsoft.com/en-us/download/details.aspx?id=6812
+
   - Windows 10 SDK v. (10.0.16299.0) (or newer)
   - C++ 17 compiler. Tempera is untested on mingw/gcc. VS 2018 build tools
   - Cmake - The Visual Studio solution and project system is a blight upon humanity the ide itself is okay.

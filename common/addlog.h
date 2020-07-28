@@ -27,7 +27,6 @@ void DBGPrnt(const char *fmt, va_list va_alist);
 void DEBUG(const char* fmt, ...);
 
 // void Print(bool toConsole, const char *fmt, ...);
-
 #ifdef __GNUC__
 template<bool toConsole = true>
 extern void Print(const char *fmt, ...);
@@ -73,8 +72,6 @@ static void PrintLn(const char *fmt, ...) {
 
 		va_end(va_alist);
 }
-
-
 #endif
 
 void InitAddLog(HMODULE hModule, const char * filename);
