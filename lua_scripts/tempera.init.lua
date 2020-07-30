@@ -99,17 +99,21 @@ end
 --]]
 --player_index
 
+function Dbg(msg)
+	DebugPrint(true, msg)
+end
+
 local firstPlayerUpdateCalled = false
 function PlayerUpdate(player_control_state, player_index)
 	if firstPlayerUpdateCalled == false then
-		DebugPrint(true, "First Player update, ever!")
+		Dbg("First Player update, ever!")
 	end
 
 	local currentGamePad = 0
 	--TODO: Player to Controller mapping...
 	while currentGamePad < 4 do
 		if firstPlayerUpdateCalled == false then
-			DebugPrint(true, string.format("--[%d] player update controller update", currentGamePad))
+			Dbg(string.format("--[%d] player update controller update", currentGamePad))
 		end
 		--[[
             the controller object:
@@ -126,7 +130,7 @@ function PlayerUpdate(player_control_state, player_index)
         --]]
 
 		if firstPlayerUpdateCalled == false then
-			DebugPrint(true, "Retrieving ControllerState")
+			Dbg("Retrieving ControllerState")
 		end
 
 		--Controlleer is -1 if not found, and result is 0 if successful.
@@ -134,12 +138,12 @@ function PlayerUpdate(player_control_state, player_index)
 		controller, result = GetControllerState(currentGamePad)
 
 		if firstPlayerUpdateCalled == false then
-			DebugPrint(true, "ControllerState retrieved")
+			Dbg("ControllerState retrieved")
 		end
 
 		if controller ~= -1 and result == 0 then
 			if IsButtonPressed(controller.buttons, XINPUT_GAMEPAD_Y) then
-				DebugPrint(true, "Controller input pressed, jumping the player")
+				Dbg("Controller input pressed, jumping the player")
 				MakePlayerJump(player_index)
 			end
 
@@ -152,7 +156,7 @@ function PlayerUpdate(player_control_state, player_index)
 		end
 
 		if firstPlayerUpdateCalled == false then
-			DebugPrint(true, "ControllerState retrieved")
+			Dbg("ControllerState retrieved")
 		end
 
 		currentGamePad = currentGamePad + 1
@@ -169,52 +173,52 @@ local onTickNextPlayerIndexPrinted = false
 function OnTick(ticks_til_frame, time_since_map_started)
 	-- too much log spam
 	--if onTickNextPlayerIndexPrinted == false then
-	--	DebugPrint(true, "Checking if Core Initialized!")
+	--	Dbg("Checking if Core Initialized!")
 	--end
 
 	if IsCoreInitialized() == false then
 		return
 	elseif onTickNextPlayerIndexPrinted == false then
-		DebugPrint(true, "Core is initialized!\n")
+		Dbg("Core is initialized!\n")
 	end
 
 	if onTickNextPlayerIndexPrinted == false then
-		DebugPrint(true, "\nChecking if in main menu first time\n")
+		Dbg("\nChecking if in main menu first time\n")
 	end
 
 	--At some point, Is* functions will be a variable list passed into the .
 	--While only relevant in HCE, this value should still be valid as (false) in sapien.
 	if AreWeInMainMenu() == false then
-		DebugPrint(true, "Not in main menu!\n")
+		Dbg("Not in main menu!\n")
 	end
 
 	if onTickNextPlayerIndexPrinted == false then
-		DebugPrint(true, "Calling first NextPlayerIndex")
+		Dbg("Calling first NextPlayerIndex")
 	end
 
 	--The Current setup for NextPlayerIndex doesn't really work so great
 	NextPlayerIndex()
 
 	if onTickNextPlayerIndexPrinted == false then
-		DebugPrint(true, "NextPlayerIndex called\n")
+		Dbg("NextPlayerIndex called\n")
 	end
 
 	onTickNextPlayerIndexPrinted = true
 end
 
-DebugPrint(true, "\tOntick callback registered")
+Dbg("\tOntick callback registered")
 RegisterCallBack(5, "OnTick")
 
 if IsCustomEd() then
-	DebugPrint(true, "\tCustom Edition Detected in Lua!\n")
+	Dbg("\tCustom Edition Detected in Lua!\n")
 	--TODO: Change when GetMaxLocalPlayers() actually works.
 	MaxPlayers = 1
-	DebugPrint(true, "\tSet MaxPlayers to 1\n")
+	Dbg("\tSet MaxPlayers to 1\n")
 elseif IsHek() then
-	DebugPrint(true, "\tHEK Detected!")
+	Dbg("\tHEK Detected!")
 	--Lua support within it is 100% experimental.
 	if IsSapien() then
-		DebugPrint(true, " Sapien detected!\n")
+		Dbg(" Sapien detected!\n")
 		--Sapien will likely only ever have 1 MaxPlayer.
 		MaxPlayers = 1
 	end

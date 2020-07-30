@@ -390,7 +390,7 @@ namespace Yelo::Enums {
 	// How much more memory we're adding.
 	// +50%
 
-	static constexpr float K_MEMORY_UPGRADE_INCREASE_AMOUNT = 1.5f;
+	static constexpr int K_MEMORY_UPGRADE_INCREASE_MULTIPLIER = 2;
 	constexpr int          k_game_state_allocation_size     = 0x00440000;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -447,18 +447,18 @@ namespace Yelo::Enums {
 	constexpr uint k_maximum_hs_source_data_per_file = 0x40000;
 
 	// Our upgraded memory allocation size.
-	constexpr uint k_physical_memory_map_allocation_size_upgrade = static_cast<uint>(k_physical_memory_map_allocation_size * K_MEMORY_UPGRADE_INCREASE_AMOUNT);
+	constexpr uint k_physical_memory_map_allocation_size_upgrade = static_cast<uint>(k_physical_memory_map_allocation_size * K_MEMORY_UPGRADE_INCREASE_MULTIPLIER);
 
 	static_assert(k_physical_memory_map_allocation_size_upgrade >= k_physical_memory_map_allocation_size);
 
 	constexpr uint k_maximum_simultaneous_tag_instances         = 0x00001400; // 5120
-	constexpr uint k_maximum_simultaneous_tag_instances_upgrade = static_cast<uint>(Yelo::Enums::k_maximum_simultaneous_tag_instances * K_MEMORY_UPGRADE_INCREASE_AMOUNT);
+	constexpr uint k_maximum_simultaneous_tag_instances_upgrade = static_cast<uint>(Yelo::Enums::k_maximum_simultaneous_tag_instances * K_MEMORY_UPGRADE_INCREASE_MULTIPLIER);
 
 	// 0x40440000
 	constexpr uint k_tag_base_address = k_physical_memory_base_address + k_game_state_allocation_size;
 
 	constexpr uint k_tag_allocation_size         = 0x01700000;
-	constexpr uint k_tag_allocation_size_upgrade = static_cast<uint>(Enums::k_tag_allocation_size * K_MEMORY_UPGRADE_INCREASE_AMOUNT);
+	constexpr uint k_tag_allocation_size_upgrade = static_cast<uint>(Enums::k_tag_allocation_size * K_MEMORY_UPGRADE_INCREASE_MULTIPLIER);
 
 	// Highest Tag Memory Address
 	// 0x41B40000
@@ -485,24 +485,24 @@ namespace Yelo::Enums {
 	constexpr uint k_hs_functions_count        = 543; // the normal hs_function count in the engine under an editor build
 	constexpr uint k_hs_external_globals_count = 495; // the normal hs external globals count in the engine under an editor build
 
-	constexpr uint k_maximum_hs_syntax_nodes_per_scenario_upgrade = static_cast<uint>(k_maximum_hs_syntax_nodes_per_scenario * K_MEMORY_UPGRADE_INCREASE_AMOUNT);
-	constexpr uint k_maximum_hs_string_data_per_scenario_upgrade  = static_cast<uint>(k_maximum_hs_string_data_per_scenario * K_MEMORY_UPGRADE_INCREASE_AMOUNT);
+	constexpr uint k_maximum_hs_syntax_nodes_per_scenario_upgrade = static_cast<uint>(k_maximum_hs_syntax_nodes_per_scenario * K_MEMORY_UPGRADE_INCREASE_MULTIPLIER);
+	constexpr uint k_maximum_hs_string_data_per_scenario_upgrade  = static_cast<uint>(k_maximum_hs_string_data_per_scenario * K_MEMORY_UPGRADE_INCREASE_MULTIPLIER);
 
 	constexpr uint k_hs_script_functions_count_upgrade = 1024;
 	constexpr uint k_hs_external_globals_count_upgrade = 1024 - k_maximum_hs_globals_per_scenario;
 
 	//sizeof(Yelo::Memory::s_data_array) == 0x38
 
-	constexpr uint k_rasterizer_maximum_dynamic_triangles_upgrade = static_cast<uint>(k_rasterizer_maximum_dynamic_triangles * K_MEMORY_UPGRADE_INCREASE_AMOUNT);
+	constexpr uint k_rasterizer_maximum_dynamic_triangles_upgrade = static_cast<uint>(k_rasterizer_maximum_dynamic_triangles * K_MEMORY_UPGRADE_INCREASE_MULTIPLIER);
 
 
 	constexpr uint k_maximum_rendered_objects_upgrade   = k_maximum_rendered_objects + k_maximum_rendered_objects_upgrade_amount;
-	constexpr uint k_maximum_rendered_triangles_upgrade = static_cast<uint>(k_maximum_rendered_triangles * K_MEMORY_UPGRADE_INCREASE_AMOUNT);
+	constexpr uint k_maximum_rendered_triangles_upgrade = static_cast<uint>(k_maximum_rendered_triangles * K_MEMORY_UPGRADE_INCREASE_MULTIPLIER);
 
 	// Our upgraded max cache size.
-	constexpr uint k_max_cache_size_upgrade = static_cast<uint>(k_max_cache_size * K_MEMORY_UPGRADE_INCREASE_AMOUNT);
+	constexpr uint k_max_cache_size_upgrade = static_cast<uint>(k_max_cache_size * K_MEMORY_UPGRADE_INCREASE_MULTIPLIER);
 
-	constexpr uint k_max_cache_vertex_y_index_buffer_size_upgrade = static_cast<uint>(k_max_cache_vertex_y_index_buffer_size * K_MEMORY_UPGRADE_INCREASE_AMOUNT);
+	constexpr uint k_max_cache_vertex_y_index_buffer_size_upgrade = static_cast<uint>(k_max_cache_vertex_y_index_buffer_size * K_MEMORY_UPGRADE_INCREASE_MULTIPLIER);
 
 	constexpr uint k_total_scenario_hs_syntax_data         = 0x38 + (0x14 * k_maximum_hs_syntax_nodes_per_scenario);
 	constexpr uint k_total_scenario_hs_syntax_data_upgrade        = 0x38 + (0x14 * k_maximum_hs_syntax_nodes_per_scenario_upgrade);//sizeof(Scripting::hs_syntax_node)

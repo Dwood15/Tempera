@@ -114,7 +114,7 @@ constexpr uintptr_t regular_player_clamps[] = {
 };
 
 
-constexpr ::std::pair<uintptr_t, char> MPPARBs[]{
+constexpr ::std::pair<uintptr_t, unsigned char> MPPARBs[]{
 	{0x476200, sizeof(s_player_control_globals_data)},//, players_initialize_sizeof_a_patch);
 	{0x47620A, sizeof(s_player_control_globals_data)}, //);
 	{0x49F897, 0x0}, //player_spawn_count_hack_fuck_off
@@ -226,9 +226,9 @@ void CE110::WriteHooks() {
 	PrintLn("\nWriting the player controls hook");
 	calls::WriteSimpleHook(player_control_init_new_map_hook, &spcore::player_control::player_control_initialize_for_new_map);
 
-	PrintLn("\nWriting the update before game server iterator_next wrapper hook");
-	constexpr uintptr_t players_update_before_game_server_iterator_hook = 0x476CB0;
-	calls::WriteSimpleHook(players_update_before_game_server_iterator_hook, &Yelo::blam::data_iterator_next_wrapper);
+//	PrintLn("\nWriting the update before game server iterator_next wrapper hook");
+//	constexpr uintptr_t players_update_before_game_server_iterator_hook = 0x476CB0;
+//	calls::WriteSimpleHook(players_update_before_game_server_iterator_hook, &Yelo::blam::data_iterator_next_wrapper);
 
 	//Lua Hooks
 	constexpr uintptr_t post_initialize_hook = 0x4CAABA;
@@ -284,7 +284,7 @@ void CE110::WriteHooks() {
 	}
 
 	for (auto elem : MPPARBs) {
-		calls::patchValue<byte>(elem.first, elem.second);
+		calls::patchValue(elem.first, elem.second);
 	}
 
 	PrintLn("\nRunning the generic short patches, num: %d", sizeof(short_patches) / sizeof(::std::pair<uintptr_t, short>));

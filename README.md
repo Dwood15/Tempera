@@ -14,11 +14,16 @@
 
   ### Step 2: Build it.
   
-  Generate the build files: 
+  - Generate the build files: 
   
-    cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" .
+    
+   `cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" .`
 
-   Note: Release mode builds are currently untested.
+   - Note: Release mode builds are currently untested.
+  
+   
+  Find VCvarsall.bat (see something like:  `C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build`)
+   
    
     cmake --build cmake-build-debug --target all
 
