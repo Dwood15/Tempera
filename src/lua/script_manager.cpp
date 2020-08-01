@@ -43,7 +43,7 @@ int l_registerLuaCallback(lua_State *L) {
  * @return
  */
 int l_IsPlayerSpawned(lua_State *L) {
-	if (!CurrentEngine->IsCoreInitialized()) {
+	if (!::feature_management::engines::IsCoreInitialized()) {
 		PrintLn<false>("\tCan't spawn player because core is not initialized!\n");
 
 		lua_pushboolean(L, false);
@@ -67,7 +67,7 @@ int l_IsPlayerSpawned(lua_State *L) {
  * @return
  */
 int l_GetPlayerAddress(lua_State *L) {
-	if (!CurrentEngine->IsCoreInitialized()) {
+	if (!::feature_management::engines::IsCoreInitialized()) {
 		PrintLn<false>("\tCan't get player address because core is not initialized!\n");
 
 		lua_pushinteger(L, -1);
@@ -426,7 +426,7 @@ void LuaScriptManager::InitializeLua(const char *filename) {
 	});
 
 	registerGlobalLuaFunction("IsCoreInitialized", [](lua_State *L) {
-		lua_pushboolean(L, feature_management::engines::GlobalEngine::IsCoreInitialized());
+		lua_pushboolean(L, feature_management::engines::IsCoreInitialized());
 		return 1;
 	});
 

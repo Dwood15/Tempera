@@ -17,7 +17,7 @@ using namespace feature_management::engines;
 
 LPCoreAddressList CE110::GetCoreAddressList() {
 	PrintLn("Retrieving the Core AddressLists");
-	LPCoreAddressList CurrentCore;
+	static LPCoreAddressList CurrentCore;
 	CurrentCore.core_0 = 0x815900;
 	CurrentCore.core_1 = 0x7FB6F8;
 	CurrentCore.core_2 = 0x7FBE70;
@@ -140,7 +140,7 @@ void naked CE110::OnPlayerActionUpdate() {
 #if defined(_MSC_VER) && !defined(__CLANG__)
 	s_player_action *current_action;
 
-	__asm mov dword ptr[esp+18h], -1
+	__asm mov dword ptr[esp+1Ch], -1
 	__asm mov current_action, ebp
 	__asm retn
 #else
@@ -148,12 +148,13 @@ void naked CE110::OnPlayerActionUpdate() {
 #endif
 }
 
+static inline bool printOnce = false;
+
 void naked CE110::OnUnitControlUpdate(int client_update_idx) {
 	//PrintLn("\nOn UnitControl Update");
-	static bool printOnce = false;
 
 	//cannot update a unit's control if core's not initialized.
-	if (!CurrentEngine->IsCoreInitialized()) {
+	if (!::feature_management::engines::IsCoreInitialized()) {
 		if (!printOnce) {
 			PrintLn("\nOn UnitControl Update when core not initialized, printing once.");
 			printOnce = true;
@@ -182,9 +183,9 @@ void naked CE110::OnUnitControlUpdate(int client_update_idx) {
 static void ValuePatches() {
 	//Function call
 	// 			signature: "8B 35 20 59 81 00 57 8B FA B9 .26 00 00 00 F3 AB 83 CF FF"
-	//constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
+//	constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
 	//Relying on sizeof allows us to redefine MAX_PLAYER variables/defines
-	//patchValue<unsigned int>(players_initialize_for_new_map_overwrite, sizeof(s_players_globals_data) / 4);
+//	calls::patchValue(players_initialize_for_new_map_overwrite, sizeof(s_players_globals_data) / 4);
 
 	//uintptr_t player_spawn = 0x47A9E0; Valid, just not using it...
 	constexpr uintptr_t size_of_fp_weapons = 0x1EA0 * MAX_PLAYER_COUNT_LOCAL;
@@ -248,7 +249,7 @@ static void ValuePatches() {
 }
 
 void CE110::WriteHooks() {
-	//ValuePatches();
+	ValuePatches();
 
 	//TODO: Conceptually separate these out..
 
@@ -263,7 +264,7 @@ void CE110::WriteHooks() {
 //	calls::WriteSimpleHook(players_update_before_game_server_iterator_hook, &Yelo::blam::data_iterator_next_wrapper);
 
 	//Lua Hooks
-	constexpr uintptr_t post_initialize_hook = 0x4CAABA;
+//	constexpr uintptr_t post_initialize_hook = 0x4CAABA;
 
 	PrintLn("\nWriting the lua main setup connection init hook");
 //	calls::WriteSimpleHook(post_initialize_hook, main_setup_connection_init);
@@ -271,7 +272,7 @@ void CE110::WriteHooks() {
 	constexpr uintptr_t game_tick_hook = 0x473815;
 
 	PrintLn("\nWriting the game tick hook");
-	//calls::WriteSimpleHook(game_tick_hook, game_tick);
+	calls::WriteSimpleHook(game_tick_hook, game_tick);
 
 	PrintLn("\nAdditional Player action hooks");
 	//Originally: C7 44 24 18 FF FF FF FF
@@ -285,20 +286,18 @@ void CE110::WriteHooks() {
 	calls::WriteSimpleHook(0x476CF3, CE110::OnPlayerActionUpdate); //6 bytes off.
 
 	PrintLn("\nWriting the player controls hook");
-//	calls::WriteSimpleHook(player_control_init_new_map_hook, &spcore::player_control::player_control_initialize_for_new_map);
+//	calls::WriteSimpleHook(player_control_init_new_map_hook, spcore::player_control::player_control_initialize_for_new_map);
 
 	PrintLn("\nCE110 OnUnitControl Update hook for lua");
-//	calls::WriteSimpleHook(0x4770CF, &CE110::OnUnitControlUpdate);
-
-	// patchValue<uintptr_t>(player_control_init_new_map_hook, addr); //Gotta be able to loop over all the players + input devices, no?.
+//	calls::WriteSimpleHook(0x4770CF, CE110::OnUnitControlUpdate);
 
 	// constexpr uintptr_t scenario_load_hookA = 0x4CC9AD; //inside main_new_map
 	// addr = calc_addr_offset(scenario_load_hookA, (int)&scenario_load);
-	// patchValue<uintptr_t>(scenario_load_hookA, addr); //Gotta be able to loop over all the players + input devices, no?.
+	// patchValue<uintptr_t>(scenario_load_hookA, addr); //Gotta be able to loop over all the players + input devices
 	//
 	// constexpr uintptr_t scenario_load_hookB = 0x4E1C28; //inside network_game_create_game_objects
 	// addr = calc_addr_offset(scenario_load_hookB, (int)&scenario_load);
-	// patchValue<uintptr_t>(scenario_load_hookB, addr); //Gotta be able to loop over all the players + input devices, no?.
+	// patchValue<uintptr_t>(scenario_load_hookB, addr); //Gotta be able to loop over all the players + input devices.
 
 	//This hook is called right before the game enters the actual main loop
 

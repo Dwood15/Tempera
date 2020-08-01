@@ -30,8 +30,8 @@ constexpr const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
 
 namespace feature_management::engines {
 	class GlobalEngine {
-		static inline bool core_initialized = false;
-
+	public:
+		bool core_initialized = false;
 	private:
 		//TODO: More intelligent division of these members -
 		// - Values dependent upon other values or actions should _not_ be writable from outside this class.
@@ -59,7 +59,7 @@ namespace feature_management::engines {
 		s_players_globals_data        *players_globals;
 		Yelo::Scenario::s_scenario_globals * scenario_globals;
 		s_motion_sensor               *motion_sensor;
-		static inline Yelo::GameState::s_game_time_globals	  *game_time_globals = nullptr;
+		Yelo::GameState::s_game_time_globals	  *game_time_globals = nullptr;
 		uintptr                       game_state_globals_location_ptr;
 		uintptr                       game_state_globals_ptr;
 		void                          **crc_checksum_buffer;
@@ -157,10 +157,6 @@ namespace feature_management::engines {
 			return CurrentMajor == major::CE;
 		}
 
-		static bool IsCoreInitialized() {
-			return core_initialized;
-		}
-
 		void WriteHooks();
 
 		static bool HasSupport();
@@ -205,29 +201,17 @@ namespace feature_management::engines {
 		 */
 		::std::optional<uintptr_t> getFunctionBegin(const char *needle);
 
-		static short GetElapsedTime() {
-			static auto gtg = game_time_globals;
-
-			return gtg->elapsed_time;
-		}
-
+        short GetElapsedTime();
 	};
 
 	/***
  	 * Called before VirtualProtect is run.
  	 ***/
-	static void registerLuaCallback(const char * cb_name, LuaCallbackId cb_type) {
-		auto cb = cb_name;
-
-		PrintLn<false>("Should be registering callback: %s", cb);
-
-		mgr.registerLuaCallback(cb_name, cb_type);
-
-		PrintLn<false>("%s registered.", cb_name);
-	}
+	void registerLuaCallback(const char * cb_name, LuaCallbackId cb_type);
+	bool IsCoreInitialized();
 }
 
-static inline feature_management::engines::GlobalEngine* CurrentEngine = nullptr;
+extern feature_management::engines::GlobalEngine* CurrentEngine;
 
 
 /**

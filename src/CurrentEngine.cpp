@@ -241,6 +241,8 @@ GlobalEngine * GlobalEngine::GetGlobalEngine() {
 //	return 0;
 //}
 
+feature_management::engines::GlobalEngine* CurrentEngine = nullptr;
+
 void GlobalEngine::SetCoreAddressList(LPCoreAddressList add_list) {
 	if (core_initialized) {
 		return;
@@ -259,10 +261,24 @@ void GlobalEngine::SetCoreAddressList(LPCoreAddressList add_list) {
 
 	game_state_globals_location_ptr = reinterpret_cast<uintptr>(add_list.game_state_globals_location_ptr);
 	at_main_menu                    = reinterpret_cast<bool *>(add_list.at_main_menu);
-	player_control_globals_data     = *reinterpret_cast<s_player_control_globals_data **>(add_list.player_control_globals_data); // = player_control_globals *
+
+	//Some attempts to initialize come out with 0x0 player control globals data.
+	if (add_list.player_control_globals_data > 0)
+		player_control_globals_data     = *reinterpret_cast<s_player_control_globals_data **>(add_list.player_control_globals_data); // = player_control_globals *
+
 	game_time_globals               = *reinterpret_cast<Yelo::GameState::s_game_time_globals **>(add_list.game_time_globals);
 
 	core_initialized = true;
+}
+
+
+short GlobalEngine::GetElapsedTime() {
+    if (game_time_globals == nullptr) {
+        RefreshCore(true);
+    }
+
+
+    return game_time_globals->elapsed_time;
 }
 
 void GlobalEngine::RefreshCore(bool force) {
@@ -274,18 +290,20 @@ void GlobalEngine::RefreshCore(bool force) {
 		throw "WTF? this platform has no support. Bye.";
 	}
 
+	LPCoreAddressList addressList;
+
 	if (feature_management::engines::GlobalEngine::IsSapien()) {
 		PrintLn("IsSapien SetCoreAddressList");
-
-		SetCoreAddressList(Sapien::GetCoreAddressList());
+		addressList = Sapien::GetCoreAddressList();
 	}
 
 	PrintLn("GetCoreAddressList");
 	if (feature_management::engines::GlobalEngine::IsCustomEd()) {
 		PrintLn("CustomEd SetCoreAddressList");
-		SetCoreAddressList(CE110::GetCoreAddressList());
+		addressList = CE110::GetCoreAddressList();
 	}
 
+	SetCoreAddressList(addressList);
 }
 
 const char *GlobalEngine::GetCurrentMajorVerString() {
@@ -438,6 +456,19 @@ pConsoleText oConsoleText;
 ////////////////////////////////////////
 // Player Methods
 namespace feature_management::engines {
+	void registerLuaCallback(const char * cb_name, LuaCallbackId cb_type) {
+		auto cb = cb_name;
+
+		PrintLn<false>("Should be registering callback: %s", cb);
+
+		mgr.registerLuaCallback(cb_name, cb_type);
+
+		PrintLn<false>("%s registered.", cb_name);
+	}
+
+	bool IsCoreInitialized() {
+		return CurrentEngine != nullptr && CurrentEngine->core_initialized;
+	}
 
 	s_player_control *GlobalEngine::GetPlayerControl(unsigned short idx) {
 		if (idx < MAX_PLAYER_COUNT_LOCAL) {
@@ -699,7 +730,7 @@ void game_tick(int current_frame_tick)  {
 
 	state->call_lua_event_by_type(LuaCallbackId::before_game_tick);
 
-	state->lua_on_tick(current_frame_tick, feature_management::engines::GlobalEngine::GetElapsedTime());
+	state->lua_on_tick(current_frame_tick, CurrentEngine->GetElapsedTime());
 	static ::std::optional<uintptr_t> funcFound = FUNC_GET(game_tick);
 
 	if (funcFound) {
@@ -725,7 +756,9 @@ void main_setup_connection_init() {
     PrintLn("main_setup_connection_init hook called");
 
     if (!alreadyChecked) {
-        PrintLn("Getting main setup connection");
+		CurrentEngine->ConsoleText(hGreen, "Tempera Running!");
+
+		PrintLn("Getting main setup connection");
 
         if (funcFound)
             PrintLn("Main setup connection found");

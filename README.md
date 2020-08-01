@@ -21,8 +21,8 @@
 
    - Note: Release mode builds are currently untested.
   
-   
-  Find VCvarsall.bat (see something like:  `C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build`)
+  
+   Open ADMIN cmd prompt. Find and run VCvarsall.bat (see something like:  `C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build`)
    
    
     cmake --build cmake-build-debug --target all

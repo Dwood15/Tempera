@@ -107,7 +107,7 @@ bool isOffScreen(vect3 screenpos) {
 }
 
 void PrintObjectTags(IDirect3DDevice9 *pDevice) {
-	if (!CurrentEngine->IsCoreInitialized()) {
+	if (!::feature_management::engines::IsCoreInitialized()) {
 		static bool printOnce = true;
 		if(printOnce) {
 			::PrintLn<true>("Tried to get Data for use in PrintObjects, couldn't.");

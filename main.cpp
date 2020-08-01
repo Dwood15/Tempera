@@ -94,11 +94,11 @@ static void *init(HMODULE *reason) {
 
 #define SUPPORTSFEAT(FEAT) CurrentEngine->SupportsFeature(feats::FEAT)
 #define SUPPORTSFEATS(FEATA, FEATB) CurrentEngine->SupportsFeature((uint)(feats::FEATA | feats::FEATB))
-//	if (SUPPORTSFEAT(LUA_HOOKS)) {
-//		feature_management::engines::GlobalEngine::InitializeLuaState();
-//		feature_management::engines::GlobalEngine::LuaFirstRun();
-//		PrintLn("\nLua state initialized and FirstRun called");
-//	}
+	if (SUPPORTSFEAT(LUA_HOOKS)) {
+		feature_management::engines::GlobalEngine::InitializeLuaState();
+		feature_management::engines::GlobalEngine::LuaFirstRun();
+		PrintLn("\nLua state initialized and FirstRun called");
+	}
 
 	orig_DirectInput8Create = (void*)GetProcAddress(*reason, "DirectInput8Create");
 	PrintLn("\nDinput8Create");
