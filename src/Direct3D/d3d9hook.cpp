@@ -265,9 +265,9 @@ DWORD __stdcall CD3D::hkD3DHook(void *lpVoid) {
 	DWORD            dwOldProtect    = (DWORD)NULL;
 	IDirect3DDevice9 *pGameDevice;
 
-	VirtualProtect((void *) pDevicePointer, 4, PAGE_EXECUTE_READWRITE, &dwOldProtect);
+	//VirtualProtect((void *) pDevicePointer, 4, PAGE_EXECUTE_READWRITE, &dwOldProtect);
 	memcpy(&pGameDevice, (void *) pDevicePointer, 4);
-	VirtualProtect((void *) pDevicePointer, 4, dwOldProtect, NULL);
+	//VirtualProtect((void *) pDevicePointer, 4, dwOldProtect, NULL);
 
 	DWORD *pHaloDevice = (DWORD *) pGameDevice;
 	pHaloDevice = (DWORD *) pHaloDevice[0];

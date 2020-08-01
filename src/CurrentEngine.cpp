@@ -269,6 +269,9 @@ void GlobalEngine::SetCoreAddressList(LPCoreAddressList add_list) {
 
 	game_time_globals               = *reinterpret_cast<Yelo::GameState::s_game_time_globals **>(add_list.game_time_globals);
 
+	CONSOLE_HOOK_ADDRESS = add_list.CONSOLE_HOOK_ADDRESS;
+	CONSOLE_TEXT_HOOK_ADDRESS = add_list.CONSOLE_TEXT_HOOK_ADDRESS;
+
 	core_initialized = true;
 }
 
@@ -689,10 +692,14 @@ namespace feature_management::engines {
 
 	// Outputs console text, with custom colors and formatting
 	void GlobalEngine::ConsoleText(HaloColor fColor, const char *cFmt, ...) {
+	    if (CONSOLE_TEXT_HOOK_ADDRESS == 0x0) {
+	        RefreshCore(true);
+	    }
+
 		va_list mvalist;
 		char    cBuffer[256] = {0};
 
-		PrintLn("Attempting to print to Console!");
+//		PrintLn("Attempting to print to Console!");
 		BYTE  bOrig[6]     = {0x83, 0xEC, 0x10, 0x57, 0x8B, 0xF8};
 
 //		DWORD dwOldProtect = 0;
@@ -704,7 +711,7 @@ namespace feature_management::engines {
 			va_end(mvalist);
 
 		// EZ PZ Detours.h replacement, yea?
-		oConsoleText = (pConsoleText) DetourFunction((PBYTE) CONSOLE_TEXT_HOOK_ADDRESS, (PBYTE) &hkConsoleText);
+		oConsoleText = (pConsoleText) DetourFunction((PBYTE) CONSOLE_TEXT_HOOK_ADDRESS, (PBYTE) hkConsoleText);
 		void *color = &fColor;
 #ifdef __GNUC__
 		IMPLEMENTATION_REQUIRED
@@ -714,7 +721,7 @@ namespace feature_management::engines {
 		calls::DoCall<Convention::m_cdecl, void, char *>(CONSOLE_TEXT_HOOK_ADDRESS, cBuffer);
 		// #ifdef __GNUC__
 		// #elif _MSC_VER
-		// 	__asm ADD ESP, 04h
+		 	__asm ADD ESP, 04h
 		// #endif
 
 
@@ -742,6 +749,7 @@ void game_tick(int current_frame_tick)  {
 
 		calls::DoCall<Convention::m_cdecl, void, int>(value, tick);
 		// PrintLn("Post-Game_tick call");
+		CurrentEngine->ConsoleText(hGreen, "Tempera");
 	}
 
 	// PrintLn("Lua_post_tick call");
@@ -757,8 +765,11 @@ void main_setup_connection_init() {
     PrintLn("main_setup_connection_init hook called");
 
     if (!alreadyChecked) {
-		//CurrentEngine->ConsoleText(hGreen, "Tempera Running!");
-
+        {
+            //ConsoleText is FUCKED- are we calling it too early in the
+            //process?
+            CurrentEngine->ConsoleText(hGreen, "Tempera Running!");
+        }
 		PrintLn("Getting main setup connection");
 
         if (funcFound)
