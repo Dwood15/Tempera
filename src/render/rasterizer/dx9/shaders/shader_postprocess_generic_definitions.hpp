@@ -179,7 +179,7 @@ namespace Yelo
 					struct {
 						TagGroups::s_bitmap_data* bitmap;
 						PAD32;
-					}_internal;	// We use a '_' prefix so intelli-sense doesn't get retarded
+					}_internal;	// We use a '_' prefix so intelli-sense doesn't get confused
 
 					struct {
 						char* source;
