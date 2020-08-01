@@ -279,7 +279,7 @@ void LuaScriptManager::lua_on_player_update(s_player_action * control, ushort pl
 	}
 
 	if(!DebugOnce) {
-		PrintLn("PlayerControl");
+		PrintLn("lua_on_player_update");
 	}
 
 	PassPlayerControl(L, control);

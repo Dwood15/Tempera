@@ -4,6 +4,7 @@
 #include "exceptions/exception_handler.h"
 #include <hek/sapien/sapienEngineManager.h>
 #include <addlog.h>
+#include <detours.h>
 
 using namespace feature_management;
 using namespace feature_management::engines;
@@ -692,10 +693,10 @@ namespace feature_management::engines {
 		char    cBuffer[256] = {0};
 
 		PrintLn("Attempting to print to Console!");
-		DWORD dwOldProtect = 0;
 		BYTE  bOrig[6]     = {0x83, 0xEC, 0x10, 0x57, 0x8B, 0xF8};
 
-		VirtualProtect((void *) CONSOLE_TEXT_HOOK_ADDRESS, 10, PAGE_EXECUTE_READWRITE, &dwOldProtect);
+//		DWORD dwOldProtect = 0;
+//		VirtualProtect((void *) CONSOLE_TEXT_HOOK_ADDRESS, 10, PAGE_EXECUTE_READWRITE, &dwOldProtect);
 
 			va_start(mvalist, cFmt);
 		_vsnprintf(cBuffer, sizeof(cBuffer), cFmt, mvalist);
@@ -703,7 +704,7 @@ namespace feature_management::engines {
 			va_end(mvalist);
 
 		// EZ PZ Detours.h replacement, yea?
-		// oConsoleText = (pConsoleText) DetourFunction((PBYTE) CONSOLE_TEXT_HOOK_ADDRESS, (PBYTE) &hkConsoleText);
+		oConsoleText = (pConsoleText) DetourFunction((PBYTE) CONSOLE_TEXT_HOOK_ADDRESS, (PBYTE) &hkConsoleText);
 		void *color = &fColor;
 #ifdef __GNUC__
 		IMPLEMENTATION_REQUIRED
@@ -718,7 +719,7 @@ namespace feature_management::engines {
 
 
 		memcpy((void *) CONSOLE_TEXT_HOOK_ADDRESS, (void *) bOrig, 6);
-		VirtualProtect((void *) CONSOLE_TEXT_HOOK_ADDRESS, 10, dwOldProtect, &dwOldProtect);
+//		VirtualProtect((void *) CONSOLE_TEXT_HOOK_ADDRESS, 10, dwOldProtect, &dwOldProtect);
 	}
 };
 
@@ -756,7 +757,7 @@ void main_setup_connection_init() {
     PrintLn("main_setup_connection_init hook called");
 
     if (!alreadyChecked) {
-		CurrentEngine->ConsoleText(hGreen, "Tempera Running!");
+		//CurrentEngine->ConsoleText(hGreen, "Tempera Running!");
 
 		PrintLn("Getting main setup connection");
 

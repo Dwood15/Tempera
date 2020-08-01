@@ -248,32 +248,29 @@ static void ValuePatches() {
 
 }
 
-void CE110::WriteHooks() {
-	ValuePatches();
+inline void playerUpdateB4GameSrverIteratorHk() {
+	//This wrapper don't work
+	PrintLn("\nWriting the update before game server iterator_next wrapper hook");
+	constexpr uintptr_t players_update_before_game_server_iterator_hook = 0x476CB0;
+	calls::WriteSimpleHook(players_update_before_game_server_iterator_hook, Yelo::blam::data_iterator_next_wrapper);
+}
 
-	//TODO: Conceptually separate these out..
-
-	//Hooks
-
-	//Gotta be able to loop over all the players + input devices, no?.
-	//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
-	constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
-
-//	PrintLn("\nWriting the update before game server iterator_next wrapper hook");
-//	constexpr uintptr_t players_update_before_game_server_iterator_hook = 0x476CB0;
-//	calls::WriteSimpleHook(players_update_before_game_server_iterator_hook, &Yelo::blam::data_iterator_next_wrapper);
-
-	//Lua Hooks
-//	constexpr uintptr_t post_initialize_hook = 0x4CAABA;
+inline void luaPostInitializeHookMainSetupConnInit() {
+	//main_setup_connection_init is ALSO fucked.
+	constexpr uintptr_t post_initialize_hook = 0x4CAABA;
 
 	PrintLn("\nWriting the lua main setup connection init hook");
-//	calls::WriteSimpleHook(post_initialize_hook, main_setup_connection_init);
+	calls::WriteSimpleHook(post_initialize_hook, main_setup_connection_init);
+}
 
+inline void gameTickHook() {
 	constexpr uintptr_t game_tick_hook = 0x473815;
 
 	PrintLn("\nWriting the game tick hook");
 	calls::WriteSimpleHook(game_tick_hook, game_tick);
+}
 
+inline void playerActionUpdateHook() {
 	PrintLn("\nAdditional Player action hooks");
 	//Originally: C7 44 24 18 FF FF FF FF
 	//Basically just sets some random value to -1. Couldn't tell if it was being used or not.
@@ -284,12 +281,45 @@ void CE110::WriteHooks() {
 	calls::patchValue<unsigned short>(0x476CF8, 0x9090);
 
 	calls::WriteSimpleHook(0x476CF3, CE110::OnPlayerActionUpdate); //6 bytes off.
+}
+
+inline void playerControlInitForNewMapHook() {
+	//Gotta be able to loop over all the players + input devices, no?.
+	//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
+	constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
 
 	PrintLn("\nWriting the player controls hook");
-//	calls::WriteSimpleHook(player_control_init_new_map_hook, spcore::player_control::player_control_initialize_for_new_map);
+	calls::WriteSimpleHook(player_control_init_new_map_hook,
+						   spcore::player_control::player_control_initialize_for_new_map);
+}
 
+inline void onUnitControlUpdate() {
+	// OnUnitControlUpdate hook is broken.
 	PrintLn("\nCE110 OnUnitControl Update hook for lua");
-//	calls::WriteSimpleHook(0x4770CF, CE110::OnUnitControlUpdate);
+	calls::WriteSimpleHook(0x4770CF, CE110::OnUnitControlUpdate);
+}
+
+void CE110::WriteHooks() {
+	ValuePatches();
+
+	//TODO: Conceptually separate these out..
+
+	//Hooks
+
+	//Breaks shit- never worked in the first place. Broken.
+	//	playerUpdateB4GameSrverIteratorHk();
+
+	//Lua Hooks
+	luaPostInitializeHookMainSetupConnInit();
+
+	gameTickHook();
+
+	playerActionUpdateHook();
+
+	playerControlInitForNewMapHook();
+
+	//Broken
+	//	onUnitControlUpdate();
 
 	// constexpr uintptr_t scenario_load_hookA = 0x4CC9AD; //inside main_new_map
 	// addr = calc_addr_offset(scenario_load_hookA, (int)&scenario_load);

@@ -172,9 +172,9 @@ end
 local onTickNextPlayerIndexPrinted = false
 function OnTick(ticks_til_frame, time_since_map_started)
 	-- too much log spam
-	--if onTickNextPlayerIndexPrinted == false then
-	Dbg("OnTick callback: Checking if Core Initialized!")
-	--end
+	if onTickNextPlayerIndexPrinted == false then
+		Dbg("OnTick callback: First Check if Core Initialized!")
+	end
 
 	if IsCoreInitialized() == false then
 		return
@@ -189,7 +189,7 @@ function OnTick(ticks_til_frame, time_since_map_started)
 	--At some point, Is* functions will be a variable list passed into the .
 	--While only relevant in HCE, this value should still be valid as (false) in sapien.
 	if AreWeInMainMenu() == false then
-		Dbg("Not in main menu!\n")
+		--Dbg("Not in main menu!\n")
 	end
 
 	if onTickNextPlayerIndexPrinted == false then
