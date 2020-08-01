@@ -153,11 +153,12 @@ void naked CE110::OnUnitControlUpdate(int client_update_idx) {
 	static bool printOnce = false;
 
 	//cannot update a unit's control if core's not initialized.
-	if (!CurrentEngine.IsCoreInitialized()) {
+	if (!CurrentEngine->IsCoreInitialized()) {
 		if (!printOnce) {
 			PrintLn("\nOn UnitControl Update when core not initialized, printing once.");
 			printOnce = true;
 		}
+		CurrentEngine->RefreshCore();
 
 		__asm retn;
 	}
@@ -177,8 +178,8 @@ void naked CE110::OnUnitControlUpdate(int client_update_idx) {
 #endif
 }
 
-void CE110::WriteHooks() {
-	//TODO: Conceptually separate these out..
+
+static void ValuePatches() {
 	//Function call
 	// 			signature: "8B 35 20 59 81 00 57 8B FA B9 .26 00 00 00 F3 AB 83 CF FF"
 	//constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
@@ -217,61 +218,6 @@ void CE110::WriteHooks() {
 	PrintLn("\nPatching the motion sensor sizeofs");
 	calls::adjustNPatch32(motion_sensor_sizeofs, sizeof(s_motion_sensor));
 
-
-	//Gotta be able to loop over all the players + input devices, no?.
-	//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
-	constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
-	// //Hooks
-
-	PrintLn("\nWriting the player controls hook");
-	calls::WriteSimpleHook(player_control_init_new_map_hook, &spcore::player_control::player_control_initialize_for_new_map);
-
-//	PrintLn("\nWriting the update before game server iterator_next wrapper hook");
-//	constexpr uintptr_t players_update_before_game_server_iterator_hook = 0x476CB0;
-//	calls::WriteSimpleHook(players_update_before_game_server_iterator_hook, &Yelo::blam::data_iterator_next_wrapper);
-
-	//Lua Hooks
-	constexpr uintptr_t post_initialize_hook = 0x4CAABA;
-
-	PrintLn("\nWriting the lua main setup connection init hook");
-	calls::WriteSimpleHook(post_initialize_hook, &main_setup_connection_init);
-
-	constexpr uintptr_t game_tick_hook = 0x473815;
-
-	PrintLn("\nWriting the game tick hook");
-	calls::WriteSimpleHook(game_tick_hook, &game_tick);
-
-	PrintLn("\nAdditional Player action hooks");
-	//Originally: C7 44 24 18 FF FF FF FF
-	//Basically just sets some random value to -1. Couldn't tell if it was being used or not.
-	calls::patchValue<byte>(0x476CF2, 0xE8); //call
-	calls::WriteSimpleHook(0x476CF3, &CE110::OnPlayerActionUpdate); //6 bytes off.
-	calls::patchValue<byte>(0x476CF7, 0x90); //
-	calls::patchValue<unsigned short>(0x476CF8, 0x9090);
-
-	PrintLn("\nCE110 OnUnitControl Update hook for lua");
-	calls::WriteSimpleHook(0x4770CF, &CE110::OnUnitControlUpdate);
-
-	// patchValue<uintptr_t>(player_control_init_new_map_hook, addr); //Gotta be able to loop over all the players + input devices, no?.
-
-	// constexpr uintptr_t scenario_load_hookA = 0x4CC9AD; //inside main_new_map
-	// addr = calc_addr_offset(scenario_load_hookA, (int)&scenario_load);
-	// patchValue<uintptr_t>(scenario_load_hookA, addr); //Gotta be able to loop over all the players + input devices, no?.
-	//
-	// constexpr uintptr_t scenario_load_hookB = 0x4E1C28; //inside network_game_create_game_objects
-	// addr = calc_addr_offset(scenario_load_hookB, (int)&scenario_load);
-	// patchValue<uintptr_t>(scenario_load_hookB, addr); //Gotta be able to loop over all the players + input devices, no?.
-
-	//This hook is called right before the game enters the actual main loop
-
-	//Nothing wrong's with the hook, just the function.
-	//			real_address        = (int)&initializations::motion_sensor_initialize_for_new_map;
-	//			real_address_offset = ( real_address ) - ((int)0x4AC98E);																					// + (int)4);
-	//
-	//			patchValue<uintptr_t>(((unsigned int)0x4AC98E ), (unsigned int)( real_address_offset ) - 4);
-
-	// insertRenderWindowCountHooks();
-
 	//_rasterizer_detail_objects_draw51EF90
 	//THIS ONE IS THE SAME AS XBOX BETA ALMOST.
 	//			constexpr uintptr_t get_render_window_ct_patch_6 = 0x51EE05;
@@ -297,6 +243,72 @@ void CE110::WriteHooks() {
 	//render player frame
 	calls::nopBytes(0x50F5F0, 0xA); //render_player_frame_cmp_patch
 	//end renderplayerframeclamp
+
+
+}
+
+void CE110::WriteHooks() {
+	//ValuePatches();
+
+	//TODO: Conceptually separate these out..
+
+	//Hooks
+
+	//Gotta be able to loop over all the players + input devices, no?.
+	//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
+	constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
+
+//	PrintLn("\nWriting the update before game server iterator_next wrapper hook");
+//	constexpr uintptr_t players_update_before_game_server_iterator_hook = 0x476CB0;
+//	calls::WriteSimpleHook(players_update_before_game_server_iterator_hook, &Yelo::blam::data_iterator_next_wrapper);
+
+	//Lua Hooks
+	constexpr uintptr_t post_initialize_hook = 0x4CAABA;
+
+	PrintLn("\nWriting the lua main setup connection init hook");
+//	calls::WriteSimpleHook(post_initialize_hook, main_setup_connection_init);
+
+	constexpr uintptr_t game_tick_hook = 0x473815;
+
+	PrintLn("\nWriting the game tick hook");
+	//calls::WriteSimpleHook(game_tick_hook, game_tick);
+
+	PrintLn("\nAdditional Player action hooks");
+	//Originally: C7 44 24 18 FF FF FF FF
+	//Basically just sets some random value to -1. Couldn't tell if it was being used or not.
+	calls::patchValue<byte>(0x476CF2, 0xE8); //call
+
+	//clear it with some NOPS
+	calls::patchValue<byte>(0x476CF7, 0x90); //
+	calls::patchValue<unsigned short>(0x476CF8, 0x9090);
+
+	calls::WriteSimpleHook(0x476CF3, CE110::OnPlayerActionUpdate); //6 bytes off.
+
+	PrintLn("\nWriting the player controls hook");
+//	calls::WriteSimpleHook(player_control_init_new_map_hook, &spcore::player_control::player_control_initialize_for_new_map);
+
+	PrintLn("\nCE110 OnUnitControl Update hook for lua");
+//	calls::WriteSimpleHook(0x4770CF, &CE110::OnUnitControlUpdate);
+
+	// patchValue<uintptr_t>(player_control_init_new_map_hook, addr); //Gotta be able to loop over all the players + input devices, no?.
+
+	// constexpr uintptr_t scenario_load_hookA = 0x4CC9AD; //inside main_new_map
+	// addr = calc_addr_offset(scenario_load_hookA, (int)&scenario_load);
+	// patchValue<uintptr_t>(scenario_load_hookA, addr); //Gotta be able to loop over all the players + input devices, no?.
+	//
+	// constexpr uintptr_t scenario_load_hookB = 0x4E1C28; //inside network_game_create_game_objects
+	// addr = calc_addr_offset(scenario_load_hookB, (int)&scenario_load);
+	// patchValue<uintptr_t>(scenario_load_hookB, addr); //Gotta be able to loop over all the players + input devices, no?.
+
+	//This hook is called right before the game enters the actual main loop
+
+	//Nothing wrong's with the hook, just the function.
+	//			real_address        = (int)&initializations::motion_sensor_initialize_for_new_map;
+	//			real_address_offset = ( real_address ) - ((int)0x4AC98E);																					// + (int)4);
+	//
+	//			patchValue<uintptr_t>(((unsigned int)0x4AC98E ), (unsigned int)( real_address_offset ) - 4);
+
+	// insertRenderWindowCountHooks();
 
 	PrintLn("\nWritten shit");
 }

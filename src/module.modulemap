@@ -1,3 +1,0 @@
-module Tempera_Core_Types {
-    header "core_types.h"
-}

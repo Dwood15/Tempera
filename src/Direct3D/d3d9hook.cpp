@@ -107,7 +107,7 @@ bool isOffScreen(vect3 screenpos) {
 }
 
 void PrintObjectTags(IDirect3DDevice9 *pDevice) {
-	if (!CurrentEngine.IsCoreInitialized()) {
+	if (!CurrentEngine->IsCoreInitialized()) {
 		static bool printOnce = true;
 		if(printOnce) {
 			::PrintLn<true>("Tried to get Data for use in PrintObjects, couldn't.");
@@ -116,7 +116,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 		return;
 	}
 
-	static short maxObjects = CurrentEngine.GetMaxObjects();
+	static short maxObjects = CurrentEngine->GetMaxObjects();
 
 	object_data   *obj          = NULL;
 	object_header *objh         = NULL;
@@ -133,13 +133,13 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 
 	for (unsigned short i = 0; i < maxObjects; i++) {
-		objh = CurrentEngine.GetObjectHeader(i);
-		obj  = CurrentEngine.GetGenericObject(i);
+		objh = CurrentEngine->GetObjectHeader(i);
+		obj  = CurrentEngine->GetGenericObject(i);
 		if (obj == NULL) {
 			continue;
 		}
 
-		screenpos = CurrentEngine.MyCamera->ScreenPos(obj->World);
+		screenpos = CurrentEngine->MyCamera->ScreenPos(obj->World);
 
 		// Offscreen check
 		if (isOffScreen(screenpos)) {
@@ -161,7 +161,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 		D3DCOLOR color = tGreen;
 
-		ObjName = CurrentEngine.GetObjectName(i);
+		ObjName = CurrentEngine->GetObjectName(i);
 
 
 		if (obj->IsPlayer()) {
@@ -169,17 +169,17 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 		}
 
-		if (CurrentEngine.ObjectControl->IsSelected(objh)) {
+		if (CurrentEngine->ObjectControl->IsSelected(objh)) {
 			color = tOrange;
 
-		} else if (CurrentEngine.ObjectControl->IsNearest(objh)) {
+		} else if (CurrentEngine->ObjectControl->IsNearest(objh)) {
 			color = tBlue;
 		}
 
 		cd3d.myDrawText(pDevice, cd3d.Font, true, (int) screenpos.x, (int) screenpos.y, 1000, 1000, color, tBlack, ObjName);
 	}
 
-	CurrentEngine.ObjectControl->SetNearest(temp_nearest);
+	CurrentEngine->ObjectControl->SetNearest(temp_nearest);
 }
 
 long __stdcall hkEndScene(IDirect3DDevice9 *pDevice) {

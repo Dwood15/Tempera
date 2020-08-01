@@ -4,11 +4,10 @@
 #include "exceptions/exception_handler.h"
 #include <hek/sapien/sapienEngineManager.h>
 #include <addlog.h>
-#include <DbgHelp.h>
 
 using namespace feature_management;
 using namespace feature_management::engines;
-
+#pragma check_stack(off)
 //If it's not here, it won't ever update...
 static volatile s_player_action ActionOverrides[MAX_PLAYER_COUNT_LOCAL];
 
@@ -47,7 +46,7 @@ std::string GlobalEngine::GetCurrentFileName() {
 		// 	}
 		// }
 
-		GetModuleFileNameA(0, name, ::std::size(name));
+		GetModuleFileNameA(nullptr, name, ::std::size(name));
 		char *lpCmdline = GetCommandLineA();
 		printf("CommandLine Args: %s\n", lpCmdline);
 		printf("File Name: %s\n", name);
@@ -61,15 +60,15 @@ std::string GlobalEngine::GetCurrentFileName() {
 			till--;
 		}
 
-		shortName = ::std::string(name).substr(till + 1, num - (till)).c_str();
+		shortName = std::string(name).substr(till + 1, num - (till)).c_str();
 		nameGot   = true;
 	}
 	return shortName;
 }
 
 bool GlobalEngine::VerSupported() {
-	if (this->CurrentMajor == major::CE) {
-		switch (this->CurrentMinor) {
+	if (feature_management::engines::GlobalEngine::CurrentMajor == major::CE) {
+		switch (feature_management::engines::GlobalEngine::CurrentMinor) {
 			case minor::halo_1_10:
 				return (CE110::SupportedFeatures() > features::NOPE);
 			default:
@@ -78,22 +77,6 @@ bool GlobalEngine::VerSupported() {
 	}
 
 	return false;
-}
-
-bool GlobalEngine::IsHek() {
-	return this->CurrentMajor == major::HEK;
-}
-
-bool GlobalEngine::IsSapien() {
-	return this->IsHek() && this->CurrentMinor == minor::sapien;
-}
-
-bool GlobalEngine::IsCustomEd() {
-	return this->CurrentMajor == major::CE;
-}
-
-bool GlobalEngine::IsCoreInitialized() {
-	return core_initialized;
 }
 
 //void GlobalEngine::InitializeMemoryUpgrades() {
@@ -106,16 +89,16 @@ bool GlobalEngine::IsCoreInitialized() {
 //}
 
 features GlobalEngine::GetSupported() {
-	switch (this->CurrentMajor) {
+	switch (CurrentMajor) {
 		case major::CE:
-			switch (this->CurrentMinor) {
+			switch (CurrentMinor) {
 				case minor::halo_1_10:
 					return CE110::SupportedFeatures();
 				default:
 					return features::NOPE;
 			}
 		case major::HEK:
-			switch (this->CurrentMinor) {
+			switch (CurrentMinor) {
 				case minor::sapien:
 					return Sapien::SupportedFeatures();
 				default:
@@ -145,51 +128,51 @@ auto GlobalEngine::ScenarioGlobals() {
 
 void GlobalEngine::InitializeLuaState() {
 	PrintLn("Attempting to initialize LuaScript manager");
-	LuaState->InitializeLua(LUA_FILENAME);
+	mgr.InitializeLua(LUA_FILENAME);
 }
 
-LuaScriptManager *GlobalEngine::GetLuaState() {
-	if (!LuaState->IsLoaded()) {
+[[nodiscard]] LuaScriptManager *GlobalEngine::GetLuaState() {
+	if (!mgr.IsLoaded()) {
 		InitializeLuaState();
 	}
 
-	return LuaState;
+	return &mgr;
 }
 
 IDirectInput8A *GlobalEngine::GetDInput8Device() {
-	if (this->IsCustomEd()) {
+	if (IsCustomEd()) {
 		return CE110::GetDInput8Device();
 	}
-	return NULL;
+	return nullptr;
 }
 
 IDirectInputDevice8A *GlobalEngine::GetKeyboardInput() {
-	if (this->IsCustomEd()) {
+	if (IsCustomEd()) {
 		return CE110::GetKeyboardInput();
 	}
-	return NULL;
+	return nullptr;
 }
 
 IDirectInputDevice8A *GlobalEngine::GetMouseInput() {
-	if (this->IsCustomEd()) {
+	if (IsCustomEd()) {
 		return CE110::GetMouseInput();
 	}
-	return NULL;
+	return nullptr;
 }
 
 IDirectInputDevice8A **GlobalEngine::GetJoystickInputs() {
-	if (this->IsCustomEd()) {
+	if (IsCustomEd()) {
 		return CE110::GetJoystickInputs();
 	}
-	return NULL;
+	return nullptr;
 }
 
 void GlobalEngine::WriteHooks() {
 	PrintLn("\nInitializing to prepare to write the game hooks now!");
-	switch (this->CurrentMajor) {
+	switch (CurrentMajor) {
 		case major::CE:
 			PrintLn("Custom Edition detected");
-			switch (this->CurrentMinor) {
+			switch (CurrentMinor) {
 				case minor::halo_1_10:
 					PrintLn("CE_110 detected!");
 					CE110::WriteHooks();
@@ -198,7 +181,7 @@ void GlobalEngine::WriteHooks() {
 			}
 		case major::HEK:
 			PrintLn("Sapien detected");
-			switch (this->CurrentMinor) {
+			switch (CurrentMinor) {
 				case minor::sapien:
 					Sapien::WriteHooks();
 				default:
@@ -209,45 +192,54 @@ void GlobalEngine::WriteHooks() {
 	}
 }
 
-GlobalEngine::GlobalEngine() {
-	if (this->current_map != nullptr) {
+GlobalEngine * GlobalEngine::GetGlobalEngine() {
+    if (CurrentEngine == nullptr) {
+        CurrentEngine = new GlobalEngine();
+    }
+
+	if (current_map != nullptr) {
 		PrintLn("Setting up GlobalEngine despite already having current map");
 	}
 
 	auto filename = GetCurrentFileName();
 
-	printf("Filename: %s\n", filename.c_str());
+	PrintLn("GlobalEngine Filename: %s\n", filename.c_str());
 
-	auto fName = ::std::string(filename.c_str());
+	auto fName = ::std::string(filename);
+
+	DEBUG_FILENAME = const_cast<char *>("tempera.unk.unk.debug.log");
 
 	if (fName == "sapien.exe") {
 		printf("Detected sapien!\n");
-		this->CurrentMajor   = major::HEK;
-		this->CurrentMinor   = minor::sapien;
-		this->DEBUG_FILENAME = const_cast<char *>(Sapien::DEBUG_FILENAME);
-		this->current_map    = const_cast<defined_functionrange *>(Sapien::GetFunctionMap());
+		CurrentMajor   = major::HEK;
+        CurrentMinor   = minor::sapien;
+        DEBUG_FILENAME = const_cast<char *>(Sapien::DEBUG_FILENAME);
+        current_map    = const_cast<defined_functionrange *>(Sapien::GetFunctionMap());
 	}
 
 	if (fName == "haloce.exe") {
 		printf("Detected haloce!\n");
-		this->CurrentMajor   = major::CE;
-		this->CurrentMinor   = minor::halo_1_10;
-		this->DEBUG_FILENAME = const_cast<char*>(CE110::DEBUG_FILENAME);
-		this->current_map    = const_cast<defined_functionrange *>(CE110::GetFunctionMap());
+        CurrentMajor   = major::CE;
+        CurrentMinor   = minor::halo_1_10;
+        DEBUG_FILENAME = const_cast<char*>(CE110::DEBUG_FILENAME);
+        current_map    = const_cast<defined_functionrange *>(CE110::GetFunctionMap());
 	}
 
-	if (this->HasSupport()) {
-		CurrentSupported = this->GetSupported();
+	if (HasSupport()) {
+		PrintLn("CurrentEngine HasSupport");
+        CurrentSupported = GetSupported();
 	}
+
+	return CurrentEngine;
 }
 
-size_t GlobalEngine::GetNumberOfFunctionTableReferences() {
-	if (this->IsCustomEd()) {
-		return 354u;
-	}
-
-	return 0;
-}
+//size_t GlobalEngine::GetNumberOfFunctionTableReferences() {
+//	if (this->IsCustomEd()) {
+//		return 354u;
+//	}
+//
+//	return 0;
+//}
 
 void GlobalEngine::SetCoreAddressList(LPCoreAddressList add_list) {
 	if (core_initialized) {
@@ -278,18 +270,18 @@ void GlobalEngine::RefreshCore(bool force) {
 		return;
 	}
 
-	if (!this->HasSupport()) {
+	if (!HasSupport()) {
 		throw "WTF? this platform has no support. Bye.";
 	}
 
-	if (this->IsSapien()) {
+	if (feature_management::engines::GlobalEngine::IsSapien()) {
 		PrintLn("IsSapien SetCoreAddressList");
 
 		SetCoreAddressList(Sapien::GetCoreAddressList());
 	}
 
 	PrintLn("GetCoreAddressList");
-	if (this->IsCustomEd()) {
+	if (feature_management::engines::GlobalEngine::IsCustomEd()) {
 		PrintLn("CustomEd SetCoreAddressList");
 		SetCoreAddressList(CE110::GetCoreAddressList());
 	}
@@ -330,21 +322,12 @@ bool GlobalEngine::SupportsFeature(uint feat) {
 	return (this->GetSupported() & feat) == feat;
 }
 
-void GlobalEngine::registerLuaCallback(const ::std::string &cb_name, LuaCallbackId cb_type) {
-	PrintLn<false>("Should be registering callback: %s", cb_name.c_str());
-	LuaState->registerLuaCallback(cb_name, cb_type);
-}
-
 bool GlobalEngine::ShouldOverrideAction(ushort idx) {
 	return ShouldOverride[idx];
 }
 
 void GlobalEngine::LuaFirstRun() {
-	if (LuaState) {
-		LuaState->DoFirstRun();
-	} else {
-		PrintLn("Lua Failed to initialize & run!");
-	}
+	mgr.DoFirstRun();
 }
 
 template <typename T>
@@ -362,23 +345,19 @@ void GlobalEngine::ResetOverride(ushort idx) {
 }
 
 bool GlobalEngine::HasSupport() {
-	if (this->CurrentMajor == major::NO) {
+	if (CurrentMajor == major::NO) {
 		return false;
 	}
 
 	if (IsHek()) {
-		return this->IsSapien();
+		return feature_management::engines::GlobalEngine::IsSapien();
 	}
 
 	if (IsCustomEd()) {
-		return this->VerSupported();
+		return VerSupported();
 	}
 
 	return false;
-}
-
-short GlobalEngine::GetElapsedTime() {
-	return game_time_globals->elapsed_time;
 }
 
 datum_index *GlobalEngine::GetLocalPlayers() {
@@ -402,7 +381,7 @@ s_player_action GlobalEngine::GetPlayerActionOverride(ushort idx, s_unit_control
 	newControl.desired_weapon_index  = from->weapon_index;
 	newControl.control_flagsA        = from->control_flags;
 
-	this->LuaState->lua_on_player_update(&newControl, idx);
+	mgr.lua_on_player_update(&newControl, idx);
 
 	return newControl;
 }
@@ -435,122 +414,12 @@ std::optional<uintptr_t> GlobalEngine::getFunctionBegin(const char *needle) {
 	return (uintptr_t) -1;
 }
 
-const char *GlobalEngine::getMemoryRegionDescriptor(const void * addr) {
-
-	PrintLn("\tSearching for address: [0x%X]", addr);
-
-	unsigned int endImgRng = NtHeader.baseImageLocation + NtHeader.imageSize;
-
-	if ((uintptr_t)addr >= NtHeader.baseImageLocation && (uintptr_t)addr <= (uintptr_t)endImgRng) {
-		PrintLn("\tException Location inside of tempera dinput dll, probably.");
-		return "probably_in_tempera_dll_space";
-	}
-
-	if ((uintptr_t)addr < 0x200000) {
-		PrintLn("\tAddress on the stack");
-		return "probably_in_stack";
-	}
-
-	if ((uintptr_t)addr < 0x400000) {
-		PrintLn("\tAn unmapped region");
-		return "unmapped_region";
-	}
-
-	using dfr = defined_functionrange;
-
-	dfr *funcList = current_map;
-
-	int i = 0;
-
-	for (dfr *item = funcList; item; item++) {
-		++i;
-
-		if (item->end < (uintptr_t)addr)
-			continue;
-
-		bool contains = item->contains((uintptr_t)addr);
-		//The function map should be pre-sorted, so this SHOULD mean that we can
-		// break out of the loop.
-		if (item->begin <= (uintptr_t)addr) {
-			if (!contains) {
-				PrintLn("\tContains disagrees with the manual calculation");
-			}
-
-			return item->funcName;
-		}
-	}
-
-	if ((uintptr_t)addr < 0x5E9020) {
-		PrintLn("\tUnmapped function space, probably");
-		return "function_space_unmapped";
-	}
-
-	PrintLn("\tUnmappedRegion");
-	return "unmapped_region";
-}
-
 //Calls every registered lua function by that event.
 #include "enums/generic_enums.h"
 
-#define PRINTED(str) #str
-#define CALL_LUA_BY_EVENT(event) state->call_lua_event_by_type(LuaCallbackId::PRINTED(event))
+//#define PRINTED(str) #str
+//#define CALL_LUA_BY_EVENT(event) state->call_lua_event_by_type(LuaCallbackId::PRINTED(event))
 
-void main_setup_connection_init() {
-	//If alreadyChecked is true, we shouldn't have to update 'funcFound' ever again.
-	static bool alreadyChecked = false;
-	static ::std::optional<uintptr_t> funcFound = FUNC_GET(main_setup_connection);
-
-	 PrintLn("main_setup_connection_init hook called");
-
-	if (!alreadyChecked) {
-		PrintLn("Getting main setup connection");
-
-		if (funcFound)
-			PrintLn("Main setup connection found");
-
-		alreadyChecked = true;
-	}
-
-	if (funcFound) {
-		calls::DoCall<Convention::m_cdecl>(*funcFound);
-	}
-
-	static LuaScriptManager *state = 0;
-
-	if (state == 0) {
-		state = CurrentEngine.GetLuaState();
-	}
-
-	CurrentEngine.RefreshCore();
-	state->call_lua_event_by_type(LuaCallbackId::post_initialize);
-	// CALL_LUA_BY_EVENT(post_initialize);
-}
-
-void game_tick(int current_frame_tick) {
-	static LuaScriptManager *state = 0;
-
-	if (state == 0) {
-		state = CurrentEngine.GetLuaState();
-	}
-
-	state->call_lua_event_by_type(LuaCallbackId::before_game_tick);
-
-	state->lua_on_tick(current_frame_tick, CurrentEngine.GetElapsedTime());
-	static ::std::optional<uintptr_t> funcFound = FUNC_GET(game_tick);
-
-	if (funcFound) {
-		// PrintLn("Game_tick call");
-		calls::DoCall<Convention::m_cdecl, void, int>(*funcFound, current_frame_tick);
-		// PrintLn("Post-Game_tick call");
-	}
-
-	// PrintLn("Lua_post_tick call");
-	state->call_lua_event_by_type(LuaCallbackId::after_game_tick);
-	// PrintLn("Post-Lua-post-tick call");
-}
-
-#undef CALL_LUA_BY_EVENT
-#undef PRINTED
 
 typedef std::string string;
 
@@ -561,7 +430,6 @@ pConsoleCMD oConsoleCMD;
 typedef void (*pConsoleText)(const char *pString, const HaloColor *fColor);
 
 pConsoleText oConsoleText;
-
 
 ////////////////////////////////////////
 // Core Methods
@@ -600,7 +468,7 @@ namespace feature_management::engines {
 	wchar_t *GlobalEngine::GetPlayerName(short player_index) {
 		player *newplayer = GetPlayer(player_index);
 		if (!newplayer)
-			return NULL;
+			return nullptr;
 		else
 			return newplayer->PlayerName0;
 	}
@@ -642,7 +510,7 @@ namespace feature_management::engines {
 
 	// Returns an object_header structure by object index
 	object_header *GlobalEngine::GetObjectHeader(short object_index) {
-		object_header *objectheader = (object_header *) ((unsigned long) core_1->Object->first + (object_index * core_1->Object->size));
+		auto objectheader = (object_header *) ((unsigned long) core_1->Object->first + (object_index * core_1->Object->size));
 		return objectheader;
 	}
 
@@ -667,7 +535,7 @@ namespace feature_management::engines {
 		char   *name   = TagIndexHeader->FirstTag[metaind].TName->Name;
 		string str     = name;
 
-		return name + str.rfind("\\") + 1;
+		return name + str.rfind('\\') + 1;
 	}
 
 	////////////////////////////////////////
@@ -677,41 +545,18 @@ namespace feature_management::engines {
 		return MapHeader->MapName;
 	}
 
-	const bool GlobalEngine::AreWeInMainMenu() {
-		if (!HasSupport()) {
-
-			PrintLn("No Support for Current Engine");
-
-			throw "Main menu check called invalid fashion";
-		}
-
+	bool GlobalEngine::AreWeInMainMenu() {
 		if (!IsCoreInitialized()) {
-
-			PrintLn("Core is not initialized for CurrentEngine");
-
-			throw "AreWeInMainMenu called way too early in the cycle.";
+			PrintLn("Core not initialized - defaulting to true for MainMenu check");
+			return true;
 		}
 
-		if (IsSapien()) {
-			PrintLn("Can't be in main menu if we're in sapien");
+		if (IsHek()) {
+			PrintLn("Can't be in main menu if we're in HEK");
 			return false;
 		}
 
-		if (!this->at_main_menu) {
-			PrintLn("Not in main menu, so we can force-RefreshCore");
-
-			//Calling refreshCore here is problematic as it semi-mildly relies on side effects in order to
-			//get the core refreshed
-			this->RefreshCore();
-
-			if (!this->at_main_menu) {
-				PrintLn("RefreshCore- What the fuck are we even doing here");
-
-				throw "This is complete bullshit. We cannot continue. RefreshCore check fails after refresh.";
-			}
-		}
-
-		return this->at_main_menu;
+		return *at_main_menu;
 	}
 
 	////////////////////////////////////////
@@ -845,3 +690,61 @@ namespace feature_management::engines {
 		VirtualProtect((void *) CONSOLE_TEXT_HOOK_ADDRESS, 10, dwOldProtect, &dwOldProtect);
 	}
 };
+
+#define PRINTED(str) #str
+#define CALL_LUA_BY_EVENT(event) state->call_lua_event_by_type(LuaCallbackId::PRINTED(event))
+
+void game_tick(int current_frame_tick)  {
+	static LuaScriptManager *state = CurrentEngine->GetLuaState();
+
+	state->call_lua_event_by_type(LuaCallbackId::before_game_tick);
+
+	state->lua_on_tick(current_frame_tick, feature_management::engines::GlobalEngine::GetElapsedTime());
+	static ::std::optional<uintptr_t> funcFound = FUNC_GET(game_tick);
+
+	if (funcFound) {
+		// PrintLn("Game_tick call");
+
+		auto value = *funcFound;
+		auto tick = current_frame_tick;
+
+		calls::DoCall<Convention::m_cdecl, void, int>(value, tick);
+		// PrintLn("Post-Game_tick call");
+	}
+
+	// PrintLn("Lua_post_tick call");
+	state->call_lua_event_by_type(LuaCallbackId::after_game_tick);
+	// PrintLn("Post-Lua-post-tick call");
+}
+
+void main_setup_connection_init() {
+//If alreadyChecked is true, we shouldn't have to update 'funcFound' ever again.
+    static bool alreadyChecked = false;
+    static ::std::optional<uintptr_t> funcFound = FUNC_GET(main_setup_connection);
+
+    PrintLn("main_setup_connection_init hook called");
+
+    if (!alreadyChecked) {
+        PrintLn("Getting main setup connection");
+
+        if (funcFound)
+            PrintLn("Main setup connection found");
+
+        alreadyChecked = true;
+    }
+
+    if (funcFound) {
+        calls::DoCall<Convention::m_cdecl>(*funcFound);
+    }
+
+    static LuaScriptManager *state;
+
+    if (state == nullptr) {
+        state = CurrentEngine->GetLuaState();
+    }
+
+    CurrentEngine->RefreshCore();
+    state->call_lua_event_by_type(LuaCallbackId::post_initialize);
+}
+#undef CALL_LUA_BY_EVENT
+#undef PRINTED

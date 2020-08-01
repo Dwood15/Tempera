@@ -52,7 +52,7 @@ namespace feature_management {
 		 * game engine. the HEK, TRIAL, & STUBBZ are all odd ducks WRT versioning.
 		 */
 		enum major {
-			NO = -1,
+			NO = 0x0,
 			CE,
 			HEK,
 			PC,
@@ -65,7 +65,7 @@ namespace feature_management {
 		//No plans to fully support more than CE 1_10 at this time,
 		//just preparing for the possibility of dynamic feature support based on version.
 		enum minor {
-			nope      = -1,
+			nope      = 0x0,
 			dedi      = 'DEDI',
 			stubbz    = 'STBZ',
 			trial     = 'TRIL',

@@ -204,7 +204,7 @@ namespace Yelo {
 		// 			gc_nodes = true;
 		// 		}
 		// 			// by default, the editor doesn't run game scripts
-		// 		else if (!hs_runtime_globals->run_game_scripts || CurrentEngine.IsSapien()) {
+		// 		else if (!hs_runtime_globals->run_game_scripts || CurrentEngine->IsSapien()) {
 		// 			continue;
 		// 		}
 		//
@@ -315,7 +315,7 @@ namespace Yelo {
 	// 	if (actual_type == desired_type || actual_type == Enums::_hs_passthrough)
 	// 		return value;
 	// 	else if (!Yelo::blam::hs_type_is_object_name(desired_type) && Yelo::blam::hs_type_is_object(desired_type) && hs_type_is_object_name(actual_type)) {
-	// 		const auto obj_idx_from_name = CurrentEngine.getFunctionBegin("object_index_from_name_index");
+	// 		const auto obj_idx_from_name = CurrentEngine->getFunctionBegin("object_index_from_name_index");
 	//
 	// 		if (!obj_idx_from_name) {
 	// 			throw "Could not find engine function: " "object_index_from_name_index";

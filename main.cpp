@@ -43,7 +43,7 @@
  * along with Tempera. If not, see <http://www.gnu.org/licenses/>.
  **/
 static volatile bool loaded = false;
-static void *orig_DirectInput8Create;
+static inline void *orig_DirectInput8Create = nullptr;
 
 //Used in order to proxy direct input.
 naked void WINAPI Tempera_DirectInput8Create() {
@@ -56,9 +56,9 @@ naked void WINAPI Tempera_DirectInput8Create() {
 
 using feats = feature_management::features;
 
-static inline void *init(HMODULE *reason) {
+static void *init(HMODULE *reason) {
 
-	InitializeDllImageContext((PVOID)(*reason));
+//	InitializeDllImageContext((PVOID)(*reason));
 	ExceptionHandlerHandle = AddVectoredExceptionHandler(CALL_FIRST, CEInternalExceptionHandler);
 
 	// Dbg output before we get any further (initializes the console)
@@ -66,17 +66,16 @@ static inline void *init(HMODULE *reason) {
 		freopen_s(&debug_out, "CONOUT$", "w", stdout);
 	}
 
-	CurrentEngine = feature_management::engines::GlobalEngine();
+	CurrentEngine = feature_management::engines::GlobalEngine::GetGlobalEngine();
 
 	//Initializes the file log for debug output.
-	InitAddLog(*reason, CurrentEngine.DEBUG_FILENAME);
+	InitAddLog(*reason, feature_management::engines::GlobalEngine::DEBUG_FILENAME);
 
-	if (!CurrentEngine.HasSupport()) {
+	if (!feature_management::engines::GlobalEngine::HasSupport()) {
 		PrintLn("Tempera could not detect that the current runtime has any feature support.");
 		return nullptr;
 	}
 
-	PrintLn("Initialized the dll. Details: %s", PrintImageDetails());
 	PrintLn("The Current runtime does, in fact, have support.");
 
 	//TODO: dinput-agnostic tempera.
@@ -93,13 +92,13 @@ static inline void *init(HMODULE *reason) {
 		return nullptr;
 	}
 
-#define SUPPORTSFEAT(FEAT) CurrentEngine.SupportsFeature(feats::FEAT)
-#define SUPPORTSFEATS(FEATA, FEATB) CurrentEngine.SupportsFeature((uint)(feats::FEATA | feats::FEATB))
-	if (SUPPORTSFEAT(LUA_HOOKS)) {
-		CurrentEngine.InitializeLuaState();
-		CurrentEngine.LuaFirstRun();
-		PrintLn("\nLua state initialized and FirstRun called");
-	}
+#define SUPPORTSFEAT(FEAT) CurrentEngine->SupportsFeature(feats::FEAT)
+#define SUPPORTSFEATS(FEATA, FEATB) CurrentEngine->SupportsFeature((uint)(feats::FEATA | feats::FEATB))
+//	if (SUPPORTSFEAT(LUA_HOOKS)) {
+//		feature_management::engines::GlobalEngine::InitializeLuaState();
+//		feature_management::engines::GlobalEngine::LuaFirstRun();
+//		PrintLn("\nLua state initialized and FirstRun called");
+//	}
 
 	orig_DirectInput8Create = (void*)GetProcAddress(*reason, "DirectInput8Create");
 	PrintLn("\nDinput8Create");
@@ -112,17 +111,11 @@ static inline void *init(HMODULE *reason) {
 
 	PrintLn("\nVirtualProtect called, result: [%d]", succ);
 
-	CurrentEngine.WriteHooks();
+	CurrentEngine->WriteHooks();
 	PrintLn("\nCurrentEngine.WriteHooks completed");
 
 	//We need to protect memory, I suppose.
 	// VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READ, &old);
-
-	//run the post_dll_load lua hook
-	if (SUPPORTSFEAT(LUA_HOOKS)) {
-		PrintLn("\nLua Hooks writing, initiating the call lua event by type now");
-		CurrentEngine.GetLuaState()->call_lua_event_by_type(LuaCallbackId::post_dll_init);
-	}
 
 	PrintLn("\nreturning the original dinput8 create now");
 
@@ -157,3 +150,5 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 	}
 	return true;
 }
+#undef SUPPORTSFEAT
+#undef SUPPORTSFEATS

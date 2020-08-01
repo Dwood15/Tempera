@@ -2,9 +2,9 @@
 #include "../CurrentEngine.h"
 
 void Control::HandleActionOverride(ushort idx, s_unit_control_data * from) {
-	if (CurrentEngine.ShouldOverrideAction(idx)) {
+	if (CurrentEngine->ShouldOverrideAction(idx)) {
 
-		auto override = CurrentEngine.GetPlayerActionOverride(idx, from);
+		auto override = CurrentEngine->GetPlayerActionOverride(idx, from);
 
 		from->control_flags = override.control_flagsA;
 		from->throttle.x = override.throttle_leftright;
@@ -16,7 +16,7 @@ void Control::HandleActionOverride(ushort idx, s_unit_control_data * from) {
 
 		from->grenade_index = override.desired_grenade_index;
 
-		CurrentEngine.ResetOverride();
+		CurrentEngine->ResetOverride();
 	}
 }
 
@@ -25,7 +25,7 @@ void Control::HandleActionOverride(ushort idx, s_unit_control_data * from) {
 void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client_update_idx) {
 	PrintLn("Updating player: 0x%x", unit_idx);
 
-	auto to = reinterpret_cast<s_unit_datum *>(CurrentEngine.GetGenericObject(unit_idx));
+	auto to = reinterpret_cast<s_unit_datum *>(CurrentEngine->GetGenericObject(unit_idx));
 
 	if(to->unit.controlling_player_index.handle != static_cast<uint>(-1))	{
 		HandleActionOverride(to->unit.controlling_player_index.index, from);
@@ -33,7 +33,7 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 
 	PrintLn("HandleActionOverride");
 
-	if (*CurrentEngine.main_globals_game_connection_type == 2) {
+	if (*CurrentEngine->main_globals_game_connection_type == 2) {
 		PrintLn("game connection type -- non local !?");
 
 		if ((from->control_flags.control_flags_a >> 8) & 0b00101000) {

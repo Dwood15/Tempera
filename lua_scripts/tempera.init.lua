@@ -26,7 +26,7 @@ Hopefully you, the mapmaker or mod developer (or end-user) will find it useful.
 --The available LUA API.
 
 
-DebugPrint(true, "\n\tCALLED A C FUNCTION FROM LUA\n")
+DebugPrint(true, "\n\t<<Tempera.init.lua Initializing>>\n")
 --DebugPrint - For logging to file + Console.
 --Takes Two parameters (Boolean) and a string.
 --Always prints to debug file. Requires a boolean indicating whether or not to write to console.
@@ -173,7 +173,7 @@ local onTickNextPlayerIndexPrinted = false
 function OnTick(ticks_til_frame, time_since_map_started)
 	-- too much log spam
 	--if onTickNextPlayerIndexPrinted == false then
-	--	Dbg("Checking if Core Initialized!")
+	Dbg("OnTick callback: Checking if Core Initialized!")
 	--end
 
 	if IsCoreInitialized() == false then
@@ -206,8 +206,9 @@ function OnTick(ticks_til_frame, time_since_map_started)
 	onTickNextPlayerIndexPrinted = true
 end
 
-Dbg("\tOntick callback registered")
+Dbg("\tOntick callback registering")
 RegisterCallBack(5, "OnTick")
+Dbg("\tOntick callback registered, Lua detecting version")
 
 if IsCustomEd() then
 	Dbg("\tCustom Edition Detected in Lua!\n")
@@ -327,3 +328,6 @@ GetPlayerAddress
 -- Address is the location (in memory) to write the value.
 -- Since lua does not have integers as a base type, Tempera only does simple bounds checking on the value passed in.
 -- Other than that, Tempera assumes the value is correct, and dumbly writes the value to memory.
+
+
+Dbg("\tTempera init lua file initialized!\n")

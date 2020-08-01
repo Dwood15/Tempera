@@ -82,7 +82,7 @@ STAT_ASSERT(ushort, 0x2);
 #define INVALID -1
 
 #pragma region functional
-#define FLAG(bit)               ( 1<<(bit) )
+#define FLAG(bit)               ( 1<<((uint32)bit) )
 #define UNK_TYPE(type) pad_##type
 #define PAD24(name) unsigned char name[24];
 
@@ -137,7 +137,7 @@ STAT_ASSERT(ushort, 0x2);
 // ...Actually, this fixes the problem of the compiler ignoring the 'write' attribute
 // When compiled into object-code (.obj), the 'write' attribute is lost, so it's not really the linker's fault
 //#pragma comment(linker, "/section:" API_CODEDATA_SECTION_NAME ",ERW")
-#define FUNC_GET(funcName)       CurrentEngine.getFunctionBegin(#funcName)
+#define FUNC_GET(funcName)       CurrentEngine->getFunctionBegin(#funcName)
 #endif
 
 //TODO: Move to enums

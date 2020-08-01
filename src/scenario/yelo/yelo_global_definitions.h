@@ -116,7 +116,7 @@ namespace Yelo::TagGroups {
 
 				if (remove_element) {
 					//TODO: tag_block_delete_element()
-					// auto function = CurrentEngine.getFunctionBegin("tag_block_delete_element");
+					// auto function = CurrentEngine->getFunctionBegin("tag_block_delete_element");
 					// Yelo::blam::tag_block_delete_element(networking.player_units, x);
 				}
 			}

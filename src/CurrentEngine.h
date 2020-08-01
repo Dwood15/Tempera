@@ -1,9 +1,11 @@
 #pragma once
+#pragma check_stack(off)
 
 //#pragma clang diagnostic push
 //#pragma clang diagnostic ignored "-Weverything"
 #include <dinput.h>
 #include <optional>
+#include <addlog.h>
 //#pragma clang diagnostic pop
 
 #include "versions.h"
@@ -25,17 +27,10 @@ struct s_player_action;
 struct s_unit_control_data;
 constexpr const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
 
+
 namespace feature_management::engines {
-
-
-
-
-
-
-
-
 	class GlobalEngine {
-		bool core_initialized = false;
+		static inline bool core_initialized = false;
 
 	private:
 		//TODO: More intelligent division of these members -
@@ -55,7 +50,7 @@ namespace feature_management::engines {
 		short *to_respawn_count;
 		short *spawn_count;
 		short *render_window_count;
-		volatile bool  at_main_menu;
+		static inline bool  *at_main_menu = nullptr;
 
 		void **hud_scripted_globals;
 		void **hud_messaging_state;
@@ -64,7 +59,7 @@ namespace feature_management::engines {
 		s_players_globals_data        *players_globals;
 		Yelo::Scenario::s_scenario_globals * scenario_globals;
 		s_motion_sensor               *motion_sensor;
-		Yelo::GameState::s_game_time_globals	  *game_time_globals;
+		static inline Yelo::GameState::s_game_time_globals	  *game_time_globals = nullptr;
 		uintptr                       game_state_globals_location_ptr;
 		uintptr                       game_state_globals_ptr;
 		void                          **crc_checksum_buffer;
@@ -88,8 +83,7 @@ namespace feature_management::engines {
 
 		player *GetPlayer(short index);
 
-		const bool AreWeInMainMenu();
-		auto GetGameTimeGlobals();
+		static bool AreWeInMainMenu();
 
 		bool IsPlayerSpawned(short index);
 
@@ -129,47 +123,51 @@ namespace feature_management::engines {
 		void ToggleFlycam(char = -1);
 
 	private:
-		features              CurrentSupported = features::NOPE;
-		major                 CurrentMajor     = major::NO;
-		minor                 CurrentMinor     = minor::nope;
-		defined_functionrange *current_map     = nullptr;
+		static inline features              CurrentSupported;
+		static inline major                 CurrentMajor;
+		static inline minor                 CurrentMinor;
 		//Support Attempted
 		//::std::string GetCurrentFileName(char * args) {
-		::std::string GetCurrentFileName();
+		static ::std::string GetCurrentFileName();
 
-		bool VerSupported();
+		static bool VerSupported();
 
-		features GetSupported();
-
-		LuaScriptManager * LuaState = &mgr;
+		static features GetSupported();
 
 	public:
+		static inline char *DEBUG_FILENAME = nullptr;
+		static inline defined_functionrange *current_map = nullptr;
 
-		void ** GetHsFunctionTableReferences();
-		char                     *DEBUG_FILENAME = const_cast<char *>("tempera.unk.unk.debug.log");
-		char *LUA_FILENAME   = const_cast<char *>("tempera.init.lua");
+		static GlobalEngine* GetGlobalEngine();
+		static inline char *LUA_FILENAME   = const_cast<char *>("tempera.init.lua");
 
-		LuaScriptManager * GetLuaState();
+		[[nodiscard]] static LuaScriptManager * GetLuaState();
 
 		s_player_action GetPlayerActionOverride(ushort idx, s_unit_control_data * from);
 
-		bool IsHek();
+		static bool IsHek() {
+			return CurrentMajor == major::HEK;
+		}
 
-		bool IsSapien();
+		static bool IsSapien() {
+			return IsHek() && CurrentMinor == minor::sapien;
+		}
 
-		bool IsCustomEd();
+		static bool IsCustomEd() {
+			return CurrentMajor == major::CE;
+		}
 
-		bool IsCoreInitialized();
-
-		size_t GetNumberOfFunctionTableReferences();
+		static bool IsCoreInitialized() {
+			return core_initialized;
+		}
 
 		void WriteHooks();
 
-		bool HasSupport();
+		static bool HasSupport();
 
 		auto ScenarioGlobals();
 
-		IDirectInput8A *GetDInput8Device();
+		static IDirectInput8A *GetDInput8Device();
 		IDirectInputDevice8A *GetKeyboardInput();
 		IDirectInputDevice8A *GetMouseInput();
 		IDirectInputDevice8A **GetJoystickInputs();
@@ -184,11 +182,9 @@ namespace feature_management::engines {
 
 		void MakePlayerJump(ushort idx);
 
-		void InitializeLuaState();
+		static void InitializeLuaState();
 
-		void LuaFirstRun();
-
-		GlobalEngine();
+		static void LuaFirstRun();
 
 		void RefreshCore(bool force = false);
 
@@ -197,11 +193,6 @@ namespace feature_management::engines {
 		}
 
 		const char *GetCurrentMajorVerString();
-
-		/**
- 		* Called before VirtualProtect is run.
- 		*/
-		void registerLuaCallback(const ::std::string &cb_name, LuaCallbackId cb_type);
 
 		constexpr bool equal(const char *lhs, const char *rhs);
 
@@ -214,20 +205,30 @@ namespace feature_management::engines {
 		 */
 		::std::optional<uintptr_t> getFunctionBegin(const char *needle);
 
-		/**
-		 * Run-time lookup of memory regions.
-		 * 	While positive results are (often) correct, take guesses
-		 * with a huge grain of salt.
-		 * @param addr Address to look up
-		 * @return named description of the memory region.
-		 */
-		const char *getMemoryRegionDescriptor(const void * addr);
+		static short GetElapsedTime() {
+			static auto gtg = game_time_globals;
 
-		short GetElapsedTime();
+			return gtg->elapsed_time;
+		}
+
 	};
-};
 
-static feature_management::engines::GlobalEngine CurrentEngine;
+	/***
+ 	 * Called before VirtualProtect is run.
+ 	 ***/
+	static void registerLuaCallback(const char * cb_name, LuaCallbackId cb_type) {
+		auto cb = cb_name;
+
+		PrintLn<false>("Should be registering callback: %s", cb);
+
+		mgr.registerLuaCallback(cb_name, cb_type);
+
+		PrintLn<false>("%s registered.", cb_name);
+	}
+}
+
+static inline feature_management::engines::GlobalEngine* CurrentEngine = nullptr;
+
 
 /**
  * Called variably based on fps
@@ -239,5 +240,65 @@ void game_tick(int current_frame_tick);
  * Called right before game loop starts, memory has already been initialized
  */
 void main_setup_connection_init();
+
+
+static const char * getMemoryRegionDescriptor(void * addr) {
+	PrintLn("\tCurrentEngine Location: : [0x%X]", CurrentEngine);
+	PrintLn("\tSearching for address: [0x%X]", addr);
+
+//	unsigned int endImgRng = NtHeader.baseImageLocation + NtHeader.imageSize;
+//
+//	if ((uintptr_t)addr >= NtHeader.baseImageLocation && (uintptr_t)addr <= (uintptr_t)endImgRng) {
+//		PrintLn("\tException Location inside of tempera dinput dll, probably.");
+//		return "probably_in_tempera_dll_space";
+//	}
+
+	if ((uintptr_t)addr < 0x200000) {
+		PrintLn("\tAddress on the stack");
+		return "probably_in_stack";
+	}
+
+	if ((uintptr_t)addr < 0x400000) {
+		PrintLn("\tAn unmapped region");
+		return "unmapped_region";
+	}
+
+	if ((uintptr_t)addr >=  0x70000000) {
+		PrintLn("\tProbably in a loaded DLL memory location");
+		return "probably in a loaded DLL memory location";
+	}
+
+	using dfr = defined_functionrange;
+
+	dfr *funcList =  ::feature_management::engines::GlobalEngine::current_map;
+
+	int i = 0;
+
+	for (dfr *item = funcList; item; item++) {
+		++i;
+
+		if (item->end < (uintptr_t)addr)
+			continue;
+
+		bool contains = item->contains((uintptr_t)addr);
+		//The function map should be pre-sorted, so this SHOULD mean that we can
+		// break out of the loop.
+		if (item->begin <= (uintptr_t)addr) {
+			if (!contains) {
+				PrintLn("\tContains disagrees with the manual calculation");
+			}
+
+			return item->funcName;
+		}
+	}
+
+	if ((uintptr_t)addr < 0x5E9020) {
+		PrintLn("\tUnmapped function space, probably");
+		return "function_space_unmapped";
+	}
+
+	PrintLn("\tUnmappedRegion");
+	return "unmapped_region";
+}
 
 static CD3D cd3d;

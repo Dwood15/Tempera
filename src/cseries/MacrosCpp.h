@@ -114,7 +114,6 @@
 // returns the amount of bits that make up [type]
 #define BIT_COUNT(type) ( sizeof(type) * 8 )
 
-#define FLAG(bit)                  ( 1<<(bit) )
 // Test the flags for a specific bit value
 #define TEST_FLAG(flags, bit)         ( ((flags) & FLAG(bit)) != 0 )
 // Toggle the bit in a set of flags

@@ -390,7 +390,7 @@ namespace Yelo::Enums {
 	// How much more memory we're adding.
 	// +50%
 
-	static constexpr int K_MEMORY_UPGRADE_INCREASE_MULTIPLIER = 2;
+	static constexpr float K_MEMORY_UPGRADE_INCREASE_MULTIPLIER = 1.5f;
 	constexpr int          k_game_state_allocation_size     = 0x00440000;
 
 	//////////////////////////////////////////////////////////////////////////

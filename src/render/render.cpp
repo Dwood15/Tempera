@@ -10,7 +10,7 @@
 namespace render {
 	int main_get_window_count_override() {
 		//Todo: remember to  check if cinematic is playing.
-		auto player_count = CurrentEngine.GetLocalPlayerCount();
+		auto player_count = CurrentEngine->GetLocalPlayerCount();
 		if (player_count > MAX_PLAYER_COUNT_LOCAL || player_count < 1) {
 			player_count = 1;
 		}

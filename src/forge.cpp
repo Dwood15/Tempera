@@ -39,7 +39,7 @@ void ForgeState::HandleMainMenuOptions() {
 	if (GetAsyncKeyState(VK_F1) & 1) {
 		//Player spawn count set to 2.
 		*(short *) 0x624A9C = (short) 0x2;
-		CurrentEngine.ConsoleText(hGreen, "Number players to spawn in next sp map: +1!");
+		CurrentEngine->ConsoleText(hGreen, "Number players to spawn in next sp map: +1!");
 	}
 }
 
@@ -60,8 +60,8 @@ void ForgeState::PrintHelp() {
 }
 
 //TODO: Launch thread later on in the load cycle
-[[noreturn]] int ForgeState::MainLoop() {
-	if (CurrentEngine.IsHek()) {
+int ForgeState::MainLoop() {
+	if (CurrentEngine->IsHek()) {
 		PrintLn("Forge doesn't support anything but Halo PC 1.10 right now. Working on expanding horizons.");
 		__asm retn
 	}

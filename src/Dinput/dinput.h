@@ -2,24 +2,22 @@
 #include <dinput.h>
 #include "../CurrentEngine.h"
 
-namespace Input {
-	namespace DInput {
+namespace Input::DInput {
 		static IDirectInput8 * GetDInput() {
-			return CurrentEngine.GetDInput8Device();
+			return CurrentEngine->GetDInput8Device();
 		}
 
 		static IDirectInputDevice8A *GetJoystick(unsigned int idx = 0) {
 			if (idx > 7) {
-				return NULL;
+				return nullptr;
 			}
 
-			return (CurrentEngine.GetJoystickInputs())[idx];
+			return (CurrentEngine->GetJoystickInputs())[idx];
 		}
 
 		//because static doesn't work with the current compilation order I guess.
 		extern void RegisterLuaFunctions(::LuaScriptManager * mgr);
 	}
-}
 
 namespace gamepads {
 	// constexpr __int16 *og_player_to_controller_array =  static_cast<__int16 *>(0x6AFE26);

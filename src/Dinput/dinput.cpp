@@ -115,10 +115,10 @@ namespace players {
 			return datum_index::null();
 		}
 
-		if (local_player_index > CurrentEngine.GetLocalPlayerCount()) {
+		if (local_player_index > CurrentEngine->GetLocalPlayerCount()) {
 			return datum_index::null();
 		}
 
-		return CurrentEngine.GetLocalPlayers()[local_player_index];
+		return CurrentEngine->GetLocalPlayers()[local_player_index];
 	}
 };

@@ -35,7 +35,7 @@ struct s_player_action;
 //This code was (for the most part) copy-pasted from
 //The tutorial series here: https://eliasdaler.wordpress.com/2013/10/20/lua_and_cpp_pt2/
 class LuaScriptManager {
-	lua_State   *L;
+	lua_State   *L = nullptr;
 	::std::string fileName;
 	bool        loaded = false;
 
@@ -71,16 +71,16 @@ public:
  	* @param cb_name Name of Lua func to call.
  	* @param cb_type On which event this func is called.
  	*/
-	void registerLuaCallback(const ::std::string &cb_name, LuaCallbackId cb_type);
+	void registerLuaCallback(const char * cb_name, LuaCallbackId cb_type);
 
-	void registerGlobalLuaFunction(const ::std::string &funcName, lua_CFunction funcAddr) {
+	void registerGlobalLuaFunction(const char * funcName, lua_CFunction funcAddr) {
 		lua_pushcclosure(L, funcAddr, 0);
-		lua_setglobal(L, funcName.c_str());
+		lua_setglobal(L, funcName);
 	}
 
-	void InitializeLua(const ::std::string &filename = "tempera.init.lua");
+	void InitializeLua(const char *filename = "tempera.init.lua");
 
-	void lua_on_tick(ushort remaining, uint32 since_map_begin);
+	void lua_on_tick(uint32 remaining, uint32 since_map_begin);
 	void lua_on_player_update(s_player_action * control, ushort plyrIdx);
 
 	void call_void_lua_func(const ::std::string &funcName);

@@ -7,7 +7,7 @@ class ForgeState {
 
 	void PrintHelp();
 
-	[[noreturn]] int MainLoop();
+	int MainLoop();
 };
 
 struct _blam_ {

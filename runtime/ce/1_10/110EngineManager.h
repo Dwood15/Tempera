@@ -30,8 +30,8 @@ namespace feature_management::engines {
 		//static void InitializeHSMemoryUpgrades();
 
 	public:
-		CE110() {}
-		~CE110() {}
+		CE110() = default;
+		~CE110() = default;
 
 		static const defined_functionrange *GetFunctionMap();
 

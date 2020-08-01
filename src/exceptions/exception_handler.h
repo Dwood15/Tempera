@@ -8,11 +8,9 @@
 
 #include <vector>
 #include <Windows.h>
-#include <DbgHelp.h>
-#include <locale.h>
-#include <locale>
+//#include <DbgHelp.h>
 
-#define MAX_EXCEPTIONS_TO_LOG 2
+#define MAX_EXCEPTIONS_TO_LOG 3
 
 //Try to let the game handle the exception first...
 #define CALL_FIRST 0
@@ -28,17 +26,15 @@ void DUMP_REGISTERS(PCONTEXT context);
 void SetPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, bool setExecuteBit);
 
 //The descriptor for our header
-static struct NtHeaderData {
-	bool initialized = false;
-	PIMAGE_NT_HEADERS pNtHeader;
-	unsigned int imageSize;
-	unsigned int imageSizeKB;
-	unsigned int baseImageLocation;
+//struct NtHeaderData {
+//	bool initialized = false;
+//	PIMAGE_NT_HEADERS pNtHeader;
+//	unsigned int imageSize;
+//	unsigned int imageSizeKB;
+//	unsigned int baseImageLocation;
+//};
 
-} NtHeader;
-
-void InitializeDllImageContext(PVOID imageBase);
-char* PrintImageDetails();
+//static volatile NtHeaderData NtHeader;
 
 LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo);
 

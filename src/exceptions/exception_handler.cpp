@@ -34,24 +34,24 @@ void DUMP_REGISTERS(PCONTEXT context) {
 }
 
 
-char* PrintImageDetails() {
-	static char imgDta[120];
-	const char* fmt = "\n\tDLL startAddress = [0x%x] |"
-					  " DLL ImageSizeKB: [%d]";
-
-	sprintf(imgDta, fmt, NtHeader.baseImageLocation, NtHeader.imageSizeKB);
-
-	return imgDta;
-}
-
-void InitializeDllImageContext(PVOID imageBase) {
-	NtHeader.baseImageLocation = (unsigned long)imageBase;
-	NtHeader.pNtHeader = ImageNtHeader(imageBase);
-	NtHeader.imageSize = NtHeader.pNtHeader->OptionalHeader.SizeOfImage;
-	NtHeader.imageSizeKB = NtHeader.imageSize / 1024;
-
-	NtHeader.initialized = true;
-}
+//char* PrintImageDetails() {
+//	static char imgDta[120];
+//	const char* fmt = "\n\tDLL startAddress = [0x%x] |"
+//					  " DLL ImageSizeKB: [%d]";
+//
+//	sprintf(imgDta, fmt, NtHeader.baseImageLocation, NtHeader.imageSizeKB);
+//
+//	return imgDta;
+//}
+//
+//void InitializeDllImageContext(PVOID imageBase) {
+//	NtHeader.baseImageLocation = reinterpret_cast<uint32>(imageBase);
+//	NtHeader.pNtHeader = ImageNtHeader(imageBase);
+//	NtHeader.imageSize = NtHeader.pNtHeader->OptionalHeader.SizeOfImage;
+//	NtHeader.imageSizeKB = NtHeader.imageSize / 1024;
+//
+//	NtHeader.initialized = true;
+//}
 
 
 const char *GetExceptionString(const DWORD &code) {
@@ -113,6 +113,8 @@ void SetPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, bool se
 	DEBUG("PageGuard should be getting set now. Not implemented yet tho.");
 }
 
+static std::atomic<DWORD> ExceptionCount;
+
 /**
  * This method is intended to capture basic information about exceptions and attempts to
  * give basic information about the exception, including known method and typenames.
@@ -120,7 +122,6 @@ void SetPageGuard(uintptr_t startAddr, uintptr_t length, void *callback, bool se
  * @return Whether or not the application should continue running despite the exception
  */
 LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo) {
-	static std::atomic<DWORD> ExceptionCount;
 
 	DEBUG("Exception being handled. \n\tBUILD DATE: " __DATE__ " TIME: " __TIME__);
 
@@ -132,18 +133,14 @@ LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo
 		return FAIL_FAST_NO_HARD_ERROR_DLG;
 	}
 
-	++ExceptionCount;
-
-	if (!NtHeader.initialized) {
-		DEBUG("\n\tNtHeader is not initialized with a received Exception\n");
-	}
-
 	auto eiRecord = ExceptionInfo->ExceptionRecord;
 	auto eCode = eiRecord->ExceptionCode;
 
-	auto exceptionAddress = eiRecord->ExceptionAddress;
-	auto regionDescriptor = CurrentEngine.getMemoryRegionDescriptor((void *)exceptionAddress);
-	DEBUG("\tErr Code: 0x%X - %s @ 0x%X (%s)\n", eCode, GetExceptionString(eCode), exceptionAddress, regionDescriptor);
+	auto exceptionAddr = eiRecord->ExceptionAddress;
+	auto regionDescriptor = getMemoryRegionDescriptor((void *)exceptionAddr);
+	auto exceptStr = GetExceptionString(eCode);
+
+	DEBUG("\tErr Code: 0x%X - %s @ 0x%X (%s)\n", eCode, exceptStr, exceptionAddr, regionDescriptor);
 
 	auto nestedExc = eiRecord->ExceptionRecord;
 	if (nestedExc != nullptr) {
@@ -153,6 +150,8 @@ LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo
 	if (ExceptionCount <= MAX_EXCEPTIONS_TO_LOG) {
 		DUMP_REGISTERS(ExceptionInfo->ContextRecord);
 	}
+
+	ExceptionCount++;
 
 	return EXCEPTION_EXECUTE_HANDLER;
 }

@@ -306,11 +306,11 @@ enum object_sizes {
 	k_object_size_vehicle = 0xF4 + k_object_size_unit,
 };
 
-enum object_type {
-	_object_type_object = -4,
-	_object_type_device = -3,
-	_object_type_item   = -2,
-	_object_type_unit   = -1,
+enum object_type : uint32 {
+	_object_type_object = (uint32)(-4),
+	_object_type_device = (uint32)-3,
+	_object_type_item   = (uint32)-2,
+	_object_type_unit   = (uint32)-1,
 
 	_object_type_biped = 0,
 	_object_type_vehicle,

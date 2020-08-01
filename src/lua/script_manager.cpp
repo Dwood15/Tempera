@@ -32,7 +32,7 @@ int l_registerLuaCallback(lua_State *L) {
 		PrintLn("\tCan't register hook id: %d for: %s Invalid hook id!", id, str);
 	}
 
-	CurrentEngine.registerLuaCallback(str, (LuaCallbackId) id);
+	::feature_management::engines::registerLuaCallback(str, (LuaCallbackId) id);
 
 	return 0;
 }
@@ -43,7 +43,7 @@ int l_registerLuaCallback(lua_State *L) {
  * @return
  */
 int l_IsPlayerSpawned(lua_State *L) {
-	if (!CurrentEngine.IsCoreInitialized()) {
+	if (!CurrentEngine->IsCoreInitialized()) {
 		PrintLn<false>("\tCan't spawn player because core is not initialized!\n");
 
 		lua_pushboolean(L, false);
@@ -53,7 +53,7 @@ int l_IsPlayerSpawned(lua_State *L) {
 	const auto idx = lua_tointeger(L, 1);
 
 	if (idx >= 0 && idx <= 15) {
-		lua_pushboolean(L, CurrentEngine.IsPlayerSpawned(idx));
+		lua_pushboolean(L, CurrentEngine->IsPlayerSpawned(idx));
 		return 1;
 	}
 
@@ -67,7 +67,7 @@ int l_IsPlayerSpawned(lua_State *L) {
  * @return
  */
 int l_GetPlayerAddress(lua_State *L) {
-	if (!CurrentEngine.IsCoreInitialized()) {
+	if (!CurrentEngine->IsCoreInitialized()) {
 		PrintLn<false>("\tCan't get player address because core is not initialized!\n");
 
 		lua_pushinteger(L, -1);
@@ -77,12 +77,12 @@ int l_GetPlayerAddress(lua_State *L) {
 	const auto idx = lua_tointeger(L, 1);
 
 	if (idx >= 0 && idx <= 15) {
-		if (!CurrentEngine.IsPlayerSpawned(idx)) {
+		if (!CurrentEngine->IsPlayerSpawned(idx)) {
 			lua_pushinteger(L, -1);
 			return 1;
 		}
 
-		lua_pushinteger(L, reinterpret_cast<int>(CurrentEngine.GetPlayer(idx)));
+		lua_pushinteger(L, reinterpret_cast<int>(CurrentEngine->GetPlayer(idx)));
 		return 1;
 	}
 
@@ -117,7 +117,7 @@ int LuaSetPlayerFunctionWithArg(lua_State *L, F func) {
  */
 int l_CallVoidEngineFunctionByFunctionMapName(lua_State *L) {
 	auto str = lua_tostring(L, 1);
-	auto got = CurrentEngine.getFunctionBegin(str);
+	auto got = CurrentEngine->getFunctionBegin(str);
 
 	if (got) {
 		calls::DoCall<Convention::m_cdecl>(*got);
@@ -137,7 +137,7 @@ int l_CallVoidEngineFunctionByFunctionMapName(lua_State *L) {
  */
 int l_GetEngineContext(lua_State *L) {
 
-	const char *MAJSTR = CurrentEngine.GetCurrentMajorVerString();
+	const char *MAJSTR = CurrentEngine->GetCurrentMajorVerString();
 
 	lua_pushstring(L, MAJSTR);
 
@@ -146,7 +146,7 @@ int l_GetEngineContext(lua_State *L) {
 		return 2;
 	}
 
-	lua_pushinteger(L, CurrentEngine.GetMinorVersion());
+	lua_pushinteger(L, CurrentEngine->GetMinorVersion());
 	return 2;
 }
 
@@ -155,7 +155,7 @@ int l_GetEngineContext(lua_State *L) {
  * @param cb_name
  * @param cb_type
  */
-void LuaScriptManager::registerLuaCallback(const::std::string &cb_name, LuaCallbackId cb_type) {
+void LuaScriptManager::registerLuaCallback(const char *cb_name, LuaCallbackId cb_type) {
 #ifndef __GNUC__
 	if (!this) {
 		PrintLn<false>("\tRegisterLuaCallback exiting b/c of invalid context. :(");
@@ -171,11 +171,11 @@ void LuaScriptManager::registerLuaCallback(const::std::string &cb_name, LuaCallb
 	PrintLn<false>("Checking if Hook valid inside script_manager.h");
 
 	if (isValidCbId((uint) cb_type)) {
-		PrintLn<false>("\tPushing down the cb: %s", cb_name.c_str());
+		PrintLn<false>("\tPushing down the cb: %s", cb_name);
 
-		callbacks[cb_type].push_back(cb_name);
+		callbacks[cb_type].emplace_back(cb_name);
 
-		PrintLn<false>("\tHook %s should register now! # Hooks now registered: %d", cb_name.c_str(), callbacks[cb_type].size());
+		PrintLn<false>("\tHook %s should register now! # Hooks now registered: %d", cb_name, callbacks[cb_type].size());
 	} else {
 		PrintLn("Rejected callback: %s with id: %d because the id is invalid.", cb_name, cb_type);
 	}
@@ -190,6 +190,8 @@ void LuaScriptManager::PCall(const char * funcName) {
 
 //Returns false if function not found, or if error.
 bool LuaScriptManager::HandleFunctionNameEvent(const char * funcName) {
+	PrintLn<false>("HandleFunctionNameEvent: %s", funcName);
+
 	if (!this->IsLoaded()) {
 		PrintLn<false>("Can't call %s event- doesn't exist!", funcName);
 		return false;
@@ -289,7 +291,7 @@ void LuaScriptManager::lua_on_player_update(s_player_action * control, ushort pl
 	ReadPlayerControl(L, control);
 }
 
-void LuaScriptManager::lua_on_tick(ushort remaining, uint32 since_map_begin) {
+void LuaScriptManager::lua_on_tick(uint32 remaining, uint32 since_map_begin) {
 	constexpr const char * funcName = "OnTick";
 
 	if(!this->HandleFunctionNameEvent(funcName)) {
@@ -368,18 +370,18 @@ void LuaScriptManager::HandleLuaError(int result) {
  * Initialize Lua, look for file filename.
  * @param filename
  */
-void LuaScriptManager::InitializeLua(const::std::string &filename) {
-	PrintLn("Trying To load: \n\t%s", filename.c_str());
+void LuaScriptManager::InitializeLua(const char *filename) {
+	PrintLn("Trying To load: \n\t%s", filename);
 
 	L = luaL_newstate();
 	luaL_openlibs(L);
-	auto result = luaL_loadfilex(L, filename.c_str(), 0);
+	auto result = luaL_loadfilex(L, filename, 0);
 
 	if (result != LUA_OK) {
-		PrintLn("Error: script failed to load: (%s)\n\tDwood is still learning how to add features to Lua.", filename.c_str());
+		PrintLn("Error: script failed to load: (%s)\n\tDwood is still learning how to add features to Lua.", filename);
 		HandleLuaError(result);
 		this->loaded = false;
-		L = 0;
+		L = nullptr;
 		return;
 	}
 
@@ -408,7 +410,7 @@ void LuaScriptManager::InitializeLua(const::std::string &filename) {
 	});
 
 	registerGlobalLuaFunction("AreWeInMainMenu", [](lua_State *L) {
-		lua_pushboolean(L, CurrentEngine.AreWeInMainMenu());
+		lua_pushboolean(L, feature_management::engines::GlobalEngine::AreWeInMainMenu());
 		return 1;
 	});
 
@@ -419,12 +421,12 @@ void LuaScriptManager::InitializeLua(const::std::string &filename) {
 	//Some helpers for controlling the player.
 	registerGlobalLuaFunction("MakePlayerJump", [](lua_State *L) {
 		return LuaSetPlayerFunctionNoArg(L, [](ushort idx) {
-			CurrentEngine.MakePlayerJump(idx);
+			CurrentEngine->MakePlayerJump(idx);
 		});
 	});
 
 	registerGlobalLuaFunction("IsCoreInitialized", [](lua_State *L) {
-		lua_pushboolean(L, CurrentEngine.IsCoreInitialized());
+		lua_pushboolean(L, feature_management::engines::GlobalEngine::IsCoreInitialized());
 		return 1;
 	});
 
@@ -435,17 +437,17 @@ void LuaScriptManager::InitializeLua(const::std::string &filename) {
 	Input::DInput::RegisterLuaFunctions(this);
 
 	registerGlobalLuaFunction("IsCustomEd", [](lua_State *L) {
-		lua_pushboolean(L, CurrentEngine.IsCustomEd());
+		lua_pushboolean(L, feature_management::engines::GlobalEngine::IsCustomEd());
 		return 1;
 	});
 
 	registerGlobalLuaFunction("IsSapien", [](lua_State *L) {
-		lua_pushboolean(L, CurrentEngine.IsSapien());
+		lua_pushboolean(L, feature_management::engines::GlobalEngine::IsSapien());
 		return 1;
 	});
 
 	registerGlobalLuaFunction("IsHek", [](lua_State *L) {
-		lua_pushboolean(L, CurrentEngine.IsHek());
+		lua_pushboolean(L, feature_management::engines::GlobalEngine::IsHek());
 		return 1;
 	});
 

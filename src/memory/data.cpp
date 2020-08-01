@@ -24,7 +24,7 @@ namespace Yelo::blam {
 
 	// [[deprecated]]
 	// static s_data_array *data_new(const char *name, long maximum_count, size_t datum_size) {
-	// 	static auto FUNCTION = CurrentEngine.getFunctionBegin("data_new");
+	// 	static auto FUNCTION = CurrentEngine->getFunctionBegin("data_new");
 	//
 	// 	if (!FUNCTION) {
 	// 		return nullptr;

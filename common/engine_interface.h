@@ -79,7 +79,7 @@ namespace memory {
 
 namespace calls {
 	template <typename T>
-	void patchValue(uintptr_t to_patch, T replace_with) {
+	static void patchValue(uintptr_t to_patch, T replace_with) {
 		*(T *) to_patch = replace_with;
 	}
 
@@ -90,7 +90,7 @@ namespace calls {
 	// 	}
 	// }
 
-	static const unsigned int calc_addr_offset(const uintptr_t dest, int real_address) {
+	static unsigned int calc_addr_offset(const uintptr_t dest, int real_address) {
 		int real_address_offset = (real_address) - ((int) dest) - 4;
 		return static_cast<unsigned int>(real_address_offset);
 	}
