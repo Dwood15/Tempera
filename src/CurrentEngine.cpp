@@ -700,7 +700,7 @@ namespace feature_management::engines {
 		char    cBuffer[256] = {0};
 
 //		PrintLn("Attempting to print to Console!");
-		BYTE  bOrig[6]     = {0x83, 0xEC, 0x10, 0x57, 0x8B, 0xF8};
+//		BYTE  bOrig[6]     = {0x83, 0xEC, 0x10, 0x57, 0x8B, 0xF8};
 
 //		DWORD dwOldProtect = 0;
 //		VirtualProtect((void *) CONSOLE_TEXT_HOOK_ADDRESS, 10, PAGE_EXECUTE_READWRITE, &dwOldProtect);
@@ -711,22 +711,33 @@ namespace feature_management::engines {
 			va_end(mvalist);
 
 		// EZ PZ Detours.h replacement, yea?
-		oConsoleText = (pConsoleText) DetourFunction((PBYTE) CONSOLE_TEXT_HOOK_ADDRESS, (PBYTE) hkConsoleText);
+//		oConsoleText = (pConsoleText) DetourFunction((PBYTE) CONSOLE_TEXT_HOOK_ADDRESS, (PBYTE) hkConsoleText);
 		void *color = &fColor;
 #ifdef __GNUC__
-		IMPLEMENTATION_REQUIRED
+		using printf_tproc __attribute__((cdecl, regparm(1))) = void(*)(const void *color, const char* fmt, const char* arg); // pass fmt as "%s"
+		const printf_tproc console_printf = reinterpret_cast<printf_tproc>(CONSOLE_TEXT_HOOK_ADDRESS);
+		console_printf(color, "%s", cBuffer);
 #elif _MSC_VER
-		__asm MOV EAX, color
+		{
+			const void *func = reinterpret_cast<const void *>(CONSOLE_TEXT_HOOK_ADDRESS); // necessary, dont question it
+			const char *fmt = "%s";
+			const char *text = cBuffer;
+			__asm {
+			pushad
+			pushfd
+
+			mov eax, color
+			mov ecx, func
+			push text
+			push fmt
+			call ecx
+			add esp, 8
+
+			popfd
+			popad
+			};
+		}
 #endif
-		calls::DoCall<Convention::m_cdecl, void, char *>(CONSOLE_TEXT_HOOK_ADDRESS, cBuffer);
-		// #ifdef __GNUC__
-		// #elif _MSC_VER
-		 	__asm ADD ESP, 04h
-		// #endif
-
-
-		memcpy((void *) CONSOLE_TEXT_HOOK_ADDRESS, (void *) bOrig, 6);
-//		VirtualProtect((void *) CONSOLE_TEXT_HOOK_ADDRESS, 10, dwOldProtect, &dwOldProtect);
 	}
 };
 
