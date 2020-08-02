@@ -6,6 +6,26 @@
 
 using namespace feature_management::engines;
 
+namespace {
+	
+	// Why is this necessary? HCE/HPC pass in color via ARG.EAX, and the rest by stack.
+	// Sapien is full on __cdecl, so an interface is necessary to keep everything compatible.
+	void naked sapien_console_printf_interface() {
+		// initial pop edx is to take the function pointer out
+		__asm {
+			mov edx, dword ptr [esp+4]
+			mov ecx, 00506B20h
+			push dword ptr [esp+8]
+			push edx
+			push eax
+			call ecx
+			add esp, 0Ch
+			ret
+		}
+	}
+	
+} // (anonymous)
+
 //__cdecl makes the _caller_ clean up the stack. __stdcall means our function cleans up the stack
 
 void naked Sapien::OnPlayerActionUpdate() {
@@ -55,6 +75,8 @@ LPCoreAddressList Sapien::GetCoreAddressList() {
 
 	add_list.core_0 = reinterpret_cast<uint>(core0);
 	add_list.core_1 = reinterpret_cast<uint>(core1);
+	
+	add_list.CONSOLE_TEXT_HOOK_ADDRESS = reinterpret_cast<std::uintptr_t>(&sapien_console_printf_interface);
 
 	add_list.at_main_menu      = 0xDBD909;
 	add_list.game_time_globals = 0xBD8A18;
