@@ -1,9 +1,12 @@
-# Tempera
-
 ## A GPLv3 Mod for Halo Custom Edition and the Halo Editing Kit
 
-## Setting up Tempera under WINE
-   ### TODO: Step-By-Step tutorial for getting HCE and HEK set up and running on WINE
+# Setup
+
+---
+## Under WINE
+    TODO: Step-By-Step tutorial for getting HCE and HEK set up and running on WINE
+---  
+
 ## Setting up Tempera for Windows (Assuming Win 10)
   (This Documentation is extra-detailed so I have some documentation of installing all this stuff more than anyone else)
   ### Step 0: Install Notepad++ and Everything Service
@@ -89,7 +92,7 @@
   - Long-term-ish, I will be looking to move the project to be compatible w/ Clang/Gcc. 
   This is what's been the easier setup for me..
 
-## Attributions
+# Attributions
   
 Various files and items in this codebase can be attributed as follows:
 
@@ -108,7 +111,7 @@ SilentK and Abyll's haloforge project was mostly kept private. Intended for halo
 
 Tempera's repository may be the only publicly released code from the original live_projekt.
 
-## License Notice
+# License Notice
 
 All code within this repository is under the GNU General Public License, Version 3, and comes with no warranty, express or implied.
 
