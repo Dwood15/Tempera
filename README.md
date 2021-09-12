@@ -1,15 +1,47 @@
-## A GPLv3 Mod for Halo Custom Edition and the Halo Editing Kit
+Tempera
+==
 
-# Setup
+License Disclaimer
+=========
+
+All code within this repository is Licensed under the GNU General Public License, Version 3 or a compatible license and comes with no warranty, express or implied.
+
+MSFT Usage Guidelines
+=========
+
+The Tempera project, being targeted at Halo Custom Edition and the HEK are **not** covered under the Microsoft Content Usage guidelines. Halo Custom Edition and the HEK licenses predate both.
+
+General Disclaimer
+=========
+
+Tempera may cause your files to corrupt or game or pc to crash. None of which I am liable. Backup your files regularly.
+
+Table of contents
+=================
+
+   * [Setup](#setup)
+      * [For WINE](#for-wine)
+      * [Setting up Tempera for Windows 10](#for-windows-10)
+      	* [Install NPP and Everything Service](#install-npp-and-everything)
+      	* [Install Build Tools](#install-the-build-tools)
+      	* [Build Tempera](#build-tempera)
+      	* [Quick Dev Intro](#quick-dev-intro)
+   * [FAQ](#faq)
+   * [Attributions](#attributions)
 
 ---
-## Under WINE
+Setup
+==
+---
+
+## For WINE
     TODO: Step-By-Step tutorial for getting HCE and HEK set up and running on WINE
+
 ---  
 
-## Setting up Tempera for Windows (Assuming Win 10)
+## For Windows 10
   (This Documentation is extra-detailed so I have some documentation of installing all this stuff more than anyone else)
-  ### Step 0: Install Notepad++ and Everything Service
+  ### Install NPP and Everything
   - [Have Git installed](https://gitforwindows.org/), with your gcc tools on the Path. 
     - If you open a cmd window and do `which which` you should get `/usr/bin/which`
   - [Install Notepad++](https://notepad-plus-plus.org/downloads)
@@ -24,7 +56,7 @@
     	-  Add Filter -> `C:\Windows`
     	-  Any other folders you don't want noising up your results. There's methods for only searching allowed places but I would rather exclude folders)
 
-  ### Step 1: Install Prerequisites 
+  ### Install The Build Tools 
  
   - [Download and install the DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812)
     - While I have attempted to investigate moving off this DXSDK Redist, there's a certain API which is available in the Jun 2010 variant which is not available in the "new" windows 10 variants. (TODO: Update this README with more specific details)
@@ -41,7 +73,7 @@
   - CMake, v 3.16 or newer (I have personally been exploring using the meson build system but haven't dove into it)
   - Halo Custom Edition (v110) and Halo Editing Kit must both be installed.
 
-  ### Step 2: Build it.
+  ### Build Tempera
   
   - Generate the build files: 
    
@@ -54,8 +86,7 @@
    
     cmake --build cmake-build-debug --target all
 
-  ### Step 3: There you go!
-
+  ### Quick Dev Intro
    
    You should now find a few files:
     - tempera.init.lua 
@@ -66,53 +97,78 @@
    In theory, cmake will read the registry for the location of Halo's install. YMMV.
    Please let me know if you have halo installed to another dir and it doesn't work.
 
-  ### Disclaimer 
+---
 
-   This project may cause your game to die, files to corrupt, or, if luck does not shine down upon you, your machine to crash.
+FAQ
+=================
 
-### What is Tempera? It aims to:
-  - Add Local Splitscreen Multiplayer to Halo Custom Edition for PC
-  - Add a Forge-like mode for Halo Custom Edition
-  - Be equivalent to an Open Sauce v2
+Q: What is Tempera? 
 
-### Tempera is: 
-  - A series proofs of concepts - Features are there, showcasing they're possible. 
-  - A mishmash of code from Kornman00 an TheFieryScythe's Open Sauce project, as well as SilentK and abyll's haloforge project.
-  - Between major refactorings and feature updates.
-  - In Alpha - Breaking changes happen probably every single commit. 
+A: Tempera is a love letter for Halo, an omnibus reverse-engineering mod/project for Halo Custom Edition, based on a heavily stripped-down Open Sauce project (thanks, Kornman!).
 
-### Tempera is in need of:
-  -  Feedback and help. No need for halo-specific modding experience. Just C++ and C knowledge. 
-  
-### Tempera is not: 
-  - Stable. (I'm barely even willing to consider this an alpha)
-  - Good for your health. The codebase will make you use a number of swears, probably cursing my name.
-  
-### Open Source Compilers?
-  - Long-term-ish, I will be looking to move the project to be compatible w/ Clang/Gcc. 
-  This is what's been the easier setup for me..
+---
+
+Q: As a Developer, What Can I do with Tempera Right Now?
+
+A: Not much. You can spit some logs to file and hook into certain events via lua or send certain logs to console 
+
+---
+
+Q: As a Modder, What Can I do with Tempera Right Now?
+
+A: Print some Lua text to console 
+
+---
+
+Q: Why is the project activity so low?
+
+A: I'm the only one working on it, and Tempera is a novelty project that I work on when I have extra energy between being a software engineer.
+
+---
+
+Q: What do you plan to do with Tempera?
+
+A: There's a number of long-term goals for the project:
+  1. Control bipeds inside Sapien via controller
+  2. Allow the Keyboard + mouse and controller to update separate bipeds  
+  3. Render First Person View for separate bipeds
+  4. Add forge-like mode for Halo Custom Edition
+
+---
+
+Q: Current State?
+
+A:
+  1. A series proofs of concepts - Certain features are in the code which showcase much of this is possible. 
+  2. A mishmash of code from Kornman00 an TheFieryScythe's Open Sauce project, as well as SilentK and Abyll's haloforge project.
+  3. Between major refactorings and feature updates.
+  4. Breaking changes happen probably nearly every single commit. Haven't bothered to begin versioning
+
+---
+
+Q: Can I help?
+
+A: Yes, but for the most part I need people who are comfortable reverse-engineering and turning x86 into readable C.
+
+---
+
+Q: How?
+
+A: There's a number of things that I want to be done, which aren't reverse-engineering-focused. Check the Repository Issues.
+
+---
 
 # Attributions
   
 Various files and items in this codebase can be attributed as follows:
 
- *	SilentK & Abyll - For the initial implementaiton of haloforge. Most of haloforge's unique features are built on the work of these two. AFAIK, haloforge is gone with Google Code.
- *	Kornman00 (Sean Cooper) - For Open Sauce. See: https://bitbucket.org/KornnerStudios/opensauce-release/wiki/Home
- *  ZBE - Helping me get the initial prototypes running and helping to answer my RE-related questions.
- *	Dwood15 (Dason Woodhouse - Me) - Primary developer and current maintainer of Tempera. 
-  
-At one point, I was using Chimera as a base for Tempera. All of Kavawuvi's code has been removed, and Tempera is now a completely separate codebase.
+ * Kornman00 (Sean Cooper) - [For Open Sauce](https://bitbucket.org/KornnerStudios/opensauce-release/wiki/Home)
+ * Kavawuvi//Snowy for their endless knowledge, support, and the [Chimera project](https://github.com/Kavawuvi/Chimera)
+  * Endless font of knowledge, support, and shitposts
+ * SilentK & Abyll - For initial implementaiton of haloforge. Most of our forge features are built on the work of these two.
+   * AFAIK, haloforge's source is gone with the demise of Google Code and is largely lost to time. Even then, it was mostly kept private and only intended for halo PC v1.08 in 2008-2009
+   * Because of this, Tempera may be the only remaining repository containing code from the original live_projekt.
+ * ZBE - Helped me get the initial prototypes running and answering my Reverse-Engineering-related questions.
+ * Dwood15 (Dason Woodhouse - Me) - Primary developer and maintainer of Tempera. 
 
-See Chimera here: https://github.com/Kavawuvi/Chimera
-
-Tempera has grown and evolved to the point that maintaining attribution in every file is impractical and (quite frankly)silly. Attributions in individual files are being removed in favor of a readme notice.
-
-SilentK and Abyll's haloforge project was mostly kept private. Intended for halo PC v1.08 in 2008-2009, I have updated it to Custom Edition, v1.10. Expect major changes between pushes.
-
-Tempera's repository may be the only publicly released code from the original live_projekt.
-
-# License Notice
-
-All code within this repository is under the GNU General Public License, Version 3, and comes with no warranty, express or implied.
-
-This codebase isn't even covered under the Microsoft Content Usage guidelines, since Halo Custom Edition and the HEK licenses predate both.
+Attributions in individual files are being removed in favor of this readme notice. Tempera has grown and evolved to the point that maintaining attribution in every file is impractical and (quite frankly)silly.
