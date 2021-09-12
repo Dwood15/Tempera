@@ -109,6 +109,8 @@ function PlayerUpdate(player_control_state, player_index)
 		Dbg("First Player update, ever!")
 	end
 
+	MakePlayerJump(player_index)
+
 	local currentGamePad = 0
 	--TODO: Player to Controller mapping...
 	while currentGamePad < 4 do
@@ -133,7 +135,7 @@ function PlayerUpdate(player_control_state, player_index)
 			Dbg("Retrieving ControllerState")
 		end
 
-		--Controlleer is -1 if not found, and result is 0 if successful.
+		--Controller is -1 if not found, and result is 0 if successful.
 		-- Will be providing helpers for reading this more fully.
 		controller, result = GetControllerState(currentGamePad)
 
@@ -142,6 +144,7 @@ function PlayerUpdate(player_control_state, player_index)
 		end
 
 		if controller ~= -1 and result == 0 then
+		    Dbg("Found Controller!, Checking Inputs")
 			if IsButtonPressed(controller.buttons, XINPUT_GAMEPAD_Y) then
 				Dbg("Controller input pressed, jumping the player")
 				MakePlayerJump(player_index)
@@ -188,8 +191,8 @@ function OnTick(ticks_til_frame, time_since_map_started)
 
 	--At some point, Is* functions will be a variable list passed into the .
 	--While only relevant in HCE, this value should still be valid as (false) in sapien.
-	if AreWeInMainMenu() == false then
-		--Dbg("Not in main menu!\n")
+	if AreWeInMainMenu() == true then
+		return
 	end
 
 	if onTickNextPlayerIndexPrinted == false then
@@ -202,6 +205,7 @@ function OnTick(ticks_til_frame, time_since_map_started)
 	if onTickNextPlayerIndexPrinted == false then
 		Dbg("NextPlayerIndex called\n")
 	end
+
 
 	onTickNextPlayerIndexPrinted = true
 end

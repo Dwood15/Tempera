@@ -7,7 +7,6 @@
 using namespace feature_management::engines;
 
 namespace {
-	
 	// Why is this necessary? HCE/HPC pass in color via ARG.EAX, and the rest by stack.
 	// Sapien is full on __cdecl, so an interface is necessary to keep everything compatible.
 	void naked sapien_console_printf_interface() {
@@ -23,24 +22,18 @@ namespace {
 			ret
 		}
 	}
-	
 } // (anonymous)
 
 //__cdecl makes the _caller_ clean up the stack. __stdcall means our function cleans up the stack
 
-void naked Sapien::OnPlayerActionUpdate() {
+static void naked OnPlayerActionUpdate() {
 	//Clang and gcc are pussy-ass bitches
 #if !defined(__GNUC__) && !defined(__CLANG__)
 	__asm mov     dword ptr[esp+18h], ecx
 	__asm mov     dword ptr[esp+14h], edi
 	__asm retn
 #endif
-}
-
-#include "function_map.txt"
-const defined_functionrange *Sapien::GetFunctionMap() {
-	return sapien_function_map;
-}
+	}
 
 void Sapien::WriteHooks() {
 	constexpr uint game_tick_hook = 0x51F219;
@@ -54,17 +47,18 @@ void Sapien::WriteHooks() {
 	//					89 7C 24 14
 	//Basically just sets some random value to -1. Couldn't tell if it was being used or not.
 	calls::patchValue<byte>(0x52C864, 0xE8); //call //0x0
-	calls::WriteSimpleHook(0x52C865, &Sapien::OnPlayerActionUpdate); //6 bytes off.
+
+
+	calls::WriteSimpleHook(0x52C865, OnPlayerActionUpdate); //6 bytes off.
 	calls::patchValue<byte>(0x52C869, 0x90); //
 	calls::patchValue<unsigned short>(0x52C86A, 0x9090); //
 }
 
-//Why? Because I (Dwood) may be really really dumb
-static auto core0 = new _core_0;
-static auto core1 = new _core_1;
-
 LPCoreAddressList Sapien::GetCoreAddressList() {
-	LPCoreAddressList add_list;
+	auto add_list = LPCoreAddressList{};
+
+	_core_0 * core0 = new _core_0;
+	_core_1 * core1 = new _core_1;
 
 	core0->PlayersGlobals = *(s_players_globals_data **) 0x1057538;
 	core0->Teams          = *(data_header<void> **) 0x1057548;
@@ -75,7 +69,7 @@ LPCoreAddressList Sapien::GetCoreAddressList() {
 
 	add_list.core_0 = reinterpret_cast<uint>(core0);
 	add_list.core_1 = reinterpret_cast<uint>(core1);
-	
+
 	add_list.CONSOLE_TEXT_HOOK_ADDRESS = reinterpret_cast<std::uintptr_t>(&sapien_console_printf_interface);
 
 	add_list.at_main_menu      = 0xDBD909;
@@ -85,3 +79,11 @@ LPCoreAddressList Sapien::GetCoreAddressList() {
 
 	return add_list;
 }
+
+#include "function_map.txt"
+const defined_functionrange * Sapien::GetFunctionMap() {
+	return sapien_function_map;
+}
+
+
+

@@ -1,10 +1,8 @@
 #pragma once
 
 namespace Yelo::Enums {
-	enum {
-		k_rasterizer_maximum_dynamic_triangles = 0x8000,
-		k_max_dynamic_vertex_buffers = 0x100,
-	};
+    constexpr unsigned int k_rasterizer_maximum_dynamic_triangles = 0x8000;
+	constexpr unsigned int k_max_dynamic_vertex_buffers = 0x100;
 
 	enum {
 		_geometry_detail_level_super_low,
@@ -54,16 +52,13 @@ namespace Yelo::Enums {
 		k_number_of_rasterizer_vertex_types,
 	};
 
-	enum {
-		k_maximum_rendered_objects = 256,
-		k_maximum_rendered_clusters = 0x80,
-		k_maximum_rendered_triangles = 0x4000,
-		k_maximum_rendered_distant_lights = 2,
-		k_maximum_rendered_point_lights   = 2
-	};
+    constexpr unsigned int k_maximum_rendered_objects = 256;
+    constexpr unsigned int k_maximum_rendered_clusters = 0x80;
+	constexpr unsigned int k_maximum_rendered_triangles = 0x4000;
+	constexpr unsigned int k_maximum_rendered_distant_lights = 2;
+	constexpr unsigned int k_maximum_rendered_point_lights   = 2;
 
 	enum {
 		k_maximum_rendered_objects_upgrade_amount = 256,
 	};
-
-};
+}

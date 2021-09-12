@@ -24,21 +24,12 @@
 static void InitializeLibraryFixups();
 
 namespace feature_management::engines {
-	using namespace Yelo;
 	class CE110 : public IEngine<CE110> {
 	private:
 		//static void InitializeHSMemoryUpgrades();
-
 	public:
 		CE110() = default;
 		~CE110() = default;
-
-		static const defined_functionrange *GetFunctionMap();
-
-		static constexpr const char *DEBUG_FILENAME = "tempera.hce.1_10.debug.log";
-
-		static LPCoreAddressList GetCoreAddressList();
-
 		static features SupportedFeatures() {
 			return features::EVERYTHING;
 		}
@@ -49,6 +40,12 @@ namespace feature_management::engines {
 		// InitializeCreateScriptFunction()
 		static auto const HS_ARGUMENTS_EVALUATE = 0x48D480;
 		static auto const HS_RETURN             = 0x48D270;
+		static constexpr const char *DEBUG_FILENAME = "tempera.hce.1_10.debug.log";
+
+		static LPCoreAddressList GetCoreAddressList();
+		static const defined_functionrange *GetFunctionMap();
+		static void OnUnitControlUpdate(int client_update_idx);
+		static void WriteHooks();
 
 		const Yelo::TagGroups::coll::collision_bsp **global_collision_bsp  = (const Yelo::TagGroups::coll::collision_bsp **)0x6E2258;
 
@@ -113,11 +110,12 @@ namespace feature_management::engines {
 
 		//////////////////////////////////////////////////////////////////////////
 		// script globals related
-		static void UpdateGlobalHSFunctionCounts(long count);
-
-		static void UpdateHSFunctionCounts(short count);
-
-		static void MemoryUpgradesInitialize();
+		// Not yet fully ported from Open Sauce
+		//		static void UpdateGlobalHSFunctionCounts(long count);
+		//
+		//		static void UpdateHSFunctionCounts(short count);
+		//
+		//		static void MemoryUpgradesInitialize();
 
 
 		//////////////////////////////////////////////////////////////////////////
@@ -139,13 +137,7 @@ namespace feature_management::engines {
 
 		static IDirectInputDevice8A **GetJoystickInputs() { return (IDirectInputDevice8A **) 0x64C778; }
 
-		typedef void (__cdecl* proc_hs_parse)(int32 function_index, datum_index expression_index);
-		typedef void (__cdecl* proc_hs_evaluate)(int32 function_index, datum_index thread_index, bool initialize_stack);
-
-		static void OnPlayerActionUpdate();
-
-		static void OnUnitControlUpdate(int client_update_idx);
-
-		static void WriteHooks();
+		typedef void (__cdecl* proc_hs_parse)(int32 function_index, Yelo::datum_index expression_index);
+		typedef void (__cdecl* proc_hs_evaluate)(int32 function_index, Yelo::datum_index thread_index, bool initialize_stack);
 	};
 };

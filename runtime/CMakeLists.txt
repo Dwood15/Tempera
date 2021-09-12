@@ -35,10 +35,8 @@ set(RUNTIME_DIR ${PROJECT_SOURCE_DIR}/runtime)
 
 
 set(SUPPORTED_RUNTIMES_H
-#	${RUNTIME_DIR}/ce/1_10/function_map.txt
 	${RUNTIME_DIR}/ce/1_10/function_rewrite.h
 	${RUNTIME_DIR}/ce/1_10/110EngineManager.h
-#	${RUNTIME_DIR}/hek/sapien/function_map.txt
 	${RUNTIME_DIR}/hek/sapien/sapienEngineManager.h
 	)
 

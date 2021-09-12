@@ -648,7 +648,7 @@ namespace Yelo {
 			// FLAG(Enums::_object_type_scenery),
 		};
 
-		const::std::array<tag, Enums::_hs_type_tag_reference__count> k_hs_tag_reference_type_group_tags = {
+		const::std::array<tag, Enums::_hs_type_tag_reference_count> k_hs_tag_reference_type_group_tags = {
 			// TagGroups::sound_definition::k_group_tag,
 			// TagGroups::effect_definition::k_group_tag,
 			// // TagGroups::s_damage_effect_definition::k_group_tag,   // damage

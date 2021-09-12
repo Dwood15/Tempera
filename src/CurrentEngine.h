@@ -22,11 +22,9 @@
 
 class LuaScriptManager;
 
-static bool ShouldOverride[MAX_PLAYER_COUNT_LOCAL];
 struct s_player_action;
 struct s_unit_control_data;
 constexpr const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
-
 
 namespace feature_management::engines {
 	class GlobalEngine {
@@ -169,7 +167,7 @@ namespace feature_management::engines {
 		IDirectInputDevice8A **GetJoystickInputs();
 
 		void SetCoreAddressList(LPCoreAddressList add_list);
-		bool ShouldOverrideAction(ushort idx = 0);
+
 		void ResetOverride(ushort idx = 0);
 
 		bool SupportsFeature(features feat);
@@ -211,8 +209,8 @@ namespace feature_management::engines {
 	bool IsCoreInitialized();
 }
 
+//Extern's like this are why C++ has a bad rep
 extern feature_management::engines::GlobalEngine* CurrentEngine;
-
 
 /**
  * Called variably based on fps

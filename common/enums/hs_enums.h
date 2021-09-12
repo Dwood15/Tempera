@@ -12,7 +12,7 @@ namespace Yelo::Enums {
 
 		// This is a partially made up constant, though when dev-mode is >= this, it outputs messages to the console
 		constexpr int k_developer_mode_level_debug_output = 4;
-};
+}
 
 namespace Yelo::Flags {
 	enum hs_yelo_definition_flags : unsigned short {
@@ -56,7 +56,7 @@ namespace Yelo::Flags {
 		_alignment_64_bit,
 		_alignment_128_bit,
 	};
-};
+}
 
 namespace Yelo::Enums {
 	enum {
@@ -190,34 +190,34 @@ namespace Yelo::Enums {
 		// NOTE: we treat sbyte as a byte still!
 			_hs_type_byte = _hs_type_bool,
 
-		_hs_type_data__first = _hs_type_bool,
-		_hs_type_data__last  = k_number_of_hs_types - 1,
-		_hs_type_data__count = (_hs_type_data__last - _hs_type_data__first) + 1,
+		_hs_type_data_first = _hs_type_bool,
+		_hs_type_data_last  = k_number_of_hs_types - 1,
+		_hs_type_data_count = (_hs_type_data_last - _hs_type_data_first) + 1,
 
-		_hs_type_tag_reference__first = _hs_type_sound,
-		_hs_type_tag_reference__last  = _hs_type_object_definition,
-		_hs_type_tag_reference__count = (_hs_type_tag_reference__last - _hs_type_tag_reference__first) + 1,
+		_hs_type_tag_reference_first = _hs_type_sound,
+		_hs_type_tag_reference_last  = _hs_type_object_definition,
+		_hs_type_tag_reference_count = (_hs_type_tag_reference_last - _hs_type_tag_reference_first) + 1,
 
-		_hs_type_enum__first = _hs_type_enum_game_difficulty,
-		_hs_type_enum__last  = _hs_type_enum_hud_corner,
-		_hs_type_enum__count = (_hs_type_enum__last - _hs_type_enum__first) + 1,
+		_hs_type_enum_first = _hs_type_enum_game_difficulty,
+		_hs_type_enum_last  = _hs_type_enum_hud_corner,
+		_hs_type_enum_count = (_hs_type_enum_last - _hs_type_enum_first) + 1,
 
-		_hs_type_object__first = _hs_type_object,
-		_hs_type_object__last  = _hs_type_scenery,
-		_hs_type_object__count = (_hs_type_object__last - _hs_type_object__first) + 1,
+		_hs_type_object_first = _hs_type_object,
+		_hs_type_object_last  = _hs_type_scenery,
+		_hs_type_object_count = (_hs_type_object_last - _hs_type_object_first) + 1,
 
-		_hs_type_object_name__first = _hs_type_object_name,
-		_hs_type_object_name__last  = _hs_type_scenery_name,
-		_hs_type_object_name__count = (_hs_type_object_name__last - _hs_type_object_name__first) + 1,
+		_hs_type_object_name_first = _hs_type_object_name,
+		_hs_type_object_name_last  = _hs_type_scenery_name,
+		_hs_type_object_name_count = (_hs_type_object_name_last - _hs_type_object_name_first) + 1,
 	};
 
 	enum hs_object_type : short {
-		_hs_object_type_any     = _hs_type_object - _hs_type_object__first,
-		_hs_object_type_unit    = _hs_type_unit - _hs_type_object__first,
-		_hs_object_type_vehicle = _hs_type_vehicle - _hs_type_object__first,
-		_hs_object_type_weapon  = _hs_type_weapon - _hs_type_object__first,
-		_hs_object_type_device  = _hs_type_device - _hs_type_object__first,
-		_hs_object_type_scenery = _hs_type_scenery - _hs_type_object__first,
+		_hs_object_type_any     = _hs_type_object - _hs_type_object_first,
+		_hs_object_type_unit    = _hs_type_unit - _hs_type_object_first,
+		_hs_object_type_vehicle = _hs_type_vehicle - _hs_type_object_first,
+		_hs_object_type_weapon  = _hs_type_weapon - _hs_type_object_first,
+		_hs_object_type_device  = _hs_type_device - _hs_type_object_first,
+		_hs_object_type_scenery = _hs_type_scenery - _hs_type_object_first,
 
 		k_number_of_hs_object_types
 	};
@@ -325,10 +325,10 @@ namespace Yelo::Enums {
 		_hs_function_display_scripted_ui_widget,
 		_hs_function_play_bink_movie,
 
-		_hs_function_scenario_faux_zones_reset,               // depreceated
-		_hs_function_scenario_faux_zone_current_switch_variant,   // depreceated
-		_hs_function_scenario_faux_zone_switch_variant,         // depreceated
-		_hs_function_scenario_faux_zone_switch_sky,            // depreceated
+		_hs_function_scenario_faux_zones_reset,               // deprecated
+		_hs_function_scenario_faux_zone_current_switch_variant,   // deprecated
+		_hs_function_scenario_faux_zone_switch_variant,         // deprecated
+		_hs_function_scenario_faux_zone_switch_sky,            // deprecated
 
 		_hs_function_structure_bsp_set_lightmap_set,
 		_hs_function_structure_bsp_set_sky_set,
@@ -390,7 +390,7 @@ namespace Yelo::Enums {
 	// How much more memory we're adding.
 	// +50%
 
-	static constexpr float K_MEMORY_UPGRADE_INCREASE_MULTIPLIER = 1.5f;
+	static constexpr double K_MEMORY_UPGRADE_INCREASE_MULTIPLIER = 1.5f;
 	constexpr int          k_game_state_allocation_size     = 0x00440000;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -513,6 +513,5 @@ namespace Yelo::Enums {
 
 	static_assert(k_max_cache_size_upgrade >= k_max_cache_size);
 	static_assert(k_max_cache_vertex_y_index_buffer_size_upgrade >= k_max_cache_vertex_y_index_buffer_size);
-
-};
+}
 

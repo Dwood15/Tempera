@@ -38,8 +38,6 @@ class LuaScriptManager {
 	lua_State   *L = nullptr;
 	::std::string fileName;
 	bool        loaded = false;
-
-	void PassInteger(int val);
 public:
 	LuaScriptManager() = default;
 

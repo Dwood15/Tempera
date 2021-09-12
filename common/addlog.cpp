@@ -1,11 +1,6 @@
 /*
-	Project: haloforge
-	File: addlog.cpp
-	Copyright � 2009 SilentK, Abyll
-	Copyright � 2018 Dwood15
-
     You should have received a copy of the GNU General Public License
-    along with haloforge.  If not, see <http://www.gnu.org/licenses/>.
+    along with Tempera.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <iostream>
 #include <ctime>
@@ -16,7 +11,10 @@
 static::std::ofstream ofile;
 static char   dlldir[320];
 
-static volatile bool debug_write_locked = false;
+//Multiple threads could be writing to the file at once, so we back it behind this
+//little semaphore. Volatile only affects compiler optimizations for the local function
+//It doesn't affect whether the variable is cached.
+static std::atomic<bool> debug_write_locked;
 
 #ifdef __GNUC__
 template<bool toConsole>
@@ -57,6 +55,19 @@ void PrintLn(const char *fmt, ...) {
 }
 #endif
 
+int constexpr length(const char* str) {
+	return *str ? 1 + length(str + 1) : 0;
+}
+
+void bufWarn(int diff) {
+	constexpr const char * warnFmt = "Line was too long. We truncated: [%d] bytes";
+	//UINT_MAX is 13 characters: add one for null terminator.
+	constexpr uint32_t warnBufSize = length(warnFmt) + 14;
+	char warnBuf[warnBufSize];
+	snprintf(warnBuf, warnBufSize, warnFmt, diff);
+
+	ofile << warnBuf << ::std::endl;
+}
 
 void DBGPrnt(const char *fmt, va_list va_alist) {
 	if (!ofile || !fmt) {
@@ -64,7 +75,7 @@ void DBGPrnt(const char *fmt, va_list va_alist) {
 	}
 
 	if (debug_write_locked) {
-		Sleep(90);
+		Sleep(10);
 		//Too impatient for this.
 		if (debug_write_locked) {
 			return;
@@ -73,13 +84,22 @@ void DBGPrnt(const char *fmt, va_list va_alist) {
 
 	debug_write_locked = true;
 
-	char logbuf[256] = {0};
-	_vsnprintf(logbuf + strlen(logbuf), sizeof(logbuf) - strlen(logbuf), fmt, va_alist);
+	constexpr int bufSize = 256;
+	char logbuf[bufSize];
+	int cwrit = std::snprintf(logbuf,  bufSize, fmt, va_alist);
+
+	if (cwrit > bufSize) {
+
+	}
+
 	ofile << logbuf <<::std::endl;
 
 	debug_write_locked = false;
 }
 
+/**
+ * DEBUG is a helper funciton for interfacing with the Console.
+ */
 void DEBUG(const char *fmt, ...) {
 	va_list va_alist;
 
@@ -101,7 +121,6 @@ void InitAddLog(HMODULE hModule, const char * filename) {
 		}
 	}
 
-	//why in hell is filesystem still experimental??? blech
 	auto myPath =::std::filesystem::current_path() /= filename;
 
 	ofile.open(myPath.filename().string(),::std::ios_base::app);

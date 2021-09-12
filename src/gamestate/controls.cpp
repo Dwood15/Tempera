@@ -2,36 +2,36 @@
 #include "../CurrentEngine.h"
 
 void Control::HandleActionOverride(ushort idx, s_unit_control_data * from) {
-	if (CurrentEngine->ShouldOverrideAction(idx)) {
+	auto override = CurrentEngine->GetPlayerActionOverride(idx, from);
 
-		auto override = CurrentEngine->GetPlayerActionOverride(idx, from);
+	from->control_flags = override.control_flagsA;
+	from->throttle.x = override.throttle_leftright;
+	from->throttle.y = override.throttle_forwardback;
 
-		from->control_flags = override.control_flagsA;
-		from->throttle.x = override.throttle_leftright;
-		from->throttle.y =  override.throttle_forwardback;
+	from->weapon_index = override.desired_weapon_index;
 
-		from->weapon_index = override.desired_weapon_index;
+	from->primary_trigger = override.primary_trigger;
 
-		from->primary_trigger = override.primary_trigger;
+	from->grenade_index = override.desired_grenade_index;
 
-		from->grenade_index = override.desired_grenade_index;
-
-		CurrentEngine->ResetOverride();
-	}
+	CurrentEngine->ResetOverride();
 }
-
-#include "../../common/addlog.h"
 
 void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client_update_idx) {
 	PrintLn("Updating player: 0x%x", unit_idx);
 
-	auto to = reinterpret_cast<s_unit_datum *>(CurrentEngine->GetGenericObject(unit_idx));
+	auto to = reinterpret_cast<s_unit_datum *>(CurrentEngine->GetGenericObject(short(unit_idx)));
+
+	if(to->unit.controlling_player_index.handle == static_cast<uint>(-1))	{
+		PrintLn("player: 0x%x player index controlling is -1 on the unit, exiting UnitControl method", unit_idx);
+		return;
+	}
 
 	if(to->unit.controlling_player_index.handle != static_cast<uint>(-1))	{
+		PrintLn("Executing HandleActionOverride");
 		HandleActionOverride(to->unit.controlling_player_index.index, from);
 	}
 
-	PrintLn("HandleActionOverride");
 
 	if (*CurrentEngine->main_globals_game_connection_type == 2) {
 		PrintLn("game connection type -- non local !?");
@@ -45,6 +45,8 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 
 	PrintLn("reading unit");
 	auto unit = &to->unit;
+
+	unit->control_flags.control_flags.jump_button = 1;
 
 	unit->throttle        = from->throttle;
 	unit->primary_trigger = from->primary_trigger;
@@ -81,5 +83,4 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 	}
 
 	PrintLn("Unit control update completed");
-
 }

@@ -38,9 +38,9 @@ namespace Yelo::blam {
 
 	static bool hs_type_valid(short type) { return type >= Enums::_hs_type_void && type < Enums::k_number_of_hs_types; }
 
-	static bool hs_type_is_enum(short type) { return type >= Enums::_hs_type_enum__first && type < Enums::_hs_type_enum__last; }
+	static bool hs_type_is_enum(short type) { return type >= Enums::_hs_type_enum_first && type < Enums::_hs_type_enum_last; }
 
-	static bool hs_type_is_tag_reference(short type) { return type >= Enums::_hs_type_tag_reference__first && type < Enums::_hs_type_tag_reference__last; }
+	static bool hs_type_is_tag_reference(short type) { return type >= Enums::_hs_type_tag_reference_first && type < Enums::_hs_type_tag_reference_last; }
 
 };
 

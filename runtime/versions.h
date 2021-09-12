@@ -109,9 +109,8 @@ namespace feature_management {
 		};
 		class CustomEd : public IEngine<CustomEd> {
 		public:
-			CustomEd() {}
-
-			~CustomEd() {}
+			CustomEd() = default;
+			~CustomEd() = default;
 
 			const char * DEBUG_FILENAME    = R"("tempera.ce.unk.debug.log")";
 			const char *GAME_REGISTRY_PATH = R"(Software\Microsoft\Microsoft Games\Halo CE)";

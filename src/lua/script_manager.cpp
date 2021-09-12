@@ -1,16 +1,9 @@
 #include <addlog.h>
+#include <enums/weapon_enums.h>
 #include "script_manager.h"
 #include "../CurrentEngine.h"
 #include "../Dinput/dinput.h"
 
-
-void LuaScriptManager::PassInteger(int val) {
-	lua_pushinteger(L,val);
-}
-
-static void PassInteger(lua_State * L, int val) {
-	lua_pushinteger(L,val);
-}
 
 int l_print(lua_State *L) {
 	const bool tocmd = lua_toboolean(L, 1);
@@ -157,7 +150,8 @@ int l_GetEngineContext(lua_State *L) {
  */
 void LuaScriptManager::registerLuaCallback(const char *cb_name, LuaCallbackId cb_type) {
 #ifndef __GNUC__
-	if (!this) {
+	//
+	if (this == nullptr) {
 		PrintLn<false>("\tRegisterLuaCallback exiting b/c of invalid context. :(");
 		return;
 	}
@@ -190,7 +184,7 @@ void LuaScriptManager::PCall(const char * funcName) {
 
 //Returns false if function not found, or if error.
 bool LuaScriptManager::HandleFunctionNameEvent(const char * funcName) {
-	PrintLn<false>("HandleFunctionNameEvent: %s", funcName);
+	//PrintLn<false>("HandleFunctionNameEvent: %s", funcName);
 
 	if (!this->IsLoaded()) {
 		PrintLn<false>("Can't call %s event- doesn't exist!", funcName);
@@ -202,29 +196,30 @@ bool LuaScriptManager::HandleFunctionNameEvent(const char * funcName) {
 	return lua_isfunction(L, -1);
 }
 
+static void setTableField(lua_State * L, const char *keyName, lua_Integer n) {
+	// https://stackoverflow.com/questions/20147027/creating-a-simple-table-with-lua-tables-c-api/20148091
+	lua_pushinteger(L, n);
+	lua_setfield(L, -2, keyName);
+}
+
+static void setTableNumber(lua_State * L, const char *keyName, lua_Number n) {
+	// https://stackoverflow.com/questions/20147027/creating-a-simple-table-with-lua-tables-c-api/20148091
+	lua_pushnumber(L, n);
+	lua_setfield(L, -2, keyName);
+}
+
 static void PassPlayerControl(lua_State * L, s_player_action * control) {
 	lua_createtable(L, 0, 6);
 
-	//TODO: I have no clue why we're using -2 as the idx on this any more.
-	//if it works tho...
-	PassInteger(L, control->control_flagsA.control_flags_a);
-	lua_setfield(L, -2, "control_flags");
+	setTableField(L, "control_flags", control->control_flagsA.control_flags_a);
 
-	lua_pushnumber(L, control->throttle_leftright);
-	lua_setfield(L, -2, "throttle.x");
+	setTableNumber(L, "throttle.x", control->throttle_leftright);
+	setTableNumber(L, "throttle.y", control->throttle_forwardback);
 
-	lua_pushnumber(L, control->throttle_forwardback);
-	lua_setfield(L, -2, "throttle.y");
+	setTableField(L,"desired_weapon_index", control->desired_weapon_index);
+	setTableField(L, "desired_grenade_index", control->desired_grenade_index);
 
-	//The::std::string might seem redundant, and it probably is. But, I'm pretty sure std string will prune uninterpretable characters.
-	PassInteger(L, control->desired_weapon_index);
-	lua_setfield(L, -2, "desired_weapon_index");
-
-	lua_pushnumber(L, control->primary_trigger);
-	lua_setfield(L, -2, "primary_trigger");
-
-	PassInteger(L,control->desired_grenade_index);
-	lua_setfield(L, -2, "desired_grenade_index");
+	setTableNumber(L, "primary_trigger", control->primary_trigger);
 }
 
 static void ReadPlayerControl(lua_State * L, s_player_action * control) {
@@ -236,6 +231,7 @@ static void ReadPlayerControl(lua_State * L, s_player_action * control) {
 	if(num <= (uint)0xFFFF) {
 		control->control_flagsA.control_flags_a = static_cast<ushort>(num);
 	}
+
 	lua_pop(L, 1);
 
 	lua_getfield(L, 1, "throttle.x");
@@ -249,12 +245,17 @@ static void ReadPlayerControl(lua_State * L, s_player_action * control) {
 	lua_getfield(L, 1, "desired_weapon_index");
 	lua_getfield(L, 1, "desired_grenade_index");
 
-	num = luaL_checkinteger(L, -1);
-	if(num <= 3) {
-		control->desired_weapon_index = static_cast<ushort>(num);
+	//This will probably make the game crash :X
+	int weapIdx = luaL_checkinteger(L, -1);
+	if (weapIdx > MAX_WEAPONS_PER_UNIT-1) {
+		weapIdx = 0;
+	} else if (weapIdx < 0) {
+		weapIdx = MAX_WEAPONS_PER_UNIT-1;
 	}
 
-	num = luaL_checkinteger(L, -2);
+	control->desired_weapon_index = static_cast<ushort>(weapIdx);
+
+	weapIdx = luaL_checkinteger(L, -2);
 	if(num <= 1) {
 		control->desired_weapon_index = static_cast<ushort>(num);
 	}
@@ -264,11 +265,11 @@ static void ReadPlayerControl(lua_State * L, s_player_action * control) {
 	lua_getfield(L, 1, "primary_trigger");
 
 	control->primary_trigger = luaL_checknumber(L, -1);
+	lua_pop(L, 1);
 }
 
 void LuaScriptManager::lua_on_player_update(s_player_action * control, ushort plyrIdx) {
-
-	static bool DebugOnce = false;
+	static volatile bool DebugOnce = false;
 
 	if(!this->HandleFunctionNameEvent("PlayerUpdate")) {
 		if (!DebugOnce) {
@@ -284,9 +285,9 @@ void LuaScriptManager::lua_on_player_update(s_player_action * control, ushort pl
 
 	PassPlayerControl(L, control);
 
-	PassInteger(plyrIdx);
+	lua_pushinteger(L, plyrIdx);
 
-	PCall<2, 0>("PlayerUpdate");
+	this->PCall<2, 0>("PlayerUpdate");
 
 	ReadPlayerControl(L, control);
 }
@@ -298,10 +299,10 @@ void LuaScriptManager::lua_on_tick(uint32 remaining, uint32 since_map_begin) {
 		return;
 	}
 
-	PassInteger(remaining);
-	PassInteger(since_map_begin);
+	lua_pushinteger(L, int(remaining));
+	lua_pushinteger(L, int(since_map_begin));
 
-	PCall<2, 0>(funcName);
+	this->PCall<2, 0>(funcName);
 }
 
 /**
@@ -375,7 +376,7 @@ void LuaScriptManager::InitializeLua(const char *filename) {
 
 	L = luaL_newstate();
 	luaL_openlibs(L);
-	auto result = luaL_loadfilex(L, filename, 0);
+	auto result = luaL_loadfilex(L, filename, nullptr);
 
 	if (result != LUA_OK) {
 		PrintLn("Error: script failed to load: (%s)\n\tDwood is still learning how to add features to Lua.", filename);
@@ -405,7 +406,7 @@ void LuaScriptManager::InitializeLua(const char *filename) {
 	registerGlobalLuaFunction("RegisterCallBack", l_registerLuaCallback);
 
 	registerGlobalLuaFunction("GetMaxLocalPlayers", [](lua_State* L) {
-		::PassInteger(L,MAX_PLAYER_COUNT_LOCAL);
+		lua_pushinteger(L, MAX_PLAYER_COUNT_LOCAL);
 		return 1;
 	});
 
@@ -457,7 +458,8 @@ void LuaScriptManager::InitializeLua(const char *filename) {
 
 void LuaScriptManager::call_lua_event_by_type(LuaCallbackId eventType) {
 #ifndef __GNUC__
-	if (!this) {
+	//Once again, don't trust IDE warnings - "this" can totally be nullptr in certain cases
+	if (this == nullptr) {
 		PrintLn<false>("Can't call lua event: %d b/c we're in an invalid context.", eventType);
 		return;
 	}
