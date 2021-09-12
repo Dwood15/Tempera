@@ -6,11 +6,14 @@
   ### Step 1: Install Prerequisites 
  
   - DirectX June 2010 SDK - https://www.microsoft.com/en-us/download/details.aspx?id=6812
+    - While we have attempted to investigate moving 
+
   - MSVC Build tools - (Visual Studio not required) - https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16 
     - Windows 10 SDK - (10.0.18362.0 or newer) 
+    	- When installing you might encounter "error S1023". [Go into Add or Remove Programs and remove the existing Visual C++ 2010 installs (x86 and x64)] (https://docs.microsoft.com/en-us/troubleshoot/windows/win32/s1023-error-when-you-install-directx-sdk)
     - Ensure that cl, msvc tool is on the path 
   - CMake, v 3.16 or newer
-  - Halo Custom Edition (v110), Halo Editing Kit must both be installed.
+  - Halo Custom Edition (v110) and Halo Editing Kit must both be installed.
 
   ### Step 2: Build it.
   
@@ -37,7 +40,7 @@
    
    Note: I have only tested this with Halo installed to the program files location. 
    In theory, cmake will read the registry for the location of Halo's install. YMMV.
-   Please let me know if you continue to have issues.
+   Please let me know if you have halo installed to another dir and it doesn't work.
 
   ### Disclaimer 
 
@@ -88,4 +91,4 @@ Tempera's repository may be the only publicly released code from the original li
 
 All code within this repository is under the GNU General Public License, Version 3, and comes with no warranty, express or implied.
 
-This codebase isn't even covered under the Microsoft Content Usage guidelines.
+This codebase isn't even covered under the Microsoft Content Usage guidelines, since Halo Custom Edition and the HEK licenses predate both.
