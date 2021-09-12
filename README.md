@@ -144,6 +144,14 @@ A:
   3. Between major refactorings and feature updates.
   4. Breaking changes happen probably nearly every single commit. Haven't bothered to begin versioning
 
+A demo showing that we can render 4 cameras at once:
+
+https://user-images.githubusercontent.com/8879021/132976632-ac583fe8-d4e5-41bc-845d-1d8e62456d6b.mp4
+
+A demo showing the biped control working: 
+
+https://www.youtube.com/watch?v=uyb1S1r83Vw
+
 ---
 
 Q: Can I help?
@@ -159,7 +167,7 @@ A: There's a number of things that I want to be done, which aren't reverse-engin
 ---
 
 # Attributions
-  
+
 Various files and items in this codebase can be attributed as follows:
 
  * Kornman00 (Sean Cooper) - [For Open Sauce](https://bitbucket.org/KornnerStudios/opensauce-release/wiki/Home)
