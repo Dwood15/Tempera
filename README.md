@@ -2,28 +2,49 @@
 
 ## A GPLv3 Mod for Halo Custom Edition and the Halo Editing Kit
 
-## Building Tempera
+## Setting up Tempera under WINE
+   ### TODO: Step-By-Step tutorial for getting HCE and HEK set up and running on WINE
+## Setting up Tempera for Windows (Assuming Win 10)
+  (This Documentation is extra-detailed so I have some documentation of installing all this stuff more than anyone else)
+  ### Step 0: Install Notepad++ and Everything Service
+  - [Have Git installed](https://gitforwindows.org/), with your gcc tools on the Path. 
+    - If you open a cmd window and do `which which` you should get `/usr/bin/which`
+  - [Install Notepad++](https://notepad-plus-plus.org/downloads)
+  	- Install the x86 variant, regardless of your CPU type. (If you want to install plugins, they are all 32-bit) 
+  - [Install The Everything Service](https://www.voidtools.com) 
+    - Go to: `Tools -> Options`
+    - Check: `View -> Alternate row color`
+    - Check: `History -> Enable search history`
+    - Set Hotkey: `Keyboard -> Toggle window Hotkey` and set it to something. Mine is: `Win + Shift + E`
+    - Check: `Indexes -> Exclude -> Enable exclude list`, then add the following Exclude filters:
+    	-  Add Filter -> `node_modules`
+    	-  Add Filter -> `C:\Windows`
+    	-  Any other folders you don't want noising up your results. There's methods for only searching allowed places but I would rather exclude folders)
+
   ### Step 1: Install Prerequisites 
  
-  - DirectX June 2010 SDK - https://www.microsoft.com/en-us/download/details.aspx?id=6812
+  - [Download and install the DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812)
     - While I have attempted to investigate moving off this DXSDK Redist, there's a certain API which is available in the Jun 2010 variant which is not available in the "new" windows 10 variants. (TODO: Update this README with more specific details)
-
-  - MSVC Build tools - (Visual Studio not required) - https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16 
-    - Windows 10 SDK - (10.0.18362.0 or newer) 
-    	- When installing you might encounter "error S1023". [Go into Add or Remove Programs and remove the existing Visual C++ 2010 installs (x86 and x64)] (https://docs.microsoft.com/en-us/troubleshoot/windows/win32/s1023-error-when-you-install-directx-sdk)
-    - Ensure that cl, msvc tool is on the path 
-  - CMake, v 3.16 or newer
+    - When installing you might encounter "error S1023". [Go into Add or Remove Programs and remove the existing Visual C++ 2010 installs (x86 and x64)](https://docs.microsoft.com/en-us/troubleshoot/windows/win32/s1023-error-when-you-install-directx-sdk)
+    	- Installing this variant works as of Sep 11, 2021.
+  - [MSVC Build tools - (Visual Studio not required)](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)
+    - Windows 10 SDK - (10.0.18362.0 or newer)
+    	- Open a new console and ensure that you have cl.exe and msvc.exe are on your path. If they aren't: 
+    		- Toggle an `Everything` window and search for `vcvarsall.bat`. 
+    		- Right click -> Open Path -> In the new Explorer window type `cmd.exe` will open a cmd prompt in that folder
+    		- Type in: `vcvarsall.bat x86` hit enter
+    		- Export the PATH and copy paste it into NPP. 
+    		- Open the Path window and add in the paths that weren't already there.
+  - CMake, v 3.16 or newer (I have personally been exploring using the meson build system but haven't dove into it)
   - Halo Custom Edition (v110) and Halo Editing Kit must both be installed.
 
   ### Step 2: Build it.
   
   - Generate the build files: 
    
-   
-    cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" .
+		cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" .
 
-   - Note: Release mode builds are currently untested.
-  
+   - Note: Release builds are unsupported. The optimizations can potentially mess with the functions being ran.
   
    Open ADMIN cmd prompt. Find and run VCvarsall.bat (see something like:  `C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build`)
    
