@@ -6,7 +6,7 @@
   ### Step 1: Install Prerequisites 
  
   - DirectX June 2010 SDK - https://www.microsoft.com/en-us/download/details.aspx?id=6812
-    - While we have attempted to investigate moving 
+    - While I have attempted to investigate moving off this DXSDK Redist, there's a certain API which is available in the Jun 2010 variant which is not available in the "new" windows 10 variants. (TODO: Update this README with more specific details)
 
   - MSVC Build tools - (Visual Studio not required) - https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16 
     - Windows 10 SDK - (10.0.18362.0 or newer) 
@@ -18,9 +18,9 @@
   ### Step 2: Build it.
   
   - Generate the build files: 
-  
-    
-   `cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" .`
+   
+   
+    cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" .
 
    - Note: Release mode builds are currently untested.
   
