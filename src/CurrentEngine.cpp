@@ -345,15 +345,11 @@ namespace feature_management::engines {
 	}
 
 	template<typename T>
-	void ClampIndex(T &idx) {
+	void GlobalEngine::ClampIndex(T &idx) {
 		if (idx > MAX_PLAYER_COUNT_LOCAL) {
 			Print("Forced player to 0 b/c it %d > %d", idx, MAX_PLAYER_COUNT_LOCAL);
 			idx = 0;
 		}
-	}
-
-	void GlobalEngine::ResetOverride(ushort idx) {
-		ClampIndex(idx);
 	}
 
 	bool GlobalEngine::HasSupport() {
@@ -386,30 +382,19 @@ namespace feature_management::engines {
 
 		auto newControl = s_player_action{};
 
-		newControl.desired_grenade_index = from->grenade_index;
-		newControl.primary_trigger = from->primary_trigger;
-		newControl.throttle_forwardback = from->throttle.x;
-		newControl.throttle_leftright = from->throttle.y;
-		newControl.desired_weapon_index = from->weapon_index;
+		//newControl.desired_grenade_index = from->grenade_index;
+		//newControl.primary_trigger = from->primary_trigger;
+		//newControl.throttle_forwardback = from->throttle.x;
+		//newControl.throttle_leftright = from->throttle.y;
+		//newControl.desired_weapon_index = from->weapon_index;
+		//newControl.control_flagsB = from->control_flags;
+
 		newControl.control_flagsA = from->control_flags;
+		newControl.control_flagsA.control_flags.jump_button = 1;
 
 		mgr.lua_on_player_update(&newControl, idx);
 
 		return newControl;
-	}
-
-	void GlobalEngine::MakePlayerJump(ushort idx = 0) {
-		if (!IsSapien() && !IsCustomEd()) {
-			Print("Can't make player go forward because the version is unsupported");
-			return;
-		}
-		ClampIndex(idx);
-
-		this->ConsoleText(hGreen, "Player Jump function call!");
-		//TODO: Which is the _real_ jump button?
-
-		//	ActionOverrides[idx].control_flagsA.control_flags.jump_button = 1;
-		//	ActionOverrides[idx].control_flagsB.control_flags.jump_button = 1;
 	}
 
 	std::optional<uintptr_t> GlobalEngine::getFunctionBegin(const char *needle) {

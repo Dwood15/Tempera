@@ -71,6 +71,20 @@ THUMBCENTER = 0
 THUMBMIN = -32768
 THUMBMAX = 32767
 
+--[[
+    the XINPUT controller object:
+        "dwPacketNumber" -- compare this with the last run. if this is the same as the last run, then the controller state is the exact same as the last state.
+        "buttons"
+        "leftTrigger"
+        "rightTrigger"
+        --Left Thumbstick x, y axis
+        "thumbLX"
+        "thumbLY"
+        --Right Thumbstick x, y axis
+        "thumbRX"
+        "thumbRY"
+--]]
+
 --A little helper to keep things readable.
 function IsButtonPressed(buttons, test)
 	return (buttons & test) ~= 0
@@ -105,11 +119,19 @@ end
 
 local firstPlayerUpdateCalled = false
 function PlayerUpdate(player_control_state, player_index)
+	if player_control_state == nil then
+		return nil
+	end
+
 	if firstPlayerUpdateCalled == false then
 		Dbg("First Player update, ever!")
 	end
 
-	MakePlayerJump(player_index)
+	Dbg("--- Player Control State values ---")
+	for k, v in pairs(player_control_state) do
+		Dbg(string.format("Key: [%s] Value: [%f]", k, v))
+	end
+	Dbg("---")
 
 	local currentGamePad = 0
 	--TODO: Player to Controller mapping...
@@ -117,24 +139,8 @@ function PlayerUpdate(player_control_state, player_index)
 		if firstPlayerUpdateCalled == false then
 			Dbg(string.format("--[%d] player update controller update", currentGamePad))
 		end
-		--[[
-            the controller object:
-                "dwPacketNumber" -- compare this with the last run. if this is the same as the last run, then the controller state is the exact same as the last state.
-                "buttons"
-                "leftTrigger"
-                "rightTrigger"
-                --Left Thumbstick x, y axis
-                "thumbLX"
-                "thumbLY"
-                --Right Thumbstick x, y axis
-                "thumbRX"
-                "thumbRY"
-        --]]
 
-		if firstPlayerUpdateCalled == false then
-			Dbg("Retrieving ControllerState")
-		end
-
+		Dbg("Retrieving ControllerState")
 		--Controller is -1 if not found, and result is 0 if successful.
 		-- Will be providing helpers for reading this more fully.
 		controller, result = GetControllerState(currentGamePad)
@@ -144,25 +150,28 @@ function PlayerUpdate(player_control_state, player_index)
 		end
 
 		if controller ~= -1 and result == 0 then
-		    Dbg("Found Controller!, Checking Inputs")
+			Dbg("--- Controller State values ---")
+			for k, v in pairs(player_control_state) do
+				Dbg(string.format("Key: [%s] Value: [%f]", k, v))
+			end
+			Dbg("---")
+
 			if IsButtonPressed(controller.buttons, XINPUT_GAMEPAD_Y) then
-				Dbg("Controller input pressed, jumping the player")
-				MakePlayerJump(player_index)
+				Dbg("Controller input Y is pressed, jumping the player")
 			end
 
 			--TODO: Check appropriate thumb stick for input, grenade throw, etc etc.
-			--SetPlayerXVelocity(0, 0.50)
-
-			--Hard to figure out how to override the biped's desired look points. :X
-
-			--MakePlayerJump             -- Just player index.
 		end
 
 		if firstPlayerUpdateCalled == false then
-			Dbg("ControllerState retrieved")
+			Dbg("ControllerState Checked")
 		end
 
 		currentGamePad = currentGamePad + 1
+	end
+
+	if firstPlayerUpdateCalled == false then
+		Dbg("Completing Controller State Check")
 	end
 
 	firstPlayerUpdateCalled = true
@@ -171,27 +180,37 @@ function PlayerUpdate(player_control_state, player_index)
 	return player_control_state
 end
 
+function TestReadingBackTheTable()
+	t = {}
+	t["foo"] = "hello"
+	t["bazz"] = 123
+	t["barr"] = 0.5
+	t["baybe"] = 0.1
+	return t
+end
 
+
+local coreInitializedCheckedOnce = false
+local inMainMenuCheckedOnce = false
 local onTickNextPlayerIndexPrinted = false
 function OnTick(ticks_til_frame, time_since_map_started)
 	-- too much log spam
-	if onTickNextPlayerIndexPrinted == false then
-		Dbg("OnTick callback: First Check if Core Initialized!")
-	end
-
 	if IsCoreInitialized() == false then
+		if coreInitializedCheckedOnce == false then
+			Dbg("\nCore Is Not Initialized Yet. Waiting.\n")
+			coreInitializedCheckedOnce = true
+		end
 		return
-	elseif onTickNextPlayerIndexPrinted == false then
-		Dbg("Core is initialized!\n")
-	end
-
-	if onTickNextPlayerIndexPrinted == false then
-		Dbg("\nChecking if in main menu first time\n")
 	end
 
 	--At some point, Is* functions will be a variable list passed into the .
 	--While only relevant in HCE, this value should still be valid as (false) in sapien.
 	if AreWeInMainMenu() == true then
+		if inMainMenuCheckedOnce == false then
+			Dbg("\nWe are In Main Menu. Not doing anything.\n")
+			inMainMenuCheckedOnce = true
+		end
+
 		return
 	end
 

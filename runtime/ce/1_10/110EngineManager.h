@@ -44,7 +44,7 @@ namespace feature_management::engines {
 
 		static LPCoreAddressList GetCoreAddressList();
 		static const defined_functionrange *GetFunctionMap();
-		static void OnUnitControlUpdate(int client_update_idx);
+		static void __stdcall OnUnitControlUpdate();
 		static void WriteHooks();
 
 		const Yelo::TagGroups::coll::collision_bsp **global_collision_bsp  = (const Yelo::TagGroups::coll::collision_bsp **)0x6E2258;

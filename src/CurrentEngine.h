@@ -157,6 +157,8 @@ namespace feature_management::engines {
 
 		void WriteHooks();
 
+		template<typename T>
+		static void ClampIndex(T &idx);
 		static bool HasSupport();
 
 		auto ScenarioGlobals();
@@ -168,13 +170,10 @@ namespace feature_management::engines {
 
 		void SetCoreAddressList(LPCoreAddressList add_list);
 
-		void ResetOverride(ushort idx = 0);
-
 		bool SupportsFeature(features feat);
 
 		bool SupportsFeature(uint feat);
 
-		void MakePlayerJump(ushort idx);
 
 		static void InitializeLuaState();
 
@@ -227,13 +226,6 @@ void main_setup_connection_init();
 static const char * getMemoryRegionDescriptor(void * addr) {
 	PrintLn("\tCurrentEngine Location: : [0x%X]", CurrentEngine);
 	PrintLn("\tSearching for address: [0x%X]", addr);
-
-//	unsigned int endImgRng = NtHeader.baseImageLocation + NtHeader.imageSize;
-//
-//	if ((uintptr_t)addr >= NtHeader.baseImageLocation && (uintptr_t)addr <= (uintptr_t)endImgRng) {
-//		PrintLn("\tException Location inside of tempera dinput dll, probably.");
-//		return "probably_in_tempera_dll_space";
-//	}
 
 	if ((uintptr_t)addr < 0x200000) {
 		PrintLn("\tAddress on the stack");

@@ -132,11 +132,6 @@ namespace feature_management::engines {
 	}
 
 	void naked s_OnPlayerActionUpdate() {
-		//ahhhhhhhhhhhhhhhhhhhhhh
-		//clangd is dumb-- even with MSVC compat enabled they STILL
-		//Do not allow variables in naked funcs.
-
-		//Postmortem: this didn't work btw, I actually just ended up disabling clangd. /shrug
 #if defined(_MSC_VER) && !defined(__CLANG__)
 		s_player_action *current_action;
 
@@ -148,10 +143,17 @@ namespace feature_management::engines {
 #endif
 	}
 
-	static inline bool printOnce = false;
+	static bool printOnce = false;
 
-	void naked CE110::OnUnitControlUpdate(int client_update_idx) {
-		//PrintLn("\nOn UnitControl Update");
+	//With stdcall the callee saves the stack
+	//Since I'm not sure what our actual sitch here is, this should work.
+	void __stdcall CE110::OnUnitControlUpdate() {
+		unsigned short unit_idx;
+		s_unit_control_data *from_control_data;
+
+		//praying to god that eax and edx aren't getting clobbered here :V
+		__asm mov unit_idx, ax
+		__asm mov from_control_data, edx
 
 		//cannot update a unit's control if core's not initialized.
 		if (!::feature_management::engines::IsCoreInitialized()) {
@@ -161,22 +163,14 @@ namespace feature_management::engines {
 			}
 			CurrentEngine->RefreshCore();
 
-			__asm retn;
+			return;
+//			__asm retn;
 		}
 
-#if !defined(__GNUC__) && !defined(__CLANG__)
-		unsigned short unit_idx;
-		s_unit_control_data *from_control_data;
+		Control::UnitControl(unit_idx, from_control_data, 0);
 
-		__asm mov unit_idx, ax
-		__asm mov from_control_data, edx
-
-		Control::UnitControl(unit_idx, from_control_data, client_update_idx);
-
-		__asm retn
-#else
-		IMPLEMENTATION_REQUIRED
-#endif
+//		__asm retn
+		return;
 	}
 
 	static void ValuePatches() {
@@ -294,12 +288,6 @@ namespace feature_management::engines {
 							   spcore::player_control::player_control_initialize_for_new_map);
 	}
 
-	inline void onUnitControlUpdate() {
-		// OnUnitControlUpdate hook is broken.
-		PrintLn("\nCE110 OnUnitControl Update hook for lua");
-		calls::WriteSimpleHook(0x4770CF, CE110::OnUnitControlUpdate);
-	}
-
 	void CE110::WriteHooks() {
 		ValuePatches();
 
@@ -314,7 +302,10 @@ namespace feature_management::engines {
 		gameTickHook();
 		playerActionUpdateHook();
 		playerControlInitForNewMapHook();
-		onUnitControlUpdate();
+
+		// OnUnitControlUpdate hook "works" the first time, dies the second.
+		PrintLn("Writing the CE110 OnUnitControl Update hook for lua");
+		calls::WriteSimpleHook(0x4770CF, CE110::OnUnitControlUpdate);
 
 		//Broken
 

@@ -13,28 +13,45 @@ void Control::HandleActionOverride(ushort idx, s_unit_control_data * from) {
 	from->primary_trigger = override.primary_trigger;
 
 	from->grenade_index = override.desired_grenade_index;
-
-	CurrentEngine->ResetOverride();
+	//CurrentEngine->ClampIndex(idx);
 }
 
+static int ucUdates = 0;
 void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client_update_idx) {
-	PrintLn("Updating player: 0x%x", unit_idx);
+	ucUdates++;
+	PrintLn("[%d] Updating player with unit index: 0x%x", ucUdates, unit_idx);
 
 	auto to = reinterpret_cast<s_unit_datum *>(CurrentEngine->GetGenericObject(short(unit_idx)));
 
-	if(to->unit.controlling_player_index.handle == static_cast<uint>(-1))	{
+	auto playerHandle = to->unit.controlling_player_index.handle;
+
+	if(playerHandle == static_cast<uint>(-1)) {
 		PrintLn("player: 0x%x player index controlling is -1 on the unit, exiting UnitControl method", unit_idx);
 		return;
 	}
 
-	if(to->unit.controlling_player_index.handle != static_cast<uint>(-1))	{
-		PrintLn("Executing HandleActionOverride");
-		HandleActionOverride(to->unit.controlling_player_index.index, from);
+	auto playerIdx = to->unit.controlling_player_index.index;
+
+	if (!CurrentEngine->IsPlayerSpawned(playerIdx) || !CurrentEngine->IsPlayerValid(playerIdx)) {
+		PrintLn("Player: [%d] is either not spawned or is not valid. Waiting.", playerIdx);
+		return;
 	}
 
+	//For when we're still in a cutscene and the player still hasn't spawned yet
+	if (to->unit_object.position.x == 0 &&  to->unit_object.position.y == 0 && to->unit_object.position.z == 0) {
+		PrintLn("Player unit object is at level origin. Waiting until player spawns.");
+		return;
+	}
 
-	if (*CurrentEngine->main_globals_game_connection_type == 2) {
-		PrintLn("game connection type -- non local !?");
+	PrintLn("Executing HandleActionOverride");
+	HandleActionOverride(playerIdx, from);
+	PrintLn("HandleActionOverride Completed");
+
+	auto connType = *CurrentEngine->main_globals_game_connection_type;
+	PrintLn("[%d] Unit Control for game connection type: [%d]", ucUdates, connType);
+
+	if (connType == 2) {
+		PrintLn("game connection type -- non-local !?");
 
 		if ((from->control_flags.control_flags_a >> 8) & 0b00101000) {
 			to->unit.pad11_networkpcOnly = true;
@@ -43,7 +60,8 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 		}
 	}
 
-	PrintLn("reading unit");
+	PrintLn("[%d] transposing controls onto the unit");
+
 	auto unit = &to->unit;
 
 	unit->control_flags.control_flags.jump_button = 1;
@@ -82,5 +100,5 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 		unit->last_completed_client_update_id_valid = true;
 	}
 
-	PrintLn("Unit control update completed");
+	PrintLn("[%d] Unit control update completed", ucUdates);
 }

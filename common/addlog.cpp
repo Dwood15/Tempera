@@ -8,8 +8,8 @@
 
 #include "addlog.h"
 
-static::std::ofstream ofile;
-static char   dlldir[320];
+::std::ofstream ofile;
+char   dlldir[320];
 
 //Multiple threads could be writing to the file at once, so we back it behind this
 //little semaphore. Volatile only affects compiler optimizations for the local function
@@ -64,8 +64,7 @@ void bufWarn(int diff) {
 	//UINT_MAX is 13 characters: add one for null terminator.
 	constexpr uint32_t warnBufSize = length(warnFmt) + 14;
 	char warnBuf[warnBufSize];
-	snprintf(warnBuf, warnBufSize, warnFmt, diff);
-
+	_vsnprintf(warnBuf, warnBufSize, warnFmt, (va_list)diff);
 	ofile << warnBuf << ::std::endl;
 }
 
@@ -86,10 +85,11 @@ void DBGPrnt(const char *fmt, va_list va_alist) {
 
 	constexpr int bufSize = 256;
 	char logbuf[bufSize];
-	int cwrit = std::snprintf(logbuf,  bufSize, fmt, va_alist);
+
+	int cwrit = _vsnprintf(logbuf, bufSize, fmt, va_alist);
 
 	if (cwrit > bufSize) {
-
+		bufWarn(cwrit - bufSize);
 	}
 
 	ofile << logbuf <<::std::endl;

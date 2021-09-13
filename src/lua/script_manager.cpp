@@ -223,23 +223,25 @@ static void PassPlayerControl(lua_State * L, s_player_action * control) {
 }
 
 static void ReadPlayerControl(lua_State * L, s_player_action * control) {
-	lua_settop(L, 1);
+	PrintLn("Attempting to read our player control back out");
 	luaL_checktype(L, 1, LUA_TTABLE);
 
 	lua_getfield(L, 1, "control_flags");
-	uint num = luaL_checkinteger(L, -1);
+	uint num = lua_tointeger(L, -1);
 	if(num <= (uint)0xFFFF) {
 		control->control_flagsA.control_flags_a = static_cast<ushort>(num);
 	}
 
+	//PrintLn("Control Flags successfully read");
 	lua_pop(L, 1);
 
 	lua_getfield(L, 1, "throttle.x");
 	lua_getfield(L, 1, "throttle.y");
 
-	control->throttle_forwardback = luaL_checknumber(L, -1);
-	control->throttle_leftright = luaL_checknumber(L, -2);
+	control->throttle_forwardback = lua_tonumber(L, -1);
+	control->throttle_leftright = lua_tonumber(L, -2);
 
+//	PrintLn("Throttle Successfully read");
 	lua_pop(L, 2);
 
 	lua_getfield(L, 1, "desired_weapon_index");
@@ -247,28 +249,75 @@ static void ReadPlayerControl(lua_State * L, s_player_action * control) {
 
 	//This will probably make the game crash :X
 	int weapIdx = luaL_checkinteger(L, -1);
-	if (weapIdx > MAX_WEAPONS_PER_UNIT-1) {
-		weapIdx = 0;
-	} else if (weapIdx < 0) {
-		weapIdx = MAX_WEAPONS_PER_UNIT-1;
-	}
+//	if (weapIdx > MAX_WEAPONS_PER_UNIT-1) {
+//		weapIdx = 0;
+//	} else if (weapIdx < 0) {
+//		weapIdx = MAX_WEAPONS_PER_UNIT-1;
+//	}
 
 	control->desired_weapon_index = static_cast<ushort>(weapIdx);
 
 	weapIdx = luaL_checkinteger(L, -2);
-	if(num <= 1) {
-		control->desired_weapon_index = static_cast<ushort>(num);
+	if(weapIdx <= 1) {
+		control->desired_grenade_index = static_cast<ushort>(weapIdx);
 	}
 
+//	PrintLn("Player Weap/Grenade Indices successfully read");
 	lua_pop(L, 2);
 
 	lua_getfield(L, 1, "primary_trigger");
-
 	control->primary_trigger = luaL_checknumber(L, -1);
+//	PrintLn("Primary Trigger successfully read");
+	lua_pop(L, 1);
+
+	//Last, pop the table off the stack
 	lua_pop(L, 1);
 }
 
+void LuaScriptManager::lua_run_sanityChecks() {
+	///Testing Ability to read a table back
+	this->HandleFunctionNameEvent("TestReadingBackTheTable");
+	PrintLn("Attempting a Sanity Check");
+	this->PCall<0, 1>("TestReadingBackTheTable");
+	if (!lua_istable(L, 1)) {
+		PrintLn("Literally Nothing we can do, table rip");
+		return;
+	}
+
+	lua_getfield(L, 1, "foo");
+	lua_getfield(L, 1, "bazz");
+
+	auto bazzNum = lua_tointeger(L, -1);
+	auto fooStr = luaL_checkstring(L, -2);
+
+	PrintLn("Lua Table reading Sanity Check, Bazz: [%d] Foo: [%s]", bazzNum, fooStr);
+	lua_pop(L, 2);
+
+	PrintLn("Popped. Checking Baybe and Barr");
+
+	lua_getfield(L, 1, "baybe");
+	lua_getfield(L, 1, "barr");
+
+	auto barrNum = luaL_checknumber(L, -1);
+	auto baybeNum = luaL_checknumber(L, -2);
+
+	PrintLn("barrNum: [%f] && baybeNum: [%f]", barrNum, baybeNum);
+	lua_pop(L, 2);
+
+	//Pop the lua table off the stack
+	lua_pop(L, 1);
+	PrintLn("Finished up with the sanity check demo func");
+}
+
 void LuaScriptManager::lua_on_player_update(s_player_action * control, ushort plyrIdx) {
+	if (control == nullptr) {
+		PrintLn("Player Action Control is null, no work to do");
+		return;
+	}
+
+	//Verify that we can read a modestly
+	this->lua_run_sanityChecks();
+
 	static volatile bool DebugOnce = false;
 
 	if(!this->HandleFunctionNameEvent("PlayerUpdate")) {
@@ -284,10 +333,11 @@ void LuaScriptManager::lua_on_player_update(s_player_action * control, ushort pl
 	}
 
 	PassPlayerControl(L, control);
-
 	lua_pushinteger(L, plyrIdx);
 
-	this->PCall<2, 0>("PlayerUpdate");
+	this->PCall<2, 1>("PlayerUpdate");
+
+	PrintLn("out of Lua, Reading player Control back out");
 
 	ReadPlayerControl(L, control);
 }
@@ -418,13 +468,6 @@ void LuaScriptManager::InitializeLua(const char *filename) {
 	registerGlobalLuaFunction("GetEngineContext", l_GetEngineContext);
 
 	registerGlobalLuaFunction("CallVoidEngineFunctionByFunctionMapName", l_CallVoidEngineFunctionByFunctionMapName);
-
-	//Some helpers for controlling the player.
-	registerGlobalLuaFunction("MakePlayerJump", [](lua_State *L) {
-		return LuaSetPlayerFunctionNoArg(L, [](ushort idx) {
-			CurrentEngine->MakePlayerJump(idx);
-		});
-	});
 
 	registerGlobalLuaFunction("IsCoreInitialized", [](lua_State *L) {
 		lua_pushboolean(L, feature_management::engines::IsCoreInitialized());

@@ -46,14 +46,14 @@ static void PrintLn(const char *fmt, ...) {
 	va_list va_alist;
 
 		va_start(va_alist, fmt);
+
+	DBGPrnt(fmt, va_alist);
+
 	if constexpr (toConsole) {
 		vprintf(fmt, va_alist);
 		//I'm incredibly lazy. Hopefully the compiler can optimize it out.
 		vprintf("\n", va_alist);
 	}
-
-	DBGPrnt(fmt, va_alist);
-
 		va_end(va_alist);
 }
 #endif
