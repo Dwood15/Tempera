@@ -208,28 +208,28 @@ static void setTableNumber(lua_State * L, const char *keyName, lua_Number n) {
 	lua_setfield(L, -2, keyName);
 }
 
-static void PassPlayerControl(lua_State * L, s_player_action * control) {
+static void PassPlayerControl(lua_State * L, s_unit_control_data * control) {
 	lua_createtable(L, 0, 6);
 
-	setTableField(L, "control_flags", control->control_flagsA.control_flags_a);
+	setTableField(L, "control_flags", control->control_flags.control_flags_a);
 
-	setTableNumber(L, "throttle.x", control->throttle_leftright);
-	setTableNumber(L, "throttle.y", control->throttle_forwardback);
+	setTableNumber(L, "throttle.x", control->throttle.x);
+	setTableNumber(L, "throttle.y", control->throttle.y);
 
-	setTableField(L,"desired_weapon_index", control->desired_weapon_index);
-	setTableField(L, "desired_grenade_index", control->desired_grenade_index);
+	setTableField(L,"weapon_index", control->weapon_index);
+	setTableField(L, "grenade_index", control->weapon_index);
 
 	setTableNumber(L, "primary_trigger", control->primary_trigger);
 }
 
-static void ReadPlayerControl(lua_State * L, s_player_action * control) {
+static void ReadPlayerControl(lua_State * L, s_unit_control_data * control) {
 	PrintLn("Attempting to read our player control back out");
 	luaL_checktype(L, 1, LUA_TTABLE);
 
 	lua_getfield(L, 1, "control_flags");
 	uint num = lua_tointeger(L, -1);
 	if(num <= (uint)0xFFFF) {
-		control->control_flagsA.control_flags_a = static_cast<ushort>(num);
+		control->control_flags.control_flags_a = static_cast<ushort>(num);
 	}
 
 	//PrintLn("Control Flags successfully read");
@@ -238,8 +238,8 @@ static void ReadPlayerControl(lua_State * L, s_player_action * control) {
 	lua_getfield(L, 1, "throttle.x");
 	lua_getfield(L, 1, "throttle.y");
 
-	control->throttle_forwardback = lua_tonumber(L, -1);
-	control->throttle_leftright = lua_tonumber(L, -2);
+	control->throttle.x = lua_tonumber(L, -1);
+	control->throttle.y = lua_tonumber(L, -2);
 
 //	PrintLn("Throttle Successfully read");
 	lua_pop(L, 2);
@@ -255,12 +255,11 @@ static void ReadPlayerControl(lua_State * L, s_player_action * control) {
 //		weapIdx = MAX_WEAPONS_PER_UNIT-1;
 //	}
 
-	control->desired_weapon_index = static_cast<ushort>(weapIdx);
+	control->weapon_index = static_cast<ushort>(weapIdx);
 
 	weapIdx = luaL_checkinteger(L, -2);
-	if(weapIdx <= 1) {
-		control->desired_grenade_index = static_cast<ushort>(weapIdx);
-	}
+	control->grenade_index = static_cast<ushort>(weapIdx);
+
 
 //	PrintLn("Player Weap/Grenade Indices successfully read");
 	lua_pop(L, 2);
@@ -309,7 +308,7 @@ void LuaScriptManager::lua_run_sanityChecks() {
 	PrintLn("Finished up with the sanity check demo func");
 }
 
-void LuaScriptManager::lua_on_player_update(s_player_action * control, ushort plyrIdx) {
+void LuaScriptManager::lua_on_player_update(s_unit_control_data * control, ushort plyrIdx) {
 	if (control == nullptr) {
 		PrintLn("Player Action Control is null, no work to do");
 		return;

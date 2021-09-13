@@ -141,7 +141,7 @@ namespace feature_management::engines {
 
 		[[nodiscard]] static LuaScriptManager * GetLuaState();
 
-		s_player_action GetPlayerActionOverride(ushort idx, s_unit_control_data * from);
+		s_unit_control_data GetPlayerActionOverride(ushort idx, s_unit_control_data * from);
 
 		static bool IsHek() {
 			return CurrentMajor == major::HEK;

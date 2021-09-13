@@ -377,20 +377,18 @@ namespace feature_management::engines {
 
 	}
 
-	s_player_action GlobalEngine::GetPlayerActionOverride(ushort idx, s_unit_control_data *from) {
+	s_unit_control_data GlobalEngine::GetPlayerActionOverride(ushort idx, s_unit_control_data *from) {
 		ClampIndex(idx);
 
-		auto newControl = s_player_action{};
+		auto newControl = s_unit_control_data{};
 
-		//newControl.desired_grenade_index = from->grenade_index;
-		//newControl.primary_trigger = from->primary_trigger;
-		//newControl.throttle_forwardback = from->throttle.x;
-		//newControl.throttle_leftright = from->throttle.y;
-		//newControl.desired_weapon_index = from->weapon_index;
-		//newControl.control_flagsB = from->control_flags;
-
-		newControl.control_flagsA = from->control_flags;
-		newControl.control_flagsA.control_flags.jump_button = 1;
+		newControl.grenade_index = from->grenade_index;
+		newControl.primary_trigger = from->primary_trigger;
+		newControl.throttle.x = from->throttle.x;
+		newControl.throttle.y = from->throttle.y;
+		newControl.aiming_vector = from->aiming_vector;
+		newControl.weapon_index = from->weapon_index;
+		newControl.control_flags = from->control_flags;
 
 		mgr.lua_on_player_update(&newControl, idx);
 

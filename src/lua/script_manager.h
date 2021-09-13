@@ -8,6 +8,7 @@
 #include "players_interface.h"
 #include "memory_interface.h"
 #include "enums/generic_enums.h"
+#include "../gamestate/units/unit_controls.h"
 
 static bool isValidCbId(uint id) {
 	return (id < LuaCallbackId::max_callback_id && id >= before_game_tick);
@@ -80,7 +81,7 @@ public:
 
 	void lua_on_tick(uint32 remaining, uint32 since_map_begin);
 	void lua_run_sanityChecks();
-	void lua_on_player_update(s_player_action * control, ushort plyrIdx);
+	void lua_on_player_update(s_unit_control_data * control, ushort plyrIdx);
 
 	void call_void_lua_func(const ::std::string &funcName);
 
