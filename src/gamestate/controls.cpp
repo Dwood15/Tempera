@@ -34,7 +34,10 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 	auto connType = *CurrentEngine->main_globals_game_connection_type;
 	PrintLn("[%d] Unit Control for game connection type: [%d]", ucUdates, connType);
 
-	auto override = CurrentEngine->GetPlayerActionOverride(playerIdx, from);
+	auto override = CurrentEngine->GetPlayerActionOverride(playerIdx, *from);
+
+	//s_unit_control_data override = *from;
+
 	PrintLn("HandleActionOverride Completed");
 
 	if (connType == 2) {
@@ -68,7 +71,6 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 	unit->desired_zoom_level = static_cast<byte>(override.zoom_index);
 
 	//Heh. Vertical throttle, anyone?
-	unit->throttle.z = 0;
 
 	unit->control_flags = override.control_flags;
 	unit->looking_angles = override.looking_vector;
