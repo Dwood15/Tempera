@@ -254,14 +254,15 @@ long __stdcall hkSetStreamSource(IDirect3DDevice9 *pDevice, UINT StreamNumber, I
 #endif
 #include <detours.h>
 
-DWORD __stdcall CD3D::hkD3DHook(void *lpVoid) {
+DWORD __stdcall CD3D::hkD3DHook() {
 	vTable_D3D9 *vD3D9; // Create instance of d3d9 Virtual Method Table
 
 	//1.08 d3d device global 0x0071D09C
 	//0x3C471C0
 	//0x3C49F5C
-	//0x6B840C
-	void             *pDevicePointer = (void *) 0x6B840C; // Halo full version device pointer ( static )
+	//1.10 global.. 0x6B840C
+
+	void             *pDevicePointer = (void *) 0x6B840C; // Halo 1.10 version device pointer ( static )
 	DWORD            dwOldProtect    = (DWORD)NULL;
 	IDirect3DDevice9 *pGameDevice;
 
