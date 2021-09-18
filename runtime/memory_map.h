@@ -60,6 +60,7 @@ struct LPCoreAddressList {
 	uint game_time_globals;
 	uint players_global_data;
 	uint game_globals_conn_type;
+	uint cinematic_globals;
 };
 
 

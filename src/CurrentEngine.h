@@ -59,6 +59,7 @@ namespace feature_management::engines {
 		s_motion_sensor               *motion_sensor;
 		Yelo::GameState::s_game_time_globals	  *game_time_globals = nullptr;
 		uintptr                       game_state_globals_location_ptr;
+		Camera::s_cinematic_globals_data *cinematic_globals;
 		uintptr                       game_state_globals_ptr;
 		void                          **crc_checksum_buffer;
 
@@ -148,11 +149,16 @@ namespace feature_management::engines {
 		}
 
 		static bool IsSapien() {
-			return IsHek() && CurrentMinor == minor::sapien;
+			static bool isSapien = IsHek() && CurrentMinor == minor::sapien;
+			return isSapien;
 		}
 
 		static bool IsCustomEd() {
 			return CurrentMajor == major::CE;
+		}
+
+		bool AreWeInCutScene() {
+			return cinematic_globals->in_progress;
 		}
 
 		void WriteHooks();

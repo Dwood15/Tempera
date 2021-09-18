@@ -79,6 +79,8 @@ LPCoreAddressList Sapien::GetCoreAddressList() {
 
 	add_list.player_control_globals_data = 0xDF76B0; // = player_control_globals *
 
+	//Pointers to an address
+	add_list.cinematic_globals = 0xCA4574;
 	return add_list;
 }
 

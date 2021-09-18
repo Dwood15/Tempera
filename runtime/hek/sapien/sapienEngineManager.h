@@ -20,7 +20,5 @@ namespace feature_management::engines {
 			return features::LUA_HOOKS;
 		}
 
-		//Sapien doesn't have fancy CutScenes
-		bool AreWeInCutScene() { return false; }
 	};
 };

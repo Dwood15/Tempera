@@ -265,6 +265,8 @@ namespace feature_management::engines {
 
 		game_time_globals = *reinterpret_cast<Yelo::GameState::s_game_time_globals **>(add_list.game_time_globals);
 
+		cinematic_globals = *reinterpret_cast<Camera::s_cinematic_globals_data **>(add_list.cinematic_globals);
+
 		CONSOLE_HOOK_ADDRESS = add_list.CONSOLE_HOOK_ADDRESS;
 		CONSOLE_TEXT_HOOK_ADDRESS = add_list.CONSOLE_TEXT_HOOK_ADDRESS;
 

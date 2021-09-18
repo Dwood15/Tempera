@@ -42,7 +42,11 @@ constexpr uintptr_t regular_player_clamps[] = {
 	// 			//constexpr uintptr_t render_weapon_hud_loc = 0x4B53E0
 	// 			//MPP_B(render_weapon_hud_loc);
 
-	0x4B196A + 0x2, //hud_messaging_update_clamp);
+	///hud_messaging_update_clamps
+	///That whole function has a fuckton of clamps that need to be inspected and overridden
+	0x4B196A + 0x2,
+	0x4B1993 + 0x2,
+
 	0x4B2787 + 0x3, //hud_update_nav_point_local_player_clamp);
 
 	//"33 C0 83 F9 FF 74 05 B8 .01 00 00 00 66 89 46 0C");
@@ -125,6 +129,8 @@ namespace feature_management::engines {
 
 		CurrentCore.game_time_globals = 0x68CD70;
 		CurrentCore.game_globals_conn_type = 0x6B47B0;
+
+		CurrentCore.cinematic_globals = 0x68C83C;
 
 		PrintLn("Core AddressLists loaded");
 
@@ -212,7 +218,6 @@ namespace feature_management::engines {
 		constexpr uintptr_t override_function_call_list[] = {0x51EFA3, 0x51EE00, 0x51EB0, 0x49792B, 0x4975C4, 0x49757D};
 
 		int main_get_window_count_override() {
-
 			if (CurrentEngine->AreWeInMainMenu()) {
 				return 1;
 			}
