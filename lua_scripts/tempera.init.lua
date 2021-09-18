@@ -151,8 +151,8 @@ function PlayerUpdate(player_control_state, player_index)
 
 		if controller ~= -1 and result == 0 then
 			Dbg("--- Controller State values ---")
-			for k, v in pairs(player_control_state) do
-				Dbg(string.format("Key: [%s] Value: [%f]", k, v))
+			for k, v in pairs(controller) do
+				Dbg(string.format("Key: [%s] Value: [0x%x]", k, v))
 			end
 			Dbg("---")
 
