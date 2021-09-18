@@ -130,6 +130,19 @@ namespace feature_management::engines {
 
 		return CurrentCore;
 	}
+
+	void naked s_OnPlayerActionUpdate() {
+#if defined(_MSC_VER) && !defined(__CLANG__)
+		s_player_action *current_action;
+
+		__asm mov dword ptr[esp+1Ch], -1
+		__asm mov current_action, ebp
+		__asm retn
+#else
+		IMPLEMENTATION_REQUIRED
+#endif
+	}
+
 	static bool printOnce = false;
 
 	//With stdcall the callee saves the stack
@@ -185,17 +198,15 @@ namespace feature_management::engines {
 		uintptr_t motion_sensor_sizeofs[] = {0x4AC8B3, 0x4AC8BC + 0x4};
 
 		//			Need to confirm these...
+		//			uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
 		//			uintptr_t weapon_hud_globals_sizeofs[]            = { 0x4AC848, 0x4AC850 + 0x4 };
 		//			uintptr_t hud_interface_related_globals_sizeofs[] = { 0x4AC87D, 0x4AC885 + 0x4 };
-
-
-		//uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
-		//calls::adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
 
 		//adjustNPatch32(hud_scripted_globals_sizeofs, 0x4);
 		//0x488 og size.
 		PrintLn("\nPatching the hud messaging globals based on sizeofs");
 		calls::adjustNPatch32(hud_messaging_globals_sizeofs, sizeof(::s_hud_messaging_state));
+		//			adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
 		//			adjustNPatch32(weapon_hud_globals_sizeofs, 0x7C);
 		//			adjustNPatch32(hud_interface_related_globals_sizeofs, 0x30);
 		PrintLn("\nPatching the motion sensor sizeofs");
@@ -263,6 +274,8 @@ namespace feature_management::engines {
 		//clear it with some NOPS
 		calls::patchValue<byte>(0x476CF7, 0x90); //
 		calls::patchValue<unsigned short>(0x476CF8, 0x9090);
+
+		calls::WriteSimpleHook(0x476CF3, s_OnPlayerActionUpdate); //6 bytes off.
 	}
 
 	inline void playerControlInitForNewMapHook() {

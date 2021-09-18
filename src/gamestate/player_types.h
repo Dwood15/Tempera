@@ -151,6 +151,10 @@ struct s_game_engine_state_message {
 	long        target_time; // timer used to fade in the target player name
 };
 
+typedef int retIntGivenVoid(void);
+
+static retIntGivenVoid *find_unused_local_player_index = (retIntGivenVoid *) 0x4762f0;
+
 //s_players_globals_data
 struct s_players_globals_data {
 	long          unused_after_initialize_unk;                                                                // 0x0, initialized to NONE but that's all I can tell

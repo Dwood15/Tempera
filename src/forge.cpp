@@ -18,7 +18,7 @@ static short *spawn_count         = (short *) 0x624A9C;
 static short *render_window_count = (short *) 0x6B4098;
 bool         *at_main_menu        = (bool *) 0x6B4051;
 
-void UpdateGlobals() {
+void ForgeState::UpdateGlobals() {
 	if (last_respawn_count != *to_respawn_count) {
 		Print("Number of people to respawn from: %d to: %d\n", last_respawn_count, *to_respawn_count);
 		last_respawn_count = *to_respawn_count;
@@ -35,7 +35,7 @@ void UpdateGlobals() {
 	}
 }
 
-void HandleMainMenuOptions() {
+void ForgeState::HandleMainMenuOptions() {
 	if (GetAsyncKeyState(VK_F1) & 1) {
 		//Player spawn count set to 2.
 		*(short *) 0x624A9C = (short) 0x2;
@@ -43,7 +43,7 @@ void HandleMainMenuOptions() {
 	}
 }
 
-void PrintHelp() {
+void ForgeState::PrintHelp() {
 	const char *f1     = "F1    -> (ui only!)Set # players to spawn in next map to 2.\n";
 	const char *f2     = "F2    -> Dumps Player Globals data to log. Prints to window when not in ui.map\n";
 	const char *shift  = "SHIFT -> Select\\Deselect highlighted object.\n";
@@ -60,18 +60,17 @@ void PrintHelp() {
 }
 
 //TODO: Launch thread later on in the load cycle
-[[noreturn]] int forge::MainLoop() {
-	if (feature_management::engines::GlobalEngine::IsHek()) {
+[[noreturn]] int ForgeState::MainLoop() {
+	if (CurrentEngine->IsHek()) {
 		PrintLn("Forge doesn't support anything but Halo PC 1.10 right now. Working on expanding horizons.");
 		__asm retn
 	}
 
 	Sleep(600);
 	//automatically spawn the maximum number of local players at the beginning of the game.
-	*(short *) 0x624A9C = (short)MAX_PLAYER_COUNT_LOCAL;
-	cd3d.hkD3DHook(nullptr);
-
-	CurrentEngine->ConsoleText(hGreen, "Number players to spawn in next sp map: 3!");
+	//*(short *) 0x624A9C = (short)MAX_PLAYER_COUNT_LOCAL;
+	cd3d.hkD3DHook(NULL);
+	// core->ConsoleText(hGreen, "Number players to spawn in next sp map: 3!");
 	PrintHelp();
 
 	while (1) {
@@ -89,44 +88,55 @@ void PrintHelp() {
 			// }
 		}
 
-		 if (GetAsyncKeyState(VK_F11) & 1) {
-		 	PrintHelp();
-		 	continue;
-		 }
-
-		 if (*at_main_menu) {
-		 	Sleep(45);
-		 	continue;
-		 }
+		// if (GetAsyncKeyState(VK_F11) & 1) {
+		// 	PrintHelp();
+		// 	continue;
+		// }
+		//
+		// if (*at_main_menu) {
+		// 	Sleep(45);
+		// 	continue;
+		// }
 		//
 		// if (GetAsyncKeyState(VK_F5) & 1) {
 		// 	core->ObjectControl->LogInfo();
 		// }
 
-		 if ((CurrentEngine->IsPlayerSpawned(1)) && GetAsyncKeyState(VK_F7) & 1) {
-		 	datum_index plyr_datum = CurrentEngine->GetPlayerObjectIdent(1);
-
-		 	if (plyr_datum.index > -1) {
-		 		object_data *objd = CurrentEngine->GetGenericObject(plyr_datum.index);
-
-		 		objd->Velocity.z += .25f;
-		 		objd->Velocity.y  = 0;
-
-		 		CurrentEngine->ConsoleText(hBlue, "Incremented The player 2 object's velocity!");
-		 	}
-		 } else if (CurrentEngine->IsPlayerSpawned(0) && GetAsyncKeyState(VK_F8) & 1) {
-			 datum_index plyr_datum = CurrentEngine->GetPlayerObjectIdent(0);
-		 	if (plyr_datum.index > -1) {
-		 		//object_header * objh = core->GetObjectHeader(plyr_datum.index);
-		 		object_data *objd = CurrentEngine->GetGenericObject(plyr_datum.index);
-
-		 		objd->Velocity.x += .25;
-		 		objd->Velocity.y  = 0;
-
-				CurrentEngine->ConsoleText(hBlue, "Increased Player 1 velocity! %.3f", objd->Velocity.x);
-		 	}
-		 }
-
+		// if ((core->IsPlayerSpawned(1)) && GetAsyncKeyState(VK_F7) & 1) {
+		// 	ident plyr_datum = core->GetPlayerObjectIdent(1);
+		//
+		// 	if (plyr_datum.index > -1) {
+		// 		//object_header * objh = core->GetObjectHeader(plyr_datum.index);
+		// 		object_data *objd = core->GetGenericObject(plyr_datum.index);
+		//
+		// 		Print(true, "\n\t\t***~~~*** Player 2 Data Dump ***~~~***\n");
+		// 		objd->DumpData(true);
+		// 		Print(true, "\n\t\t***~~~*** END Player 2 Data Dump ***~~~***\n");
+		//
+		// 		//objd->Velocity.x += .15;
+		// 		//objd->Velocity.y  = 0;
+		//
+		// 		++objd->Animation.state.animation_index;
+		//
+		// 		Print(true, "Player 2 animation state: %d", objd->Animation.state.animation_index);
+		// 		// core->ConsoleText(hBlue, );
+		// 	}
+		// } else if (core->IsPlayerSpawned(0) && GetAsyncKeyState(VK_F8) & 1) {
+		// 	ident plyr_datum = core->GetPlayerObjectIdent(0);
+		// 	if (plyr_datum.index > -1) {
+		// 		//object_header * objh = core->GetObjectHeader(plyr_datum.index);
+		// 		object_data *objd = core->GetGenericObject(plyr_datum.index);
+		//
+		// 		Print(true, "\n\t***~~~*** Player 1 Data Dump ***~~~***\n");
+		// 		objd->DumpData(true);
+		// 		Print(true, "\n\t***~~~*** END Player 1 Data Dump ***~~~***\n");
+		//
+		// 		objd->Velocity.x += .15;
+		// 		objd->Velocity.y  = 0;
+		//
+		// 		core->ConsoleText(hBlue, "Increased Player 1 velocity! %.3f", objd->Velocity.x);
+		// 	}
+		// }
 		// else if (GetAsyncKeyState(VK_UP)) {
 		// 	core->ObjectControl->IncreaseHoldDistance();         // Object MOVE away.
 		//
@@ -147,7 +157,7 @@ void PrintHelp() {
 		// 	core->ObjectControl->DropHeldObject();
 		// }
 
-		//	TODO: Scrolling to set selected item's distance from player.
+		//		TODO: Scrolling to set selected item's distance from player.
 		// 	MSG msg;
 		//Isn't doing anything?
 		// LPMSG msg = NULL;
@@ -172,6 +182,7 @@ void PrintHelp() {
 		// 		Print(true, "other: %d", msg->message);
 		// 	}
 		// }
+
 	}
 }
 
@@ -186,6 +197,10 @@ CBlam::CBlam() {
 	server_blam = (_blam_ *) SERVER_BLAM_ADDRESS;
 	local_blam  = (_blam_ *) LOCAL_BLAM_ADDRESS;
 }
+
+CBlam::~CBlam() {
+}
+
 void CBlam::SetGameTypeName(_blam_ *_blam, wchar_t *wName) { memcpy(_blam->GameTypeName, wName, 24); }
 
 wchar_t *CBlam::GetGameTypeName(_blam_ *_blam) { return _blam->GameTypeName; }

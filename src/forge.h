@@ -1,8 +1,14 @@
 #pragma once
 
-namespace forge {
+class ForgeState {
+	void UpdateGlobals();
+
+	void HandleMainMenuOptions();
+
+	void PrintHelp();
+
 	[[noreturn]] int MainLoop();
-}
+};
 
 struct _blam_ {
 	wchar_t GameTypeName[24];   // Unicode
@@ -81,7 +87,7 @@ public:
 
 	CBlam();
 
-	~CBlam() {}
+	~CBlam();
 
 	void SetGameTypeName(_blam_ *_blam, wchar_t *wName);   // Unicode, 24 characters max
 	void SetGameType(_blam_ *_blam, long dwType);      // 1 CTF, 2 Slayer, 3 Oddball, 4 KOTH, 5 Race

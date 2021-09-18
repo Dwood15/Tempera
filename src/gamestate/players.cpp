@@ -31,8 +31,9 @@ void players_set_local_player_unit(unsigned short requested_plyr_idx, datum_inde
 		__asm xor cl, cl
 		calls::DoCall<Convention::m_cdecl, void, datum_index>(*set_actively_controlled, current_unit);
 #else
-		NOT_IMPLEMENTED;
+
 #endif
+		NOT_IMPLEMENTED;
 	}
 }
 
@@ -74,6 +75,7 @@ void unit_set_actively_controlled(datum_index u, bool is_controlled) {
 	__asm mov ax, u.index
 	::calls::DoCall(*unit_update_driver_and_gunner);
 #else
-	NOT_IMPLEMENTED;
+
 #endif
+	NOT_IMPLEMENTED;
 }

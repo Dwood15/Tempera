@@ -1,5 +1,5 @@
 #include <addlog.h>
-//#include <enums/weapon_enums.h>
+#include <enums/weapon_enums.h>
 #include "script_manager.h"
 #include "../CurrentEngine.h"
 #include "../Dinput/dinput.h"
