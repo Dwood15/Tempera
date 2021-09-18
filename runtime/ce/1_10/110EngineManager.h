@@ -11,6 +11,7 @@
 #include "../../../src/scenario/definitions.h"
 #include "../../../src/models/collision_bsp.h"
 #include "../../../src/hs/structures.h"
+#include "../../../src/gamestate/camera.h"
 
 //TODO: Detect if msvc and only compile with c++latest
 //#if defined(_MSC_VER)
@@ -73,9 +74,15 @@ namespace feature_management::engines {
 
 		//////////////////////////////////////////////////////////////////////////
 		// Scenario.cpp
+		static const Yelo::Camera::s_cinematic_globals_data ** GetCinematicGlobals() { return reinterpret_cast<const Yelo::Camera::s_cinematic_globals_data **>(0x68C83C); }
 		static const Yelo::Scenario::s_scenario_globals ** GetScenarioGlobals() { return reinterpret_cast<const Yelo::Scenario::s_scenario_globals **>(0x6E2254); }
 		static const Yelo::TagGroups::scenario ** GetGlobalScenario() { return reinterpret_cast<const Yelo::TagGroups::scenario **>(0x6E224C); }
 		static const Yelo::TagGroups::coll::collision_bsp ** GetGlobalBsp3d() { return reinterpret_cast<const Yelo::TagGroups::coll::collision_bsp **>(0x6E2250); }
+
+		bool AreWeInCutScene() {
+			auto cineGlobals = *GetCinematicGlobals();
+			return cineGlobals->in_progress;
+		}
 
 		static auto const OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__READ  = 0x4F8207;
 		static auto const OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__WRITE = 0x4F83CE;

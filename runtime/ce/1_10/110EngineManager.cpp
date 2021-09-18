@@ -134,10 +134,10 @@ namespace feature_management::engines {
 	namespace static110 {
 		void naked OnPlayerActionUpdate() {
 #if defined(_MSC_VER) && !defined(__CLANG__)
-			s_player_action *current_action;
+//			s_player_action *current_action;
 
 			__asm mov dword ptr[esp+1Ch], -1
-			__asm mov current_action, ebp
+//			__asm mov current_action, ebp
 			__asm retn
 #else
 			IMPLEMENTATION_REQUIRED
@@ -174,12 +174,76 @@ namespace feature_management::engines {
 		return;
 	}
 
+	inline void patchOnPlayerUpdate() {
+		PrintLn("\nAdditional Player action hooks");
+		//Originally: C7 44 24 18 FF FF FF FF
+		//Basically just sets some random value to -1. Couldn't tell if it was being used or not.
+		calls::patchValue<byte>(0x476CF2, 0xE8); //call
+
+		//clear it with some NOPS
+		calls::patchValue<byte>(0x476CF7, 0x90); //
+		calls::patchValue<unsigned short>(0x476CF8, 0x9090);
+
+		//This OnPlayerActionUpdate Hook is required. For some reason the game
+		//Crashes when this is removed.
+		calls::WriteSimpleHook(0x476CF3, static110::OnPlayerActionUpdate); //6 bytes off.
+	}
+
+	/**
+ * 0x49757D - interface_draw_screen
+ * - E8 FE 4F 03 00
+ *network
+ * 0x49792B - see above
+* - E8 50 4C 03 00
+ *
+ * 0x4975C4 - check_render_split_screen
+ * - E8 B7 4F 03 00
+ *
+ * 0x51EB00 rasterizer_detail_objects_begin
+ * - E8 7B DA FA FF
+ *
+ * 0x51EE00 - rasterizer_detail_objects_rebuild_vertices
+ * - E8 7B D7 FA FF
+ *
+ * 0x51EFA3 - rasterizer_detail_objects_draw
+ * - E8 D8 D5 FA FF
+ */
+	namespace overrides {
+		constexpr uintptr_t override_function_call_list[] = {0x51EFA3, 0x51EE00, 0x51EB0, 0x49792B, 0x4975C4, 0x49757D};
+
+		int main_get_window_count_override() {
+
+			if (CurrentEngine->AreWeInMainMenu()) {
+				return 1;
+			}
+
+			if (CurrentEngine->AreWeInCutScene()) {
+				return 1;
+			}
+
+			//Todo: remember to  check if cinematic is playing.
+			auto player_count = CurrentEngine->GetLocalPlayerCount();
+			if (player_count > MAX_PLAYER_COUNT_LOCAL || player_count < 1) {
+				player_count = 1;
+			}
+
+			return (int) player_count;
+		}
+
+		void override_all() {
+			for (unsigned int i = 0; i < std::size(override_function_call_list); i++) {
+				auto current = override_function_call_list[i];
+				calls::WriteSimpleHook(current, main_get_window_count_override);
+			}
+		}
+	};
+
 	static void ValuePatches() {
 		//Function call
 		// 			signature: "8B 35 20 59 81 00 57 8B FA B9 .26 00 00 00 F3 AB 83 CF FF"
-//	constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
+		constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
 		//Relying on sizeof allows us to redefine MAX_PLAYER variables/defines
-//	calls::patchValue(players_initialize_for_new_map_overwrite, sizeof(s_players_globals_data) / 4);
+		calls::patchValue(players_initialize_for_new_map_overwrite, sizeof(s_players_globals_data) / 4);
 
 		//uintptr_t player_spawn = 0x47A9E0; Valid, just not using it...
 		constexpr uintptr_t size_of_fp_weapons = 0x1EA0 * MAX_PLAYER_COUNT_LOCAL;
@@ -191,12 +255,13 @@ namespace feature_management::engines {
 
 		//uintptr_t hud_scripted_globals_sizeofs[]          = { 0x4AC7A7, 0x4AC7AF };
 		uintptr_t hud_messaging_globals_sizeofs[] = {0x4AC7DD, 0x4AC7EA};
-		uintptr_t hud_messaging_state_size = 0x4AC936;
-		//static_assert(sizeof(s_hud_messaging_state)  == 0x122, "STAT_ASSERT_fail: s hud msging state");
+
+		static_assert(sizeof(s_hud_messaging_state)  ==  0x28 + (0x460 * MAX_PLAYER_COUNT_LOCAL), "STAT_ASSERT_fail: s hud msging state");
 		//memset , or rather, rep stosd assumes full integer (0x4) size in this case.
 		PrintLn("\nPatching the hud messaging state size");
-		calls::patchValue<uintptr_t>(hud_messaging_state_size, sizeof(::s_hud_messaging_state) / 4);
-		uintptr_t motion_sensor_sizeofs[] = {0x4AC8B3, 0x4AC8BC + 0x4};
+
+//		uintptr_t hud_messaging_state_size = 0x4AC936;
+//		calls::patchValue<uintptr_t>(hud_messaging_state_size, sizeof(s_hud_messaging_state) / 4);
 
 		//			Need to confirm these...
 		//			uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
@@ -213,12 +278,9 @@ namespace feature_management::engines {
 		//			adjustNPatch32(weapon_hud_globals_sizeofs, 0x7C);
 		//			adjustNPatch32(hud_interface_related_globals_sizeofs, 0x30);
 		PrintLn("\nPatching the motion sensor sizeofs");
+		uintptr_t motion_sensor_sizeofs[] = {0x4AC8B3, 0x4AC8BC + 0x4};
 		calls::adjustNPatch32(motion_sensor_sizeofs, sizeof(s_motion_sensor));
 
-		//_rasterizer_detail_objects_draw51EF90
-		//THIS ONE IS THE SAME AS XBOX BETA ALMOST.
-		//			constexpr uintptr_t get_render_window_ct_patch_6 = 0x51EE05;
-		//patchValue<short>(, (short)-1);
 
 		PrintLn("\nUpgrading the max player count locals to %d", MAX_PLAYER_COUNT_LOCAL);
 
@@ -230,8 +292,8 @@ namespace feature_management::engines {
 			calls::patchValue(elem.first, elem.second);
 		}
 
-		PrintLn("\nRunning the generic short patches, num: %d",
-				sizeof(short_patches) / sizeof(::std::pair<uintptr_t, short>));
+		constexpr auto shortPatches = sizeof(short_patches) / sizeof(::std::pair<uintptr_t, short>);
+		PrintLn("\nRunning the generic short patches, num: %d", shortPatches);
 
 		for (auto elem: short_patches) {
 			calls::patchValue<short>(elem.first, elem.second);
@@ -242,9 +304,14 @@ namespace feature_management::engines {
 		calls::nopBytes(0x50F5F0, 0xA); //render_player_frame_cmp_patch
 		//end renderplayerframeclamp
 
-		//This OnPlayerActionUpdate Hook is required. For some reason the game
-		//Crashes when this is removed.
-		calls::WriteSimpleHook(0x476CF3, static110::OnPlayerActionUpdate); //6 bytes off.
+		//_rasterizer_detail_objects_draw51EF90
+		//THIS ONE IS THE SAME AS XBOX BETA ALMOST.
+		constexpr uintptr_t get_render_window_ct_patch_6 = 0x51EE07;
+
+		static_assert((uint)MAX_PLAYER_COUNT_LOCAL < (uint)0xFF);
+		calls::patchValue<short>(get_render_window_ct_patch_6, (short)MAX_PLAYER_COUNT_LOCAL);
+
+		patchOnPlayerUpdate();
 	}
 
 	inline void playerUpdateB4GameSrverIteratorHk() {
@@ -268,17 +335,6 @@ namespace feature_management::engines {
 		calls::WriteSimpleHook(game_tick_hook, game_tick);
 	}
 
-	inline void playerActionUpdateHook() {
-		PrintLn("\nAdditional Player action hooks");
-		//Originally: C7 44 24 18 FF FF FF FF
-		//Basically just sets some random value to -1. Couldn't tell if it was being used or not.
-		calls::patchValue<byte>(0x476CF2, 0xE8); //call
-
-		//clear it with some NOPS
-		calls::patchValue<byte>(0x476CF7, 0x90); //
-		calls::patchValue<unsigned short>(0x476CF8, 0x9090);
-	}
-
 	inline void playerControlInitForNewMapHook() {
 		//Gotta be able to loop over all the players + input devices, no?.
 		//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
@@ -300,7 +356,6 @@ namespace feature_management::engines {
 		//Lua Hooks
 		luaPostInitializeHookMainSetupConnInit();
 		gameTickHook();
-		playerActionUpdateHook();
 		playerControlInitForNewMapHook();
 
 		// OnUnitControlUpdate hook "works" the first time, dies the second.

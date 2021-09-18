@@ -19,5 +19,8 @@ namespace feature_management::engines {
 		static features SupportedFeatures() {
 			return features::LUA_HOOKS;
 		}
+
+		//Sapien doesn't have fancy CutScenes
+		bool AreWeInCutScene() { return false; }
 	};
 };

@@ -13,6 +13,20 @@
 #include "math.h"
 #include "../math/colors.h"
 
+namespace Yelo::Camera {
+	struct s_cinematic_globals_data
+	{
+		float unknown1;
+		unsigned int time;
+		bool show_letterbox;
+		bool in_progress;
+		bool can_be_skipped;
+		bool suppress_bsp_object_creation;
+		char *chapter_titles[4];
+	};
+	STAT_ASSERT(s_cinematic_globals_data, 0x1C);
+}
+
 struct _camera {
 	WORD  Unknown1;
 	short wPerspective; // First Person( 0 ), Third Person( 1 ), Dead( 3 )

@@ -83,6 +83,7 @@ namespace feature_management::engines {
 
 		static bool AreWeInMainMenu();
 
+		bool AreWeInCutScene();
 		bool IsPlayerSpawned(short index);
 
 		bool IsPlayerValid(short index);

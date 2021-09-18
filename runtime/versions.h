@@ -104,6 +104,7 @@ namespace feature_management {
 				return (feat & T::SupportedFeatures()) == feat;
 			}
 
+			virtual bool AreWeInCutScene() { return false; }
 			static bool HasSupport() { return T::SupportedFeatures() != features::NOPE; }
 
 		};
