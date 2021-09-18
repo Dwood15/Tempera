@@ -1,7 +1,7 @@
 #pragma once
 
 constexpr unsigned short MAX_PLAYER_COUNT_LOCAL = 1;
-constexpr short          MAX_GAMEPAD_COUNT      = 4;
+constexpr short          MAX_GAMEPAD_COUNT      = 6;
 constexpr short          MAX_PLAYERS_IN_GAME    = 16;
 constexpr short          MAX_CUSTOM_BLIPS       = 16;
 

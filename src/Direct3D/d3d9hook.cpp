@@ -254,7 +254,7 @@ long __stdcall hkSetStreamSource(IDirect3DDevice9 *pDevice, UINT StreamNumber, I
 #endif
 #include <detours.h>
 
-DWORD __stdcall CD3D::hkD3DHook() {
+DWORD __stdcall CD3D::hkD3DHook(void *lpVoid) {
 	vTable_D3D9 *vD3D9; // Create instance of d3d9 Virtual Method Table
 
 	//1.08 d3d device global 0x0071D09C

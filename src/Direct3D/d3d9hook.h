@@ -186,7 +186,7 @@ public:
 
 	void myDrawPlane(IDirect3DDevice9 *pDevice);
 
-	DWORD __stdcall hkD3DHook();
+	DWORD __stdcall hkD3DHook(void *lpVoid);
 };
 
 #endif /* D3D9HOOK_H */

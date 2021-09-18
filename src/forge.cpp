@@ -69,7 +69,7 @@ void PrintHelp() {
 	Sleep(600);
 	//automatically spawn the maximum number of local players at the beginning of the game.
 	*(short *) 0x624A9C = (short)MAX_PLAYER_COUNT_LOCAL;
-	cd3d.hkD3DHook();
+	cd3d.hkD3DHook(nullptr);
 
 	CurrentEngine->ConsoleText(hGreen, "Number players to spawn in next sp map: 3!");
 	PrintHelp();

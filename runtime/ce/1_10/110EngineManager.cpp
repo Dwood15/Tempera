@@ -188,8 +188,9 @@ namespace feature_management::engines {
 		//			uintptr_t weapon_hud_globals_sizeofs[]            = { 0x4AC848, 0x4AC850 + 0x4 };
 		//			uintptr_t hud_interface_related_globals_sizeofs[] = { 0x4AC87D, 0x4AC885 + 0x4 };
 
-		uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
-		calls::adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
+
+		//uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
+		//calls::adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
 
 		//adjustNPatch32(hud_scripted_globals_sizeofs, 0x4);
 		//0x488 og size.
