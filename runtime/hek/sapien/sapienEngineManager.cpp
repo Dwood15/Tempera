@@ -26,6 +26,18 @@ namespace {
 
 //__cdecl makes the _caller_ clean up the stack. __stdcall means our function cleans up the stack
 
+namespace sapienStatic {
+	void naked OnPlayerActionUpdate() {
+		//Clang and gcc are pussy-ass bitches
+#if !defined(__GNUC__) && !defined(__CLANG__)
+		__asm mov     dword ptr[esp+18h], ecx
+		__asm mov     dword ptr[esp+14h], edi
+		__asm retn
+#endif
+	}
+}
+
+
 void Sapien::WriteHooks() {
 	constexpr uint game_tick_hook = 0x51F219;
 	calls::WriteSimpleHook(game_tick_hook, &game_tick);
@@ -39,6 +51,7 @@ void Sapien::WriteHooks() {
 	//Basically just sets some random value to -1. Couldn't tell if it was being used or not.
 	calls::patchValue<byte>(0x52C864, 0xE8); //call //0x0
 
+	calls::WriteSimpleHook(0x52C865, sapienStatic::OnPlayerActionUpdate); //6 bytes off.
 	calls::patchValue<byte>(0x52C869, 0x90); //
 	calls::patchValue<unsigned short>(0x52C86A, 0x9090); //
 }

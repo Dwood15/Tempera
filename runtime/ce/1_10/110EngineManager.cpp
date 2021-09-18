@@ -130,6 +130,20 @@ namespace feature_management::engines {
 
 		return CurrentCore;
 	}
+
+	namespace static110 {
+		void naked OnPlayerActionUpdate() {
+#if defined(_MSC_VER) && !defined(__CLANG__)
+			s_player_action *current_action;
+
+			__asm mov dword ptr[esp+1Ch], -1
+			__asm mov current_action, ebp
+			__asm retn
+#else
+			IMPLEMENTATION_REQUIRED
+#endif
+		}
+	};
 	static bool printOnce = false;
 
 	//With stdcall the callee saves the stack
@@ -185,11 +199,11 @@ namespace feature_management::engines {
 		uintptr_t motion_sensor_sizeofs[] = {0x4AC8B3, 0x4AC8BC + 0x4};
 
 		//			Need to confirm these...
+		//			uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
 		//			uintptr_t weapon_hud_globals_sizeofs[]            = { 0x4AC848, 0x4AC850 + 0x4 };
 		//			uintptr_t hud_interface_related_globals_sizeofs[] = { 0x4AC87D, 0x4AC885 + 0x4 };
 
 
-		//uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
 		//calls::adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
 
 		//adjustNPatch32(hud_scripted_globals_sizeofs, 0x4);
@@ -228,12 +242,12 @@ namespace feature_management::engines {
 		calls::nopBytes(0x50F5F0, 0xA); //render_player_frame_cmp_patch
 		//end renderplayerframeclamp
 
-
+		//This OnPlayerActionUpdate Hook is required. For some reason the game
+		//Crashes when this is removed.
+		calls::WriteSimpleHook(0x476CF3, static110::OnPlayerActionUpdate); //6 bytes off.
 	}
 
 	inline void playerUpdateB4GameSrverIteratorHk() {
-		//This wrapper don't work
-		PrintLn("\nWriting the update before game server iterator_next wrapper hook");
 		constexpr uintptr_t players_update_before_game_server_iterator_hook = 0x476CB0;
 		calls::WriteSimpleHook(players_update_before_game_server_iterator_hook,
 							   Yelo::blam::data_iterator_next_wrapper);
@@ -281,8 +295,7 @@ namespace feature_management::engines {
 		//TODO: Conceptually separate these out..
 
 		//Hooks
-		//Breaks shit- never worked in the first place. Broken.
-		//	playerUpdateB4GameSrverIteratorHk();
+		playerUpdateB4GameSrverIteratorHk();
 
 		//Lua Hooks
 		luaPostInitializeHookMainSetupConnInit();

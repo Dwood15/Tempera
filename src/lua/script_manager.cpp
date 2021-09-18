@@ -348,14 +348,14 @@ void LuaScriptManager::lua_on_player_update(s_unit_control_data * control, ushor
 		PrintLn("lua_on_player_update");
 	}
 
-	PassPlayerControl(L, control);
-	lua_pushinteger(L, plyrIdx);
+	//PassPlayerControl(L, control);
+	//lua_pushinteger(L, plyrIdx);
 
-	this->PCall<2, 1>("PlayerUpdate");
+	//this->PCall<2, 1>("PlayerUpdate");
 
-	PrintLn("out of Lua, Reading player Control back out");
+	//PrintLn("out of Lua, Reading player Control back out");
 
-	ReadPlayerControl(L, control);
+	//ReadPlayerControl(L, control);
 }
 
 void LuaScriptManager::lua_on_tick(uint32 remaining, uint32 since_map_begin) {

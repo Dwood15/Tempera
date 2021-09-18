@@ -30,13 +30,12 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 
 	PrintLn("Executing HandleActionOverride");
 
-
 	auto connType = *CurrentEngine->main_globals_game_connection_type;
 	PrintLn("[%d] Unit Control for game connection type: [%d]", ucUdates, connType);
 
 	auto override = CurrentEngine->GetPlayerActionOverride(playerIdx, *from);
 
-	//s_unit_control_data override = *from;
+//	s_unit_control_data override = *from;
 
 	PrintLn("HandleActionOverride Completed");
 

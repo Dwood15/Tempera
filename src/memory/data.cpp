@@ -117,38 +117,45 @@ namespace Yelo::blam {
 		return result;
 	}
 
-	static s_data_iterator  *data_iterator_next(s_data_iterator *iterator) {
+	s_data_iterator  *data_iterator_next(s_data_iterator *iterator) {
 		if (iterator->signature != (reinterpret_cast<uintptr_t>(iterator->data) ^ Enums::k_data_iterator_signature)) {
 			throw ::std::exception("uninitialized iterator passed");//::std::string(__FUNCTION__) );
 		}
 
 		auto data = iterator->data;
 		if (!data->is_valid) {
-			//std::str(data->name)
 			throw ::std::exception("tried to iterate when it was in an invalid state");
 		}
 
-		datum_index::index_t absolute_index = iterator->next_index;
+		datum_index::index_t nextIndex = iterator->next_index;
 		long                 datum_size     = data->datum_size;
-		byte                 *pointer       = reinterpret_cast<byte *>(data->base_address) + (datum_size * absolute_index);
+		uint                 pointer       = (uint)data->base_address + (datum_size * nextIndex);
 
+		if (nextIndex > data->last_datum) {
+			iterator->next_index = nextIndex;
+			return nullptr;
+		}
 
-		short last_datum = data->last_datum;
-		//kinda hoping this replicates the OG logic
-		if (absolute_index < last_datum) {
-			auto datum = reinterpret_cast<const Yelo::Memory::s_datum_base *>(pointer);
+		datum_index nextDatum;
 
-			if (!datum->IsNull()) {
-				++iterator->next_index;
-				iterator->index      = datum_index::Create(iterator->next_index, datum->GetHeader());
-				return (s_data_iterator *)pointer;
+		while ( 1 )
+		{
+			nextDatum.salt = (*(short *)pointer);
+			nextDatum.index = nextIndex++;
+			if ( *(short *)pointer)
+				break;
+
+			pointer += datum_size;
+			if ( nextIndex >= iterator->data->next_datum.index )
+			{
+				iterator->next_index = nextIndex;
+				return 0;
 			}
 		}
 
-		iterator->next_index    = absolute_index; // will equal last_datum at this point
-		iterator->finished_flag = true;
-		iterator->index         = datum_index::null();
-		return nullptr;
+		iterator->index = nextDatum;
+		iterator->next_index = nextIndex;
+		return (s_data_iterator  *)pointer;
 	}
 
 	static void datum_initialize(s_data_array *data, ushort *location) {
@@ -298,25 +305,19 @@ namespace Yelo::blam {
 };
 
 void naked Yelo::blam::data_iterator_next_wrapper() {
-	s_data_iterator *iter;
+//	s_data_iterator *iter;
 
 	__asm {
-	mov iter, edi
 	push ebx
 	push ebp
 	push esi
-	}
+	push edi
 
-	iter = data_iterator_next(iter);
+	call data_iterator_next
 
-	if (iter == nullptr || iter == (s_data_iterator *)-1) {
-		PrintLn("Iteration attempt failed.");
-	}
-
-	__asm {
+	pop edi
 	pop esi
 	pop ebp
-	mov eax, iter
 	pop ebx
 	retn
 	}

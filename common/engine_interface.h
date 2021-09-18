@@ -106,9 +106,9 @@ namespace calls {
 		patchValue<uint32>(loc[1], size);
 	}
 	template<typename T>
-	void __inline WriteSimpleHook(uintptr_t loc, T newLoc) {
-		uintptr_t addr = calc_addr_offset(loc, (int)newLoc);
-		patchValue<uintptr_t>(loc, addr);
+	void __inline WriteSimpleHook(uintptr_t target, T toCall) {
+		uintptr_t addr = calc_addr_offset(target, (int)toCall);
+		patchValue<uintptr_t>(target, addr);
 	};
 
 	/**

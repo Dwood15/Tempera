@@ -381,7 +381,7 @@ namespace feature_management::engines {
 
 		s_unit_control_data newControl = from;
 
-		mgr.lua_on_player_update(&newControl, idx);
+		//mgr.lua_on_player_update(&newControl, idx);
 
 		return newControl;
 	}
