@@ -374,21 +374,12 @@ namespace feature_management::engines {
 
 	short GlobalEngine::GetLocalPlayerCount() {
 		return players_globals->local_player_count;
-
 	}
 
-	s_unit_control_data GlobalEngine::GetPlayerActionOverride(ushort idx, s_unit_control_data *from) {
+	s_unit_control_data GlobalEngine::GetPlayerActionOverride(ushort idx, s_unit_control_data from) {
 		ClampIndex(idx);
 
-		auto newControl = s_unit_control_data{};
-
-		newControl.grenade_index = from->grenade_index;
-		newControl.primary_trigger = from->primary_trigger;
-		newControl.throttle.x = from->throttle.x;
-		newControl.throttle.y = from->throttle.y;
-		newControl.aiming_vector = from->aiming_vector;
-		newControl.weapon_index = from->weapon_index;
-		newControl.control_flags = from->control_flags;
+		s_unit_control_data newControl = from;
 
 		mgr.lua_on_player_update(&newControl, idx);
 
@@ -732,8 +723,6 @@ namespace feature_management::engines {
 
 		if (!alreadyChecked) {
 			{
-				//ConsoleText is FUCKED- are we calling it too early in the
-				//process?
 				CurrentEngine->ConsoleText(hGreen, "Tempera Running!");
 			}
 			PrintLn("Getting main setup connection");

@@ -116,7 +116,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 		//Don't setup and run a forge thread for an unsupported runtime target.
 		if (SUPPORTSFEATS(DX_PROXY, FORGE_MODE)) {
 			//Shouldn't need to use the windows API stuff for creating and running the forge thread any more
-			std::thread loopThread(forge::MainLoop);
+			//std::thread loopThread(forge::MainLoop);
 			//CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forge::MainLoop, 0, 0, 0);
 			//PrintLn("Created Forge Thread!");
 		}
