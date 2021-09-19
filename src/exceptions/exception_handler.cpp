@@ -123,7 +123,7 @@ static std::atomic<DWORD> ExceptionCount;
  */
 LONG WINAPI CEInternalExceptionHandler(struct _EXCEPTION_POINTERS *ExceptionInfo) {
 
-	DEBUG("Exception being handled. \n\tBUILD DATE: " __DATE__ " TIME: " __TIME__);
+	DEBUG("Exception being handled.");
 
 	Sleep(10);
 

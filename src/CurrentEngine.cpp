@@ -605,7 +605,9 @@ namespace feature_management::engines {
 
 		if (!alreadyChecked) {
 			{
-				CurrentRuntime->ConsoleText(hGreen, "Tempera Running!");
+				auto running = "Build Info: " __DATE__ ", " __TIME__;
+				PrintLn(running);
+				CurrentRuntime->ConsoleText(hGreen, "Tempera %s", running);;
 			}
 			PrintLn("Getting main setup connection");
 
