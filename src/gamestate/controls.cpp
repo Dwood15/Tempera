@@ -4,7 +4,6 @@
 static int ucUdates = 0;
 void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client_update_idx) {
 	ucUdates++;
-	//PrintLn("[%d] Updating player with unit index: 0x%x", ucUdates, unit_idx);
 
 	auto to = reinterpret_cast<s_unit_datum *>(CurrentRuntime->GetGenericObject(short(unit_idx)));
 
@@ -33,10 +32,8 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 	}
 
 	auto connType = *CurrentRuntime->main_globals_game_connection_type;
-	PrintLn("[%d] Unit Control for game connection type: [%d], player idx: [%d], unit idx: [0x%x]",
+	PrintLn("[%d] UnitControl, game connType: [%d], playerIdx: [%d], unitIdx: [0x%x]",
 			ucUdates, connType, playerIdx, unit_idx);
-
-	//auto override = CurrentRuntime->GetPlayerActionOverride(playerIdx, *from);
 
 	s_unit_control_data override = *from;
 
@@ -75,9 +72,6 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 	}
 
 	unit->desired_zoom_level = static_cast<byte>(override.zoom_index);
-
-	//Heh. Vertical throttle, anyone?
-
 	unit->control_flags = override.control_flags;
 	unit->looking_angles = override.looking_vector;
 

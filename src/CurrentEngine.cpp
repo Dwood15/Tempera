@@ -210,8 +210,11 @@ namespace feature_management::engines {
 		at_main_menu = reinterpret_cast<bool *>(add_list.at_main_menu);
 
 		//Some attempts to initialize come out with 0x0 player control globals data.
-		if (add_list.player_control_globals_data > 0)
-			player_control_globals_data = *reinterpret_cast<s_player_control_globals_data **>(add_list.player_control_globals_data); // = player_control_globals *
+
+		auto pglobalData = (s_players_globals_data **)add_list.players_global_data;
+
+		players_globals = *pglobalData;
+		player_control_globals_data = *reinterpret_cast<s_player_control_globals_data **>(add_list.player_control_globals_data); // = player_control_globals *
 
 		game_time_globals = *reinterpret_cast<Yelo::GameState::s_game_time_globals **>(add_list.game_time_globals);
 
@@ -255,16 +258,6 @@ namespace feature_management::engines {
 
 	short RuntimeManager::GetLocalPlayerCount() {
 		return players_globals->local_player_count;
-	}
-
-	s_unit_control_data RuntimeManager::GetPlayerActionOverride(ushort idx, s_unit_control_data from) {
-		ClampIndex(idx);
-
-		s_unit_control_data newControl = from;
-
-		//mgr.lua_on_player_update(&newControl, idx);
-
-		return newControl;
 	}
 
 	std::optional<uintptr_t> RuntimeManager::getFunctionBegin(const char *needle) {
@@ -423,7 +416,7 @@ namespace feature_management::engines {
 		}
 
 		if (CurrentEngine->IsHek()) {
-			//PrintLn("Can't be in main menu if we're in HEK");
+			//Can't be in main menu if we're in HEK
 			return false;
 		}
 
@@ -581,19 +574,13 @@ namespace feature_management::engines {
 		static ::std::optional<uintptr_t> funcFound = FUNC_GET(game_tick);
 
 		if (funcFound) {
-			// PrintLn("Game_tick call");
-
 			auto value = *funcFound;
 			auto tick = current_frame_tick;
 
 			calls::DoCall<Convention::m_cdecl, void, int>(value, tick);
-			// PrintLn("Post-Game_tick call");
-			//CurrentRuntime->ConsoleText(hGreen, "Tempera");
 		}
 
-		// PrintLn("Lua_post_tick call");
 		state->call_lua_event_by_type(LuaCallbackId::after_game_tick);
-		// PrintLn("Post-Lua-post-tick call");
 	}
 
 	void main_setup_connection_init() {
@@ -607,7 +594,7 @@ namespace feature_management::engines {
 			{
 				auto running = "Build Info: " __DATE__ ", " __TIME__;
 				PrintLn(running);
-				CurrentRuntime->ConsoleText(hGreen, "Tempera %s", running);;
+				CurrentRuntime->ConsoleText(hGreen, "Tempera %s", running);
 			}
 			PrintLn("Getting main setup connection");
 

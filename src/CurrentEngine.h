@@ -132,8 +132,6 @@ namespace feature_management::engines {
 
 		[[nodiscard]] static LuaScriptManager * GetLuaState();
 
-		s_unit_control_data GetPlayerActionOverride(ushort idx, s_unit_control_data from);
-
 		bool AreWeInCutScene() {
 			return cinematic_globals->in_progress;
 		}
