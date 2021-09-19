@@ -4,9 +4,9 @@
 static int ucUdates = 0;
 void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client_update_idx) {
 	ucUdates++;
-	PrintLn("[%d] Updating player with unit index: 0x%x", ucUdates, unit_idx);
+	//PrintLn("[%d] Updating player with unit index: 0x%x", ucUdates, unit_idx);
 
-	auto to = reinterpret_cast<s_unit_datum *>(CurrentEngine->GetGenericObject(short(unit_idx)));
+	auto to = reinterpret_cast<s_unit_datum *>(CurrentRuntime->GetGenericObject(short(unit_idx)));
 
 	auto playerHandle = to->unit.controlling_player_index.handle;
 
@@ -17,9 +17,13 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 
 	auto playerIdx = to->unit.controlling_player_index.index;
 
-	if (!CurrentEngine->IsPlayerSpawned(playerIdx) || !CurrentEngine->IsPlayerValid(playerIdx)) {
+	if (!CurrentRuntime->IsPlayerSpawned(playerIdx) || !CurrentRuntime->IsPlayerValid(playerIdx)) {
 		PrintLn("Player: [%d] is either not spawned or is not valid. Waiting.", playerIdx);
 		return;
+	}
+
+	if (playerIdx > 0) {
+		PrintLn("Handling player idx: [%d]", playerIdx);
 	}
 
 	//For when we're still in a cutscene and the player still hasn't spawned yet
@@ -28,19 +32,22 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 		return;
 	}
 
-	PrintLn("Executing HandleActionOverride");
+	auto connType = *CurrentRuntime->main_globals_game_connection_type;
+	PrintLn("[%d] Unit Control for game connection type: [%d], player idx: [%d], unit idx: [0x%x]",
+			ucUdates, connType, playerIdx, unit_idx);
 
-	auto connType = *CurrentEngine->main_globals_game_connection_type;
-	PrintLn("[%d] Unit Control for game connection type: [%d]", ucUdates, connType);
+	//auto override = CurrentRuntime->GetPlayerActionOverride(playerIdx, *from);
 
-	auto override = CurrentEngine->GetPlayerActionOverride(playerIdx, *from);
+	s_unit_control_data override = *from;
 
-//	s_unit_control_data override = *from;
-
-	PrintLn("HandleActionOverride Completed");
+//	PrintLn("HandleActionOverride Completed");
 
 	if (connType == 2) {
-		PrintLn("game connection type -- non-local !?");
+		static bool printed;
+		if (!printed) {
+			printed = true;
+			PrintLn("game connection type -- networked");
+		}
 
 		if ((override.control_flags.control_flags_a >> 8) & 0b00101000) {
 			to->unit.pad11_networkpcOnly = true;
@@ -49,7 +56,7 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 		}
 	}
 
-	PrintLn("[%d] transposing controls onto the unit");
+//	PrintLn("[%d] transposing controls onto the unit");
 
 	auto unit = &to->unit;
 
@@ -61,7 +68,7 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 		unit->next_weapon_index = override.weapon_index;
 	}
 
-	PrintLn("Unit control update grenade index");
+	//PrintLn("Unit control update grenade index");
 
 	if (from->grenade_index != -1) {
 		unit->next_grenade_index = static_cast<sbyte>(override.grenade_index);
@@ -84,5 +91,5 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 		unit->last_completed_client_update_id_valid = true;
 	}
 
-	PrintLn("[%d] Unit control update completed", ucUdates);
+	//PrintLn("[%d] Unit control update completed", ucUdates);
 }

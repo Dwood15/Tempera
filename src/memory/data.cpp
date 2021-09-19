@@ -24,7 +24,7 @@ namespace Yelo::blam {
 
 	// [[deprecated]]
 	// static s_data_array *data_new(const char *name, long maximum_count, size_t datum_size) {
-	// 	static auto FUNCTION = CurrentEngine->getFunctionBegin("data_new");
+	// 	static auto FUNCTION = CurrentRuntime->getFunctionBegin("data_new");
 	//
 	// 	if (!FUNCTION) {
 	// 		return nullptr;
@@ -61,28 +61,6 @@ namespace Yelo::blam {
 		if (data != nullptr) {
 			GlobalFree(data);
 		}
-	}
-
-	static void data_delete_all(s_data_array *data) {
-		data->last_datum       = 0;
-		data->next_datum.index = 0;
-		data->next_index       = 0;
-		strncpy((char *) &data->next_datum.salt, data->name, 2u);
-		// strncpy_s((char *) &data->next_datum.salt, data->name, 2u);
-		data->next_datum.salt |= 0x8000u;
-		if (data->max_datum > 0) {
-			return; // we're done here!
-		}
-
-		for (short i = 0; i < data->max_datum; i++) {
-			auto current = i * data->datum_size;
-			*(byte *) (&data->base_address)[current] = 0;
-		}
-	}
-
-	static void data_make_valid(s_data_array *data) {
-		data->is_valid = true;
-		data_delete_all(data);
 	}
 
 	static void data_make_invalid(s_data_array *data) {

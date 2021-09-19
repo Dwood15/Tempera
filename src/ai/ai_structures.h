@@ -28,29 +28,31 @@ namespace Yelo {
 		struct s_ai_globals_data {
 			bool ai_active;
 			bool initialized;
-			unsigned char : 8; // unknown field
-			unsigned char : 8; // unknown field
-			unsigned short : 16; // unknown field
-			unsigned short : 16; // unknown field
+			unsigned char pad1; // unknown field
+			unsigned char pad2; // unknown field
+			unsigned short pad3; // unknown field
+			unsigned short pad4; // unknown field
 			datum_index first_encounterless_actor_index;
-			unsigned long : 32; // unknown field
+			unsigned long pad5; // unknown field
 			bool dialogue_triggers_enabled;
-			unsigned char : 8; unsigned short : 16;
-			PAD(1, 8); // unknown field
-			PAD(2, 8); // unknown field
-			PAD(3, 8); // unknown field
-			unsigned short : 16; // unknown field
-			unsigned short : 16; // unknown field
-			PAD(4, 256); // unknown field
-			unsigned short : 16; // unknown field
-			unsigned short : 16; // unknown field
+			unsigned char pad6;
+			unsigned short pad7;
+
+			char pad8[8];
+			char pad9[8];
+			char pad10[8];
+			unsigned short pad11; // unknown field
+			unsigned short pad12; // unknown field
+			char pad13[256];
+			unsigned short pad14; // unknown field
+			unsigned short pad15; // unknown field
 			s_ai_spatial_effect spatial_effects[32];
 			bool                grenades_enabled;
-			unsigned char : 8;
+			unsigned char pad16;
 			short                        vehicles_enterable_count;
 			s_ai_vehicle_enterable_datum vehicles_enterable[32];
 			short                        pending_mounted_weapons_count;
-			unsigned short : 16;
+			unsigned short pad17;
 			datum_index pending_mounted_weapon_indices[8];
 		}; static_assert(sizeof(s_ai_globals_data) == 0x8DC);
 	};

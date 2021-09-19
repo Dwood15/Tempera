@@ -469,7 +469,7 @@ namespace Yelo::Enums {
 
 	constexpr uint k_multiplayer_maximum_players_upgrade = 16 + k_multiplayer_maximum_additional_players;
 
-	constexpr uint k_maximum_network_machine_count_upgrade = k_multiplayer_maximum_players_upgrade / MAX_PLAYER_COUNT_LOCAL + k_multiplayer_maximum_additional_players;
+	constexpr uint k_maximum_network_machine_count_upgrade = k_multiplayer_maximum_players_upgrade / 1 + k_multiplayer_maximum_additional_players;
 
 	//////////////////////////////////////////////////////////////////////////
 	// effects upgrades

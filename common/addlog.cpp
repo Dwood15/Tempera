@@ -112,6 +112,11 @@ void DEBUG(const char *fmt, ...) {
  * Initialize the Debug log file.
  */
 void InitAddLog(HMODULE hModule, const char * filename) {
+	if (!filename ) {
+		printf("Filename missing. Cannot add to log\n");
+		throw "Tempera FileName missing InitAddLog";
+	}
+
 	GetModuleFileNameA(hModule, dlldir, 512);
 
 	for (int i = (int) strlen(dlldir); i > 0; i--) {

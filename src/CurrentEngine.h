@@ -27,9 +27,10 @@ struct s_unit_control_data;
 constexpr const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
 
 namespace feature_management::engines {
-	class GlobalEngine {
+	class RuntimeManager {
 	public:
 		bool core_initialized = false;
+
 	private:
 		//TODO: More intelligent division of these members -
 		// - Values dependent upon other values or actions should _not_ be writable from outside this class.
@@ -122,40 +123,16 @@ namespace feature_management::engines {
 		void ToggleFlycam(char = -1);
 
 	private:
-		static inline features              CurrentSupported;
-		static inline major                 CurrentMajor;
-		static inline minor                 CurrentMinor;
 		//Support Attempted
 		//::std::string GetCurrentFileName(char * args) {
-		static ::std::string GetCurrentFileName();
-
-		static bool VerSupported();
-
-		static features GetSupported();
 
 	public:
-		static inline char *DEBUG_FILENAME = nullptr;
-		static inline defined_functionrange *current_map = nullptr;
 
-		static GlobalEngine* GetGlobalEngine();
 		static inline char *LUA_FILENAME   = const_cast<char *>("tempera.init.lua");
 
 		[[nodiscard]] static LuaScriptManager * GetLuaState();
 
 		s_unit_control_data GetPlayerActionOverride(ushort idx, s_unit_control_data from);
-
-		static bool IsHek() {
-			return CurrentMajor == major::HEK;
-		}
-
-		static bool IsSapien() {
-			static bool isSapien = IsHek() && CurrentMinor == minor::sapien;
-			return isSapien;
-		}
-
-		static bool IsCustomEd() {
-			return CurrentMajor == major::CE;
-		}
 
 		bool AreWeInCutScene() {
 			return cinematic_globals->in_progress;
@@ -174,8 +151,6 @@ namespace feature_management::engines {
 		IDirectInputDevice8A *GetMouseInput();
 		IDirectInputDevice8A **GetJoystickInputs();
 
-		void SetCoreAddressList(LPCoreAddressList add_list);
-
 		bool SupportsFeature(features feat);
 
 		bool SupportsFeature(uint feat);
@@ -186,12 +161,6 @@ namespace feature_management::engines {
 		static void LuaFirstRun();
 
 		void RefreshCore(bool force = false);
-
-		minor GetMinorVersion() {
-			return this->CurrentMinor;
-		}
-
-		const char *GetCurrentMajorVerString();
 
 		constexpr bool equal(const char *lhs, const char *rhs);
 
@@ -207,6 +176,9 @@ namespace feature_management::engines {
         short GetElapsedTime();
 	};
 
+	//Set up our stuff
+	RuntimeManager *GetRuntimeManager();
+
 	/***
  	 * Called before VirtualProtect is run.
  	 ***/
@@ -215,7 +187,8 @@ namespace feature_management::engines {
 }
 
 //Extern's like this are why C++ has a bad rep
-extern feature_management::engines::GlobalEngine* CurrentEngine;
+extern feature_management::engines::RuntimeManager* CurrentRuntime;
+extern feature_management::engines::IEngine* CurrentEngine;
 
 /**
  * Called variably based on fps
@@ -230,7 +203,7 @@ void main_setup_connection_init();
 
 
 static const char * getMemoryRegionDescriptor(void * addr) {
-	PrintLn("\tCurrentEngine Location: : [0x%X]", CurrentEngine);
+	PrintLn("\tCurrentRuntime Location: : [0x%X]", CurrentRuntime);
 	PrintLn("\tSearching for address: [0x%X]", addr);
 
 	if ((uintptr_t)addr < 0x200000) {
@@ -250,7 +223,11 @@ static const char * getMemoryRegionDescriptor(void * addr) {
 
 	using dfr = defined_functionrange;
 
-	dfr *funcList =  ::feature_management::engines::GlobalEngine::current_map;
+	static dfr *funcList = nullptr;
+
+	if (!funcList) {
+		funcList = CurrentEngine->GetFunctionMap();
+	}
 
 	int i = 0;
 

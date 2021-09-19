@@ -4,7 +4,7 @@
 
 namespace Input::DInput {
 		static IDirectInput8 * GetDInput() {
-			return CurrentEngine->GetDInput8Device();
+			return CurrentRuntime->GetDInput8Device();
 		}
 
 		static IDirectInputDevice8A *GetJoystick(unsigned int idx = 0) {
@@ -12,7 +12,7 @@ namespace Input::DInput {
 				return nullptr;
 			}
 
-			return (CurrentEngine->GetJoystickInputs())[idx];
+			return (CurrentRuntime->GetJoystickInputs())[idx];
 		}
 
 		//because static doesn't work with the current compilation order I guess.

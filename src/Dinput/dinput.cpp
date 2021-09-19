@@ -115,10 +115,10 @@ namespace players {
 			return datum_index::null();
 		}
 
-		if (local_player_index > CurrentEngine->GetLocalPlayerCount()) {
+		if (local_player_index > CurrentRuntime->GetLocalPlayerCount()) {
 			return datum_index::null();
 		}
 
-		return CurrentEngine->GetLocalPlayers()[local_player_index];
+		return CurrentRuntime->GetLocalPlayers()[local_player_index];
 	}
 };

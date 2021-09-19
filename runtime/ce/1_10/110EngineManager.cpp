@@ -20,23 +20,23 @@ constexpr uintptr_t regular_player_clamps[] = {
 	// 		patch bytes region
 	//"90 39 1C B1 74 0A 46 83 FE .01 7C F5 5E 5B 59 C3"
 	0x53D035, //player_profile_save_changes_clamp
-	0x4764E8, //player_new_clamp
+//	0x4764E8, //player_new_clamp
 	// "46 83 FE .04 7C F1 8B C7 5F 5E C3 5F 8B C6 5E C3"
-	0x476333, //find_unused_player_index_spawn    //This patch MAY NOT be technically necessary but I'd rather have it documented than not.
+//	0x476333, //find_unused_player_index_spawn    //This patch MAY NOT be technically necessary but I'd rather have it documented than not.
 	//"74 15 66 83 F9 .01 7D 0F 8B 15 18 59 81 00"
-	0x473C86,  // get_player_input_blob_clamping_patch
-	0x498470, //player_ui_get_single_player_local_player_from_controller
+//	0x473C86,  // get_player_input_blob_clamping_patch
+//	0x498470, //player_ui_get_single_player_local_player_from_controller
 	(0x4476EF + 0x2), // first_person_camera_update_clamp_patch
 	(0x446760 + 0x3),// director_choose_camera_game_clamp
 	//
 	// 			//I can't find the xbox equivalent of this function, so this may not be necessary?
-	(0X497930 + 0x2), //check_render_splitscreen_clamp);
+//	(0X497930 + 0x2), //check_render_splitscreen_clamp);
 	//
 	// 			//Yep, this one's the real deal...
-	0x4CBBFC + 0x3, //create_local_players_clamp);
-	0x4A04B0 + 0x1, //coop_game_initialize);
-	0x4A0076, //local_player_initialize_spawn_ct);
-	0x4A007E, //local_player_initialize_window_ct);
+//	0x4CBBFC + 0x3, //create_local_players_clamp);
+//	0x4A04B0 + 0x1, //coop_game_initialize);
+//	0x4A0076, //local_player_initialize_spawn_ct);
+//	0x4A007E, //local_player_initialize_window_ct);
 
 	// 			//-- address is to the func(x) itself, not to to the patch
 	// 			//constexpr uintptr_t render_weapon_hud_loc = 0x4B53E0
@@ -44,21 +44,21 @@ constexpr uintptr_t regular_player_clamps[] = {
 
 	///hud_messaging_update_clamps
 	///That whole function has a fuckton of clamps that need to be inspected and overridden
-	0x4B196A + 0x2,
-	0x4B1993 + 0x2,
+//	0x4B196A + 0x2,
+//	0x4B1993 + 0x2,
 
 	0x4B2787 + 0x3, //hud_update_nav_point_local_player_clamp);
 
 	//"33 C0 83 F9 FF 74 05 B8 .01 00 00 00 66 89 46 0C");
 	0x477115, //players_update_before_game_server patch
-	0x45FC67, //"game_engine_post_rasterize_in_game clamp fix"
+	//0x45FC67, //"game_engine_post_rasterize_in_game clamp fix"
 
 	0x4476F1, //"first_person_camera_update clamp fix"
 	0x474B0D, //"player_control_get_facing_direction clamp fix"
 
-	0x477BEF, //"First cmp of requested_player_index with 1");
-	0x477C10, //"2nd cmp of requested_player_index with 1");
-	0x4B4D75, //hud_update_weapon_local_player_clamp
+//	0x477BEF, //"First cmp of requested_player_index with 1");
+//	0x477C10, //"2nd cmp of requested_player_index with 1");
+//	0x4B4D75, //hud_update_weapon_local_player_clamp
 
 	//TODO: CONFIRM FIXES FOR THE CMP'S IMMEDIATELY FOLLOWING THESE CALLS.
 
@@ -111,6 +111,8 @@ namespace feature_management::engines {
 
 		CurrentCore.to_respawn_count = 0x6B4802;
 		CurrentCore.spawn_count = 0x624A9C;
+
+		///num windows to render. Fills with black when there is no corresponding player/camera to render.
 		CurrentCore.render_window_count = 0x6B4098;
 		CurrentCore.at_main_menu = 0x6B4051;
 
@@ -168,15 +170,12 @@ namespace feature_management::engines {
 				PrintLn("\nOn UnitControl Update when core not initialized, printing once.");
 				printOnce = true;
 			}
-			CurrentEngine->RefreshCore();
+			CurrentRuntime->RefreshCore();
 
 			return;
-//			__asm retn;
 		}
 
 		Control::UnitControl(unit_idx, from_control_data, 0);
-
-//		__asm retn
 		return;
 	}
 
@@ -215,19 +214,17 @@ namespace feature_management::engines {
  * - E8 D8 D5 FA FF
  */
 	namespace overrides {
-		constexpr uintptr_t override_function_call_list[] = {0x51EFA3, 0x51EE00, 0x51EB0, 0x49792B, 0x4975C4, 0x49757D};
-
 		int main_get_window_count_override() {
-			if (CurrentEngine->AreWeInMainMenu()) {
+			if (CurrentRuntime->AreWeInMainMenu()) {
 				return 1;
 			}
 
-			if (CurrentEngine->AreWeInCutScene()) {
+			if (CurrentRuntime->AreWeInCutScene()) {
 				return 1;
 			}
 
 			//Todo: remember to  check if cinematic is playing.
-			auto player_count = CurrentEngine->GetLocalPlayerCount();
+			auto player_count = CurrentRuntime->GetLocalPlayerCount();
 			if (player_count > MAX_PLAYER_COUNT_LOCAL || player_count < 1) {
 				player_count = 1;
 			}
@@ -235,21 +232,21 @@ namespace feature_management::engines {
 			return (int) player_count;
 		}
 
-		void override_all() {
-			for (unsigned int i = 0; i < std::size(override_function_call_list); i++) {
-				auto current = override_function_call_list[i];
-				calls::WriteSimpleHook(current, main_get_window_count_override);
+		void override_main_get_window_count_calls() {
+			//These functions do not get called during a multiplayer game
+			constexpr uintptr_t override_function_call_list[] = {0x51EFA2, 0x51EE00, 0x51EB00, 0x49792B, 0x4975C4, 0x49757D};
+
+			for (auto current : override_function_call_list) {
+				//The first instruction of any asm call is E8. We didn't pre-add so we have to do it here.
+				calls::WriteSimpleHook(current+1, main_get_window_count_override);
 			}
 		}
 	};
 
-	static void ValuePatches() {
-		//Function call
-		// 			signature: "8B 35 20 59 81 00 57 8B FA B9 .26 00 00 00 F3 AB 83 CF FF"
-		constexpr uintptr_t players_initialize_for_new_map_overwrite = 0x476243; // overwrite the .26 with the size of the 4 player structure.
-		//Relying on sizeof allows us to redefine MAX_PLAYER variables/defines
-		calls::patchValue(players_initialize_for_new_map_overwrite, sizeof(s_players_globals_data) / 4);
 
+
+
+	static void ValuePatches() {
 		//uintptr_t player_spawn = 0x47A9E0; Valid, just not using it...
 		constexpr uintptr_t size_of_fp_weapons = 0x1EA0 * MAX_PLAYER_COUNT_LOCAL;
 
@@ -336,8 +333,21 @@ namespace feature_management::engines {
 	inline void gameTickHook() {
 		constexpr uintptr_t game_tick_hook = 0x473815;
 
-		PrintLn("\nWriting the game tick hook");
+		PrintLn("Writing the game tick hook");
 		calls::WriteSimpleHook(game_tick_hook, game_tick);
+	}
+
+	inline void playersInitializeForNewMap() {
+		constexpr uintptr_t player_init_for_new_map_hook = 0x46C4EE;
+		PrintLn("Writing PlayerInitForNew Map hook");
+		calls::WriteSimpleHook(player_init_for_new_map_hook,
+							   spcore::initializations::players_initialize_for_new_map);
+	}
+
+	inline void countPlayersBeforeGameUpdateHook() {
+		constexpr uintptr_t theHook = 0x477107;
+
+		calls::WriteSimpleHook(theHook, spcore::player_updates::compute_combined_pvs_local);
 	}
 
 	inline void playerControlInitForNewMapHook() {
@@ -345,7 +355,7 @@ namespace feature_management::engines {
 		//"E8 4E 9A 01 00 E8 .69 7D 01 00 8B 15 44 C8 68 00"
 		constexpr uintptr_t player_control_init_new_map_hook = 0x45BC33;
 
-		PrintLn("\nWriting the player controls hook");
+		PrintLn("Writing the player controls hook");
 		calls::WriteSimpleHook(player_control_init_new_map_hook,
 							   spcore::player_control::player_control_initialize_for_new_map);
 	}
@@ -387,15 +397,16 @@ namespace feature_management::engines {
 
 		// insertRenderWindowCountHooks();
 
+		overrides::override_main_get_window_count_calls();
 		PrintLn("\nWritten shit");
 	}
 
-	const defined_functionrange *CE110::GetFunctionMap() {
+	defined_functionrange *CE110::GetFunctionMap() {
 #include "function_map.txt"
 //Basic correctness validation/checks
 		static_assert(hce110_function_map[0].contains(hce110_function_map[0].begin), "Should be able to find itself");
 		static_assert(!hce110_function_map[0].contains(0x0), "Should not find 0x0");
-		return hce110_function_map;
+		return const_cast<defined_functionrange *>(hce110_function_map);
 	}
 };
 

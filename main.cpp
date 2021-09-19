@@ -46,12 +46,12 @@ static void *init(HMODULE *reason) {
 		freopen_s(&debug_out, "CONOUT$", "w", stdout);
 	}
 
-	CurrentEngine = feature_management::engines::GlobalEngine::GetGlobalEngine();
+	CurrentRuntime = feature_management::engines::GetRuntimeManager();
 
 	//Initializes the file log for debug output.
-	InitAddLog(*reason, feature_management::engines::GlobalEngine::DEBUG_FILENAME);
+	InitAddLog(*reason, CurrentEngine->GetLogFileName());
 
-	if (!feature_management::engines::GlobalEngine::HasSupport()) {
+	if (!feature_management::engines::RuntimeManager::HasSupport()) {
 		PrintLn("Tempera could not detect that the current runtime has any feature support.");
 		return nullptr;
 	}
@@ -72,11 +72,11 @@ static void *init(HMODULE *reason) {
 		return nullptr;
 	}
 
-#define SUPPORTSFEAT(FEAT) CurrentEngine->SupportsFeature(feats::FEAT)
-#define SUPPORTSFEATS(FEATA, FEATB) CurrentEngine->SupportsFeature((uint)(feats::FEATA | feats::FEATB))
+#define SUPPORTSFEAT(FEAT) CurrentRuntime->SupportsFeature(feats::FEAT)
+#define SUPPORTSFEATS(FEATA, FEATB) CurrentRuntime->SupportsFeature((uint)(feats::FEATA | feats::FEATB))
 	if (SUPPORTSFEAT(LUA_HOOKS)) {
-		feature_management::engines::GlobalEngine::InitializeLuaState();
-		feature_management::engines::GlobalEngine::LuaFirstRun();
+		feature_management::engines::RuntimeManager::InitializeLuaState();
+		feature_management::engines::RuntimeManager::LuaFirstRun();
 		PrintLn("\nLua state initialized and FirstRun called");
 	}
 
@@ -91,8 +91,8 @@ static void *init(HMODULE *reason) {
 
 	PrintLn("\nVirtualProtect called, result: [%d]", succ);
 
-	CurrentEngine->WriteHooks();
-	PrintLn("\nCurrentEngine.WriteHooks completed");
+	CurrentRuntime->WriteHooks();
+	PrintLn("\nCurrentRuntime.WriteHooks completed");
 
 	//We need to protect memory, I suppose.
 	// VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READ, &old);

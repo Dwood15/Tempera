@@ -63,7 +63,7 @@ namespace Yelo {
 				auto set_sampler = [&](datum_index bitmap_tag_index, int32 stage) {
 					auto bitmap_data = get_bitmap_data(bitmap_tag_index, lightmap_index);
 
-					auto got = CurrentEngine->getFunctionBegin("rasterizer_set_texture_bitmap_data");
+					auto got = CurrentRuntime->getFunctionBegin("rasterizer_set_texture_bitmap_data");
 
 					if (got) {
 						__asm mov esi, bitmap_data

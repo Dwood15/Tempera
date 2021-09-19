@@ -84,9 +84,9 @@ LPCoreAddressList Sapien::GetCoreAddressList() {
 	return add_list;
 }
 
+defined_functionrange * Sapien::GetFunctionMap() {
 #include "function_map.txt"
-const defined_functionrange * Sapien::GetFunctionMap() {
-	return sapien_function_map;
+	return const_cast<defined_functionrange *>(sapien_function_map);
 }
 
 

@@ -7,17 +7,93 @@
 #pragma check_stack(off)
 
 //Putting this under a namespace breaks for some reason
-feature_management::engines::GlobalEngine *CurrentEngine = nullptr;
+feature_management::engines::RuntimeManager *CurrentRuntime = nullptr;
+feature_management::engines::IEngine *CurrentEngine = nullptr;
 
 namespace feature_management::engines {
-	std::string GlobalEngine::GetCurrentFileName() {
+//void RuntimeManager::InitializeMemoryUpgrades() {
+//	if (this->HasSupport() && !this->IsHek()) {
+//		if (this->IsCustomEd() && this->CurrentMinor == feature_management::engines::minor::halo_1_10) {
+//			//CE110::InitializeMemoryUpgrades();
+//		}
+//
+//	}
+//}
+
+	constexpr bool RuntimeManager::equal(const char *lhs, const char *rhs) {
+		while (*lhs || *rhs) {
+			if (*lhs++ != *rhs++) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	auto RuntimeManager::ScenarioGlobals() {
+		if (!core_initialized || !scenario_globals) {
+			return static_cast<Yelo::Scenario::s_scenario_globals *>(nullptr);
+		}
+
+		return scenario_globals;
+	}
+
+	void RuntimeManager::InitializeLuaState() {
+		PrintLn("Attempting to initialize LuaScript manager");
+		mgr.InitializeLua(LUA_FILENAME);
+	}
+
+	[[nodiscard]] LuaScriptManager *RuntimeManager::GetLuaState() {
+		if (!mgr.IsLoaded()) {
+			InitializeLuaState();
+		}
+
+		return &mgr;
+	}
+
+	IDirectInput8A *RuntimeManager::GetDInput8Device() {
+		if (CurrentEngine->IsCustomEd()) {
+			return CE110::GetDInput8Device();
+		}
+		return nullptr;
+	}
+
+	IDirectInputDevice8A *RuntimeManager::GetKeyboardInput() {
+		if (CurrentEngine->IsCustomEd()) {
+			return CE110::GetKeyboardInput();
+		}
+		return nullptr;
+	}
+
+	IDirectInputDevice8A *RuntimeManager::GetMouseInput() {
+		if (CurrentEngine->IsCustomEd()) {
+			return CE110::GetMouseInput();
+		}
+		return nullptr;
+	}
+
+	IDirectInputDevice8A **RuntimeManager::GetJoystickInputs() {
+		if (CurrentEngine->IsCustomEd()) {
+			return CE110::GetJoystickInputs();
+		}
+		return nullptr;
+	}
+
+	void RuntimeManager::WriteHooks() {
+		PrintLn("\nInitializing to prepare to write the game hooks now!");
+		CurrentEngine->WriteHooks();
+	}
+
+	std::string GetCurrentFileName() {
 		static char name[MAX_PATH];
 		static ::std::string shortName;
 		static bool nameGot = false;
 
-		if (!nameGot) {
+		if (nameGot) {
+			return shortName;
+		}
+		//Tried to pluck out version information from the file metadata
+		{
 			// static int nameSz     = GetModuleFileNameA(0, name, MAX_PATH);
-
 			//This section copy/pasted form StackOverflow
 			//https://stackoverflow.com/a/940743
 			// LPBYTE lpBuffer  = NULL;
@@ -44,206 +120,80 @@ namespace feature_management::engines {
 			// 		}
 			// 	}
 			// }
-
-			GetModuleFileNameA(nullptr, name, ::std::size(name));
-			char *lpCmdline = GetCommandLineA();
-			printf("CommandLine Args: %s\n", lpCmdline);
-			printf("File Name: %s\n", name);
-
-			int num = MAX_PATH - 1;
-			while (name[num] != 'e') {
-				num--;
-			}
-			int till = num;
-			while (name[till] != '\\') {
-				till--;
-			}
-
-			shortName = std::string(name).substr(till + 1, num - (till)).c_str();
-			nameGot = true;
 		}
+		GetModuleFileNameA(nullptr, name, ::std::size(name));
+		char *lpCmdline = GetCommandLineA();
+		PrintLn("CommandLine Args: %s", lpCmdline);
+		PrintLn("File Name: %s", name);
+
+		int num = MAX_PATH - 1;
+		while (name[num] != 'e') {
+			num--;
+		}
+		int till = num;
+		while (name[till] != '\\') {
+			till--;
+		}
+
+		shortName = std::string(name).substr(till + 1, num - (till)).c_str();
+		nameGot = true;
+
 		return shortName;
 	}
 
-	bool GlobalEngine::VerSupported() {
-		if (feature_management::engines::GlobalEngine::CurrentMajor == major::CE) {
-			switch (feature_management::engines::GlobalEngine::CurrentMinor) {
-				case minor::halo_1_10:
-					return (CE110::SupportedFeatures() > features::NOPE);
-				default:
-					return false;
-			}
-		}
-
-		return false;
-	}
-
-//void GlobalEngine::InitializeMemoryUpgrades() {
-//	if (this->HasSupport() && !this->IsHek()) {
-//		if (this->IsCustomEd() && this->CurrentMinor == feature_management::engines::minor::halo_1_10) {
-//			//CE110::InitializeMemoryUpgrades();
-//		}
-//
-//	}
-//}
-
-	feature_management::features GlobalEngine::GetSupported() {
-		switch (CurrentMajor) {
-			case major::CE:
-				switch (CurrentMinor) {
-					case minor::halo_1_10:
-						return CE110::SupportedFeatures();
-					default:
-						return features::NOPE;
-				}
-			case major::HEK:
-				switch (CurrentMinor) {
-					case minor::sapien:
-						return Sapien::SupportedFeatures();
-					default:
-						return features::NOPE;
-				}
-			default:
-				return features::NOPE;
-		}
-	}
-
-	constexpr bool GlobalEngine::equal(const char *lhs, const char *rhs) {
-		while (*lhs || *rhs) {
-			if (*lhs++ != *rhs++) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	auto GlobalEngine::ScenarioGlobals() {
-		if (!core_initialized || !scenario_globals) {
-			return static_cast<Yelo::Scenario::s_scenario_globals *>(nullptr);
-		}
-
-		return scenario_globals;
-	}
-
-	void GlobalEngine::InitializeLuaState() {
-		PrintLn("Attempting to initialize LuaScript manager");
-		mgr.InitializeLua(LUA_FILENAME);
-	}
-
-	[[nodiscard]] LuaScriptManager *GlobalEngine::GetLuaState() {
-		if (!mgr.IsLoaded()) {
-			InitializeLuaState();
-		}
-
-		return &mgr;
-	}
-
-	IDirectInput8A *GlobalEngine::GetDInput8Device() {
-		if (IsCustomEd()) {
-			return CE110::GetDInput8Device();
-		}
-		return nullptr;
-	}
-
-	IDirectInputDevice8A *GlobalEngine::GetKeyboardInput() {
-		if (IsCustomEd()) {
-			return CE110::GetKeyboardInput();
-		}
-		return nullptr;
-	}
-
-	IDirectInputDevice8A *GlobalEngine::GetMouseInput() {
-		if (IsCustomEd()) {
-			return CE110::GetMouseInput();
-		}
-		return nullptr;
-	}
-
-	IDirectInputDevice8A **GlobalEngine::GetJoystickInputs() {
-		if (IsCustomEd()) {
-			return CE110::GetJoystickInputs();
-		}
-		return nullptr;
-	}
-
-	void GlobalEngine::WriteHooks() {
-		PrintLn("\nInitializing to prepare to write the game hooks now!");
-		switch (CurrentMajor) {
-			case major::CE:
-				PrintLn("Custom Edition detected");
-				switch (CurrentMinor) {
-					case minor::halo_1_10:
-						PrintLn("CE_110 detected!");
-						CE110::WriteHooks();
-					default:
-						return;
-				}
-			case major::HEK:
-				PrintLn("Sapien detected");
-				switch (CurrentMinor) {
-					case minor::sapien:
-						Sapien::WriteHooks();
-					default:
-						return;
-				}
-			default:
-				return;
-		}
-	}
-
-	GlobalEngine *GlobalEngine::GetGlobalEngine() {
-		if (CurrentEngine == nullptr) {
-			CurrentEngine = new GlobalEngine();
-		}
-
-		if (current_map != nullptr) {
-			PrintLn("Setting up GlobalEngine despite already having current map");
+	RuntimeManager *GetRuntimeManager() {
+		if (CurrentRuntime == nullptr) {
+			CurrentRuntime = new RuntimeManager();
 		}
 
 		auto filename = GetCurrentFileName();
 
-		PrintLn("GlobalEngine Filename: %s\n", filename.c_str());
+		PrintLn("RuntimeManager Filename: %s\n", filename.c_str());
 
 		auto fName = ::std::string(filename);
 
-		DEBUG_FILENAME = const_cast<char *>("tempera.unk.unk.debug.log");
+		if (CurrentEngine == nullptr) {
+			CurrentEngine = new IEngine();
+			if (fName == "sapien.exe") {
+				PrintLn("Detected sapien!");
+				CurrentEngine = new Sapien();
+			}
 
-		if (fName == "sapien.exe") {
-			printf("Detected sapien!\n");
-			CurrentMajor = major::HEK;
-			CurrentMinor = minor::sapien;
-			DEBUG_FILENAME = const_cast<char *>(Sapien::DEBUG_FILENAME);
-			current_map = const_cast<defined_functionrange *>(Sapien::GetFunctionMap());
+			if (fName == "haloce.exe") {
+				PrintLn("Detected haloce! Assuming version 110.");
+				CurrentEngine = new CE110();
+			}
+
+			if (!CurrentEngine->HasSupport()) {
+				PrintLn("Current running engine Has No support!");
+			}
 		}
-
-		if (fName == "haloce.exe") {
-			printf("Detected haloce!\n");
-			CurrentMajor = major::CE;
-			CurrentMinor = minor::halo_1_10;
-			DEBUG_FILENAME = const_cast<char *>(CE110::DEBUG_FILENAME);
-			current_map = const_cast<defined_functionrange *>(CE110::GetFunctionMap());
-		}
-
-		if (HasSupport()) {
-			PrintLn("CurrentEngine HasSupport");
-			CurrentSupported = GetSupported();
-		}
-
-		return CurrentEngine;
+		return CurrentRuntime;
 	}
 
-//size_t GlobalEngine::GetNumberOfFunctionTableReferences() {
-//	if (this->IsCustomEd()) {
-//		return 354u;
-//	}
-//
-//	return 0;
-//}
+	short RuntimeManager::GetElapsedTime() {
+		if (game_time_globals == nullptr) {
+			RefreshCore(true);
+		}
 
-	void GlobalEngine::SetCoreAddressList(LPCoreAddressList add_list) {
-		if (core_initialized) {
+
+		return game_time_globals->elapsed_time;
+	}
+
+	void RuntimeManager::RefreshCore(bool force) {
+		if (core_initialized && !force) {
 			return;
 		}
+
+		if (!HasSupport()) {
+			throw "WTF? this platform has no support. Bye.";
+		}
+
+		PrintLn("GetCoreAddressList");
+
+		auto add_list = CurrentEngine->GetCoreAddressList();
+
+		PrintLn("CoreAddressLists loaded, moving them into ");
 
 		core_0 = reinterpret_cast<_core_0 *>(add_list.core_0);
 		core_1 = reinterpret_cast<_core_1 *>(add_list.core_1);
@@ -271,114 +221,43 @@ namespace feature_management::engines {
 		CONSOLE_TEXT_HOOK_ADDRESS = add_list.CONSOLE_TEXT_HOOK_ADDRESS;
 
 		core_initialized = true;
+
 	}
 
-
-	short GlobalEngine::GetElapsedTime() {
-		if (game_time_globals == nullptr) {
-			RefreshCore(true);
-		}
-
-
-		return game_time_globals->elapsed_time;
+	bool RuntimeManager::SupportsFeature(features feat) {
+		return CurrentEngine->SupportsFeature(feat);
 	}
 
-	void GlobalEngine::RefreshCore(bool force) {
-		if (core_initialized && !force) {
-			return;
-		}
-
-		if (!HasSupport()) {
-			throw "WTF? this platform has no support. Bye.";
-		}
-
-		LPCoreAddressList addressList;
-
-		if (feature_management::engines::GlobalEngine::IsSapien()) {
-			PrintLn("IsSapien SetCoreAddressList");
-			addressList = Sapien::GetCoreAddressList();
-		}
-
-		PrintLn("GetCoreAddressList");
-		if (feature_management::engines::GlobalEngine::IsCustomEd()) {
-			PrintLn("CustomEd SetCoreAddressList");
-			addressList = CE110::GetCoreAddressList();
-		}
-
-		SetCoreAddressList(addressList);
+	bool RuntimeManager::SupportsFeature(uint feat) {
+		return CurrentEngine->SupportsFeature(feat);
 	}
 
-	const char *GlobalEngine::GetCurrentMajorVerString() {
-		switch (this->CurrentMajor) {
-			case engines::major::DEDI:
-				return "DEDI";
-			case engines::major::HEK:
-				switch (this->CurrentMinor) {
-					case engines::minor::sapien:
-						return "SAPI";
-					default:
-						return "HEK";
-				}
-			case engines::major::PC:
-				return "PC";
-			case engines::major::MAC:
-				return "MAC";
-			case engines::major::STUBBZ:
-				return "STBZ";
-			case engines::major::TRIAL:
-				return "TRIL";
-			case engines::major::CE:
-				return "CE";
-			default:
-				return "";
-		}
-	}
-
-	bool GlobalEngine::SupportsFeature(features feat) {
-		return (this->GetSupported() & feat) == feat;
-	}
-
-	bool GlobalEngine::SupportsFeature(uint feat) {
-		return (this->GetSupported() & feat) == feat;
-	}
-
-	void GlobalEngine::LuaFirstRun() {
+	void RuntimeManager::LuaFirstRun() {
 		mgr.DoFirstRun();
+		mgr.lua_run_sanityChecks();
 	}
 
 	template<typename T>
-	void GlobalEngine::ClampIndex(T &idx) {
+	void RuntimeManager::ClampIndex(T &idx) {
 		if (idx > MAX_PLAYER_COUNT_LOCAL) {
 			Print("Forced player to 0 b/c it %d > %d", idx, MAX_PLAYER_COUNT_LOCAL);
 			idx = 0;
 		}
 	}
 
-	bool GlobalEngine::HasSupport() {
-		if (CurrentMajor == major::NO) {
-			return false;
-		}
-
-		if (IsHek()) {
-			return feature_management::engines::GlobalEngine::IsSapien();
-		}
-
-		if (IsCustomEd()) {
-			return VerSupported();
-		}
-
-		return false;
+	bool RuntimeManager::HasSupport() {
+		return (CurrentEngine) && CurrentEngine->HasSupport();
 	}
 
-	datum_index *GlobalEngine::GetLocalPlayers() {
+	datum_index *RuntimeManager::GetLocalPlayers() {
 		return players_globals->local_player_players;
 	}
 
-	short GlobalEngine::GetLocalPlayerCount() {
+	short RuntimeManager::GetLocalPlayerCount() {
 		return players_globals->local_player_count;
 	}
 
-	s_unit_control_data GlobalEngine::GetPlayerActionOverride(ushort idx, s_unit_control_data from) {
+	s_unit_control_data RuntimeManager::GetPlayerActionOverride(ushort idx, s_unit_control_data from) {
 		ClampIndex(idx);
 
 		s_unit_control_data newControl = from;
@@ -388,10 +267,10 @@ namespace feature_management::engines {
 		return newControl;
 	}
 
-	std::optional<uintptr_t> GlobalEngine::getFunctionBegin(const char *needle) {
+	std::optional<uintptr_t> RuntimeManager::getFunctionBegin(const char *needle) {
 		using dfr = defined_functionrange;
 
-		dfr *funcList = current_map;
+		dfr *funcList = CurrentEngine->GetFunctionMap();
 
 		for (dfr *item = funcList; item; item++) {
 			if (equal(needle, item->funcName)) {
@@ -427,10 +306,10 @@ namespace feature_management::engines {
 	}
 
 	bool IsCoreInitialized() {
-		return CurrentEngine != nullptr && CurrentEngine->core_initialized;
+		return CurrentRuntime != nullptr && CurrentRuntime->core_initialized;
 	}
 
-	s_player_control *GlobalEngine::GetPlayerControl(unsigned short idx) {
+	s_player_control *RuntimeManager::GetPlayerControl(unsigned short idx) {
 		if (idx < MAX_PLAYER_COUNT_LOCAL) {
 			return &player_control_globals_data->local_players[idx];
 		}
@@ -439,24 +318,24 @@ namespace feature_management::engines {
 	}
 
 	// Returns a player structure address, by player index
-	player *GlobalEngine::GetPlayer(short index) {
+	player *RuntimeManager::GetPlayer(short index) {
 		return reinterpret_cast<player *>((unsigned long) core_0->Players->first + (index * core_0->Players->size));
 	}
 
 	// Check to see if a player is spawned && biped object is valid?
-	bool GlobalEngine::IsPlayerSpawned(short index) {
+	bool RuntimeManager::IsPlayerSpawned(short index) {
 		player *newplayer = GetPlayer(index);
 		return (newplayer->SlaveUnitIndex.index != 0 && newplayer->SlaveUnitIndex.index != INVALID);
 	}
 
 	// Check to see if a player is valid
-	bool GlobalEngine::IsPlayerValid(short index) {
+	bool RuntimeManager::IsPlayerValid(short index) {
 		player *newplayer = GetPlayer(index);
 		return (newplayer->playerid != 0 && newplayer->playerid != INVALID);
 	}
 
 	// Returns a player's name by player index
-	wchar_t *GlobalEngine::GetPlayerName(short player_index) {
+	wchar_t *RuntimeManager::GetPlayerName(short player_index) {
 		player *newplayer = GetPlayer(player_index);
 		if (!newplayer)
 			return nullptr;
@@ -465,12 +344,12 @@ namespace feature_management::engines {
 	}
 
 	// Returns a player team by player index
-	long GlobalEngine::GetPlayerTeam(short player_index) {
+	long RuntimeManager::GetPlayerTeam(short player_index) {
 		player *newplayer = GetPlayer(player_index);
 		return newplayer->Team;
 	}
 
-	void GlobalEngine::TryLogPlayer(short index, bool toConsole) {
+	void RuntimeManager::TryLogPlayer(short index, bool toConsole) {
 		if (!IsPlayerSpawned(index)) {
 			return;
 		}
@@ -479,7 +358,7 @@ namespace feature_management::engines {
 	}
 
 	// Returns a player object ident by player index
-	datum_index GlobalEngine::GetPlayerObjectIdent(short player_index) {
+	datum_index RuntimeManager::GetPlayerObjectIdent(short player_index) {
 		player *newplayer = GetPlayer(player_index);
 		return newplayer->SlaveUnitIndex;
 	}
@@ -490,7 +369,7 @@ namespace feature_management::engines {
 	 * @param player_index 0-15 index of player to try to get.
 	 * @returns the address of a players biped object structure
 	 */
-	// biped_data *GlobalEngine::GetBiped(short player_index) {
+	// biped_data *RuntimeManager::GetBiped(short player_index) {
 	// 	short object_index = GetPlayerObjectIdent(player_index).index;
 	//
 	// 	if (object_index == INVALID)
@@ -500,29 +379,29 @@ namespace feature_management::engines {
 	// }
 
 	// Returns an object_header structure by object index
-	object_header *GlobalEngine::GetObjectHeader(short object_index) {
+	object_header *RuntimeManager::GetObjectHeader(short object_index) {
 		auto offset = object_index * core_1->Object->size;
 		auto hLocation = (unsigned long)core_1->Object->first + offset;
 		return (object_header *)(hLocation) ;
 	}
 
 	// Returns a generic object_data structure by object index
-	object_data *GlobalEngine::GetGenericObject(short object_index) {
+	object_data *RuntimeManager::GetGenericObject(short object_index) {
 		return GetObjectHeader(object_index)->address;
 	}
 
 	// Returns the x,y,z coordinates of an object by object index
-	vect3 &GlobalEngine::GetObjectCoord(short object_index) {
+	vect3 &RuntimeManager::GetObjectCoord(short object_index) {
 		return GetGenericObject(object_index)->World;
 	}
 
 	// Returns an object name by object index
-	const char *GlobalEngine::GetObjectName(short object_index) {
+	const char *RuntimeManager::GetObjectName(short object_index) {
 		return GetObjectName(GetGenericObject(object_index));
 	}
 
 	//Returns an object name by object structure
-	const char *GlobalEngine::GetObjectName(object_data *obj) {
+	const char *RuntimeManager::GetObjectName(object_data *obj) {
 		short metaind = obj->Meta.index;
 		char *name = TagIndexHeader->FirstTag[metaind].TName->Name;
 		std::string str = name;
@@ -533,17 +412,17 @@ namespace feature_management::engines {
 	////////////////////////////////////////
 	// Map Methods
 	// Returns the loaded map name
-	char *GlobalEngine::GetMapName() {
+	char *RuntimeManager::GetMapName() {
 		return MapHeader->MapName;
 	}
 
-	bool GlobalEngine::AreWeInMainMenu() {
+	bool RuntimeManager::AreWeInMainMenu() {
 		if (!IsCoreInitialized()) {
 			PrintLn("Core not initialized - defaulting to true for MainMenu check");
 			return true;
 		}
 
-		if (IsHek()) {
+		if (CurrentEngine->IsHek()) {
 			//PrintLn("Can't be in main menu if we're in HEK");
 			return false;
 		}
@@ -554,7 +433,7 @@ namespace feature_management::engines {
 	////////////////////////////////////////
 	// Console Methods
 	// Toggles console on / off
-	void GlobalEngine::ToggleConsole(bool bSwitch) {
+	void RuntimeManager::ToggleConsole(bool bSwitch) {
 		// DWORD dwOldProtect = NULL;
 		if (bSwitch) {
 
@@ -563,10 +442,10 @@ namespace feature_management::engines {
 		}
 	}
 
-	short GlobalEngine::GetMaxObjects() { return this->core_1->Object->max; }
+	short RuntimeManager::GetMaxObjects() { return this->core_1->Object->max; }
 
 	// Toggles devmode on / off
-	void GlobalEngine::ToggleDevmode(bool bSwitch) {
+	void RuntimeManager::ToggleDevmode(bool bSwitch) {
 		ConsoleText(hRed, "Dev-mode toggling isn't enabled.");
 		//	DWORD dwOldProtect = NULL;
 		//	BYTE bEnable[1] = {0xEB};
@@ -582,7 +461,7 @@ namespace feature_management::engines {
 	}
 
 	// Toggles devmode flycam on / off
-	void GlobalEngine::ToggleFlycam(char onoff) {
+	void RuntimeManager::ToggleFlycam(char onoff) {
 		static bool on = true; // first run means turn on.
 
 		// if -1, toggle. Else, follow what was given.
@@ -616,7 +495,7 @@ namespace feature_management::engines {
 	}
 
 	// Calls the requested console command
-	void GlobalEngine::ConsoleCMD(char *command) {
+	void RuntimeManager::ConsoleCMD(char *command) {
 		DWORD dwOldProtect = (DWORD) NULL;
 		BYTE bConsoleOrig[8] = {0x8A, 0x07, 0x81, 0xEC, 0x00, 0x05, 0x00, 0x00};
 
@@ -647,7 +526,7 @@ namespace feature_management::engines {
 	}
 
 	// Outputs console text, with custom colors and formatting
-	void GlobalEngine::ConsoleText(HaloColor fColor, const char *cFmt, ...) {
+	void RuntimeManager::ConsoleText(HaloColor fColor, const char *cFmt, ...) {
 		if (CONSOLE_TEXT_HOOK_ADDRESS == 0x0) {
 			RefreshCore(true);
 		}
@@ -667,9 +546,10 @@ namespace feature_management::engines {
 		console_printf(color, "%s", cBuffer);
 #elif _MSC_VER
 		{
-			const void *func = reinterpret_cast<const void *>(CONSOLE_TEXT_HOOK_ADDRESS); // necessary, dont question it
-			const char *fmt = "%s";
-			const char *text = cBuffer;
+			//If you pass these variable directly into the the assembly, shit breaks.
+			[[maybe_unused]]auto func = reinterpret_cast<const void *>(CONSOLE_TEXT_HOOK_ADDRESS);
+			[[maybe_unused]]const char *fmt = "%s";
+			[[maybe_unused]]const char *text = cBuffer;
 			__asm {
 			pushad
 			pushfd
@@ -693,11 +573,11 @@ namespace feature_management::engines {
 #define CALL_LUA_BY_EVENT(event) state->call_lua_event_by_type(LuaCallbackId::PRINTED(event))
 
 	void game_tick(int current_frame_tick) {
-		static LuaScriptManager *state = CurrentEngine->GetLuaState();
+		static LuaScriptManager *state = CurrentRuntime->GetLuaState();
 
 		state->call_lua_event_by_type(LuaCallbackId::before_game_tick);
 
-		state->lua_on_tick(current_frame_tick, CurrentEngine->GetElapsedTime());
+		state->lua_on_tick(current_frame_tick, CurrentRuntime->GetElapsedTime());
 		static ::std::optional<uintptr_t> funcFound = FUNC_GET(game_tick);
 
 		if (funcFound) {
@@ -708,7 +588,7 @@ namespace feature_management::engines {
 
 			calls::DoCall<Convention::m_cdecl, void, int>(value, tick);
 			// PrintLn("Post-Game_tick call");
-			//CurrentEngine->ConsoleText(hGreen, "Tempera");
+			//CurrentRuntime->ConsoleText(hGreen, "Tempera");
 		}
 
 		// PrintLn("Lua_post_tick call");
@@ -725,7 +605,7 @@ namespace feature_management::engines {
 
 		if (!alreadyChecked) {
 			{
-				CurrentEngine->ConsoleText(hGreen, "Tempera Running!");
+				CurrentRuntime->ConsoleText(hGreen, "Tempera Running!");
 			}
 			PrintLn("Getting main setup connection");
 
@@ -742,10 +622,10 @@ namespace feature_management::engines {
 		static LuaScriptManager *state;
 
 		if (state == nullptr) {
-			state = CurrentEngine->GetLuaState();
+			state = CurrentRuntime->GetLuaState();
 		}
 
-		CurrentEngine->RefreshCore();
+		CurrentRuntime->RefreshCore();
 		state->call_lua_event_by_type(LuaCallbackId::post_initialize);
 	}
 

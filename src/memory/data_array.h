@@ -2,6 +2,7 @@
 
 #include "datum_index.h"
 #include "data_base.h"
+#include <string.h>
 
 namespace Yelo::Memory {
 	static constexpr Yelo::datum_index::salt_t k_datum_index_salt_msb = 1U << (15);
@@ -52,22 +53,11 @@ namespace Yelo::Memory {
 	};
 
 	STAT_ASSERT(s_data_array, 0x38);
-
-	static s_data_array *DataNewAndMakeValid(const char *name, long maximum_count, size_t datum_size) {
-		//
-		// Memory::s_data_array *data = blam::data_new(name, maximum_count, datum_size);
-		//
-		// if (data != nullptr) {
-		// 	data->is_valid = true;
-		// 	Yelo::blam::data_delete_all(data);
-		// }
-		//
-		// return data;
-		return (s_data_array *) -1;
-	}
 };
 
 namespace Yelo::blam {
+	//Replace the engine versions of these functions
+
 	//Intended to be a complete replacement for the in-game data_new :)
 	//TODO: TEST + confirm works. _Looks_ functionally similar to the original data_new.
 	template <typename T, int max_count>
@@ -75,11 +65,28 @@ namespace Yelo::blam {
 
 	static void data_dispose(Yelo::Memory::s_data_array *data);
 
-	//This replaces the engine version of data_delete_all
-	//TODO: TEST
-	static void data_delete_all(Yelo::Memory::s_data_array *data);
+	//Yelo::Memory
+	static void data_delete_all(Yelo::Memory::s_data_array *data) {
+		data->last_datum       = 0;
+		data->next_datum.index = 0;
+		data->next_index       = 0;
+		strncpy((char *) &data->next_datum.salt, data->name, 2u);
+		// strncpy_s((char *) &data->next_datum.salt, data->name, 2u);
+		data->next_datum.salt |= 0x8000u;
+		if (data->max_datum > 0) {
+			return; // we're done here!
+		}
 
-	static void data_make_valid(Yelo::Memory::s_data_array *data);
+		for (short i = 0; i < data->max_datum; i++) {
+			auto current = i * data->datum_size;
+			*(byte *) (&data->base_address)[current] = 0;
+		}
+	}
+
+	static void data_make_valid(Yelo::Memory::s_data_array *data) {
+		data->is_valid = true;
+		data_delete_all(data);
+	}
 
 	static void data_make_invalid(Yelo::Memory::s_data_array *data);
 

@@ -14,9 +14,6 @@ static short *to_respawn_count = (short *) 0x6B4802;
 
 //Number of players to spawn - set on map initialization/unloading.
 static short *spawn_count         = (short *) 0x624A9C;
-///num windows to render. Fills with black for invalid.    f
-static short *render_window_count = (short *) 0x6B4098;
-bool         *at_main_menu        = (bool *) 0x6B4051;
 
 void UpdateGlobals() {
 	if (last_respawn_count != *to_respawn_count) {
@@ -29,17 +26,18 @@ void UpdateGlobals() {
 		last_spawn_count = *spawn_count;
 	}
 
-	if (last_render_window_count != *render_window_count) {
-		Print("Updated number players to spawn from: %d to: %d\n", last_render_window_count, *render_window_count);
-		last_render_window_count = *render_window_count;
-	}
+//  render_window_count is not currently provided
+//	if (last_render_window_count != CurrentRuntime->) {
+//		Print("Updated number players to spawn from: %d to: %d\n", last_render_window_count, *render_window_count);
+//		last_render_window_count = *render_window_count;
+//	}
 }
 
 void HandleMainMenuOptions() {
 	if (GetAsyncKeyState(VK_F1) & 1) {
 		//Player spawn count set to 2.
 		*(short *) 0x624A9C = (short) 0x2;
-		CurrentEngine->ConsoleText(hGreen, "Number players to spawn in next sp map: +1!");
+		CurrentRuntime->ConsoleText(hGreen, "Number players to spawn in next sp map: +1!");
 	}
 }
 
@@ -61,24 +59,27 @@ void PrintHelp() {
 
 //TODO: Launch thread later on in the load cycle
 [[noreturn]] int forge::MainLoop() {
-	if (feature_management::engines::GlobalEngine::IsHek()) {
+	if (CurrentEngine->IsHek()) {
 		PrintLn("Forge doesn't support anything but Halo PC 1.10 right now. Working on expanding horizons.");
 		__asm retn
 	}
 
 	Sleep(600);
 	//automatically spawn the maximum number of local players at the beginning of the game.
+
 	*(short *) 0x624A9C = (short)MAX_PLAYER_COUNT_LOCAL;
 	cd3d.hkD3DHook(nullptr);
 
-	CurrentEngine->ConsoleText(hGreen, "Number players to spawn in next sp map: 3!");
+	CurrentRuntime->ConsoleText(hGreen, "Number players to spawn in next sp map: 3!");
 	PrintHelp();
 
 	while (1) {
 		Sleep(20);
 		UpdateGlobals();
 
-		if (*at_main_menu) {
+		auto inMainMenu = CurrentRuntime->AreWeInMainMenu();
+
+		if (inMainMenu) {
 			HandleMainMenuOptions();
 		}
 
@@ -94,36 +95,36 @@ void PrintHelp() {
 		 	continue;
 		 }
 
-		 if (*at_main_menu) {
+		 if (inMainMenu) {
 		 	Sleep(45);
 		 	continue;
 		 }
-		//
+
 		// if (GetAsyncKeyState(VK_F5) & 1) {
 		// 	core->ObjectControl->LogInfo();
 		// }
 
-		 if ((CurrentEngine->IsPlayerSpawned(1)) && GetAsyncKeyState(VK_F7) & 1) {
-		 	datum_index plyr_datum = CurrentEngine->GetPlayerObjectIdent(1);
+		 if ((CurrentRuntime->IsPlayerSpawned(1)) && GetAsyncKeyState(VK_F7) & 1) {
+		 	datum_index plyr_datum = CurrentRuntime->GetPlayerObjectIdent(1);
 
 		 	if (plyr_datum.index > -1) {
-		 		object_data *objd = CurrentEngine->GetGenericObject(plyr_datum.index);
+		 		object_data *objd = CurrentRuntime->GetGenericObject(plyr_datum.index);
 
 		 		objd->Velocity.z += .25f;
 		 		objd->Velocity.y  = 0;
 
-		 		CurrentEngine->ConsoleText(hBlue, "Incremented The player 2 object's velocity!");
+		 		CurrentRuntime->ConsoleText(hBlue, "Incremented The player 2 object's velocity!");
 		 	}
-		 } else if (CurrentEngine->IsPlayerSpawned(0) && GetAsyncKeyState(VK_F8) & 1) {
-			 datum_index plyr_datum = CurrentEngine->GetPlayerObjectIdent(0);
+		 } else if (CurrentRuntime->IsPlayerSpawned(0) && GetAsyncKeyState(VK_F8) & 1) {
+			 datum_index plyr_datum = CurrentRuntime->GetPlayerObjectIdent(0);
 		 	if (plyr_datum.index > -1) {
 		 		//object_header * objh = core->GetObjectHeader(plyr_datum.index);
-		 		object_data *objd = CurrentEngine->GetGenericObject(plyr_datum.index);
+		 		object_data *objd = CurrentRuntime->GetGenericObject(plyr_datum.index);
 
 		 		objd->Velocity.x += .25;
 		 		objd->Velocity.y  = 0;
 
-				CurrentEngine->ConsoleText(hBlue, "Increased Player 1 velocity! %.3f", objd->Velocity.x);
+				CurrentRuntime->ConsoleText(hBlue, "Increased Player 1 velocity! %.3f", objd->Velocity.x);
 		 	}
 		 }
 

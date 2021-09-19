@@ -3,11 +3,38 @@
 #include <engine_interface.h>
 #include "function_rewrite.h"
 #include "../../../src/gamestate/game_globals.h"
+#include "../../../src/memory/data_array.h"
 
 namespace spcore {
 	//static s_motion_sensor*motion_sensor = ;
 
 	namespace initializations {
+		void players_initialize_for_new_map() {
+			static auto *const players_globals = *reinterpret_cast<s_players_globals_data **>(0x815918);
+			static auto *const player_data = *reinterpret_cast<Yelo::Memory::s_data_array**>(0x815920);
+			static auto *const team_data = *reinterpret_cast<s_team_data **>(0x7A4210);
+
+
+			memset(players_globals, 0, sizeof(s_players_globals_data));
+
+			for (auto i = 0; i < MAX_PLAYER_COUNT_LOCAL; i++) {
+				players_globals->local_player_players[i] = -1;
+				players_globals->local_player_dead_units[i] = -1;
+			}
+
+			players_globals->unused_after_initialize_unk = -1;
+			players_globals->input_disabled = 0;
+			players_globals->double_speed_ticks_remaining = 0;
+			players_globals->are_all_dead = 0;
+			players_globals->_bsp_switch_trigger_idx = -1;
+			players_globals->respawn_failure = 0;
+
+			Yelo::blam::data_make_valid(player_data);
+			Yelo::blam::data_make_valid((Yelo::Memory::s_data_array *)team_data);
+			memset((void *)(0x676FA8), 0xFF, 0x40);
+
+		}
+
 		//40000db0
 		//		void __cdecl motion_sensor_initialize_for_new_map() {
 		//			s_motion_sensor * motion_snsor_location = (s_motion_sensor*)0x6B44C8;
@@ -46,6 +73,27 @@ namespace spcore {
 		}
 	};
 
+	namespace player_updates {
+		int calculatePlayerCount() {
+			static auto *const players_globals = *reinterpret_cast<s_players_globals_data **>(0x815918);
+
+			//Classically, Halo allowed for nearly any ordering of allocated players
+			int numPlyrs = 0;
+			for (int i = MAX_PLAYER_COUNT_LOCAL; i > 0; i--) {
+				auto plyrRef = players_globals->local_player_players[i-1];
+				if (!plyrRef.IsNull()) {
+					++numPlyrs;
+				}
+			}
+
+			return numPlyrs;
+		}
+
+		void naked compute_combined_pvs_local() {
+			__asm call calculatePlayerCount
+			__asm retn
+		}
+	}
 	//Initialzie at new map!
 	const void player_control::player_control_initialize() {
 		//TODO: overwrite the built-in control initialization to account for s_player_control_globals I think
@@ -53,7 +101,6 @@ namespace spcore {
 
 	void player_control::player_control_initialize_for_new_map() {
 		// float matrix_related_flt = *(float *) 0x612188;
-
 		s_player_control_globals_data *player_controls        = *(s_player_control_globals_data **) 0x64C38C;
 		game_options::s_game_globals  *game_globals           = *(game_options::s_game_globals **) 0x6E2260;
 		s_player_control              *current_player_datum   = player_controls->local_players;

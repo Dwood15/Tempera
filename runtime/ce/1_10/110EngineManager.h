@@ -25,14 +25,26 @@
 static void InitializeLibraryFixups();
 
 namespace feature_management::engines {
-	class CE110 : public IEngine<CE110> {
+	namespace overrides {
+		void override_main_get_window_count_calls();
+	}
+
+	class CE110 : public IEngine {
 	private:
 		//static void InitializeHSMemoryUpgrades();
 	public:
-		CE110() = default;
-		~CE110() = default;
-		static features SupportedFeatures() {
-			return features::EVERYTHING;
+		CE110() {
+			Major = major::CE;
+			Minor = minor::halo_1_10;
+			Supported = features::EVERYTHING;
+		}
+
+		bool IsCustomEd() {
+			return true;
+		}
+
+		features SupportedFeatures() {
+			return Supported;
 		}
 		//TODO: Make using this _not_ suck.
 		static auto const HS_VALID_ACCESS_FLAGS = 0x486220;
@@ -41,12 +53,16 @@ namespace feature_management::engines {
 		// InitializeCreateScriptFunction()
 		static auto const HS_ARGUMENTS_EVALUATE = 0x48D480;
 		static auto const HS_RETURN             = 0x48D270;
-		static constexpr const char *DEBUG_FILENAME = "tempera.hce.1_10.debug.log";
 
-		static LPCoreAddressList GetCoreAddressList();
-		static const defined_functionrange *GetFunctionMap();
+		const char* GetLogFileName() {
+			return "tempera.hce.1_10.debug.log";
+		}
+
+		LPCoreAddressList GetCoreAddressList();
+		defined_functionrange *GetFunctionMap();
 		static void __stdcall OnUnitControlUpdate();
-		static void WriteHooks();
+
+		void WriteHooks();
 
 		const Yelo::TagGroups::coll::collision_bsp **global_collision_bsp  = (const Yelo::TagGroups::coll::collision_bsp **)0x6E2258;
 

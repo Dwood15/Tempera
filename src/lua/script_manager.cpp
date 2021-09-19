@@ -46,7 +46,7 @@ int l_IsPlayerSpawned(lua_State *L) {
 	const auto idx = lua_tointeger(L, 1);
 
 	if (idx >= 0 && idx <= 15) {
-		lua_pushboolean(L, CurrentEngine->IsPlayerSpawned(idx));
+		lua_pushboolean(L, CurrentRuntime->IsPlayerSpawned(idx));
 		return 1;
 	}
 
@@ -70,12 +70,12 @@ int l_GetPlayerAddress(lua_State *L) {
 	const auto idx = lua_tointeger(L, 1);
 
 	if (idx >= 0 && idx <= 15) {
-		if (!CurrentEngine->IsPlayerSpawned(idx)) {
+		if (!CurrentRuntime->IsPlayerSpawned(idx)) {
 			lua_pushinteger(L, -1);
 			return 1;
 		}
 
-		lua_pushinteger(L, reinterpret_cast<int>(CurrentEngine->GetPlayer(idx)));
+		lua_pushinteger(L, reinterpret_cast<int>(CurrentRuntime->GetPlayer(idx)));
 		return 1;
 	}
 
@@ -110,7 +110,7 @@ int LuaSetPlayerFunctionWithArg(lua_State *L, F func) {
  */
 int l_CallVoidEngineFunctionByFunctionMapName(lua_State *L) {
 	auto str = lua_tostring(L, 1);
-	auto got = CurrentEngine->getFunctionBegin(str);
+	auto got = CurrentRuntime->getFunctionBegin(str);
 
 	if (got) {
 		calls::DoCall<Convention::m_cdecl>(*got);
@@ -129,7 +129,6 @@ int l_CallVoidEngineFunctionByFunctionMapName(lua_State *L) {
  * @return (In C) Num args for lua.
  */
 int l_GetEngineContext(lua_State *L) {
-
 	const char *MAJSTR = CurrentEngine->GetCurrentMajorVerString();
 
 	lua_pushstring(L, MAJSTR);
@@ -330,10 +329,6 @@ void LuaScriptManager::lua_on_player_update(s_unit_control_data * control, ushor
 		PrintLn("Player Action Control is null, no work to do");
 		return;
 	}
-
-	//Sanity-Check our ability to read a table
-	this->lua_run_sanityChecks();
-
 	static volatile bool DebugOnce = false;
 
 	if(!this->HandleFunctionNameEvent("PlayerUpdate")) {
@@ -477,7 +472,7 @@ void LuaScriptManager::InitializeLua(const char *filename) {
 	});
 
 	registerGlobalLuaFunction("AreWeInMainMenu", [](lua_State *L) {
-		lua_pushboolean(L, feature_management::engines::GlobalEngine::AreWeInMainMenu());
+		lua_pushboolean(L, feature_management::engines::RuntimeManager::AreWeInMainMenu());
 		return 1;
 	});
 
@@ -497,17 +492,17 @@ void LuaScriptManager::InitializeLua(const char *filename) {
 	Input::DInput::RegisterLuaFunctions(this);
 
 	registerGlobalLuaFunction("IsCustomEd", [](lua_State *L) {
-		lua_pushboolean(L, feature_management::engines::GlobalEngine::IsCustomEd());
+		lua_pushboolean(L, CurrentEngine->IsCustomEd());
 		return 1;
 	});
 
 	registerGlobalLuaFunction("IsSapien", [](lua_State *L) {
-		lua_pushboolean(L, feature_management::engines::GlobalEngine::IsSapien());
+		lua_pushboolean(L, CurrentEngine->IsSapien());
 		return 1;
 	});
 
 	registerGlobalLuaFunction("IsHek", [](lua_State *L) {
-		lua_pushboolean(L, feature_management::engines::GlobalEngine::IsHek());
+		lua_pushboolean(L, CurrentEngine->IsHek());
 		return 1;
 	});
 

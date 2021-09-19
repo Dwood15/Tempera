@@ -116,7 +116,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 		return;
 	}
 
-	static short maxObjects = CurrentEngine->GetMaxObjects();
+	static short maxObjects = CurrentRuntime->GetMaxObjects();
 
 	object_data   *obj          = NULL;
 	object_header *objh         = NULL;
@@ -133,13 +133,13 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 
 	for (unsigned short i = 0; i < maxObjects; i++) {
-		objh = CurrentEngine->GetObjectHeader(i);
-		obj  = CurrentEngine->GetGenericObject(i);
+		objh = CurrentRuntime->GetObjectHeader(i);
+		obj  = CurrentRuntime->GetGenericObject(i);
 		if (obj == NULL) {
 			continue;
 		}
 
-		screenpos = CurrentEngine->MyCamera->ScreenPos(obj->World);
+		screenpos = CurrentRuntime->MyCamera->ScreenPos(obj->World);
 
 		// Offscreen check
 		if (isOffScreen(screenpos)) {
@@ -161,7 +161,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 		D3DCOLOR color = tGreen;
 
-		ObjName = CurrentEngine->GetObjectName(i);
+		ObjName = CurrentRuntime->GetObjectName(i);
 
 
 		if (obj->IsPlayer()) {
@@ -169,17 +169,17 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 		}
 
-		if (CurrentEngine->ObjectControl->IsSelected(objh)) {
+		if (CurrentRuntime->ObjectControl->IsSelected(objh)) {
 			color = tOrange;
 
-		} else if (CurrentEngine->ObjectControl->IsNearest(objh)) {
+		} else if (CurrentRuntime->ObjectControl->IsNearest(objh)) {
 			color = tBlue;
 		}
 
 		cd3d.myDrawText(pDevice, cd3d.Font, true, (int) screenpos.x, (int) screenpos.y, 1000, 1000, color, tBlack, ObjName);
 	}
 
-	CurrentEngine->ObjectControl->SetNearest(temp_nearest);
+	CurrentRuntime->ObjectControl->SetNearest(temp_nearest);
 }
 
 long __stdcall hkEndScene(IDirect3DDevice9 *pDevice) {

@@ -127,11 +127,11 @@ function PlayerUpdate(player_control_state, player_index)
 		Dbg("First Player update, ever!")
 	end
 
-	Dbg("--- Player Control State values ---")
-	for k, v in pairs(player_control_state) do
-		Dbg(string.format("Key: [%s] Value: [%f]", k, v))
-	end
-	Dbg("---")
+	--Dbg("--- Player Control State values ---")
+	--for k, v in pairs(player_control_state) do
+	--	Dbg(string.format("Key: [%s] Value: [%f]", k, v))
+	--end
+	--Dbg("---")
 
 	local currentGamePad = 0
 	--TODO: Player to Controller mapping...
@@ -303,7 +303,7 @@ GetPlayerAddress
 
 --[[
 	IsCoreInitialized - Returns true if Core (the interface used to access gamestate) has been initialized.
-	- Check this function _before_ attempting to access the Core variable within CurrentEngine.
+	- Check this function _before_ attempting to access the Core variable within CurrentRuntime.
 
 	IsCustomEd - True if current context is CustomEdition
 	IsSapien - True if current context is Sapien.
