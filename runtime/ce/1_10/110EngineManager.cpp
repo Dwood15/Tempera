@@ -242,7 +242,9 @@ namespace feature_management::engines {
 
 		void override_main_get_window_count_calls() {
 			//These functions do not get called during a multiplayer game
-			constexpr uintptr_t override_function_call_list[] = {0x51EFA2, 0x51EE00, 0x51EB00, 0x49792B, 0x4975C4, 0x49757D};
+			constexpr uintptr_t override_function_call_list[] = {
+				0x51EFA2, 0x51EE00, 0x51EB00, 0x49792B, 0x4975C4, 0x49757D
+			};
 
 			for (auto current : override_function_call_list) {
 				//The first instruction of any asm call is E8. We didn't pre-add so we have to do it here.
@@ -251,42 +253,78 @@ namespace feature_management::engines {
 		}
 	};
 
+	namespace initializes {
+		namespace forNewMapInitializes {
+			void hudInitializeForNewMap() {
+				//			uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
+				//			uintptr_t weapon_hud_globals_sizeofs[]            = { 0x4AC848, 0x4AC850 + 0x4 };
+				//			uintptr_t hud_interface_related_globals_sizeofs[] = { 0x4AC87D, 0x4AC885 + 0x4 };
 
+				//calls::adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
+
+				PrintLn("\nPatching the hud messaging globals based on sizeofs");
+				//			adjustNPatch32(weapon_hud_globals_sizeofs, 0x7C);
+				//			adjustNPatch32(hud_interface_related_globals_sizeofs, 0x30);
+
+				//uintptr_t hud_messaging_state_size = 0x4AC936;
+				//calls::patchValue<uintptr_t>(hud_messaging_state_size, sizeof(s_hud_messaging_state) / 4);
+			}
+		}
+
+		//TODO: Ought to just... Override the initialize with our own.
+		//It would be less complicated and easier to read and understand, at least.
+		void hudInitializePatches() {
+			//hud_scripted globals (0x6B44A8) is the same size, so we don't worry about that one
+
+			//These hud Initialize patches all need corresponding
+			//Initialize for new map overrides as well.
+			uintptr_t hud_messaging_globals_sizeofs[] = {0x4AC7DD, 0x4AC7EA};
+			calls::adjustNPatch32(hud_messaging_globals_sizeofs, sizeof(s_hud_messaging_state));
+
+			constexpr uintptr_t weapHudInterfaceSzOfs[] = {0x4AC84A, 0x4AC854};
+
+			static_assert((uint) sizeof(s_hud_weapon_interface) < (uint) 0xFF,
+						  "Weapon Hud interface size is larger than a byte. We must rewrite our value patches");
+
+			for (auto elem: weapHudInterfaceSzOfs) {
+				calls::patchValue<byte>(elem, sizeof(s_hud_weapon_interface));
+			}
+
+			static_assert(sizeof(s_players_nav_point_state) < 0xFF,
+						  "Players nav point state larger than a byte");
+
+			constexpr uintptr_t navPointStateSzOfs[] = {0x4AC87F, 0x4AC889};
+
+			for (auto elem: navPointStateSzOfs) {
+				calls::patchValue<byte>(elem, sizeof(s_players_nav_point_state));
+			}
+		}
+
+		void interfaceInitializePatches() {
+			//These all need equivalent "for new map" fixes :grimacing:
+			hudInitializePatches();
+
+			constexpr uintptr_t size_of_fp_weapons = 0x1EA0 * MAX_PLAYER_COUNT_LOCAL;
+			uintptr_t fp_weap_initialize[] = {0x497122, 0x49712F};
+
+			PrintLn("\nAdjustNPatchin' the fp weapons");
+			calls::adjustNPatch32(fp_weap_initialize, size_of_fp_weapons);
+		}
+	};
 
 
 	static void ValuePatches() {
 		//uintptr_t player_spawn = 0x47A9E0; Valid, just not using it...
-		constexpr uintptr_t size_of_fp_weapons = 0x1EA0 * MAX_PLAYER_COUNT_LOCAL;
 
-		uintptr_t fp_weap_initialize[] = {0x497122, 0x49712F};
 
-		PrintLn("\nAdjustNPatchin' the fp weapons");
-		calls::adjustNPatch32(fp_weap_initialize, size_of_fp_weapons);
-
-		//uintptr_t hud_scripted_globals_sizeofs[]          = { 0x4AC7A7, 0x4AC7AF };
-		uintptr_t hud_messaging_globals_sizeofs[] = {0x4AC7DD, 0x4AC7EA};
-
-		static_assert(sizeof(s_hud_messaging_state)  ==  0x28 + (0x460 * MAX_PLAYER_COUNT_LOCAL), "STAT_ASSERT_fail: s hud msging state");
 		//memset , or rather, rep stosd assumes full integer (0x4) size in this case.
 		PrintLn("\nPatching the hud messaging state size");
 
-//		uintptr_t hud_messaging_state_size = 0x4AC936;
-//		calls::patchValue<uintptr_t>(hud_messaging_state_size, sizeof(s_hud_messaging_state) / 4);
-
-		//			Need to confirm these...
-		//			uintptr_t unit_hud_globals_sizeofs[]              = { 0x4AC813, 0x4AC81B + 0x4 };
-		//			uintptr_t weapon_hud_globals_sizeofs[]            = { 0x4AC848, 0x4AC850 + 0x4 };
-		//			uintptr_t hud_interface_related_globals_sizeofs[] = { 0x4AC87D, 0x4AC885 + 0x4 };
+		initializes::interfaceInitializePatches();
 
 
-		//calls::adjustNPatch32(unit_hud_globals_sizeofs, 0x5C);
-
-		//adjustNPatch32(hud_scripted_globals_sizeofs, 0x4);
 		//0x488 og size.
-		PrintLn("\nPatching the hud messaging globals based on sizeofs");
-		calls::adjustNPatch32(hud_messaging_globals_sizeofs, sizeof(::s_hud_messaging_state));
-		//			adjustNPatch32(weapon_hud_globals_sizeofs, 0x7C);
-		//			adjustNPatch32(hud_interface_related_globals_sizeofs, 0x30);
+
 		PrintLn("\nPatching the motion sensor sizeofs");
 		uintptr_t motion_sensor_sizeofs[] = {0x4AC8B3, 0x4AC8BC + 0x4};
 		calls::adjustNPatch32(motion_sensor_sizeofs, sizeof(s_motion_sensor));
