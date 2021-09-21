@@ -8,11 +8,11 @@ namespace Yelo::Memory {
 	static constexpr Yelo::datum_index::salt_t k_datum_index_salt_msb = 1U << (15);
 
 	struct s_data_array {
-		tag_string name;
-		short      max_datum;
-		short      datum_size;
-		bool       is_valid;
-		bool       identifier_zero_invalid;
+		tag_string name; //0x1F with Null Terminator, so 32 bytes
+		short      max_datum; //0x21
+		short      datum_size; //0x23
+		bool       is_valid;  //0x25
+		bool       identifier_zero_invalid; //0x26
 		unsigned short : 16;
 		tag         signature;
 		short       next_index;      // Next index to use when creating a new datum
@@ -36,7 +36,6 @@ namespace Yelo::Memory {
 		}
 
 		short NumberOfInvalidDatums() const {
-
 			auto  *datum_address = reinterpret_cast<const byte *>(base_address);
 			short invalid_count  = 0;
 

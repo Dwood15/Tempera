@@ -26,6 +26,8 @@ struct s_player_action;
 struct s_unit_control_data;
 constexpr const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
 
+extern feature_management::engines::IEngine* CurrentEngine;
+
 namespace feature_management::engines {
 	class RuntimeManager {
 	public:
@@ -59,9 +61,11 @@ namespace feature_management::engines {
 		Yelo::Scenario::s_scenario_globals * scenario_globals;
 		s_motion_sensor               *motion_sensor;
 		Yelo::GameState::s_game_time_globals	  *game_time_globals = nullptr;
-		uintptr                       game_state_globals_location_ptr;
+		uintptr						game_state_cpu_allocation_size;
+		uintptr						game_state_globals_ptr;
+		uintptr						game_state_globals_crc;
+
 		Camera::s_cinematic_globals_data *cinematic_globals;
-		uintptr                       game_state_globals_ptr;
 		void                          **crc_checksum_buffer;
 
 		////////////////////////////////////////
@@ -122,12 +126,6 @@ namespace feature_management::engines {
 		void ConsoleText(HaloColor fColor, const char *cFmt, ...);
 		void ToggleFlycam(char = -1);
 
-	private:
-		//Support Attempted
-		//::std::string GetCurrentFileName(char * args) {
-
-	public:
-
 		static inline char *LUA_FILENAME   = const_cast<char *>("tempera.init.lua");
 
 		[[nodiscard]] static LuaScriptManager * GetLuaState();
@@ -138,8 +136,43 @@ namespace feature_management::engines {
 
 		void WriteHooks();
 
+		//Basically all GameStateMallocs are the same
+		//But because C++ is stupid (when this is in CurrentEngine.cpp)
+		template<typename T>
+		void GameStateMalloc(void **targetGlobal) {
+			uint game_state_cpu_allocation_size = 0;
+			uint game_state_globals_ptr = 0;
+			uint game_state_globals_crc = 0;
+
+			if (CurrentEngine != nullptr) {
+				CurrentEngine->GetMallocAddresses(game_state_cpu_allocation_size, game_state_globals_ptr, game_state_globals_crc);
+			}
+
+			if (game_state_cpu_allocation_size == NULL) {
+				PrintLn("game_state_cpu_allocation_size is nullptr. prolly wanna fix that.");
+			}
+
+			auto oldSize = (* (uintptr)game_state_cpu_allocation_size);
+			PrintLn("Old Value: 0x%x", oldSize);
+
+			auto newLocation = oldSize + (uintptr_t)game_state_globals_ptr;
+			auto currentSizeof = sizeof(T);
+
+			(* (uintptr *)game_state_cpu_allocation_size) += currentSizeof;
+			(*targetGlobal) = (void*)newLocation;
+			//Call the game engine's malloc crc checksum buffer. Hoping for the best, lmao
+			static ::std::optional<uintptr_t> funcFound = getFunctionBegin("malloc_crc_checksum_buffer");
+			if ((uint)game_state_globals_crc != (uint)0x67dd94) {
+				PrintLn("Game State Globals CRC does not look like the expected address");
+			}
+
+			if (funcFound)
+				calls::DoCall<Convention::m_cdecl, void, int, int, uint>(*funcFound, (int)game_state_globals_crc, (int)&currentSizeof, (uint)0x4u);
+		}
+
 		template<typename T>
 		static void ClampIndex(T &idx);
+
 		static bool HasSupport();
 
 		auto ScenarioGlobals();
@@ -152,8 +185,6 @@ namespace feature_management::engines {
 		bool SupportsFeature(features feat);
 
 		bool SupportsFeature(uint feat);
-
-
 		static void InitializeLuaState();
 
 		static void LuaFirstRun();
@@ -186,7 +217,6 @@ namespace feature_management::engines {
 
 //Extern's like this are why C++ has a bad rep
 extern feature_management::engines::RuntimeManager* CurrentRuntime;
-extern feature_management::engines::IEngine* CurrentEngine;
 
 /**
  * Called variably based on fps

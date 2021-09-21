@@ -69,16 +69,36 @@ struct s_player_hud_messages {
 };
 STAT_ASSERT(s_player_hud_messages, 0x460);
 
-struct s_nav_point_state {
-	//TODO: Actually investigate this structure
-	byte unk1[0x30];
-};
-STAT_ASSERT(s_nav_point_state, 0x30)
+struct s_hud_nav_points
+{
+	struct s_nav_point
+	{
+		short navpoint_index;
+		struct {
+			// if the bitfield size was calculated in their code, and not by hand then it
+			// probably factored in k_number_of_waypoint_types's value (not value-1).
+			// Then there's +1 more bit for the sign
+			short type : 4;
 
-struct s_players_nav_point_state {
-	s_nav_point_state navPoints[MAX_PLAYER_COUNT_LOCAL];
-};
-STAT_ASSERT(s_players_nav_point_state, 0x30 * MAX_PLAYER_COUNT_LOCAL)
+			real vertical_offset;
+
+			union {
+				long cutscene_flag_index;
+				datum_index object_index;
+				short game_goal_index;
+			};
+		} waypoint;
+	};
+	STAT_ASSERT(s_nav_point, 0xC);
+
+	struct s_local_player
+	{
+		s_nav_point nav_points[4];
+	};
+
+	s_local_player local_players[MAX_PLAYER_COUNT_LOCAL];
+}; STAT_ASSERT(s_hud_nav_points, 0x30 * MAX_PLAYER_COUNT_LOCAL);
+
 
 struct s_hud_messaging_state {
 	s_player_hud_messages hmi[MAX_PLAYER_COUNT_LOCAL];

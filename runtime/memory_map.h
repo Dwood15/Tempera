@@ -50,9 +50,8 @@ struct LPCoreAddressList {
 	uint hud_scripted_globals;
 	uint hud_messaging_state;
 
-	uint game_state_location_as_int;
+	uint game_state_globals_crc;
 	uint game_state_cpu_allocation;
-	uint game_state_globals_location_ptr;
 	uint game_state_globals_ptr;
 	uint crc_checksum_buffer;
 

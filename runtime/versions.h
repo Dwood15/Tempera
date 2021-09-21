@@ -1,6 +1,9 @@
 #pragma once
 
 #include "memory_map.h"
+#include "../src/gamestate/camera.h"
+#include "../src/scenario/structures.h"
+#include "../src/scenario/scenario.h"
 #include <exception>
 /**
  * I'm going to go on a bit of a lecture here everyone who reads this code
@@ -154,10 +157,20 @@ namespace feature_management {
 			virtual minor GetMinorVersion() { return Minor; }
 
 		public:
+			virtual Yelo::Camera::s_cinematic_globals_data ** GetCinematicGlobals() { return nullptr; };
+			virtual Yelo::Scenario::s_scenario_globals ** GetScenarioGlobals() { return nullptr; };
+			virtual	Yelo::TagGroups::scenario ** GetGlobalScenario() { return nullptr; };
+			virtual Yelo::TagGroups::coll::collision_bsp ** GetGlobalBsp3d() { return nullptr; };
 
 			virtual LPCoreAddressList GetCoreAddressList() {
 				return LPCoreAddressList();
 			};
+
+			virtual void GetMallocAddresses(uint &cpu_alloc_size, uint &game_state_globals_ptr, uint &game_state_globals_crc) {
+				cpu_alloc_size = 0;
+				game_state_globals_ptr = 0;
+				game_state_globals_crc = 0;
+			}
 
 			virtual defined_functionrange* GetFunctionMap() {
 				return nullptr;

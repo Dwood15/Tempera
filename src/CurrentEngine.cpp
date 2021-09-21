@@ -206,7 +206,6 @@ namespace feature_management::engines {
 
 		main_globals_game_connection_type = reinterpret_cast<ushort *>(add_list.game_globals_conn_type);
 
-		game_state_globals_location_ptr = reinterpret_cast<uintptr>(add_list.game_state_globals_location_ptr);
 		at_main_menu = reinterpret_cast<bool *>(add_list.at_main_menu);
 
 		//Some attempts to initialize come out with 0x0 player control globals data.
@@ -224,7 +223,6 @@ namespace feature_management::engines {
 		CONSOLE_TEXT_HOOK_ADDRESS = add_list.CONSOLE_TEXT_HOOK_ADDRESS;
 
 		core_initialized = true;
-
 	}
 
 	bool RuntimeManager::SupportsFeature(features feat) {
@@ -574,10 +572,7 @@ namespace feature_management::engines {
 		static ::std::optional<uintptr_t> funcFound = FUNC_GET(game_tick);
 
 		if (funcFound) {
-			auto value = *funcFound;
-			auto tick = current_frame_tick;
-
-			calls::DoCall<Convention::m_cdecl, void, int>(value, tick);
+			calls::DoCall<Convention::m_cdecl, void, int>(*funcFound, current_frame_tick);
 		}
 
 		state->call_lua_event_by_type(LuaCallbackId::after_game_tick);

@@ -118,13 +118,6 @@ namespace feature_management::engines {
 		CurrentCore.hud_scripted_globals = 0x6B44A8;
 		CurrentCore.hud_messaging_state = 0x677624;
 
-		CurrentCore.game_state_globals_location_ptr = 0x67DD8C;
-		CurrentCore.game_state_globals_ptr = 0x67DD88;
-		CurrentCore.crc_checksum_buffer = 0x4D36D0;
-
-		CurrentCore.game_state_cpu_allocation = *(uint *) CurrentCore.game_state_globals_ptr;
-		CurrentCore.game_state_location_as_int = *(uint *) CurrentCore.game_state_globals_location_ptr;
-
 		CurrentCore.players_global_data = 0x815918;
 		CurrentCore.player_control_globals_data = 0x64C38C;
 
@@ -212,6 +205,7 @@ namespace feature_management::engines {
  * 0x51EFA3 - rasterizer_detail_objects_draw
  * - E8 D8 D5 FA FF
  */
+
 	namespace overrides {
 		int main_get_window_count_override() {
 			if (CurrentRuntime->AreWeInMainMenu()) {
@@ -271,7 +265,7 @@ namespace feature_management::engines {
 			}
 		}
 
-		//TODO: Ought to just... Override the initialize with our own.
+		//TODO: Override the initialize function with our own.
 		//It would be less complicated and easier to read and understand, at least.
 		void hudInitializePatches() {
 			//hud_scripted globals (0x6B44A8) is the same size, so we don't worry about that one
@@ -290,20 +284,93 @@ namespace feature_management::engines {
 				calls::patchValue<byte>(elem, sizeof(s_hud_weapon_interface));
 			}
 
-			static_assert(sizeof(s_players_nav_point_state) < 0xFF,
-						  "Players nav point state larger than a byte");
+			//These navPoint SizeOf changes cause the game to crash
+//			static_assert(sizeof(s_hud_nav_points) < 0xFF,
+//						  "Players nav point state larger than a byte");
+//
+//			constexpr uintptr_t navPointStateSzOfs[] = {0x4AC87F, 0x4AC889};
+//
+//			for (auto elem: navPointStateSzOfs) {
+//				calls::patchValue<byte>(elem, sizeof(s_hud_nav_points));
+//			}
+		}
 
-			constexpr uintptr_t navPointStateSzOfs[] = {0x4AC87F, 0x4AC889};
+		int *game_state_data_new(short object_size, const char * name, int allocated_mem) {
+			__int16 num_items; // bp
+			int new_cpu_allocation_size; // ecx
 
-			for (auto elem: navPointStateSzOfs) {
-				calls::patchValue<byte>(elem, sizeof(s_players_nav_point_state));
+			uint gsgPtr = 0;
+			uint gsgcpuAllocSz = 0;
+			uint gsgCRC = 0;
+
+			CurrentEngine->GetMallocAddresses(gsgPtr, gsgcpuAllocSz, gsgCRC);
+
+			num_items = allocated_mem;
+			uint location_allocate_to = *(uintptr) gsgPtr + *(uintptr) gsgcpuAllocSz;
+			new_cpu_allocation_size = object_size * allocated_mem + 0x38 + gsgcpuAllocSz;
+			allocated_mem = object_size * allocated_mem + 0x38;
+			*(uintptr) gsgcpuAllocSz = new_cpu_allocation_size;
+
+			static ::std::optional<uintptr_t> funcFound = CurrentRuntime->getFunctionBegin("malloc_crc_checksum_buffer");
+			if ((uint) gsgCRC != (uint) 0x67dd94) {
+				PrintLn("Game State Globals CRC does not look like the expected address");
 			}
+
+			if (funcFound)
+				calls::DoCall<Convention::m_cdecl, void, int, int, uint>(*funcFound, (int) gsgCRC, (int) &allocated_mem,
+																		 (uint) 0x4u);
+
+			//Could probably replace this with an actual function call.
+			Memory::s_data_array *newItem = (Memory::s_data_array *)location_allocate_to;
+			std::memset(newItem, 0, sizeof(Memory::s_data_array));
+			std::strncpy(newItem->name, name, 0x1Fu);
+			newItem->max_datum = num_items;
+			newItem->datum_size = object_size;
+			newItem->signature = 'd@t@';
+			newItem->base_address = (void*)(&newItem[1]);
+			newItem->is_valid = 0;
+
+			return (int *)location_allocate_to;
+		}
+
+		//These multi-layers of indirection are obnoxious lmao
+		void scenarioInitializeWrapper() {
+			auto addr = CurrentEngine->GetScenarioGlobals();
+			CurrentRuntime->GameStateMalloc<Scenario::s_scenario_globals>((void **)addr);
+
+			auto director_camera_scripted = (void**)0x81713C;
+			CurrentRuntime->GameStateMalloc<int>(director_camera_scripted);
+			(**(int **)director_camera_scripted) = 0;
+
+			int ** cached_object_render_states = (int **)0x75E44C;
+			*(cached_object_render_states) = game_state_data_new(0x100, "cached object render states", 0x100);
+		}
+
+		void naked nakedScenarioInitializeWrapper() {
+			__asm {
+				push ebx
+				push edx
+				push ebp
+				mov ebp, esp
+				call scenarioInitializeWrapper
+				pop ebp
+				pop edx
+				pop ebx
+				retn
+			}
+		}
+
+		void gameInitializePatches() {
+			//Write the hook
+			calls::patchValue<byte>(0x45B3A8, 0xE8);
+			calls::WriteSimpleHook(0x45B3A9, nakedScenarioInitializeWrapper);
+			calls::nopBytes(0x45B3AD, 0x45B42E-0x45B3AD);
 		}
 
 		void interfaceInitializePatches() {
 			//These all need equivalent "for new map" fixes :grimacing:
 			hudInitializePatches();
-
+			gameInitializePatches();
 			constexpr uintptr_t size_of_fp_weapons = 0x1EA0 * MAX_PLAYER_COUNT_LOCAL;
 			uintptr_t fp_weap_initialize[] = {0x497122, 0x49712F};
 

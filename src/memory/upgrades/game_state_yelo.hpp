@@ -58,15 +58,5 @@ namespace Yelo
 		// Are OS-modified game states in effect?
 		// If so, these will render game saves incompatible with stock games
 		bool YeloGameStateEnabled();
-
-		// Allocate an object of type [T] [count] times inside the game state memory and return its address.
-		// Note: Also updates the game state's cpu allocation size by adding 'sizeof([T]) * count'
-		template<typename T> inline
-		T* GameStateMalloc(const bool k_update_allocation_crc = true, const size_t count = 1)
-		{
-			extern void* GameStateMalloc(const bool k_update_allocation_crc, const size_t size_of);
-
-			return reinterpret_cast<T *>(GameStateMalloc(k_update_allocation_crc, sizeof(T) * count));
-		}
 	};
 };
