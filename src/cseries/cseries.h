@@ -4,8 +4,6 @@ namespace Yelo {
 	// The epsilon value I've seen Halo1 use
 	// TODO: See if we need to throw this into the base module
 	const real K_REAL_EPSILON = 0.000099999997f; // 0x38D1B717
-
-
 };
 
 namespace Yelo::blam {

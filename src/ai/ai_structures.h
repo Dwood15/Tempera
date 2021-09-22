@@ -10,7 +10,7 @@ namespace Yelo {
 	namespace AI {
 		struct s_ai_spatial_effect {
 			short type;
-			unsigned short : 16; // unknown field
+			unsigned short unkPadA; // unknown field
 			real_vector3d location;
 			uint        tick;
 		}; static_assert(sizeof(s_ai_spatial_effect) == 0x14);
@@ -21,7 +21,7 @@ namespace Yelo {
 			short       teams_bitvector;
 			short       actor_types_bitvector;
 			short       actors_count;
-			unsigned short : 16;
+			unsigned short unkPad1;
 			datum_index actor_indices[6];
 		}; static_assert(sizeof(s_ai_vehicle_enterable_datum) == 0x28);
 

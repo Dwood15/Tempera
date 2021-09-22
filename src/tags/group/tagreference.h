@@ -44,19 +44,27 @@ namespace Yelo {
 
 	typedef char *tag_reference_name_reference;
 
-	struct tag_reference {
+	struct s_tag_ref {
+		tag group_tag;
+		char * name;
+		long name_length;
+		datum_index tag_index;
+	}; 	STAT_ASSERT(s_tag_ref, 0x10);
+
+
+	struct tag_reference : s_tag_ref {
 		enum {
 			k_debug_data_size = sizeof(tag_reference_name_reference) + sizeof(long),
 		};
 
-		// group tag identifier for this reference
-		tag                          group_tag;
-		// path, without tag group extension, to the tag reference
-		tag_reference_name_reference name;
-		// length of the reference name
-		long                         name_length;
-		// datum index of this reference in the tag index
-		datum_index                  tag_index;
+//		// group tag identifier for this reference
+//		tag                          group_tag;
+//		// path, without tag group extension, to the tag reference
+//		tag_reference_name_reference name;
+//		// length of the reference name
+//		long                         name_length;
+//		// datum index of this reference in the tag index
+//		datum_index                  tag_index;
 
 		operator datum_index() const { return tag_index; }
 
@@ -78,8 +86,6 @@ namespace Yelo {
 			this->set(T::k_group_tag, name);
 		}
 	};
-
-	STAT_ASSERT(tag_reference, 0x10);
 
 	namespace blam {
 		extern void tag_reference_clear(tag_reference &reference);

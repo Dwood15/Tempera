@@ -295,7 +295,7 @@ namespace feature_management::engines {
 //			}
 		}
 
-		int *game_state_data_new(short object_size, const char * name, int allocated_mem) {
+		Memory::s_data_array *game_state_data_new(short object_size, const char * name, int allocated_mem) {
 			__int16 num_items; // bp
 			int new_cpu_allocation_size; // ecx
 
@@ -307,8 +307,11 @@ namespace feature_management::engines {
 
 			num_items = allocated_mem;
 			uint location_allocate_to = *(uintptr) gsgPtr + *(uintptr) gsgcpuAllocSz;
-			new_cpu_allocation_size = object_size * allocated_mem + 0x38 + gsgcpuAllocSz;
-			allocated_mem = object_size * allocated_mem + 0x38;
+
+			constexpr auto sDataArray = sizeof(Memory::s_data_array);
+
+			new_cpu_allocation_size = object_size * allocated_mem + sDataArray + gsgcpuAllocSz;
+			allocated_mem = object_size * allocated_mem + sDataArray;
 			*(uintptr) gsgcpuAllocSz = new_cpu_allocation_size;
 
 			static ::std::optional<uintptr_t> funcFound = CurrentRuntime->getFunctionBegin("malloc_crc_checksum_buffer");
@@ -330,7 +333,7 @@ namespace feature_management::engines {
 			newItem->base_address = (void*)(&newItem[1]);
 			newItem->is_valid = 0;
 
-			return (int *)location_allocate_to;
+			return newItem;
 		}
 
 		//These multi-layers of indirection are obnoxious lmao
@@ -342,7 +345,7 @@ namespace feature_management::engines {
 			CurrentRuntime->GameStateMalloc<int>(director_camera_scripted);
 			(**(int **)director_camera_scripted) = 0;
 
-			int ** cached_object_render_states = (int **)0x75E44C;
+			Memory::s_data_array ** cached_object_render_states = (Memory::s_data_array **)0x75E44C;
 			*(cached_object_render_states) = game_state_data_new(0x100, "cached object render states", 0x100);
 		}
 
