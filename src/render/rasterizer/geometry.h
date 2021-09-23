@@ -21,7 +21,7 @@ namespace Yelo::Rasterizer {
 
 	struct rasterizer_vertex_buffer {
 		Enums::rasterizer_vertex_type type;
-		unsigned short : 16;
+		unsigned short pad0;
 		long vertex_start_index;
 		long vertex_count;
 		void *data;

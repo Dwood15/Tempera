@@ -19,6 +19,7 @@ namespace feature_management::engines {
 //
 //	}
 //}
+	bool  *RuntimeManager::at_main_menu = nullptr;
 
 	constexpr bool RuntimeManager::equal(const char *lhs, const char *rhs) {
 		while (*lhs || *rhs) {

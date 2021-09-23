@@ -84,7 +84,7 @@ namespace Yelo {
 		const struct tag_data_definition *definition;
 
 		// Returns a [T] pointer that is the same as [address].
-		// Just makes coding a little more cleaner
+		// Just makes coding a little cleaner
 		template<typename T>
 		T *Elements() { return reinterpret_cast<T *>(address); }
 
@@ -104,7 +104,6 @@ namespace Yelo {
 		void *__cdecl tag_data_get_pointer(T &data, long offset, long size) {
 			//YELO_ASSERT(size >= 0);
 			//YELO_ASSERT(offset >= 0 && offset + size <= data.size);
-
 			return data.Bytes() + offset;
 		}
 

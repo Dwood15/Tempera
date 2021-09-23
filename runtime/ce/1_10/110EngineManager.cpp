@@ -460,10 +460,12 @@ namespace feature_management::engines {
 							   spcore::initializations::players_initialize_for_new_map);
 	}
 
-	inline void countPlayersBeforeGameUpdateHook() {
-		constexpr uintptr_t theHook = 0x477107;
+	inline void countPlayersBeforeGameServerUpdatePatch() {
+		calls::patchValue<byte>(0x477106, 0xE8);
 
+		constexpr uintptr_t theHook = 0x477107;
 		calls::WriteSimpleHook(theHook, spcore::player_updates::compute_combined_pvs_local);
+		calls::nopBytes(0x47710C, 0x477119 - 0x47710C);
 	}
 
 	inline void playerControlInitForNewMapHook() {

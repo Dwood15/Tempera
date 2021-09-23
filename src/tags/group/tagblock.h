@@ -1,12 +1,13 @@
 #pragma once
 
 #include <macros_generic.h>
+#include "groups_structures.h"
 
 namespace Yelo {
 	struct tag_block {
 		long count;
 		void *Address;
-		Yelo::tag_block_definition *tagBlockDefinition;
+		s_tag_block_definition *tagBlockDefinition;
 	}; STAT_ASSERT(tag_block, 0xC);
 
 	// Halo1's editor allocates 256 characters for all tag_reference names, even if they're empty
@@ -47,7 +48,7 @@ namespace Yelo {
 
 		// definition pointer for this block instance
 		union {
-			const class tag_block_definition *BlockDefinition;
+			const struct tag_block_definition *BlockDefinition;
 			Yelo::tag_block_definition       *definition;
 		};
 
@@ -112,10 +113,5 @@ namespace Yelo {
 
 	STAT_ASSERT(TagBlock<char>, 0xC);
 };
-
-typedef Yelo::TagBlock<uint> tag_block;
-
-STAT_ASSERT(tag_block, 0xC);
-STAT_ASSERT(tag_block, 12);
 
 #define pad_tag_block PAD32 PAD32 PAD32

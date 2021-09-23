@@ -97,38 +97,44 @@ static void *init(HMODULE *reason) {
 	//We need to protect memory, I suppose.
 	// VirtualProtect((void *) 0x400000, 0x215000, PAGE_EXECUTE_READ, &old);
 
-	PrintLn("\nreturning the original dinput8 create now");
+	PrintLn("Returning the original dinput8 create now");
 
 	return orig_DirectInput8Create;
 }
 
+void loadProxy(HINSTANCE hinstDLL) {
+	DisableThreadLibraryCalls(hinstDLL);
+	if (!init(&hinstDLL)) {
+		PrintLn("Failed to Initialize properly. Exiting");
+		loaded = false;
+	}
+
+	//Don't setup and run a forge thread for an unsupported runtime target.
+	if (SUPPORTSFEATS(DX_PROXY, FORGE_MODE)) {
+		//Shouldn't need to use the windows API stuff for creating and running the forge thread any more
+		//std::thread loopThread(forge::MainLoop);
+		//CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forge::MainLoop, 0, 0, 0);
+		//PrintLn("Created Forge Thread!");
+	}
+
+	loaded = true;
+	PrintLn("DllMain loaded!");
+}
+
+void cleanUp(HINSTANCE mod) {
+	PrintLn("Dll process detach detected");
+	ExitAddLog();
+	RemoveVectoredExceptionHandler(ExceptionHandlerHandle);
+	FreeLibrary(mod);
+	loaded = false;
+}
+
 extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
 	if (fdwReason == DLL_PROCESS_ATTACH && !loaded) {
-		DisableThreadLibraryCalls(hinstDLL);
-		if (!init(&hinstDLL)) {
-			PrintLn("Failed to Initialize properly. Exiting");
-			return false;
-		}
-
-		//Don't setup and run a forge thread for an unsupported runtime target.
-		if (SUPPORTSFEATS(DX_PROXY, FORGE_MODE)) {
-			//Shouldn't need to use the windows API stuff for creating and running the forge thread any more
-			//std::thread loopThread(forge::MainLoop);
-			//CreateThread(0, 0, (LPTHREAD_START_ROUTINE) forge::MainLoop, 0, 0, 0);
-			//PrintLn("Created Forge Thread!");
-		}
-
-		PrintLn("\nDllMain loaded = true");
-
-		loaded = true;
-
+		loadProxy(hinstDLL);
+		return loaded;
 	} else if (fdwReason == DLL_PROCESS_DETACH && loaded) {
-		PrintLn("\nDll process detach detected");
-
-		ExitAddLog();
-		RemoveVectoredExceptionHandler(ExceptionHandlerHandle);
-		FreeLibrary(hinstDLL);
-		loaded = false;
+		cleanUp(hinstDLL);
 	}
 	return true;
 }

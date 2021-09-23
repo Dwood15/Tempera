@@ -51,7 +51,7 @@ namespace feature_management::engines {
 		short *to_respawn_count;
 		short *spawn_count;
 		short *render_window_count;
-		static inline bool  *at_main_menu = nullptr;
+		static bool  *at_main_menu;
 
 		void **hud_scripted_globals;
 		void **hud_messaging_state;

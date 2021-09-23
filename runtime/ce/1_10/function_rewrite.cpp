@@ -91,6 +91,8 @@ namespace spcore {
 
 		void naked compute_combined_pvs_local() {
 			__asm call calculatePlayerCount
+			//Oh god oh fuck this is so fucked and probably won't work
+			__asm mov     [esi+0Ch], ax
 			__asm retn
 		}
 	}

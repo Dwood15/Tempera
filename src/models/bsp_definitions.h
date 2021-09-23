@@ -9,13 +9,19 @@ namespace Yelo::TagGroups {
 	struct tag_block_int {
 		long count;
 		int *Address;
-		Yelo::tag_block_definition *tagBlockDefinition;
+		Yelo::s_tag_block_definition *tagBlockDefinition;
 	}; STAT_ASSERT(tag_block_int, 0xC);	
-	
+
+	struct tag_block_byte {
+		long count;
+		int *Address;
+		Yelo::s_tag_block_definition *tagBlockDefinition;
+	}; STAT_ASSERT(tag_block_byte, 0xC);
+
 	struct tag_block_unk {
 		long count;
 		void *Address;
-		Yelo::tag_block_definition *tagBlockDefinition;
+		Yelo::s_tag_block_definition *tagBlockDefinition;
 	}; STAT_ASSERT(tag_block_unk, 0xC);
 
 	struct structure_surface {
@@ -38,13 +44,22 @@ namespace Yelo::TagGroups {
 		Rasterizer::rasterizer_vertex_buffer lightmap_vertices;
 		tag_data uncompressed_vertices;
 		tag_data compressed_vertices;
-	}; static_assert(sizeof(structure_bsp_material) == 0x100);
+	};
+	STAT_ASSERT(structure_bsp_material, 0x100);
+
+	struct tag_block_sbspmat {
+		long count;
+		structure_bsp_material *Address;
+		Yelo::s_tag_block_definition *tagBlockDefinition;
+	};
+
+	STAT_ASSERT(tag_block_sbspmat, 0xC);
 
 	struct structure_bsp_lightmap {
-		short                                  bitmap;
-		short                                  padA;
-		long                                   padB[4];
-		Yelo::TagBlock<structure_bsp_material> materials;
+		short bitmap;
+		short padA;
+		long padB[4];
+		tag_block_sbspmat materials;
 	};
 
 	STAT_ASSERT(structure_bsp_lightmap, 0x14 + sizeof(Yelo::TagBlock<structure_bsp_material>));
@@ -55,14 +70,20 @@ namespace Yelo::TagGroups {
 
 	struct structure_subcluster {
 		s_world_bounds       world_bounds;
-		Yelo::TagBlock<long> surface_indices;
+		tag_block_int surface_indices;
+	};
+
+	struct tag_block_realPoint3D {
+		long count;
+		real_point3d *Address;
+		Yelo::s_tag_block_definition *tagBlockDefinition;
 	};
 
 	struct structure_mirror {
 		real_plane3d                       plane;
 		long                               padA[5];
 		s_tag_ref                      shader;
-		Yelo::TagBlock<const real_point3d> vertices;
+		tag_block_realPoint3D vertices;
 	};
 
 	struct predicted_resource {
@@ -73,6 +94,18 @@ namespace Yelo::TagGroups {
 
 	STAT_ASSERT(predicted_resource, 0x8);
 
+	struct tag_block_predictedResource {
+		long count;
+		predicted_resource *Address;
+		Yelo::s_tag_block_definition *tagBlockDefinition;
+	};
+
+	struct tag_block_structureSubcluster {
+		long count;
+		structure_subcluster *Address;
+		Yelo::s_tag_block_definition *tagBlockDefinition;
+	};
+
 	struct structure_cluster {
 		short                                sky;
 		short                                fog;
@@ -80,10 +113,10 @@ namespace Yelo::TagGroups {
 		short                                sound_environment; // block index
 		short                                weather; // block index
 		short                                transition_structure_bsp;
-		long                                 padA[7];
+		long                                 unkPad0[7];
 		// Yelo::TagBlock<predicted_resource>   predicted_resources;
-		Yelo::TagBlock<predicted_resource>   predicted_resources;
-		Yelo::TagBlock<structure_subcluster> subclusters;
+		tag_block_predictedResource   predicted_resources;
+		tag_block_structureSubcluster subclusters;
 		short                                first_lens_flare_marker_index;
 		short                                lens_flare_marker_count;
 		tag_block_int                 surface_indices;
@@ -93,15 +126,21 @@ namespace Yelo::TagGroups {
 
 	STAT_ASSERT(structure_cluster, 0x68);
 
+	struct tag_block_vector3DVertices {
+		long count;
+		real_vector3d *Address;
+		Yelo::s_tag_block_definition *tagBlockDefinition;
+	};
+
 	struct s_structure_fog_plane {
-		short                               front_region;
-		short                               runtime_material_type; // NONE or _material_type_water
-		real_plane3d                        plane;
-		Yelo::TagBlock<const real_vector3d> vertices;
+		short front_region;
+		short runtime_material_type; // NONE or _material_type_water
+		real_plane3d plane;
+		tag_block_vector3DVertices vertices;
 	};
 
 	struct s_structure_fog_region {
-		long  padA[9];
+		long  pad0[9];
 		short fog_palette; // block index
 		short weather_palette; // block index
 	};
@@ -111,7 +150,7 @@ namespace Yelo::TagGroups {
 		s_tag_ref fog;
 		long          padA;
 		tag_string    fog_scale_function;
-		long          padB[13];
+		long          pad0[13];
 	};
 	struct structure_weather_palette_entry {
 		tag_string    name;
@@ -145,7 +184,9 @@ namespace Yelo::TagGroups {
 
 	// TODO: move to structures\leaf_map.hpp
 	struct s_leaf_map {
-		Yelo::TagGroups::coll::collision_bsp *collision; // initialized by postprocess proc, only valid in tags builds
+		//char collision_bsp_pad[0x60];
+		void * collision_bsp;
+		//Yelo::TagGroups::coll::collision_bsp *collision; // initialized by postprocess proc, only valid in tags builds
 		tag_block_unk                    leaves;
 		tag_block_unk                    portals;
 	};
@@ -166,46 +207,104 @@ namespace Yelo::TagGroups {
 		Objects::s_object_lighting default_lighting; // doesn't expose distant_light_count
 		unsigned long              pad00; // Useless? Wasn't removed in H2, but can't find any code references in H1
 
-		Yelo::TagBlock<structure_collision_material>         collision_materials;
-		Yelo::TagBlock<Yelo::TagGroups::coll::collision_bsp> collision_bsp;
-		Yelo::TagBlock<structure_node>                       nodes;
+		struct {
+			long count;
+			structure_collision_material *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		}  collision_materials;
+
+		struct {
+			long count;
+			Yelo::TagGroups::coll::collision_bsp *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		} collision_bsp;
+
+		struct {
+			long count;
+			structure_node *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		} nodes;
 
 		struct {
 			real_bounds x, y, z;
 		}                                                    world_bounds;
 
-		Yelo::TagBlock<structure_leaf>              leafs;
-		Yelo::TagBlock<structure_surface_reference> leaf_surfaces;
-		Yelo::TagBlock<structure_surface>           surfaces;
+		struct {
+			long count;
+			structure_leaf *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		} leafs;
 
-		Yelo::TagBlock<structure_bsp_lightmap> lightmaps;
+		struct {
+			long count;
+			structure_surface_reference *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		} leaf_surfaces;
+		struct {
+			long count;
+			structure_surface *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		}            surfaces;
+
+		struct {
+			long count;
+			structure_bsp_lightmap *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		} lightmaps;
 		tag_block_unk                      bsp_padA; // Useless? Removed in H2
 
 		tag_block_unk lens_flares;
 		tag_block_unk lens_flare_markers;
 
-		Yelo::TagBlock<structure_cluster> clusters;
+		struct {
+			long count;
+			structure_cluster *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		}  clusters;
 		tag_data                          cluster_data;
 		tag_block_unk                 cluster_portals;
 		tag_block_unk                 bsp_padB; // Useless? Removed in H2
 
 		tag_block_unk                       breakable_surfaces;
 		tag_block_unk                       fog_planes;
-		Yelo::TagBlock<s_structure_fog_region>  fog_regions;
-		Yelo::TagBlock<s_structure_fog_palette> fog_palette;
+		struct {
+			long count;
+			s_structure_fog_region *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		}  fog_regions;
+		struct {
+			long count;
+			s_structure_fog_palette *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		} fog_palette;
+
 		tag_block_unk                       bsp_padC; // Useless? Removed in H2
 		tag_block_unk                       bsp_padD; // Useless? Removed in H2
 
-		Yelo::TagBlock<structure_weather_palette_entry> weather_palette;
+		struct {
+			long count;
+			structure_weather_palette_entry *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		} weather_palette;
+
 		tag_block_unk weather_polyhedra;
 		tag_block_unk bsp_padE; // Useless? Removed in H2 (new block was added)
 		tag_block_unk bsp_padF; // Useless? Removed in H2 (new block was added)
 
-		Yelo::TagBlock<byte> pathfinding_surfaces;
-		Yelo::TagBlock<byte> pathfinding_edges;
+		tag_block_byte pathfinding_surfaces;
+		tag_block_byte pathfinding_edges;
 
-		Yelo::TagBlock<structure_background_sound_palette_entry>  background_sound_palette;
-		Yelo::TagBlock<structure_sound_environment_palette_entry> sound_environment_palette;
+		struct {
+			long count;
+			structure_background_sound_palette_entry *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		} background_sound_palette;
+
+		struct {
+			long count;
+			structure_sound_environment_palette_entry *Address;
+			Yelo::s_tag_block_definition *tagBlockDefinition;
+		} sound_environment_palette;
 
 		tag_data sound_pas_data;
 
@@ -218,7 +317,6 @@ namespace Yelo::TagGroups {
 
 		unsigned long long  PadLast; // Useless? Removed in H2
 		s_leaf_map        leaf_map;
-
 	};
 #pragma pack(pop)
 	STAT_ASSERT(structure_bsp, 0x288);
