@@ -35,9 +35,7 @@ set(TARGET_GAME_VER "HALO_CE_1_10")
 
 add_subdirectory(runtime)
 
-set(COMMON ${CMAKE_CURRENT_SOURCE_DIR}/common/)
-
-include_directories(AFTER ${GAME_LIB_DIRS} ${COMMON})
+include_directories(AFTER ${GAME_LIB_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/common/)
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 
@@ -54,7 +52,6 @@ find_package(Lua REQUIRED)
 message(STATUS "Post-Find LUA debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
 
 find_package(DirectX REQUIRED)
-#find_package(TinyDNN)
 
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
@@ -89,8 +86,6 @@ if (MSVC)
 
     #CLANGD HELPER
     set(CMAKE_CXX_COMPILER_TARGET i686-pc-win32-msvc)
-    set(COMPILER_REL_FLDR msvc)
-    #	set(CMAKE_C_FLAGS '')
 
     set(COMPILER_MACROS "/D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /DDIRECTINPUT_VERSION=0x800\ /D_CRT_SECURE_NO_WARNINGS")
 
@@ -102,14 +97,6 @@ if (MSVC)
 	#Apparently MTd is going out of fashion?
     set(CMAKE_CXX_FLAGS_DEBUG "/TP\ /MP\ /MTd\ /Gy- /W3\ /Od\ /Zi\ /MP\ /EHsc\ ${NEW_FEATURES}\ /fp:fast\ /arch:SSE2\ ${COMPILER_MACROS}")
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
-
-
-#	CMAKE_CXX_FLAGS
-#	CMAKE_CXX_FLAGS_DEBUG
-#	CMAKE_CXX_FLAGS_RELEASE
-#
-#	CMAKE_C_FLAGS_DEBUG
-#	CMAKE_C_FLAGS_RELEASE
 
 
     # 4070 : Silences `OUT directive differs from filename ignoring directive` (warning)
@@ -135,54 +122,9 @@ file(GLOB LUA_GLOB libs/lua53.lib)
 
 add_subdirectory(src)
 
-set(COMMON_H
-	${CMAKE_CURRENT_SOURCE_DIR}/common/addlog.h
-	${CMAKE_CURRENT_SOURCE_DIR}/common/engine_interface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/macros_generic.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/struct_helper.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/control_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/damage.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/effects_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/generic_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/hs_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/objects_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/ai_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/scenario_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/geometry_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/yelo_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/memory_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/unit_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/model_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/player_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/weapon_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/network_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/postprocessing.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/bitmaps.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/shaders.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/materials.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/animations.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/damage.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/math.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/vehicle.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/render.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/engine.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/game_variants.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/render/rasterizer/dx9/dx9_render_targets.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/game/game_engine.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/game/networking/client_manager_structures.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/game/networking/game_globals.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/game_engine.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/game_engine.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/game_types.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects/vehicle_remapper.h
-	${CMAKE_CURRENT_SOURCE_DIR}/common/engine_interface.cpp)
-
-add_custom_target(HeadersTarget SOURCES ${SRC_H})
-
 add_library(dinput8 SHARED
-        ${COMMON_H}
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/engine_interface.cpp
         ${LUA_INCLUDE_DIR}
-        ${SRC_H}
         ${RUNTIME_H}
         ${RUNTIME_CXX}
         ${SRC_CXX}

@@ -1,14 +1,5 @@
-set(D3D
-	${CMAKE_CURRENT_SOURCE_DIR}/Direct3D/d3d9hook.h
-	${CMAKE_CURRENT_SOURCE_DIR}/Direct3D/textures.h
-	)
-
-set(DINPUT_H
-	${CMAKE_CURRENT_SOURCE_DIR}/Dinput/dinput.h
-	)
-
 set(DINPUT_CXX
-	${CMAKE_CURRENT_SOURCE_DIR}/Dinput/dinput.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Dinput/dinput.cpp
 	)
 
 add_subdirectory(ai)
@@ -45,27 +36,4 @@ set(SRC_CXX
 	${GAME_SRC}
 	${RENDER_CXX}
 	${TAGS_CXX}
-	PARENT_SCOPE)
-
-set(SRC_H
-	${GAME_H}
-	${SCRIPTING_H}
-	${SCENARIO_H}
-	${CACHE_H}
-	${CSERIES_H}
-	${EFFECTS_H}
-	${MATH_H}
-	${MEMORY_H}
-	${ENGINE_H}
-	${MODELS_H}
-	${RENDER_H}
-	${D3D}
-	${DINPUT_H}
-	${LUA_H}
-	${CMAKE_CURRENT_SOURCE_DIR}/core_types.h
-	${CMAKE_CURRENT_SOURCE_DIR}/CurrentEngine.h
-	${CMAKE_CURRENT_SOURCE_DIR}/forge.h
-	${TAGS_H}
-	${GAMESTATE_H}
-	${EXCEPTIONS_H}
 	PARENT_SCOPE)
