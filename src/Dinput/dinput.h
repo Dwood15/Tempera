@@ -1,29 +1,19 @@
 #pragma once
 #include <dinput.h>
-#include "../CurrentEngine.h"
+#include "../RuntimeManager.h"
 
 namespace Input::DInput {
 		static IDirectInput8 * GetDInput() {
-			return CurrentEngine->GetDInput8Device();
+			return CurrentRuntime->GetDInput8Device();
 		}
 
-		static IDirectInputDevice8A *GetJoystick(unsigned int idx = 0) {
-			if (idx > 7) {
-				return nullptr;
-			}
-
-			return (CurrentEngine->GetJoystickInputs())[idx];
-		}
-
-		//because static doesn't work with the current compilation order I guess.
-		extern void RegisterLuaFunctions(::LuaScriptManager * mgr);
+		static IDirectInputDevice8A *GetJoystick(unsigned int idx = 0);
 	}
 
 namespace gamepads {
 	// constexpr __int16 *og_player_to_controller_array =  static_cast<__int16 *>(0x6AFE26);
 
 	constexpr unsigned int og_player_to_controller_array =  0x6AFE26;
-	static __int16 player_to_controller_arr[MAX_PLAYER_COUNT_LOCAL];
 
 	struct player_ui_globals {
 		int player_ui_globals_im_dumb[0x60E4];

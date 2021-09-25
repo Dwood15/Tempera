@@ -69,11 +69,69 @@ struct s_player_hud_messages {
 };
 STAT_ASSERT(s_player_hud_messages, 0x460);
 
+struct s_hud_nav_points
+{
+	struct s_nav_point
+	{
+		short navpoint_index;
+		struct {
+			// if the bitfield size was calculated in their code, and not by hand then it
+			// probably factored in k_number_of_waypoint_types's value (not value-1).
+			// Then there's +1 more bit for the sign
+			short type : 4;
+
+			real vertical_offset;
+
+			union {
+				long cutscene_flag_index;
+				datum_index object_index;
+				short game_goal_index;
+			};
+		} waypoint;
+	};
+	STAT_ASSERT(s_nav_point, 0xC);
+
+	struct s_local_player
+	{
+		s_nav_point nav_points[4];
+	};
+
+	s_local_player local_players[MAX_PLAYER_COUNT_LOCAL];
+}; STAT_ASSERT(s_hud_nav_points, 0x30 * MAX_PLAYER_COUNT_LOCAL);
+
+
 struct s_hud_messaging_state {
 	s_player_hud_messages hmi[MAX_PLAYER_COUNT_LOCAL];
 	byte                  unknown[0x28];
 };
 STAT_ASSERT(s_hud_messaging_state, 0x28 + (0x460 * MAX_PLAYER_COUNT_LOCAL));
+
+struct s_hud_weapon_interface_crosshairs_state
+{
+	int first_render_times[19];
+	unsigned int render_types_mask[1];
+}; STAT_ASSERT(s_hud_weapon_interface_crosshairs_state, 0x50);
+
+struct s_hud_weapon_interface_weapon_state
+{
+	int first_render_times[8];
+	datum_index weapon_index;
+	int grenades_first_render_time;
+}; STAT_ASSERT(s_hud_weapon_interface_weapon_state, 0x28);
+
+
+struct s_local_player_s_hud_weapon_interface
+{
+	s_hud_weapon_interface_weapon_state weapon;
+	s_hud_weapon_interface_crosshairs_state crosshairs;
+}; STAT_ASSERT(s_local_player_s_hud_weapon_interface, 0x78);
+
+
+struct s_hud_weapon_interface
+{
+	s_local_player_s_hud_weapon_interface local_players[MAX_PLAYER_COUNT_LOCAL];
+	unsigned int show_flags;
+}; STAT_ASSERT(s_hud_weapon_interface, 0x4 + (sizeof(s_local_player_s_hud_weapon_interface) * MAX_PLAYER_COUNT_LOCAL));
 
 //this _fucking_ struct.
 //	struct s_hud_message_state_player {
@@ -93,7 +151,6 @@ struct s_blip : s_custom_blip {
 	blip_type type; // set to _blip_type_none when not used
 	sbyte     size;    // a la object's size (tiny, large, etc)
 };
-
 STAT_ASSERT(s_blip, 0x4);
 
 struct s_team_data {
@@ -150,10 +207,6 @@ struct s_game_engine_state_message {
 	datum_index target_player;
 	long        target_time; // timer used to fade in the target player name
 };
-
-typedef int retIntGivenVoid(void);
-
-static retIntGivenVoid *find_unused_local_player_index = (retIntGivenVoid *) 0x4762f0;
 
 //s_players_globals_data
 struct s_players_globals_data {

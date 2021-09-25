@@ -26,10 +26,13 @@ struct s_player_action;
 struct s_unit_control_data;
 constexpr const char *  K_GAME_GLOBALS_TAG_NAME = "globals\\globals";
 
+extern feature_management::engines::IEngine* CurrentEngine;
+
 namespace feature_management::engines {
-	class GlobalEngine {
+	class RuntimeManager {
 	public:
 		bool core_initialized = false;
+
 	private:
 		//TODO: More intelligent division of these members -
 		// - Values dependent upon other values or actions should _not_ be writable from outside this class.
@@ -48,7 +51,7 @@ namespace feature_management::engines {
 		short *to_respawn_count;
 		short *spawn_count;
 		short *render_window_count;
-		static inline bool  *at_main_menu = nullptr;
+		static bool  *at_main_menu;
 
 		void **hud_scripted_globals;
 		void **hud_messaging_state;
@@ -58,8 +61,11 @@ namespace feature_management::engines {
 		Yelo::Scenario::s_scenario_globals * scenario_globals;
 		s_motion_sensor               *motion_sensor;
 		Yelo::GameState::s_game_time_globals	  *game_time_globals = nullptr;
-		uintptr                       game_state_globals_location_ptr;
-		uintptr                       game_state_globals_ptr;
+		uintptr						game_state_cpu_allocation_size;
+		uintptr						game_state_globals_ptr;
+		uintptr						game_state_globals_crc;
+
+		Camera::s_cinematic_globals_data *cinematic_globals;
 		void                          **crc_checksum_buffer;
 
 		////////////////////////////////////////
@@ -79,6 +85,7 @@ namespace feature_management::engines {
 
 		s_player_control * GetPlayerControl(unsigned short idx);
 
+		void SetSpawnCount(short newSpawnNum);
 		player *GetPlayer(short index);
 
 		static bool AreWeInMainMenu();
@@ -120,45 +127,53 @@ namespace feature_management::engines {
 		void ConsoleText(HaloColor fColor, const char *cFmt, ...);
 		void ToggleFlycam(char = -1);
 
-	private:
-		static inline features              CurrentSupported;
-		static inline major                 CurrentMajor;
-		static inline minor                 CurrentMinor;
-		//Support Attempted
-		//::std::string GetCurrentFileName(char * args) {
-		static ::std::string GetCurrentFileName();
-
-		static bool VerSupported();
-
-		static features GetSupported();
-
-	public:
-		static inline char *DEBUG_FILENAME = nullptr;
-		static inline defined_functionrange *current_map = nullptr;
-
-		static GlobalEngine* GetGlobalEngine();
 		static inline char *LUA_FILENAME   = const_cast<char *>("tempera.init.lua");
 
 		[[nodiscard]] static LuaScriptManager * GetLuaState();
 
-		s_player_action GetPlayerActionOverride(ushort idx, s_unit_control_data * from);
-
-		static bool IsHek() {
-			return CurrentMajor == major::HEK;
-		}
-
-		static bool IsSapien() {
-			return IsHek() && CurrentMinor == minor::sapien;
-		}
-
-		static bool IsCustomEd() {
-			return CurrentMajor == major::CE;
+		bool AreWeInCutScene() {
+			return cinematic_globals->in_progress;
 		}
 
 		void WriteHooks();
 
+		//Basically all GameStateMallocs are the same
+		//But because C++ is stupid (when this is in CurrentEngine.cpp)
+		template<typename T>
+		void GameStateMalloc(void **targetGlobal) {
+			uint game_state_cpu_allocation_size = 0;
+			uint game_state_globals_ptr = 0;
+			uint game_state_globals_crc = 0;
+
+			if (CurrentEngine != nullptr) {
+				CurrentEngine->GetMallocAddresses(game_state_cpu_allocation_size, game_state_globals_ptr, game_state_globals_crc);
+			}
+
+			if (game_state_cpu_allocation_size == NULL) {
+				PrintLn("game_state_cpu_allocation_size is nullptr. prolly wanna fix that.");
+			}
+
+			auto oldSize = (* (uintptr)game_state_cpu_allocation_size);
+			PrintLn("Old Value: 0x%x", oldSize);
+
+			auto newLocation = oldSize + (uintptr_t)game_state_globals_ptr;
+			auto currentSizeof = sizeof(T);
+
+			(* (uintptr *)game_state_cpu_allocation_size) += currentSizeof;
+			(*targetGlobal) = (void*)newLocation;
+			//Call the game engine's malloc crc checksum buffer. Hoping for the best, lmao
+			static ::std::optional<uintptr_t> funcFound = getFunctionBegin("malloc_crc_checksum_buffer");
+			if ((uint)game_state_globals_crc != (uint)0x67dd94) {
+				PrintLn("Game State Globals CRC does not look like the expected address");
+			}
+
+			if (funcFound)
+				calls::DoCall<Convention::m_cdecl, void, int, int, uint>(*funcFound, (int)game_state_globals_crc, (int)&currentSizeof, (uint)0x4u);
+		}
+
 		template<typename T>
 		static void ClampIndex(T &idx);
+
 		static bool HasSupport();
 
 		auto ScenarioGlobals();
@@ -168,24 +183,14 @@ namespace feature_management::engines {
 		IDirectInputDevice8A *GetMouseInput();
 		IDirectInputDevice8A **GetJoystickInputs();
 
-		void SetCoreAddressList(LPCoreAddressList add_list);
-
 		bool SupportsFeature(features feat);
 
 		bool SupportsFeature(uint feat);
-
-
 		static void InitializeLuaState();
 
 		static void LuaFirstRun();
 
 		void RefreshCore(bool force = false);
-
-		minor GetMinorVersion() {
-			return this->CurrentMinor;
-		}
-
-		const char *GetCurrentMajorVerString();
 
 		constexpr bool equal(const char *lhs, const char *rhs);
 
@@ -201,6 +206,9 @@ namespace feature_management::engines {
         short GetElapsedTime();
 	};
 
+	//Set up our stuff
+	RuntimeManager *GetRuntimeManager();
+
 	/***
  	 * Called before VirtualProtect is run.
  	 ***/
@@ -209,7 +217,7 @@ namespace feature_management::engines {
 }
 
 //Extern's like this are why C++ has a bad rep
-extern feature_management::engines::GlobalEngine* CurrentEngine;
+extern feature_management::engines::RuntimeManager* CurrentRuntime;
 
 /**
  * Called variably based on fps
@@ -224,7 +232,7 @@ void main_setup_connection_init();
 
 
 static const char * getMemoryRegionDescriptor(void * addr) {
-	PrintLn("\tCurrentEngine Location: : [0x%X]", CurrentEngine);
+	PrintLn("\tCurrentRuntime Location: : [0x%X]", CurrentRuntime);
 	PrintLn("\tSearching for address: [0x%X]", addr);
 
 	if ((uintptr_t)addr < 0x200000) {
@@ -244,7 +252,11 @@ static const char * getMemoryRegionDescriptor(void * addr) {
 
 	using dfr = defined_functionrange;
 
-	dfr *funcList =  ::feature_management::engines::GlobalEngine::current_map;
+	static dfr *funcList = nullptr;
+
+	if (!funcList) {
+		funcList = CurrentEngine->GetFunctionMap();
+	}
 
 	int i = 0;
 

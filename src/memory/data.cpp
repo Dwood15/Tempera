@@ -24,7 +24,7 @@ namespace Yelo::blam {
 
 	// [[deprecated]]
 	// static s_data_array *data_new(const char *name, long maximum_count, size_t datum_size) {
-	// 	static auto FUNCTION = CurrentEngine->getFunctionBegin("data_new");
+	// 	static auto FUNCTION = CurrentRuntime->getFunctionBegin("data_new");
 	//
 	// 	if (!FUNCTION) {
 	// 		return nullptr;
@@ -34,55 +34,11 @@ namespace Yelo::blam {
 	// 	return calls::DoCall<Convention::m_cdecl, s_data_array *, long, const char *>(*FUNCTION, maximum_count, name);
 	// }
 
-	//Intended to be a complete replacement for the in-game data_new :)
-	//TODO: TEST + confirm works. _Looks_ functionally similar to the original data_new.
-	template <typename T, int max_count>
-	static s_data_array *data_new(const char *name) {
-		constexpr auto size = static_cast<short>(sizeof(T));
-
-		auto allocd = GlobalAlloc(0, max_count * size + sizeof(s_data_array));
-
-		auto newData = reinterpret_cast<s_data_array *>(allocd);
-
-		if (newData) {
-			std::memset(newData, 0, sizeof(s_data_array));
-			std::strncpy(newData->name, name, 31u);
-			newData->max_datum    = size * max_count;
-			newData->datum_size   = size;
-			newData->signature    = 'd@t@';
-			newData->is_valid     = 0;
-			newData->base_address = newData + sizeof(s_data_array);
-		}
-
-		return newData;
-	}
 
 	static void data_dispose(s_data_array *data) {
 		if (data != nullptr) {
 			GlobalFree(data);
 		}
-	}
-
-	static void data_delete_all(s_data_array *data) {
-		data->last_datum       = 0;
-		data->next_datum.index = 0;
-		data->next_index       = 0;
-		strncpy((char *) &data->next_datum.salt, data->name, 2u);
-		// strncpy_s((char *) &data->next_datum.salt, data->name, 2u);
-		data->next_datum.salt |= 0x8000u;
-		if (data->max_datum > 0) {
-			return; // we're done here!
-		}
-
-		for (short i = 0; i < data->max_datum; i++) {
-			auto current = i * data->datum_size;
-			*(byte *) (&data->base_address)[current] = 0;
-		}
-	}
-
-	static void data_make_valid(s_data_array *data) {
-		data->is_valid = true;
-		data_delete_all(data);
 	}
 
 	static void data_make_invalid(s_data_array *data) {
@@ -117,38 +73,45 @@ namespace Yelo::blam {
 		return result;
 	}
 
-	static s_data_iterator  *data_iterator_next(s_data_iterator *iterator) {
+	s_data_iterator  *data_iterator_next(s_data_iterator *iterator) {
 		if (iterator->signature != (reinterpret_cast<uintptr_t>(iterator->data) ^ Enums::k_data_iterator_signature)) {
 			throw ::std::exception("uninitialized iterator passed");//::std::string(__FUNCTION__) );
 		}
 
 		auto data = iterator->data;
 		if (!data->is_valid) {
-			//std::str(data->name)
 			throw ::std::exception("tried to iterate when it was in an invalid state");
 		}
 
-		datum_index::index_t absolute_index = iterator->next_index;
+		datum_index::index_t nextIndex = iterator->next_index;
 		long                 datum_size     = data->datum_size;
-		byte                 *pointer       = reinterpret_cast<byte *>(data->base_address) + (datum_size * absolute_index);
+		uint                 pointer       = (uint)data->base_address + (datum_size * nextIndex);
 
+		if (nextIndex > data->last_datum) {
+			iterator->next_index = nextIndex;
+			return nullptr;
+		}
 
-		short last_datum = data->last_datum;
-		//kinda hoping this replicates the OG logic
-		if (absolute_index < last_datum) {
-			auto datum = reinterpret_cast<const Yelo::Memory::s_datum_base *>(pointer);
+		datum_index nextDatum;
 
-			if (!datum->IsNull()) {
-				++iterator->next_index;
-				iterator->index      = datum_index::Create(iterator->next_index, datum->GetHeader());
-				return (s_data_iterator *)pointer;
+		while ( 1 )
+		{
+			nextDatum.salt = (*(short *)pointer);
+			nextDatum.index = nextIndex++;
+			if ( *(short *)pointer)
+				break;
+
+			pointer += datum_size;
+			if ( nextIndex >= iterator->data->next_datum.index )
+			{
+				iterator->next_index = nextIndex;
+				return 0;
 			}
 		}
 
-		iterator->next_index    = absolute_index; // will equal last_datum at this point
-		iterator->finished_flag = true;
-		iterator->index         = datum_index::null();
-		return nullptr;
+		iterator->index = nextDatum;
+		iterator->next_index = nextIndex;
+		return (s_data_iterator  *)pointer;
 	}
 
 	static void datum_initialize(s_data_array *data, ushort *location) {
@@ -256,31 +219,6 @@ namespace Yelo::blam {
 	}
 
 	// Get the data associated with [index] from the [data] array
-	//TODO: TEST AND VERIFY
-	template <typename T>
-	static void *datum_get(s_data_array *data, datum_index index) {
-
-		if (sizeof(T) != data->datum_size) {
-			Print("Datum_get for object size: %d doesn't match engine size: %d", sizeof(T), data->datum_size);
-			throw ::std::exception("Datum get mismatch! See debug log.");
-		}
-
-		T *object_array = reinterpret_cast<T *>(data->base_address); // edx
-
-		short item = *(short *) &object_array[index.index]; // cx
-
-		if (index.index < 0 || index.index >= data->last_datum) {
-			return 0;
-		}
-
-		if (!item) {
-			return 0;
-		}
-
-		return &object_array[index.index];
-	}
-
-	// Get the data associated with [index] from the [data] array
 	// Returns nullptr if the handle is invalid
 	//TODO: TEST AND VERIFY
 	static void *datum_try_and_get(s_data_array *data, datum_index index) {
@@ -296,28 +234,3 @@ namespace Yelo::blam {
 		return nullptr;
 	}
 };
-
-void naked Yelo::blam::data_iterator_next_wrapper() {
-	s_data_iterator *iter;
-
-	__asm {
-	mov iter, edi
-	push ebx
-	push ebp
-	push esi
-	}
-
-	iter = data_iterator_next(iter);
-
-	if (iter == nullptr || iter == (s_data_iterator *)-1) {
-		PrintLn("Iteration attempt failed.");
-	}
-
-	__asm {
-	pop esi
-	pop ebp
-	mov eax, iter
-	pop ebx
-	retn
-	}
-}

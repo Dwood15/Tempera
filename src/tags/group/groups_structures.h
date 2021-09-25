@@ -11,15 +11,16 @@
 #include "../../memory/datum_index.h"
 
 namespace Yelo {
-	class tag_field {
-	public:
+	struct s_tag_field {
 		Yelo::Enums::field_type type;
-		unsigned short : 16;
+		unsigned short pad0;
 		const char *name;
 		void *definition;
+	};
+	STAT_ASSERT(s_tag_field, 0xC);
 
-		tag_field() = default;
-
+	struct tag_field : s_tag_field {
+	public:
 		// cast the [definition] pointer to a T*
 		template <typename T>
 		T *Definition() const { return reinterpret_cast<T *>(definition); }
@@ -27,8 +28,6 @@ namespace Yelo {
 		// cast the data of [definition] to T
 		template <typename T>
 		T DefinitionCast() const { return reinterpret_cast<T>(definition); }
-
-		size_t GetSize(size_t *runtime_size);
 
 		bool IsReadOnly() const {
 			return name && strchr(name, Enums::k_tag_field_markup_character_read_only); // NOTE: engine uses strrchr
@@ -46,8 +45,8 @@ namespace Yelo {
 			return name && *name == '\0'; // yes, a field with no name wouldn't be considered 'invisible', according to engine code
 		}
 	};
+	STAT_ASSERT(tag_field, 0xC);
 
-	static_assert(sizeof(tag_field) == 0xC);
 
 	// Called as each element is read from the tag stream
 	// NOTE: tag_index is non-standard, and will only be valid when invoked by OS code.
@@ -61,9 +60,8 @@ namespace Yelo {
 	// Procedure called during tag_block_delete_element, but before all the child data is freed
 	typedef void    (__cdecl *proc_tag_block_delete_element)(void *block, long element_index);
 
-	class tag_block_definition {
+	struct s_tag_block_definition {
 	public:
-		tag_block_definition() = default;
 		const char *name;
 		long_flags                         flags;
 		long                               maximum_element_count;
@@ -75,26 +73,13 @@ namespace Yelo {
 		proc_tag_block_format              format_proc;
 		proc_tag_block_delete_element      delete_proc;
 		byte_swap_code_t                   *byte_swap_codes;
+	}; STAT_ASSERT(s_tag_block_definition, 0x2C);
 
-		// Searches the definition for a field of type [field_type] with a name which starts
-		// with [name] characters. Optionally starts at a specific field index.
-		// Returns NONE if this fails.
-		long FindFieldIndex(short field_type, const char *name, long start_index = NONE);
-
-		tag_field *FindField(short field_type, const char *name, long start_index = NONE);
-
-		tag_block_definition *FindBlockField(const char *name, long start_index = NONE);
-
+	struct tag_block_definition : s_tag_block_definition{
+	public:
 		// Yelo::TagGroups::s_tag_field_set_runtime_data *GetRuntimeInfo() const;
 
 		// void SetRuntimeInfo(TagGroups::s_tag_field_set_runtime_data *info);
-
-		// Mainly a visitor for startup/shutdown processes, performs an action (via a functor) on a root block definition
-		// then repeats the action for all child blocks (etc)
-		// Uses CRT assert()'s since it is assumed this is used after the group definitions have been verified
-		// TAction: void operator()([const] tag_block_definition* block_definition)
-		template <class TAction>
-		void DoRecursiveAction(TAction &action = TAction());
 
 		struct s_field_iterator {
 		private:
@@ -140,7 +125,7 @@ namespace Yelo {
 		}
 	};
 
-	static_assert(sizeof(tag_block_definition) == 0x2C);
+	STAT_ASSERT(tag_block_definition, 0x2C);
 };
 
 #include "enums/generic_enums.h"

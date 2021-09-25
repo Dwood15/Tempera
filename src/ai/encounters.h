@@ -105,17 +105,17 @@ namespace Yelo {
 		struct s_squad_datum {
 			long_flags required_locations[BIT_VECTOR_SIZE_IN_DWORDS(maxLocation)];
 			long_flags unused_locations[BIT_VECTOR_SIZE_IN_DWORDS(maxLocation)];
-			unsigned long : 32;                  // Haven't checked what is here yet
+			unsigned long unkPad1;                  // Haven't checked what is here yet
 			short respawn_total;      // 0xC
-			unsigned short : 16;                  // I believe this is padding
+			unsigned short unkPad2;                  // I believe this is padding
 			bool  automatic_migration;   // 0x10
 			bool  pad0;         // 0x11
 			short delay_ticks;         // 0x12
 			bool  pad1;         // 0x14
-			unsigned char : 8;
+			unsigned char unkpad3;
 			short original_count;      // 0x16
-			short pad2;      // 0x18, unit_count?
-			short pad3;      // 0x1A, swarm_unit_count?
+			short unkUnitCount;      // 0x18, unit_count?
+			short unkSwarmUnitCount;      // 0x1A, swarm_unit_count?
 			real  pad4;         // 0x1C
 		};
 		static_assert(sizeof(s_squad_datum) == 0x20);
@@ -126,13 +126,13 @@ namespace Yelo {
 
 		struct s_platoon_datum {
 			bool start_in_defending_state;   // 0x0
-			unsigned char : 8;
-			unsigned short : 16;                     // I believe this is padding
+			unsigned char unkPad0;
+			unsigned short unkPad1;                     // I believe this is padding
 			short          original_count;         // 0x4
-			short          pad0;         // 0x6, unit_count?
-			short          pad1;         // 0x8, swarm_unit_count?
-			unsigned short : 16;
-			real pad2;            // 0xC
+			short          unkUnitCount;         // 0x6, unit_count?
+			short          unkSwarmUnitCount;         // 0x8, swarm_unit_count?
+			unsigned short unkPad2;
+			float pad2;            // 0xC
 		};
 		static_assert(sizeof(s_platoon_datum) == 0x10);
 

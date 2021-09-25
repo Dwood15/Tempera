@@ -1,5 +1,11 @@
+#define WIN32_LEAN_AND_MEAN
+
+//IDE thinks that windows.h is not used, but we use it for side-effects. "No Target Architecture" error.
+// See: https://stackoverflow.com/questions/4845198/fatal-error-no-target-architecture-in-visual-studio
+#include <windows.h>
 #include <memory>
-#include "macros_generic.h"
+#include "tagreference.h"
+
 namespace Yelo {
 	namespace blam {
 		// Clear the values of a tag reference so that it references no tag

@@ -3,13 +3,14 @@
 #include "macros_generic.h"
 #include "../math/real_math.h"
 #include "../math/colors.h"
+#include <enums/player_enums.h>
 
 namespace Yelo::Scenario {
 	// made up name
 	struct s_scenario_player_atmospheric_fog {
 		bool is_inside;
-		unsigned char : 8;
-		unsigned short : 16;
+		unsigned char unk1;
+		unsigned short unk2;
 		real_vector3d  pad00;
 		real_vector3d  pad01;
 		real_rgb_color pad02;
@@ -18,9 +19,9 @@ namespace Yelo::Scenario {
 	STAT_ASSERT(s_scenario_player_atmospheric_fog, 0x2C);
 
 	struct sound_environment {
-		unsigned long : 32;
+		unsigned long unk1;
 		short priority;
-		unsigned short : 16;
+		unsigned short unk2;
 		real room_intensity_db;
 		real room_intensity_hf_db;
 		real room_rolloff_factor;
@@ -33,28 +34,31 @@ namespace Yelo::Scenario {
 		real diffusion;
 		real density;
 		real hf_reference;
-		unsigned long long:64;
-		unsigned long long:64;
+		unsigned long long unk3;
+		unsigned long long unk4;
 	};
 	STAT_ASSERT(sound_environment, 0x48);
 
+#pragma pack(push, 1)
+	struct scen_sound {
+		bool copy_environment_tag;
+		unsigned char padA;
+		unsigned short padB; // never seen this set to true
+		sound_environment environment;
+	};
+#pragma pack(pop)
+	STAT_ASSERT(scen_sound, 0x4C);
+
 	struct s_scenario_globals {
 		short current_structure_bsp_index;
-		unsigned short : 16;
-		s_scenario_player_atmospheric_fog player_fog[/* Enums::k_maximum_number_of_local_players*/ 1];
-#pragma pack(push, 1)
-		struct scen_sound {
-			bool copy_environment_tag;
-			unsigned char  : 8;
-			unsigned short : 16; // never seen this set to true
-			sound_environment environment;
-		} sound;
-#pragma pack(pop)
-
-		STAT_ASSERT(scen_sound, 0x4 + sizeof(sound_environment));
-
+		unsigned short unkA;
+		s_scenario_player_atmospheric_fog player_fog[MAX_PLAYER_COUNT_LOCAL];
+		scen_sound sound;
 	};
-	STAT_ASSERT(s_scenario_globals, 0x7C);
+	STAT_ASSERT(s_scenario_globals, 0x7C + (0x2C * (MAX_PLAYER_COUNT_LOCAL - 1)));
+
+	//Xbox Beta 0x100
+	//static_assert(sizeof(s_scenario_globals) + sizeof(s_scenario_player_atmospheric_fog)* 3 == 0x100);
 
 	// struct s_sky_definition {
 	// 	enum { k_group_tag = 'sky ' };

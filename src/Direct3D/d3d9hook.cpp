@@ -16,7 +16,7 @@
 #include "d3d9hook.h"
 #include "textures.h"
 #include "../gamestate/camera.h"
-#include "../CurrentEngine.h"
+#include "../RuntimeManager.h"
 #include "../gamestate/objects/objectcontroller.h"
 
 CD3D::CD3D() {
@@ -116,7 +116,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 		return;
 	}
 
-	static short maxObjects = CurrentEngine->GetMaxObjects();
+	static short maxObjects = CurrentRuntime->GetMaxObjects();
 
 	object_data   *obj          = NULL;
 	object_header *objh         = NULL;
@@ -133,13 +133,13 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 
 	for (unsigned short i = 0; i < maxObjects; i++) {
-		objh = CurrentEngine->GetObjectHeader(i);
-		obj  = CurrentEngine->GetGenericObject(i);
+		objh = CurrentRuntime->GetObjectHeader(i);
+		obj  = CurrentRuntime->GetGenericObject(i);
 		if (obj == NULL) {
 			continue;
 		}
 
-		screenpos = CurrentEngine->MyCamera->ScreenPos(obj->World);
+		screenpos = CurrentRuntime->MyCamera->ScreenPos(obj->World);
 
 		// Offscreen check
 		if (isOffScreen(screenpos)) {
@@ -161,7 +161,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 		D3DCOLOR color = tGreen;
 
-		ObjName = CurrentEngine->GetObjectName(i);
+		ObjName = CurrentRuntime->GetObjectName(i);
 
 
 		if (obj->IsPlayer()) {
@@ -169,17 +169,17 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 
 		}
 
-		if (CurrentEngine->ObjectControl->IsSelected(objh)) {
+		if (CurrentRuntime->ObjectControl->IsSelected(objh)) {
 			color = tOrange;
 
-		} else if (CurrentEngine->ObjectControl->IsNearest(objh)) {
+		} else if (CurrentRuntime->ObjectControl->IsNearest(objh)) {
 			color = tBlue;
 		}
 
 		cd3d.myDrawText(pDevice, cd3d.Font, true, (int) screenpos.x, (int) screenpos.y, 1000, 1000, color, tBlack, ObjName);
 	}
 
-	CurrentEngine->ObjectControl->SetNearest(temp_nearest);
+	CurrentRuntime->ObjectControl->SetNearest(temp_nearest);
 }
 
 long __stdcall hkEndScene(IDirect3DDevice9 *pDevice) {
@@ -260,8 +260,9 @@ DWORD __stdcall CD3D::hkD3DHook(void *lpVoid) {
 	//1.08 d3d device global 0x0071D09C
 	//0x3C471C0
 	//0x3C49F5C
-	//0x6B840C
-	void             *pDevicePointer = (void *) 0x6B840C; // Halo full version device pointer ( static )
+	//1.10 global.. 0x6B840C
+
+	void             *pDevicePointer = (void *) 0x6B840C; // Halo 1.10 version device pointer ( static )
 	DWORD            dwOldProtect    = (DWORD)NULL;
 	IDirect3DDevice9 *pGameDevice;
 

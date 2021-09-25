@@ -127,11 +127,11 @@ function PlayerUpdate(player_control_state, player_index)
 		Dbg("First Player update, ever!")
 	end
 
-	Dbg("--- Player Control State values ---")
-	for k, v in pairs(player_control_state) do
-		Dbg(string.format("Key: [%s] Value: [%f]", k, v))
-	end
-	Dbg("---")
+	--Dbg("--- Player Control State values ---")
+	--for k, v in pairs(player_control_state) do
+	--	Dbg(string.format("Key: [%s] Value: [%f]", k, v))
+	--end
+	--Dbg("---")
 
 	local currentGamePad = 0
 	--TODO: Player to Controller mapping...
@@ -141,27 +141,6 @@ function PlayerUpdate(player_control_state, player_index)
 		end
 
 		Dbg("Retrieving ControllerState")
-		--Controller is -1 if not found, and result is 0 if successful.
-		-- Will be providing helpers for reading this more fully.
-		controller, result = GetControllerState(currentGamePad)
-
-		if firstPlayerUpdateCalled == false then
-			Dbg("ControllerState retrieved")
-		end
-
-		if controller ~= -1 and result == 0 then
-			Dbg("--- Controller State values ---")
-			for k, v in pairs(player_control_state) do
-				Dbg(string.format("Key: [%s] Value: [%f]", k, v))
-			end
-			Dbg("---")
-
-			if IsButtonPressed(controller.buttons, XINPUT_GAMEPAD_Y) then
-				Dbg("Controller input Y is pressed, jumping the player")
-			end
-
-			--TODO: Check appropriate thumb stick for input, grenade throw, etc etc.
-		end
 
 		if firstPlayerUpdateCalled == false then
 			Dbg("ControllerState Checked")
@@ -303,7 +282,7 @@ GetPlayerAddress
 
 --[[
 	IsCoreInitialized - Returns true if Core (the interface used to access gamestate) has been initialized.
-	- Check this function _before_ attempting to access the Core variable within CurrentEngine.
+	- Check this function _before_ attempting to access the Core variable within CurrentRuntime.
 
 	IsCustomEd - True if current context is CustomEdition
 	IsSapien - True if current context is Sapien.

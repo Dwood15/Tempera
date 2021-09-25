@@ -1,7 +1,7 @@
 #include <addlog.h>
-#include <enums/weapon_enums.h>
+//#include <enums/weapon_enums.h>
 #include "script_manager.h"
-#include "../CurrentEngine.h"
+#include "../RuntimeManager.h"
 #include "../Dinput/dinput.h"
 
 
@@ -46,7 +46,7 @@ int l_IsPlayerSpawned(lua_State *L) {
 	const auto idx = lua_tointeger(L, 1);
 
 	if (idx >= 0 && idx <= 15) {
-		lua_pushboolean(L, CurrentEngine->IsPlayerSpawned(idx));
+		lua_pushboolean(L, CurrentRuntime->IsPlayerSpawned(idx));
 		return 1;
 	}
 
@@ -70,12 +70,12 @@ int l_GetPlayerAddress(lua_State *L) {
 	const auto idx = lua_tointeger(L, 1);
 
 	if (idx >= 0 && idx <= 15) {
-		if (!CurrentEngine->IsPlayerSpawned(idx)) {
+		if (!CurrentRuntime->IsPlayerSpawned(idx)) {
 			lua_pushinteger(L, -1);
 			return 1;
 		}
 
-		lua_pushinteger(L, reinterpret_cast<int>(CurrentEngine->GetPlayer(idx)));
+		lua_pushinteger(L, reinterpret_cast<int>(CurrentRuntime->GetPlayer(idx)));
 		return 1;
 	}
 
@@ -110,7 +110,7 @@ int LuaSetPlayerFunctionWithArg(lua_State *L, F func) {
  */
 int l_CallVoidEngineFunctionByFunctionMapName(lua_State *L) {
 	auto str = lua_tostring(L, 1);
-	auto got = CurrentEngine->getFunctionBegin(str);
+	auto got = CurrentRuntime->getFunctionBegin(str);
 
 	if (got) {
 		calls::DoCall<Convention::m_cdecl>(*got);
@@ -129,7 +129,6 @@ int l_CallVoidEngineFunctionByFunctionMapName(lua_State *L) {
  * @return (In C) Num args for lua.
  */
 int l_GetEngineContext(lua_State *L) {
-
 	const char *MAJSTR = CurrentEngine->GetCurrentMajorVerString();
 
 	lua_pushstring(L, MAJSTR);
@@ -202,34 +201,20 @@ static void setTableField(lua_State * L, const char *keyName, lua_Integer n) {
 	lua_setfield(L, -2, keyName);
 }
 
-static void setTableNumber(lua_State * L, const char *keyName, lua_Number n) {
+static void setTableNumber(lua_State * L, const char *keyName, float n) {
 	// https://stackoverflow.com/questions/20147027/creating-a-simple-table-with-lua-tables-c-api/20148091
 	lua_pushnumber(L, n);
 	lua_setfield(L, -2, keyName);
 }
 
-static void PassPlayerControl(lua_State * L, s_player_action * control) {
-	lua_createtable(L, 0, 6);
-
-	setTableField(L, "control_flags", control->control_flagsA.control_flags_a);
-
-	setTableNumber(L, "throttle.x", control->throttle_leftright);
-	setTableNumber(L, "throttle.y", control->throttle_forwardback);
-
-	setTableField(L,"desired_weapon_index", control->desired_weapon_index);
-	setTableField(L, "desired_grenade_index", control->desired_grenade_index);
-
-	setTableNumber(L, "primary_trigger", control->primary_trigger);
-}
-
-static void ReadPlayerControl(lua_State * L, s_player_action * control) {
+static void ReadPlayerControl(lua_State * L, s_unit_control_data * control) {
 	PrintLn("Attempting to read our player control back out");
 	luaL_checktype(L, 1, LUA_TTABLE);
 
 	lua_getfield(L, 1, "control_flags");
-	uint num = lua_tointeger(L, -1);
-	if(num <= (uint)0xFFFF) {
-		control->control_flagsA.control_flags_a = static_cast<ushort>(num);
+	uint ctrlFlags = luaL_checkinteger(L, -1);
+	if(ctrlFlags <= (uint)0xFFFF) {
+		control->control_flags.control_flags_a = static_cast<ushort>(ctrlFlags);
 	}
 
 	//PrintLn("Control Flags successfully read");
@@ -237,15 +222,17 @@ static void ReadPlayerControl(lua_State * L, s_player_action * control) {
 
 	lua_getfield(L, 1, "throttle.x");
 	lua_getfield(L, 1, "throttle.y");
+	lua_getfield(L, 1, "throttle.z");
 
-	control->throttle_forwardback = lua_tonumber(L, -1);
-	control->throttle_leftright = lua_tonumber(L, -2);
+	control->throttle.z = luaL_checknumber(L, -1);
+	control->throttle.y = luaL_checknumber(L, -2);
+	control->throttle.x = luaL_checknumber(L, -3);
 
 //	PrintLn("Throttle Successfully read");
-	lua_pop(L, 2);
+	lua_pop(L, 3);
 
-	lua_getfield(L, 1, "desired_weapon_index");
-	lua_getfield(L, 1, "desired_grenade_index");
+	lua_getfield(L, 1, "weapon_index");
+	lua_getfield(L, 1, "grenade_index");
 
 	//This will probably make the game crash :X
 	int weapIdx = luaL_checkinteger(L, -1);
@@ -255,12 +242,10 @@ static void ReadPlayerControl(lua_State * L, s_player_action * control) {
 //		weapIdx = MAX_WEAPONS_PER_UNIT-1;
 //	}
 
-	control->desired_weapon_index = static_cast<ushort>(weapIdx);
+	control->weapon_index = static_cast<ushort>(weapIdx);
 
-	weapIdx = luaL_checkinteger(L, -2);
-	if(weapIdx <= 1) {
-		control->desired_grenade_index = static_cast<ushort>(weapIdx);
-	}
+	int gnadeIdx = luaL_checkinteger(L, -2);
+	control->grenade_index = static_cast<ushort>(gnadeIdx);
 
 //	PrintLn("Player Weap/Grenade Indices successfully read");
 	lua_pop(L, 2);
@@ -274,10 +259,18 @@ static void ReadPlayerControl(lua_State * L, s_player_action * control) {
 	lua_pop(L, 1);
 }
 
+///The basic sanity checks ensure that we can
+///1) Call a Lua function from C++
+///2) Read out a returned table to C++.
+///There is a plethora of well-documented examples of putting a table onto Lua
+///but not so many about actually reading more complex sets of data FROM lua into C++
 void LuaScriptManager::lua_run_sanityChecks() {
-	///Testing Ability to read a table back
+	static volatile bool sanityChecked = false;
+	if (sanityChecked)
+		return;
+
 	this->HandleFunctionNameEvent("TestReadingBackTheTable");
-	PrintLn("Attempting a Sanity Check");
+	//PrintLn("Attempting a Sanity Check");
 	this->PCall<0, 1>("TestReadingBackTheTable");
 	if (!lua_istable(L, 1)) {
 		PrintLn("Literally Nothing we can do, table rip");
@@ -290,10 +283,10 @@ void LuaScriptManager::lua_run_sanityChecks() {
 	auto bazzNum = lua_tointeger(L, -1);
 	auto fooStr = luaL_checkstring(L, -2);
 
-	PrintLn("Lua Table reading Sanity Check, Bazz: [%d] Foo: [%s]", bazzNum, fooStr);
+	//PrintLn("Lua Table reading Sanity Check, Bazz: [%d] Foo: [%s]", bazzNum, fooStr);
 	lua_pop(L, 2);
 
-	PrintLn("Popped. Checking Baybe and Barr");
+	//PrintLn("Popped. Checking Baybe and Barr");
 
 	lua_getfield(L, 1, "baybe");
 	lua_getfield(L, 1, "barr");
@@ -301,23 +294,41 @@ void LuaScriptManager::lua_run_sanityChecks() {
 	auto barrNum = luaL_checknumber(L, -1);
 	auto baybeNum = luaL_checknumber(L, -2);
 
-	PrintLn("barrNum: [%f] && baybeNum: [%f]", barrNum, baybeNum);
+	//PrintLn("barrNum: [%f] && baybeNum: [%f]", barrNum, baybeNum);
 	lua_pop(L, 2);
 
 	//Pop the lua table off the stack
 	lua_pop(L, 1);
 	PrintLn("Finished up with the sanity check demo func");
+	sanityChecked = true;
 }
 
-void LuaScriptManager::lua_on_player_update(s_player_action * control, ushort plyrIdx) {
+void PassPlayerControl(lua_State *L, s_unit_control_data *control) {
+	//Send to the function our table
+	lua_createtable(L, 0, 7);
+
+	setTableField(L, "control_flags", control->control_flags.control_flags_a);
+
+	float x, y, z;
+	x = control->throttle.x;
+	y = control->throttle.y;
+	z = control->throttle.z;
+
+	setTableField(L, "throttle.x", static_cast<int>(x));
+	setTableField(L, "throttle.y", static_cast<int>(y));
+	setTableField(L, "throttle.z", static_cast<int>(z));
+
+	setTableField(L,"weapon_index", control->weapon_index);
+	setTableField(L, "grenade_index", control->grenade_index);
+
+	setTableNumber(L, "primary_trigger", control->primary_trigger);
+}
+
+void LuaScriptManager::lua_on_player_update(s_unit_control_data * control, ushort plyrIdx) {
 	if (control == nullptr) {
 		PrintLn("Player Action Control is null, no work to do");
 		return;
 	}
-
-	//Verify that we can read a modestly
-	this->lua_run_sanityChecks();
-
 	static volatile bool DebugOnce = false;
 
 	if(!this->HandleFunctionNameEvent("PlayerUpdate")) {
@@ -332,14 +343,14 @@ void LuaScriptManager::lua_on_player_update(s_player_action * control, ushort pl
 		PrintLn("lua_on_player_update");
 	}
 
-	PassPlayerControl(L, control);
-	lua_pushinteger(L, plyrIdx);
+	//PassPlayerControl(L, control);
+	//lua_pushinteger(L, plyrIdx);
 
-	this->PCall<2, 1>("PlayerUpdate");
+	//this->PCall<2, 1>("PlayerUpdate");
 
-	PrintLn("out of Lua, Reading player Control back out");
+	//PrintLn("out of Lua, Reading player Control back out");
 
-	ReadPlayerControl(L, control);
+	//ReadPlayerControl(L, control);
 }
 
 void LuaScriptManager::lua_on_tick(uint32 remaining, uint32 since_map_begin) {
@@ -461,7 +472,7 @@ void LuaScriptManager::InitializeLua(const char *filename) {
 	});
 
 	registerGlobalLuaFunction("AreWeInMainMenu", [](lua_State *L) {
-		lua_pushboolean(L, feature_management::engines::GlobalEngine::AreWeInMainMenu());
+		lua_pushboolean(L, feature_management::engines::RuntimeManager::AreWeInMainMenu());
 		return 1;
 	});
 
@@ -478,20 +489,18 @@ void LuaScriptManager::InitializeLua(const char *filename) {
 
 	registerGlobalLuaFunction("IsPlayerSpawned", l_IsPlayerSpawned);
 
-	Input::DInput::RegisterLuaFunctions(this);
-
 	registerGlobalLuaFunction("IsCustomEd", [](lua_State *L) {
-		lua_pushboolean(L, feature_management::engines::GlobalEngine::IsCustomEd());
+		lua_pushboolean(L, CurrentEngine->IsCustomEd());
 		return 1;
 	});
 
 	registerGlobalLuaFunction("IsSapien", [](lua_State *L) {
-		lua_pushboolean(L, feature_management::engines::GlobalEngine::IsSapien());
+		lua_pushboolean(L, CurrentEngine->IsSapien());
 		return 1;
 	});
 
 	registerGlobalLuaFunction("IsHek", [](lua_State *L) {
-		lua_pushboolean(L, feature_management::engines::GlobalEngine::IsHek());
+		lua_pushboolean(L, CurrentEngine->IsHek());
 		return 1;
 	});
 

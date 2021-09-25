@@ -19,14 +19,20 @@ namespace spcore {
 
 		int __fastcall interface_get_tag_index(short x);
 
-		void __cdecl interface_initialize_for_new_map();
-
-		void __cdecl scripted_hud_messages_clear();
+		void interface_initialize_for_new_map();
+		void players_initialize_for_new_map();
+		void scripted_hud_messages_clear();
 	};
 	namespace rendering {
 		//This function is good for debugging- it gets called every frame, if not more.
 		//__declspec(naked) int gen_render_window_count();
 	};
+
+	namespace player_updates {
+		int calculatePlayerCount();
+		void compute_combined_pvs_local();
+	};
+
 	namespace player_control {
 		// 			signature: "8B 35 20 59 81 00 57 8B FA B9 .26 00 00 00 F3 AB 83 CF FF"
 		//		extern uintptr_t players_init_for_new_map_overwrite; // overwrite the .26 with the size of the 4 player structure.

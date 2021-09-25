@@ -58,7 +58,7 @@ namespace Yelo {
 				byte   Ret;
 				ushort Count;
 			};
-			STAT_ASSERT(s_call_ret, sizeof(s_call) + 0x3);
+			STAT_ASSERT(s_call_ret, (sizeof(s_call) + 0x3));
 
 			// absolute call opcode
 			struct s_call_abs {
@@ -72,7 +72,7 @@ namespace Yelo {
 				byte   Ret;
 				ushort Count;
 			};
-			STAT_ASSERT(s_call_abs_ret, sizeof(s_call_abs) + 0x3);
+			STAT_ASSERT(s_call_abs_ret, (sizeof(s_call_abs) + 0x3));
 		};
 #pragma pack(pop)
 	};

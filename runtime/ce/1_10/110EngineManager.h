@@ -1,16 +1,14 @@
 #pragma once
 
 #include <versions.h>
-//#pragma clang diagnostic push
-//#pragma clang diagnostic ignored "-Weverything"
-#include <dinput.h>
-//#pragma clang diagnostic pop
 
 #include <macros_generic.h>
 #include "../../../src/scenario/structures.h"
 #include "../../../src/scenario/definitions.h"
 #include "../../../src/models/collision_bsp.h"
 #include "../../../src/hs/structures.h"
+#include "../../../src/gamestate/camera.h"
+#include "../../../src/RuntimeManager.h"
 
 //TODO: Detect if msvc and only compile with c++latest
 //#if defined(_MSC_VER)
@@ -24,14 +22,27 @@
 static void InitializeLibraryFixups();
 
 namespace feature_management::engines {
-	class CE110 : public IEngine<CE110> {
+
+	namespace overrides {
+		void override_main_get_window_count_calls();
+	}
+
+	class CE110 : public IEngine {
 	private:
 		//static void InitializeHSMemoryUpgrades();
 	public:
-		CE110() = default;
-		~CE110() = default;
-		static features SupportedFeatures() {
-			return features::EVERYTHING;
+		CE110() {
+			Major = major::CE;
+			Minor = minor::halo_1_10;
+			Supported = features::EVERYTHING;
+		}
+
+		bool IsCustomEd() {
+			return true;
+		}
+
+		features SupportedFeatures() {
+			return Supported;
 		}
 		//TODO: Make using this _not_ suck.
 		static auto const HS_VALID_ACCESS_FLAGS = 0x486220;
@@ -40,13 +51,22 @@ namespace feature_management::engines {
 		// InitializeCreateScriptFunction()
 		static auto const HS_ARGUMENTS_EVALUATE = 0x48D480;
 		static auto const HS_RETURN             = 0x48D270;
-		static constexpr const char *DEBUG_FILENAME = "tempera.hce.1_10.debug.log";
 
-		static LPCoreAddressList GetCoreAddressList();
-		static const defined_functionrange *GetFunctionMap();
+		const char* GetLogFileName() {
+			return "tempera.hce.1_10.debug.log";
+		}
+
+		LPCoreAddressList GetCoreAddressList();
+		defined_functionrange *GetFunctionMap();
 		static void __stdcall OnUnitControlUpdate();
-		static void WriteHooks();
 
+		void WriteHooks();
+
+		void GetMallocAddresses(uint &cpu_alloc_size, uint &game_state_globals_ptr, uint &game_state_globals_crc) {
+			game_state_globals_ptr = 0x67DD88;
+			cpu_alloc_size = 0x67DD8C;
+			game_state_globals_crc = 0x67DD94;
+		}
 		const Yelo::TagGroups::coll::collision_bsp **global_collision_bsp  = (const Yelo::TagGroups::coll::collision_bsp **)0x6E2258;
 
 		const Yelo::TagGroups::structure_bsp **global_structure_bsp  = (const Yelo::TagGroups::structure_bsp **)(0x6E225C);
@@ -73,9 +93,10 @@ namespace feature_management::engines {
 
 		//////////////////////////////////////////////////////////////////////////
 		// Scenario.cpp
-		static const Yelo::Scenario::s_scenario_globals ** GetScenarioGlobals() { return reinterpret_cast<const Yelo::Scenario::s_scenario_globals **>(0x6E2254); }
-		static const Yelo::TagGroups::scenario ** GetGlobalScenario() { return reinterpret_cast<const Yelo::TagGroups::scenario **>(0x6E224C); }
-		static const Yelo::TagGroups::coll::collision_bsp ** GetGlobalBsp3d() { return reinterpret_cast<const Yelo::TagGroups::coll::collision_bsp **>(0x6E2250); }
+		Yelo::Camera::s_cinematic_globals_data ** GetCinematicGlobals() { return reinterpret_cast<Yelo::Camera::s_cinematic_globals_data **>(0x68C83C); }
+		Yelo::Scenario::s_scenario_globals ** GetScenarioGlobals() { return reinterpret_cast<Yelo::Scenario::s_scenario_globals **>(0x6E2254); }
+		Yelo::TagGroups::scenario ** GetGlobalScenario() { return reinterpret_cast<Yelo::TagGroups::scenario **>(0x6E224C); }
+		Yelo::TagGroups::coll::collision_bsp ** GetGlobalBsp3d() { return reinterpret_cast<Yelo::TagGroups::coll::collision_bsp **>(0x6E2250); }
 
 		static auto const OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__READ  = 0x4F8207;
 		static auto const OBJECT_TYPES_PLACE_OBJECTS_MOD_PROCESSED_BSPS__WRITE = 0x4F83CE;
@@ -84,7 +105,7 @@ namespace feature_management::engines {
 		//////////////////////////////////////////////////////////////////////////
 		// Render
 		static auto const RENDER_FRAME  = 0x50F7B0;
-		static auto const RENDER_WINDOW = 0x50F8C0;
+		static auto const RENDER_WINDOW_FN = 0x50F8C0;
 
 		//////////////////////////////////////////////////////////////////////////
 		// Scenario

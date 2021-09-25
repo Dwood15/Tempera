@@ -23,60 +23,29 @@
 #include "dinput.h"
 
 namespace Input::DInput {
-	void RegisterLuaFunctions(::LuaScriptManager *mgr) {
-		mgr->registerGlobalLuaFunction("GetControllerState", [](lua_State *L) {
-			auto         idx = getLuaInt(L);
-			XINPUT_STATE state;
+	void PollXinputStateOfController(int idx, XINPUT_STATE &state) {
+		ZeroMemory(&state, sizeof(XINPUT_STATE));
+		auto res = XInputGetState(idx, &state);
 
-			ZeroMemory(&state, sizeof(XINPUT_STATE));
+		if (res != ERROR_SUCCESS) {
+			PrintLn("Poll Controller idx state: %d failed ", idx);
+		}
+	}
 
-			auto result = XInputGetState(idx, &state);
+	static IDirectInputDevice8A *GetJoystick(unsigned int idx) {
+		if (idx > 7) {
+			return nullptr;
+		}
 
-			if (result != ERROR_SUCCESS) {
-				lua_pushinteger(L, -1);
-				lua_pushinteger(L, -1);
-				return 2;
-			}
-
-			lua_createtable(L, 0, 7);
-
-			lua_pushinteger(L, state.dwPacketNumber);
-			lua_setfield(L, -2, "dwPacketNumber");
-
-			lua_pushinteger(L, state.Gamepad.wButtons);
-			lua_setfield(L, -2, "buttons");
-
-			lua_pushinteger(L, state.Gamepad.bLeftTrigger);
-			lua_setfield(L, -2, "leftTrigger");
-
-			//The::std::string might seem redundant, and it probably is. But, I'm pretty sure std string will prune uninterpretable characters.
-			lua_pushinteger(L, state.Gamepad.bRightTrigger);
-			lua_setfield(L, -2, "rightTrigger");
-
-			lua_pushinteger(L, state.Gamepad.sThumbLX);
-			lua_setfield(L, -2, "thumbLX");
-
-			lua_pushinteger(L, state.Gamepad.sThumbLY);
-			lua_setfield(L, -2, "thumbLY");
-
-			lua_pushinteger(L, state.Gamepad.sThumbRX);
-			lua_setfield(L, -2, "thumbRX");
-
-			lua_pushinteger(L, state.Gamepad.sThumbRY);
-			lua_setfield(L, -2, "thumbRY");
-
-			lua_pushinteger(L, 0);
-
-			return 2;
-
-		});
+		return (CurrentRuntime->GetJoystickInputs())[idx];
 	}
 };
 
 namespace gamepads {
-	__int16 *player_ui_globals_single_player_local_player_controllers = (__int16 *) 0x6AFE26;
+	short *player_ui_globals_single_player_local_player_controllers = (__int16 *) 0x6AFE26;
+	static short player_to_controller_arr[MAX_PLAYER_COUNT_LOCAL];
 
-	signed __int16 __fastcall player_ui_get_single_player_local_player_from_controller(__int16 player) {
+	signed short __fastcall player_ui_get_single_player_local_player_from_controller(__int16 player) {
 		__int16 result = 0;
 
 		do {
@@ -115,10 +84,10 @@ namespace players {
 			return datum_index::null();
 		}
 
-		if (local_player_index > CurrentEngine->GetLocalPlayerCount()) {
+		if (local_player_index > CurrentRuntime->GetLocalPlayerCount()) {
 			return datum_index::null();
 		}
 
-		return CurrentEngine->GetLocalPlayers()[local_player_index];
+		return CurrentRuntime->GetLocalPlayers()[local_player_index];
 	}
 };

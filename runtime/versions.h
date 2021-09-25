@@ -1,7 +1,10 @@
 #pragma once
 
 #include "memory_map.h"
-
+#include "../src/gamestate/camera.h"
+#include "../src/scenario/structures.h"
+#include "../src/scenario/scenario.h"
+#include <exception>
 /**
  * I'm going to go on a bit of a lecture here everyone who reads this code
  * can potentially understand what I'm trying to do here.
@@ -91,35 +94,92 @@ namespace feature_management {
 				sapien   = 'SAPI',
 		};
 
-		template <class T>
 		class IEngine {
+		protected:
+			major                 Major = major::NO;
+			minor                 Minor = minor::nope;
+			features              Supported = features::NOPE;
 		public:
-			const char *LUAFILE        = "init.txt";
-
-			static bool SupportsFeature(features feat) {
-				return (feat & T::SupportedFeatures()) > 0;
+			IEngine() {
+				Major = major::NO;
+				Minor = minor::nope;
+				Supported = features::NOPE;
 			}
 
-			bool SupportsFeature(uint feat) {
-				return (feat & T::SupportedFeatures()) == feat;
+			virtual const char* GetLogFileName() {
+				return "tempera.unk.debug.log";
 			}
 
-			static bool HasSupport() { return T::SupportedFeatures() != features::NOPE; }
+			virtual features SupportedFeatures() {
+				return Supported;
+			}
 
-		};
-		class CustomEd : public IEngine<CustomEd> {
+			virtual bool SupportsFeature(features feat) {
+				return (feat & SupportedFeatures()) > 0;
+			}
+
+			virtual bool SupportsFeature(uint feat) {
+				return (feat & SupportedFeatures()) > 0;
+			}
+
+			virtual bool HasSupport() { return Supported != features::NOPE; }
+
+			const char *GetCurrentMajorVerString() {
+				switch (Major) {
+					case engines::major::DEDI:
+						return "DEDI";
+					case engines::major::HEK:
+						switch (Minor) {
+							case engines::minor::sapien:
+								return "SAPI";
+							default:
+								return "HEK";
+						}
+					case engines::major::PC:
+						return "PC";
+					case engines::major::MAC:
+						return "MAC";
+					case engines::major::STUBBZ:
+						return "STBZ";
+					case engines::major::TRIAL:
+						return "TRIL";
+					case engines::major::CE:
+						return "CE";
+					default:
+						return "";
+				}
+			}
+
 		public:
-			CustomEd() = default;
-			~CustomEd() = default;
+			virtual bool IsHek() { return false; }
+			virtual bool IsSapien() { return false; }
+			virtual bool IsCustomEd() { return false; }
+			virtual minor GetMinorVersion() { return Minor; }
 
-			const char * DEBUG_FILENAME    = R"("tempera.ce.unk.debug.log")";
-			const char *GAME_REGISTRY_PATH = R"(Software\Microsoft\Microsoft Games\Halo CE)";
-			// static const char* HCE_LUAFILE = "hce.init.txt";
+		public:
+			virtual Yelo::Camera::s_cinematic_globals_data ** GetCinematicGlobals() { return nullptr; };
+			virtual Yelo::Scenario::s_scenario_globals ** GetScenarioGlobals() { return nullptr; };
+			virtual	Yelo::TagGroups::scenario ** GetGlobalScenario() { return nullptr; };
+			virtual Yelo::TagGroups::coll::collision_bsp ** GetGlobalBsp3d() { return nullptr; };
 
-			static features SupportedFeatures() {
-				return features::LUA_HOOKS;
+			virtual LPCoreAddressList GetCoreAddressList() {
+				return LPCoreAddressList();
+			};
+
+			virtual void GetMallocAddresses(uint &cpu_alloc_size, uint &game_state_globals_ptr, uint &game_state_globals_crc) {
+				cpu_alloc_size = 0;
+				game_state_globals_ptr = 0;
+				game_state_globals_crc = 0;
 			}
 
+			virtual defined_functionrange* GetFunctionMap() {
+				return nullptr;
+			}
+
+			virtual void WriteHooks() {
+				//PrintLn("WriteHooks for the loaded engine is unsupported");
+				throw std::exception("WriteHooks for virtual IEngine class unsupported");
+			}
 		};
 	};
 };

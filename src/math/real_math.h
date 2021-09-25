@@ -4,6 +4,8 @@
  */
 
 #include <macros_generic.h>
+
+
 //Yup, guess I'm turning into Kornman...
 #define REAL_ASSRT(name, members) STAT_ASSERT(name, members * sizeof(real))
 //Only bother porting what we actually need.
@@ -29,6 +31,7 @@ struct real_point2d {
 	real x;
 	real y;
 }; REAL_ASSRT(real_point2d, 0x2);
+STAT_ASSERT(real_point2d, 0x8);
 
 struct real_point3d : public real_point2d {
 	real z;
@@ -131,8 +134,6 @@ struct real_matrix3x3 {
 	real_vector3d Up;
 };
 
-// #include <d3d9types.h>
-
 struct real_matrix4x3 {
 	real          Scale;
 	real_vector3d Forward;
@@ -159,6 +160,7 @@ struct real_matrix4x3 {
 	// 	d3dmat._44 = Scale;
 	// }
 };
+//STAT_ASSERT(real_matrix4x3, 0x4 + sizeof(real_vector3d) * 3 + sizeof(real_point3d));
 
 struct real_matrix3x4 {
 	float m[4][3];

@@ -1,5 +1,5 @@
 #Project: Tempera
-#Copyright � 2020 dwood
+#Copyright � 2021 Dason Woodhouse
 # - GNU GPLv3
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
@@ -33,41 +33,27 @@ project(${PROJECT_NAME} C CXX)
 
 set(TARGET_GAME_VER "HALO_CE_1_10")
 
-add_subdirectory(runtime)
-
-set(COMMON ${CMAKE_CURRENT_SOURCE_DIR}/common/)
-
-include_directories(AFTER ${GAME_LIB_DIRS} ${COMMON})
+include_directories(AFTER ${CMAKE_CURRENT_SOURCE_DIR}/runtime ${CMAKE_CURRENT_SOURCE_DIR}/common/)
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 
 find_path(LUA_PATH FindLua.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 
-#find_path(TDN_PATH FindTinyDNN.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
-#C:\Users\Dwood\Documents\GitHub\tiny-dnn\tiny_dnn
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH} ${TDN_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH})
 
 find_package(HaloCE REQUIRED)
 find_package(Lua REQUIRED)
+find_package(DirectX REQUIRED)
 #find_package(YamlCpp REQUIRED)
 
 message(STATUS "Post-Find LUA debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
-
-find_package(DirectX REQUIRED)
-#find_package(TinyDNN)
 
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
 include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${INCLUDE}/detours ${LUA_INCLUDE_DIR})
 
-# Defines Debug by default.
-if (NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Debug")
-    message(STATUS "Build type not specified: Using Debug by default.")
-endif (NOT CMAKE_BUILD_TYPE)
-
 add_definitions(-D_WINDOWS -D_USRDLL)
-#TODO: Include GCC_CLANG/CMakeLists.txt
+#TODO: GCC/Clang compiler support
 
 if (MSVC)
     set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -89,8 +75,6 @@ if (MSVC)
 
     #CLANGD HELPER
     set(CMAKE_CXX_COMPILER_TARGET i686-pc-win32-msvc)
-    set(COMPILER_REL_FLDR msvc)
-    #	set(CMAKE_C_FLAGS '')
 
     set(COMPILER_MACROS "/D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /DDIRECTINPUT_VERSION=0x800\ /D_CRT_SECURE_NO_WARNINGS")
 
@@ -102,14 +86,6 @@ if (MSVC)
 	#Apparently MTd is going out of fashion?
     set(CMAKE_CXX_FLAGS_DEBUG "/TP\ /MP\ /MTd\ /Gy- /W3\ /Od\ /Zi\ /MP\ /EHsc\ ${NEW_FEATURES}\ /fp:fast\ /arch:SSE2\ ${COMPILER_MACROS}")
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
-
-
-#	CMAKE_CXX_FLAGS
-#	CMAKE_CXX_FLAGS_DEBUG
-#	CMAKE_CXX_FLAGS_RELEASE
-#
-#	CMAKE_C_FLAGS_DEBUG
-#	CMAKE_C_FLAGS_RELEASE
 
 
     # 4070 : Silences `OUT directive differs from filename ignoring directive` (warning)
@@ -133,60 +109,67 @@ endif ()
 file(GLOB DETOURS_GLOB libs/detours.lib)
 file(GLOB LUA_GLOB libs/lua53.lib)
 
-add_subdirectory(src)
+#BEGIN RUNTIME Cmake
 
-set(COMMON_H
-	${CMAKE_CURRENT_SOURCE_DIR}/common/addlog.h
-	${CMAKE_CURRENT_SOURCE_DIR}/common/engine_interface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/macros_generic.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/struct_helper.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/control_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/damage.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/effects_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/generic_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/hs_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/objects_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/ai_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/scenario_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/geometry_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/yelo_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/memory_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/unit_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/model_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/player_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/weapon_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/network_enums.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/postprocessing.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/bitmaps.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/shaders.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/materials.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/animations.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/damage.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/math.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/vehicle.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/render.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/engine.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/enums/game_variants.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/render/rasterizer/dx9/dx9_render_targets.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/game/game_engine.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/game/networking/client_manager_structures.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/game/networking/game_globals.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/game_engine.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/game_engine.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/game_types.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects/vehicle_remapper.h
-	${CMAKE_CURRENT_SOURCE_DIR}/common/engine_interface.cpp)
+#there was intention at one point to support statically loading modules for different versions of the game
+#it's mostly just been left alone.
+set(HALO_TRIAL runtime/halo1/windows/trial)
+set(HALO_FULL runtime/halo1/windows/full)
 
-add_custom_target(HeadersTarget SOURCES ${SRC_H})
+if (NOT DEFINED TARGET_GAME_VER)
+    message(WARNING "TARGET_GAME_VER IS NOT DEFINED")
+    message(FATAL_ERROR "BUILDING TEMPERA REQUIRES A VERSION OF THE 2000-2005 ERA (ie halo 1) BLAM ENGINE TO BE SELECTED.")
+endif ()
+
+if (NOT TARGET_GAME_VER MATCHES "^(HALO)_(TRIAL|PC|CE)")
+    message(FATAL_ERROR "UNKNOWN VERSION ${TARGET_GAME_VER} SELECTED.")
+endif ()
+
+#This is deliberately _not_ an elseif.
+if (TARGET_GAME_VER MATCHES "^(HALO)_(TRIAL|PC|CE)")
+    set(GAME runtime/halo1)
+endif ()
+
+if (TARGET_GAME_VER MATCHES "^HALO_TRIAL$")
+    set(GAME ${HALO_TRIAL})
+    message(FATAL_ERROR "HALO TRIAL IS NOT AN IMPLEMENTED LIBRARY TARGET. SORRY.")
+endif ()
+
+if (NOT TARGET_GAME_VER MATCHES "^(HALO)_(PC|CE)_(1_[0-1][0-9])$")
+    message(FATAL_ERROR "UNKNOWN VERSION ${TARGET_GAME_VER} SELECTED.")
+endif ()
+
+find_path(GAME_PATH FindHaloCE.cmake PATHS ./cmake REQUIRED)
+#END RUNTIME location
 
 add_library(dinput8 SHARED
-        ${COMMON_H}
-        ${LUA_INCLUDE_DIR}
-        ${SRC_H}
-        ${RUNTIME_H}
-        ${RUNTIME_CXX}
-        ${SRC_CXX}
-#        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects/yelo_objects.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/ce/1_10/110EngineManager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/hek/sapien/sapienEngineManager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/ce/1_10/function_rewrite.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/engine_interface.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tags/group/base.cpp
+        #	${CMAKE_CURRENT_SOURCE_DIR}/tags/group/groups_structures.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tags/group/tag_groups.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tags/group/c_tag_iterator.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/units/units.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/camera.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects/objectcontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/controls.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/players.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lua/script_manager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Direct3D/d3d9hook.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/cseries/random.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Dinput/dinput.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/engine_functions.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/RuntimeManager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/forge.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/math/math.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions/exception_handler.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     	${CMAKE_CURRENT_SOURCE_DIR}/common/addlog.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/memory/data.cpp)
@@ -221,4 +204,3 @@ set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")
 
 set_target_properties(dinput8 PROPERTIES OUTPUT_NAME "dinput8")
-#target_compile_features(dinput8 PRIVATE cxx_std_17)

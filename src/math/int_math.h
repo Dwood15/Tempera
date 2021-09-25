@@ -41,9 +41,8 @@ struct short_bounds {
 };
 STAT_ASSERT(short_bounds, 0x4);
 
-
 #define pad_point2d unsigned short : 16; unsigned short : 16
 
 #define pad_rectangle2d unsigned short : 16; unsigned short : 16; unsigned short : 16; unsigned short : 16
 
-
+#include "../render/render.h"

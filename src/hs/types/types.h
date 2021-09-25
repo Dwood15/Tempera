@@ -4,7 +4,7 @@
 #include <array>
 #include <d3dx9math.h>
 #include "../structures.h"
-#include "../../ai/actors/actors.h"
+//#include "../../ai/actors/actors.h"
 #include "../../ai/actors/actor_definitions.h"
 #include "enums/generic_enums.h"
 

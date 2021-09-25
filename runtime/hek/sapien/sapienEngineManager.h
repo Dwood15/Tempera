@@ -5,19 +5,25 @@
 #include "../../../src/gamestate/objects.h"
 
 namespace feature_management::engines {
-	class Sapien : public IEngine<Sapien> {
+	class Sapien : public IEngine {
 	public:
-		Sapien() = default;
+		Sapien() {
+			Major = major::HEK;
+			Minor = minor::sapien;
+			Supported = features::LUA_HOOKS;
+		}
 		~Sapien() = default;
 
-		static constexpr const char *DEBUG_FILENAME = const_cast<char*>("tempera.hek.sapien.debug.log");
-		static const defined_functionrange * GetFunctionMap();
-		static LPCoreAddressList GetCoreAddressList();
-		static void WriteHooks();
-
-		// static const char* LUAFILE = "hek.sapien.init.txt";
-		static features SupportedFeatures() {
-			return features::LUA_HOOKS;
+		const char* GetLogFileName() {
+			return "tempera.hek.sapien.debug.log";
 		}
+
+		bool IsSapien() {
+			return true;
+		}
+
+		defined_functionrange * GetFunctionMap();
+		LPCoreAddressList GetCoreAddressList();
+		virtual void WriteHooks();
 	};
 };

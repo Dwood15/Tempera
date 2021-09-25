@@ -1,4 +1,3 @@
-#include <windows.h>
 #include "macros_generic.h"
 #include "verification.h"
 
@@ -51,7 +50,7 @@ namespace Yelo::TagGroups {
 
 	template <class TAction, typename T>
 	bool tag_block_elements_do_action_sans_safe_get(T *block, TAction &action = TAction()) {
-		auto *definition = nullptr;
+		//auto *definition = nullptr;
 		bool result      = true;
 
 		// for (int x = 0; x < block->count; x++) {

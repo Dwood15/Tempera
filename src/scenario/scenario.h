@@ -61,7 +61,6 @@ namespace Yelo {
 	};
 
 	namespace blam {
-
 		// TagGroups::s_game_globals *scenario_get_game_globals() {
 		// 	return GameState::GlobalGameGlobals();
 		// }
@@ -98,17 +97,17 @@ namespace Yelo {
 
 		datum_index __cdecl scenario_tags_load(const char *  scenario_name);
 
-		datum_index __cdecl scenario_tags_load_impl(const char *  scenario_name) {
-			datum_index scenario_index = datum_index::null();
-
-			// texture_cache_open();
-			// sound_cache_open();
-			// scenario_index = cache_file_tags_load(scenario_name);
-			//
-			// Scenario::ProjectYellowInitializeForNewMap();
-
-			return scenario_index;
-		}
+//		datum_index __cdecl scenario_tags_load_impl(const char *  scenario_name) {
+//			datum_index scenario_index = datum_index::null();
+//
+//			// texture_cache_open();
+//			// sound_cache_open();
+//			// scenario_index = cache_file_tags_load(scenario_name);
+//			//
+//			// Scenario::ProjectYellowInitializeForNewMap();
+//
+//			return scenario_index;
+//		}
 
 		void __cdecl scenario_tags_unload();
 
@@ -122,29 +121,29 @@ namespace Yelo {
 		// 	return cache_file_structure_bsp_load(reference);
 		// }
 
-		void __cdecl scenario_tags_unload_impl() {
-			// texture_cache_close();
-			// sound_cache_close();
-			//
-			// Scenario::ProjectYellowDisposeFromOldMap();
-			//
-			// cache_file_tags_unload();
-		};
+//		void __cdecl scenario_tags_unload_impl() {
+//			// texture_cache_close();
+//			// sound_cache_close();
+//			//
+//			// Scenario::ProjectYellowDisposeFromOldMap();
+//			//
+//			// cache_file_tags_unload();
+//		};
 
-		void __cdecl scenario_unload_impl() {
-			//assert(!bink_playback_active());
-			scenario_tags_unload_impl();
-			blam_global_scenario_index      = datum_index::null();
-			// blam_global_structure_bsp_index = NONE;
-			//Scenario::ScenarioGlobals()->current_structure_bsp_index = NONE;
-			// blam_global_scenario      = nullptr;
-			// blam_global_structure_bsp = nullptr;
-			// blam_global_collision_bsp = nullptr;
-			// blam_global_bsp3d         = nullptr;
-			// blam_global_game_globals  = nullptr;
-		}
+//		void __cdecl scenario_unload_impl() {
+//			//assert(!bink_playback_active());
+//			//scenario_tags_unload_impl();
+//			blam_global_scenario_index      = datum_index::null();
+//			// blam_global_structure_bsp_index = NONE;
+//			//Scenario::ScenarioGlobals()->current_structure_bsp_index = NONE;
+//			// blam_global_scenario      = nullptr;
+//			// blam_global_structure_bsp = nullptr;
+//			// blam_global_collision_bsp = nullptr;
+//			// blam_global_bsp3d         = nullptr;
+//			// blam_global_game_globals  = nullptr;
+//		}
 
-		bool __cdecl scenario_load_impl(const char *  scenario_name) {
+//		bool __cdecl scenario_load_impl(const char *  scenario_name) {
 			// tag_load_error_string_clear();
 			//
 			// datum_index scenario_index = scenario_tags_load_impl(scenario_name);
@@ -182,7 +181,7 @@ namespace Yelo {
 			// for (scenario_netgame_equipment &equipment : scenario->netgame_equipment)
 			// 	equipment.runtime_object_index = datum_index::null();
 			//
-			return true;
-		}
+//			return true;
+//		}
 	};
 };

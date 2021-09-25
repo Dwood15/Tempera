@@ -1,5 +1,6 @@
 #include <math.h>
 #include "colors.h"
+#include "real_math.h"
 
 //HaloColor::HaloColor constexpr(float alpha, float red, float green, float blue) : a(alpha), r(red), g(green), b(blue) { }
 HaloColor::HaloColor(float alpha, float red, float green, float blue) : a(alpha), r(red), g(green), b(blue) {
