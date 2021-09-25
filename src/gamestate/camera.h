@@ -27,6 +27,7 @@ namespace Yelo::Camera {
 	STAT_ASSERT(s_cinematic_globals_data, 0x1C);
 }
 
+#include "../math/real_math.h"
 struct _camera {
 	WORD  Unknown1;
 	short wPerspective; // First Person( 0 ), Third Person( 1 ), Dead( 3 )

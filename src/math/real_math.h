@@ -132,8 +132,6 @@ struct real_matrix3x3 {
 	real_vector3d Up;
 };
 
-// #include <d3d9types.h>
-
 struct real_matrix4x3 {
 	real          Scale;
 	real_vector3d Forward;
@@ -160,7 +158,7 @@ struct real_matrix4x3 {
 	// 	d3dmat._44 = Scale;
 	// }
 };
-STAT_ASSERT(real_matrix4x3, 0x4 + sizeof(real_vector3d) *3 + sizeof(real_point3d));
+//STAT_ASSERT(real_matrix4x3, 0x4 + sizeof(real_vector3d) * 3 + sizeof(real_point3d));
 
 struct real_matrix3x4 {
 	float m[4][3];
@@ -171,4 +169,27 @@ namespace Yelo::blam {
 	real periodic_function_evaluate(Enums::periodic_function function_type, real input);
 
 	real transition_function_evaluate(Enums::transition_function function_type, real input);
+};
+
+// #define vect3 D3DXVECTOR3
+struct vect3 : public D3DXVECTOR3 {
+	using D3DXVECTOR3::D3DXVECTOR3;
+	// vect3() : D3DXVECTOR3() {}
+	//
+	// vect3(float x, float y, float z) : D3DXVECTOR3(x, y, z) {}
+	inline operator float *() { return reinterpret_cast<float *>(this); }
+	inline operator real_point3d *() { return reinterpret_cast<real_point3d *>(this); }
+
+};
+
+STAT_ASSERT(vect3, sizeof(D3DXVECTOR3));
+
+class CMath {
+public:
+
+	float Get2dDistance(float x, float y);
+
+	float GetAngleDistance(vect3 local, vect3 toTarget);
+
+	vect2 GetAngleToTarget(vect3 local, vect3 target);
 };

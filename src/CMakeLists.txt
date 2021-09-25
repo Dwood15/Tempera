@@ -1,9 +1,6 @@
-add_subdirectory(engine)
-add_subdirectory(math)
 add_subdirectory(gamestate)
 
 add_subdirectory(lua)
-add_subdirectory(memory)
 add_subdirectory(tags)
 
 set(SRC_CXX
@@ -17,6 +14,5 @@ set(SRC_CXX
 	${CMAKE_CURRENT_SOURCE_DIR}/exceptions/exception_handler.cpp
 	${LUA_SRC}
 	${GAMESTATE_SRC}
-	${RENDER_CXX}
 	${TAGS_CXX}
 	PARENT_SCOPE)

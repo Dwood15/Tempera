@@ -54,20 +54,6 @@ struct vect2 : public D3DXVECTOR2 {
 
 STAT_ASSERT(vect2, sizeof(D3DXVECTOR2));
 
-// #define vect3 D3DXVECTOR3
-#include "real_math.h"
-struct vect3 : public D3DXVECTOR3 {
-	using D3DXVECTOR3::D3DXVECTOR3;
-	// vect3() : D3DXVECTOR3() {}
-	//
-	// vect3(float x, float y, float z) : D3DXVECTOR3(x, y, z) {}
-	inline operator float *() { return reinterpret_cast<float *>(this); }
-	inline operator real_point3d *() { return reinterpret_cast<real_point3d *>(this); }
-
-};
-
-STAT_ASSERT(vect3, sizeof(D3DXVECTOR3));
-
 //-------------------------
 struct HaloColor {
 	float a;
@@ -83,12 +69,3 @@ const auto hGreen = HaloColor(1,0,1,0);
 const auto hBlue  = HaloColor(1,0,0,1);
 const auto hRed   = HaloColor(1,1,0,0);
 
-class CMath {
-public:
-
-	float Get2dDistance(float x, float y);
-
-	float GetAngleDistance(vect3 local, vect3 toTarget);
-
-	vect2 GetAngleToTarget(vect3 local, vect3 target);
-};
