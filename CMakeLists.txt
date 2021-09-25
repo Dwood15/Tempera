@@ -57,12 +57,6 @@ set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
 include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${INCLUDE}/detours ${LUA_INCLUDE_DIR})
 
-# Defines Debug by default.
-if (NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Debug")
-    message(STATUS "Build type not specified: Using Debug by default.")
-endif (NOT CMAKE_BUILD_TYPE)
-
 add_definitions(-D_WINDOWS -D_USRDLL)
 #TODO: Include GCC_CLANG/CMakeLists.txt
 
@@ -124,11 +118,8 @@ add_subdirectory(src)
 
 add_library(dinput8 SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/common/engine_interface.cpp
-        ${LUA_INCLUDE_DIR}
-        ${RUNTIME_H}
         ${RUNTIME_CXX}
         ${SRC_CXX}
-#        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects/yelo_objects.h
 		${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     	${CMAKE_CURRENT_SOURCE_DIR}/common/addlog.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/memory/data.cpp)
@@ -163,4 +154,3 @@ set(CMAKE_PDB_OUTPUT_DIRECTORY "${HaloCE_ROOT_DIR}")
 set(LIBRARY_OUTPUT_PATH "${HaloCE_ROOT_DIR}")
 
 set_target_properties(dinput8 PROPERTIES OUTPUT_NAME "dinput8")
-#target_compile_features(dinput8 PRIVATE cxx_std_17)

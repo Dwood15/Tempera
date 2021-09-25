@@ -1,39 +1,22 @@
-set(DINPUT_CXX
-		${CMAKE_CURRENT_SOURCE_DIR}/Dinput/dinput.cpp
-	)
-
-add_subdirectory(ai)
 add_subdirectory(engine)
 add_subdirectory(math)
-add_subdirectory(cache)
-add_subdirectory(cseries)
-add_subdirectory(effects)
-add_subdirectory(exceptions)
-add_subdirectory(game)
 add_subdirectory(gamestate)
-add_subdirectory(hs)
+
 add_subdirectory(lua)
 add_subdirectory(memory)
-add_subdirectory(models)
-add_subdirectory(render)
-add_subdirectory(scenario)
 add_subdirectory(tags)
 
 set(SRC_CXX
 	${CMAKE_CURRENT_SOURCE_DIR}/Direct3D/d3d9hook.cpp
-	${CSERIES_CXX}
-	${AI_CXX}
-	${DINPUT_CXX}
-	${ENGINE_CXX}
+	${CMAKE_CURRENT_SOURCE_DIR}/cseries/random.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Dinput/dinput.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/engine/engine_functions.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/CurrentEngine.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/forge.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/math/math.cpp
-	${SCRIPTING_SRC}
-	${EXCEPTIONS_SRC}
+	${CMAKE_CURRENT_SOURCE_DIR}/exceptions/exception_handler.cpp
 	${LUA_SRC}
 	${GAMESTATE_SRC}
-	${SCENARIO_SRC}
-	${GAME_SRC}
 	${RENDER_CXX}
 	${TAGS_CXX}
 	PARENT_SCOPE)

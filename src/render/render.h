@@ -1,80 +1,141 @@
 #pragma once
 
-/*
+
+#include <enums/geometry_enums.h>
+
 struct s_render_camera
 {
 	real_point3d point;
 	real_vector3d forward;
 	real_vector3d up;
 
-	UNKNOWN_TYPE(bool); // controls the rendering of stuff related to certain objects
-	PAD24;
+	char unkType; // controls the rendering of stuff related to certain objects
+	char unkPad0;
+	short unkPad1;
 	real vertical_field_of_view;
 	rectangle2d viewport_bounds;
-	point2d window_bounds;
+	rectangle2d window_bounds;
 	real z_near, z_far;
 	int __PAD32[4]; // just looks like 16 bytes of unused poop
-}; BOOST_STATIC_ASSERT(sizeof(s_render_camera) == 0x54)
+};
+STAT_ASSERT(s_render_camera, 0x54);
+
+#pragma pack(push, 1)
+struct s_render_frustum
+{
+	real unkRealPad[4]; // 4 reals
+	real_matrix4x3 world_to_view;
+	real_matrix4x3 view_to_world;
+
+	// clipping bounds
+	real_plane3d padPlane3d0;
+	real_plane3d padPlane3d01;
+	real_plane3d padPlane3d02;
+	real_plane3d padPlane3d03;
+
+	real_plane3d padPlane3d04;
+	real_plane3d padPlane3d05;
+
+	real z_near, z_far;
+
+	real_point3d padPlane3d06;
+	real_point3d padPlane3d07;
+	real_point3d padPlane3d08;
+	real_point3d padPlane3d09;
+	real_point3d padPlane3d0A;
+	real_point3d padPlane3d0B;
+	real_point3d padPlane3d0C;
+	real_point3d padPlane3d0D;
+
+	bool projection_valid;
+	unsigned char pad0;
+	unsigned short pad1;
+
+	// projection matrix
+	unsigned __int64 pad2;
+	unsigned __int64 pad3;
+	unsigned __int64 pad4;
+	unsigned __int64 pad5;
+	unsigned __int64 pad6;
+	unsigned __int64 pad7;
+	unsigned __int64 pad8;
+	unsigned __int64 pad9;
+
+	real_point2d padA;
+};
+#pragma pack(pop)
+STAT_ASSERT(s_render_frustum, 0x18C);
 
 struct s_render_window
 {
 	int16 local_player_index;
-	UNKNOWN_TYPE(bool);
-	PAD8;
+	bool unkTypePad;
+	char pad0;
 	s_render_camera render_camera, rasterizer_camera;
-}; static_assert(sizeof(s_render_window) == 0xAC);
+};
+STAT_ASSERT(s_render_window, 0xAC);
 
 struct s_render_fog
 {
-	word_flags flags; // same flags as in the tag definition
-	short : 16;
+	ushort flags; // same flags as in the tag definition
+	ushort unkPad0;
 	real_rgb_color atmospheric_color;
 	real atmospheric_maximum_density,
 		atmospheric_minimum_distance,
 		atmospheric_maximum_distance;
-	UNKNOWN_TYPE(int16);
-	short : 16;
+	ushort unkPad1;
+	ushort unkPad2;
 	real_plane3d plane; // copied from the bsp's fog planes
 	real_rgb_color color; // copied from tag definition
 	real max_density; // copied from tag definition
 	real planar_maximum_distance;
 	real opaque_depth; // copied from tag definition
 	const void* screen_layers_definition; // pointer to the tag definition data
-	UNKNOWN_TYPE(real);
-}; static_assert(sizeof(s_render_fog) == 0x50);
+	real unkTypePad;
+};
+STAT_ASSERT(s_render_fog,  0x50);
+
+struct s_byteClusters {
+	byte clusters[0x1A0][0x80];
+};
+STAT_ASSERT(s_byteClusters, 0xD000);
+
+//STAT_ASSERT(s_renderedClusterPvs, 0x40);
+struct s_renderedClustersSum {
+	long cluster_pvs[16]; // (512 + 31) >> 5 )
+	s_byteClusters clusters;
+	short count;
+	short pad;
+};
+STAT_ASSERT(s_renderedClustersSum, 0xD044);
 
 struct s_render_globals
 {
-	int		__iUnk0;
-	int		__iUnk1;
-	short local_player_index;
-	short __sUnk0;
-	long __lUnk0;
-	real __rUnk0;
-	byte camera[];
-	s_render_frustum frustum;
-	s_render_fog fog;
+	int		__iUnk0; //0x0
+	int		__iUnk1; //0x4
+	short local_player_index; //0x8
+	short __sUnk0; //0xA
+	long __lUnk0; //0xC
+	real __rUnk0; //0x10
+	s_render_camera camera; //0x64
+	s_render_frustum frustum; //0x1F0
+	s_render_fog fog; //0x240
 	int leaf_index;
 	int cluster_index;
 	char pad; // probably an unused bool
 	bool visible_sky_model;
 	short visible_sky_index;
 
-	struct {
-		long cluster_pvs[512];
-		byte clusters[0x1A0][k_maximum_rendered_clusters];
-		short count;
-		short pad;
-	}rendered_clusters;
+	s_renderedClustersSum rendered_clusters;
 
 	struct {
 		unsigned int visibility_bitvector[0x20000];
 		int count;
-		unsigned int triangles[k_maximum_rendered_triangles];
-	}rendered_triangles;
-}; static_assert(sizeof(s_render_globals) == 0x9D298);
+		unsigned int triangles[::Yelo::Enums::k_maximum_rendered_triangles];
+	} rendered_triangles;
+};
+STAT_ASSERT(s_render_globals, 0x9D298);
 //s_render_globals* RenderGlobals(); // defined in the implementing extension's code
-*/
 
 #include <macros_generic.h>
 #include "../math/real_math.h"
@@ -93,23 +154,6 @@ STAT_ASSERT(s_structure_render_globals, 0x18);
 
 
 namespace render{
-	int main_get_window_count_override();
-
-	/*
-	 * 0x4CCF76
-	 * - E8 75 EF FF FF
-	 *
-	 * 0x53BF45
-	 * - E8 A6 FF F8 FF
-	 *
-	 * 0x53D018
-	 * - E8 D3 EE F8 FF
-	 *
-	 * 0x53D0B8
-	 * - E8 33 EE F8 FF
-	 */
-	int main_get_current_solo_level(char * level_string);
-
 	/**
 	 * 0x49757D - interface_draw_screen
 	 * - E8 FE 4F 03 00

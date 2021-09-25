@@ -11,15 +11,14 @@ feature_management::engines::RuntimeManager *CurrentRuntime = nullptr;
 feature_management::engines::IEngine *CurrentEngine = nullptr;
 
 namespace feature_management::engines {
-//void RuntimeManager::InitializeMemoryUpgrades() {
-//	if (this->HasSupport() && !this->IsHek()) {
-//		if (this->IsCustomEd() && this->CurrentMinor == feature_management::engines::minor::halo_1_10) {
-//			//CE110::InitializeMemoryUpgrades();
-//		}
-//
-//	}
-//}
 	bool  *RuntimeManager::at_main_menu = nullptr;
+
+	void RuntimeManager::SetSpawnCount(short newSpawnNum) {
+		if (spawn_count == nullptr) {
+			PrintLn("Spawn Count is nullptr but we're still setting it. Game will die.");
+		}
+		*spawn_count = newSpawnNum;
+	}
 
 	constexpr bool RuntimeManager::equal(const char *lhs, const char *rhs) {
 		while (*lhs || *rhs) {

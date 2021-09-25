@@ -11,6 +11,7 @@ namespace Yelo {
 		void Initialize() {
 			//HALO CE HOOKS
 			auto AI_UPDATE_HOOK= reinterpret_cast<void *>(0x42A949);
+
 			memory::CreateHookRelativeCall(&AI::Update, AI_UPDATE_HOOK, Enums::_x86_opcode_retn);
 		}
 

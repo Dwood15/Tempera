@@ -141,27 +141,6 @@ function PlayerUpdate(player_control_state, player_index)
 		end
 
 		Dbg("Retrieving ControllerState")
-		--Controller is -1 if not found, and result is 0 if successful.
-		-- Will be providing helpers for reading this more fully.
-		controller, result = GetControllerState(currentGamePad)
-
-		if firstPlayerUpdateCalled == false then
-			Dbg("ControllerState retrieved")
-		end
-
-		if controller ~= -1 and result == 0 then
-			Dbg("--- Controller State values ---")
-			for k, v in pairs(controller) do
-				Dbg(string.format("Key: [%s] Value: [0x%x]", k, v))
-			end
-			Dbg("---")
-
-			if IsButtonPressed(controller.buttons, XINPUT_GAMEPAD_Y) then
-				Dbg("Controller input Y is pressed, jumping the player")
-			end
-
-			--TODO: Check appropriate thumb stick for input, grenade throw, etc etc.
-		end
 
 		if firstPlayerUpdateCalled == false then
 			Dbg("ControllerState Checked")

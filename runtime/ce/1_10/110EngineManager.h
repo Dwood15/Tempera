@@ -71,7 +71,6 @@ namespace feature_management::engines {
 			cpu_alloc_size = 0x67DD8C;
 			game_state_globals_crc = 0x67DD94;
 		}
-
 		const Yelo::TagGroups::coll::collision_bsp **global_collision_bsp  = (const Yelo::TagGroups::coll::collision_bsp **)0x6E2258;
 
 		const Yelo::TagGroups::structure_bsp **global_structure_bsp  = (const Yelo::TagGroups::structure_bsp **)(0x6E225C);
@@ -110,7 +109,7 @@ namespace feature_management::engines {
 		//////////////////////////////////////////////////////////////////////////
 		// Render
 		static auto const RENDER_FRAME  = 0x50F7B0;
-		static auto const RENDER_WINDOW = 0x50F8C0;
+		static auto const RENDER_WINDOW_FN = 0x50F8C0;
 
 		//////////////////////////////////////////////////////////////////////////
 		// Scenario

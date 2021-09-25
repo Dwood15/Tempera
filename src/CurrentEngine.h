@@ -85,6 +85,7 @@ namespace feature_management::engines {
 
 		s_player_control * GetPlayerControl(unsigned short idx);
 
+		void SetSpawnCount(short newSpawnNum);
 		player *GetPlayer(short index);
 
 		static bool AreWeInMainMenu();

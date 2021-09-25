@@ -18,13 +18,34 @@
 #define TO_STR(x) #x
 #define XSTR(s) TO_STR(s)
 
-template <size_t A, size_t B>
-struct TAssertEquality {
-	static_assert(A == B, "A != B");
-	static constexpr bool _cResult = (A == B);
+template <size_t Diff>
+struct TAssertEqualityDiff {
+	static_assert(Diff == 0, "A != B");
+	static constexpr bool _cResult2 = (Diff == 0);
+	static constexpr bool _cResult = (Diff == 0);
 };
 
-#define STAT_ASSERT(object, size) static_assert( TAssertEquality<sizeof(object), size>::_cResult);
+template <size_t A, size_t B>
+struct TAssertEquality {
+	static constexpr bool AssertDiff() {
+		if constexpr(A > B) {
+			TAssertEqualityDiff<A - B> inst;
+			return A == B;
+		}
+
+		if constexpr(B > A) {
+			TAssertEqualityDiff<B - A> inst;
+			return B == A;
+		}
+		return true;
+	}
+
+	static_assert(A-B == 0, "A != B");
+	static constexpr bool _cResult = (A-B == 0);
+	static constexpr bool _cResult2 = (B-A == 0);
+};
+
+#define STAT_ASSERT(object, size) static_assert( TAssertEqualityDiff<sizeof(object) - size>::_cResult);
 
 #define IMPLEMENTATION_REQUIRED static_assert(false, "This features requires implementation to compile on this target.");
 

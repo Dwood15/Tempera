@@ -489,8 +489,6 @@ void LuaScriptManager::InitializeLua(const char *filename) {
 
 	registerGlobalLuaFunction("IsPlayerSpawned", l_IsPlayerSpawned);
 
-	Input::DInput::RegisterLuaFunctions(this);
-
 	registerGlobalLuaFunction("IsCustomEd", [](lua_State *L) {
 		lua_pushboolean(L, CurrentEngine->IsCustomEd());
 		return 1;

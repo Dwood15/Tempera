@@ -33,23 +33,10 @@ find_path(GAME_PATH FindHaloCE.cmake PATHS ./cmake REQUIRED)
 
 set(RUNTIME_DIR ${PROJECT_SOURCE_DIR}/runtime)
 
-
-set(SUPPORTED_RUNTIMES_H
-	${RUNTIME_DIR}/ce/1_10/function_rewrite.h
-	${RUNTIME_DIR}/ce/1_10/110EngineManager.h
-	${RUNTIME_DIR}/hek/sapien/sapienEngineManager.h
-	)
-
 set(RUNTIME_CXX
 	${RUNTIME_DIR}/ce/1_10/110EngineManager.cpp
 	${RUNTIME_DIR}/hek/sapien/sapienEngineManager.cpp
 	${RUNTIME_DIR}/ce/1_10/function_rewrite.cpp
-	PARENT_SCOPE)
-
-set(RUNTIME_H
-	${SUPPORTED_RUNTIMES_H}
-	${RUNTIME_DIR}/versions.h
-	${RUNTIME_DIR}/memory_map.h
 	PARENT_SCOPE)
 
 #what should be accessible - just memory_map.h and versions.h via <versions.h>, etc etc

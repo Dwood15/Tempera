@@ -38,6 +38,9 @@ constexpr uintptr_t regular_player_clamps[] = {
 	0x4A0076, //local_player_initialize_spawn_ct);
 	0x4A007E, //local_player_initialize_window_ct);
 
+	//main game render
+	0x4CC604 + 0x1,
+
 	// 			//-- address is to the func(x) itself, not to to the patch
 	// 			//constexpr uintptr_t render_weapon_hud_loc = 0x4B53E0
 	// 			//MPP_B(render_weapon_hud_loc);
@@ -226,6 +229,9 @@ namespace feature_management::engines {
 		}
 
 		void naked main_get_window_ct_wrapper() {
+#ifndef _MSC_VER
+			static_assert(false, "only msvc is supported, update asm for data_iterator_next_wrapper to match compiler differences");
+#endif
 			__asm {
 				push edx
 				call main_get_window_count_override
@@ -350,6 +356,9 @@ namespace feature_management::engines {
 		}
 
 		void naked nakedScenarioInitializeWrapper() {
+#ifndef _MSC_VER
+			static_assert(false, "only msvc is supported, update asm for data_iterator_next_wrapper to match compiler differences");
+#endif
 			__asm {
 				push ebx
 				push edx
@@ -432,10 +441,32 @@ namespace feature_management::engines {
 		patchOnPlayerUpdate();
 	}
 
+	void naked data_iterator_next_wrapper() {
+#ifndef _MSC_VER
+		static_assert(false, "only msvc is supported, update asm for data_iterator_next_wrapper to match compiler differences");
+#endif
+		__asm {
+		push ebx
+		push ebp
+		push esi
+		push edi
+
+		call Yelo::blam::data_iterator_next
+
+		pop edi
+		pop esi
+		pop ebp
+		pop ebx
+		retn
+		}
+	}
+
+
+
 	inline void playerUpdateB4GameSrverIteratorHk() {
 		constexpr uintptr_t players_update_before_game_server_iterator_hook = 0x476CB0;
 		calls::WriteSimpleHook(players_update_before_game_server_iterator_hook,
-							   Yelo::blam::data_iterator_next_wrapper);
+							   data_iterator_next_wrapper);
 	}
 
 	inline void luaPostInitializeHookMainSetupConnInit() {
