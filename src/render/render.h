@@ -1,7 +1,8 @@
 #pragma once
 
-
+#include <macros_generic.h>
 #include <enums/geometry_enums.h>
+#include "../math/colors.h"
 
 struct s_render_camera
 {

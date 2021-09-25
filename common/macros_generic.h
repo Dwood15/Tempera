@@ -45,7 +45,7 @@ struct TAssertEquality {
 	static constexpr bool _cResult2 = (B-A == 0);
 };
 
-#define STAT_ASSERT(object, size) static_assert(TAssertEqualityDiff<sizeof(object) - size>::_cResult);
+#define STAT_ASSERT(object, size) static_assert(TAssertEquality<sizeof(object), size>::_cResult);
 
 #define IMPLEMENTATION_REQUIRED static_assert(false, "This features requires implementation to compile on this target.");
 

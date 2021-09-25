@@ -134,7 +134,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 		if (loaded) {
 			auto err = "Trying to load the DLL despite already being loaded wtf";
 			PrintLn(err);
-			throw std::exception(err);
+			return false;
 		}
 		loadProxy(hinstDLL);
 	} else if (fdwReason == DLL_PROCESS_DETACH) {
