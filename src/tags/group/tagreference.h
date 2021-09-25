@@ -85,7 +85,7 @@ namespace Yelo {
 		void set(const char *name) {
 			this->set(T::k_group_tag, name);
 		}
-	};
+	}; STAT_ASSERT(tag_reference, 0x10);
 
 	namespace blam {
 		extern void tag_reference_clear(tag_reference &reference);
@@ -94,7 +94,6 @@ namespace Yelo {
 		// non-standard overload of the above resolve()
 		extern bool tag_reference_resolve(_Inout_ tag_reference &reference, tag expected_group_tag);
 	}
-
 };
 
 #define pad_tag_reference PAD32 PAD32 PAD32 PAD32
