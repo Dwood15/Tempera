@@ -130,13 +130,17 @@ void cleanUp(HINSTANCE mod) {
 }
 
 extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
-	if (fdwReason == DLL_PROCESS_ATTACH && !loaded) {
+	if (fdwReason == DLL_PROCESS_ATTACH) {
+		if (loaded) {
+			auto err = "Trying to load the DLL despite already being loaded wtf";
+			PrintLn(err);
+			throw std::exception(err);
+		}
 		loadProxy(hinstDLL);
-		return loaded;
-	} else if (fdwReason == DLL_PROCESS_DETACH && loaded) {
+	} else if (fdwReason == DLL_PROCESS_DETACH) {
 		cleanUp(hinstDLL);
 	}
-	return true;
+	return loaded;
 }
 #undef SUPPORTSFEAT
 #undef SUPPORTSFEATS
