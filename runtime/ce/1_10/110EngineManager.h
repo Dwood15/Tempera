@@ -1,10 +1,6 @@
 #pragma once
 
 #include <versions.h>
-//#pragma clang diagnostic push
-//#pragma clang diagnostic ignored "-Weverything"
-#include <dinput.h>
-//#pragma clang diagnostic pop
 
 #include <macros_generic.h>
 #include "../../../src/scenario/structures.h"
