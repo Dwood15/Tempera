@@ -1,6 +1,6 @@
 #pragma once
 #include <dinput.h>
-#include "../CurrentEngine.h"
+#include "../RuntimeManager.h"
 
 namespace Input::DInput {
 		static IDirectInput8 * GetDInput() {

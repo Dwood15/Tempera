@@ -8,7 +8,7 @@
 #include "../../../src/gamestate/player_types.h"
 #include "../../../src/lua/script_manager.h"
 #include "../../../src/hs/structures.h"
-#include "../../../src/CurrentEngine.h"
+#include "../../../src/RuntimeManager.h"
 #include "hs_function_table_references.h"
 #include "../../../src/gamestate/runtime_data.h"
 

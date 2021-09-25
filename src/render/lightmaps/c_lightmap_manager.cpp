@@ -8,7 +8,7 @@
 #include <d3d9.h>
 #include "c_lightmap_manager.hpp"
 #include "../../memory/datum_index.h"
-#include "../../CurrentEngine.h"
+#include "../../RuntimeManager.h"
 
 namespace Yelo {
 	namespace Render {

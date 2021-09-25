@@ -3,7 +3,7 @@
 #include <addlog.h>
 #include "forge.h"
 #include "math/colors.h"
-#include "CurrentEngine.h"
+#include "RuntimeManager.h"
 
 static short last_respawn_count       = 0x0;
 static short last_spawn_count         = 0x0;

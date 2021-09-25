@@ -12,7 +12,7 @@
 #include "../../../src/models/collision_bsp.h"
 #include "../../../src/hs/structures.h"
 #include "../../../src/gamestate/camera.h"
-#include "../../../src/CurrentEngine.h"
+#include "../../../src/RuntimeManager.h"
 
 //TODO: Detect if msvc and only compile with c++latest
 //#if defined(_MSC_VER)

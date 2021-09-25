@@ -1,5 +1,5 @@
 #include "controls.h"
-#include "../CurrentEngine.h"
+#include "../RuntimeManager.h"
 
 static int ucUdates = 0;
 void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client_update_idx) {

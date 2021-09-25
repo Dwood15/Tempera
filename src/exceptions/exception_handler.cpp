@@ -9,7 +9,7 @@
    along with Tempera.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "exception_handler.h"
-#include "../CurrentEngine.h"
+#include "../RuntimeManager.h"
 #include <memory_map.h>
 #include <addlog.h>
 #include <atomic>

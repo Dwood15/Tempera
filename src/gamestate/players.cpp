@@ -4,7 +4,7 @@
 #include <macros_generic.h>
 #include "../memory/datum_index.h"
 #include "players.h"
-#include "../CurrentEngine.h"
+#include "../RuntimeManager.h"
 
 const Yelo::TagGroups::scenario_player *get_scenario_location(Yelo::TagGroups::scenario *scen, ushort idx) {
 	if (idx < scen->player_starting_locations.Count) {

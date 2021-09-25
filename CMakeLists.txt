@@ -39,9 +39,7 @@ find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 
 find_path(LUA_PATH FindLua.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 
-#find_path(TDN_PATH FindTinyDNN.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
-#C:\Users\Dwood\Documents\GitHub\tiny-dnn\tiny_dnn
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH} ${TDN_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH})
 
 find_package(HaloCE REQUIRED)
 find_package(Lua REQUIRED)
@@ -55,7 +53,7 @@ set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${INCLUDE}/detours ${LUA_INCLUDE_DIR})
 
 add_definitions(-D_WINDOWS -D_USRDLL)
-#TODO: Include GCC_CLANG/CMakeLists.txt
+#TODO: GCC/Clang compiler support
 
 if (MSVC)
     set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -111,7 +109,38 @@ endif ()
 file(GLOB DETOURS_GLOB libs/detours.lib)
 file(GLOB LUA_GLOB libs/lua53.lib)
 
-add_subdirectory(runtime)
+#BEGIN RUNTIME Cmake
+
+#there was intention at one point to support statically loading modules for different versions of the game
+#it's mostly just been left alone.
+set(HALO_TRIAL runtime/halo1/windows/trial)
+set(HALO_FULL runtime/halo1/windows/full)
+
+if (NOT DEFINED TARGET_GAME_VER)
+    message(WARNING "TARGET_GAME_VER IS NOT DEFINED")
+    message(FATAL_ERROR "BUILDING TEMPERA REQUIRES A VERSION OF THE 2000-2005 ERA (ie halo 1) BLAM ENGINE TO BE SELECTED.")
+endif ()
+
+if (NOT TARGET_GAME_VER MATCHES "^(HALO)_(TRIAL|PC|CE)")
+    message(FATAL_ERROR "UNKNOWN VERSION ${TARGET_GAME_VER} SELECTED.")
+endif ()
+
+#This is deliberately _not_ an elseif.
+if (TARGET_GAME_VER MATCHES "^(HALO)_(TRIAL|PC|CE)")
+    set(GAME runtime/halo1)
+endif ()
+
+if (TARGET_GAME_VER MATCHES "^HALO_TRIAL$")
+    set(GAME ${HALO_TRIAL})
+    message(FATAL_ERROR "HALO TRIAL IS NOT AN IMPLEMENTED LIBRARY TARGET. SORRY.")
+endif ()
+
+if (NOT TARGET_GAME_VER MATCHES "^(HALO)_(PC|CE)_(1_[0-1][0-9])$")
+    message(FATAL_ERROR "UNKNOWN VERSION ${TARGET_GAME_VER} SELECTED.")
+endif ()
+
+find_path(GAME_PATH FindHaloCE.cmake PATHS ./cmake REQUIRED)
+#END RUNTIME location
 
 add_library(dinput8 SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/runtime/ce/1_10/110EngineManager.cpp
@@ -137,7 +166,7 @@ add_library(dinput8 SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/src/cseries/random.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Dinput/dinput.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/engine_functions.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/CurrentEngine.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/RuntimeManager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/forge.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/math/math.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions/exception_handler.cpp

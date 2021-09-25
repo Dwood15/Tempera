@@ -2,7 +2,7 @@
 
 #include "sapienEngineManager.h"
 #include "../../../src/lua/script_manager.h"
-#include "../../../src/CurrentEngine.h"
+#include "../../../src/RuntimeManager.h"
 
 using namespace feature_management::engines;
 

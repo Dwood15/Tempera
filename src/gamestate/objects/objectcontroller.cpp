@@ -1,5 +1,5 @@
 #include "objectcontroller.h"
-#include "../../CurrentEngine.h"
+#include "../../RuntimeManager.h"
 
 void ObjectController::SetHoldDistance(float dist) {
 	HoldDistance = dist;

@@ -2,7 +2,7 @@
 
 //////////////////////////////////////////////////////////////////////////
 // game
-#include "../CurrentEngine.h"
+#include "../RuntimeManager.h"
 #include "../cseries/MacrosCpp.h"
 #include "../gamestate/objects/units/unit_camera.h"
 

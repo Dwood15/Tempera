@@ -16,7 +16,7 @@
 #include "d3d9hook.h"
 #include "textures.h"
 #include "../gamestate/camera.h"
-#include "../CurrentEngine.h"
+#include "../RuntimeManager.h"
 #include "../gamestate/objects/objectcontroller.h"
 
 CD3D::CD3D() {
