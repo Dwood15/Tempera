@@ -1,5 +1,5 @@
 #Project: Tempera
-#Copyright � 2020 dwood
+#Copyright � 2021 Dason Woodhouse
 # - GNU GPLv3
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
@@ -33,7 +33,7 @@ project(${PROJECT_NAME} C CXX)
 
 set(TARGET_GAME_VER "HALO_CE_1_10")
 
-include_directories(AFTER ${GAME_LIB_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/common/)
+include_directories(AFTER ${CMAKE_CURRENT_SOURCE_DIR}/runtime ${CMAKE_CURRENT_SOURCE_DIR}/common/)
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 
@@ -45,11 +45,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH} $
 
 find_package(HaloCE REQUIRED)
 find_package(Lua REQUIRED)
+find_package(DirectX REQUIRED)
 #find_package(YamlCpp REQUIRED)
 
 message(STATUS "Post-Find LUA debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
-
-find_package(DirectX REQUIRED)
 
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 

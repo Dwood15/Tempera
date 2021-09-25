@@ -29,6 +29,3 @@ set(MINOR_VER 1_10)
 set(MAJOR_VER ${HALO_FULL}/ce PARENT_SCOPE)
 
 find_path(GAME_PATH FindHaloCE.cmake PATHS ./cmake REQUIRED)
-
-#what should be accessible - just memory_map.h and versions.h via <versions.h>, etc etc
-set(GAME_LIB_DIRS ${RUNTIME_DIR} PARENT_SCOPE)
