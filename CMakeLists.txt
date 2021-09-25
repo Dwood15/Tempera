@@ -33,8 +33,6 @@ project(${PROJECT_NAME} C CXX)
 
 set(TARGET_GAME_VER "HALO_CE_1_10")
 
-add_subdirectory(runtime)
-
 include_directories(AFTER ${GAME_LIB_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/common/)
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
@@ -114,12 +112,36 @@ endif ()
 file(GLOB DETOURS_GLOB libs/detours.lib)
 file(GLOB LUA_GLOB libs/lua53.lib)
 
-add_subdirectory(src)
+add_subdirectory(runtime)
 
 add_library(dinput8 SHARED
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/ce/1_10/110EngineManager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/hek/sapien/sapienEngineManager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/ce/1_10/function_rewrite.cpp
+
         ${CMAKE_CURRENT_SOURCE_DIR}/common/engine_interface.cpp
-        ${RUNTIME_CXX}
-        ${SRC_CXX}
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tags/group/base.cpp
+        #	${CMAKE_CURRENT_SOURCE_DIR}/tags/group/groups_structures.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tags/group/tag_groups.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tags/group/c_tag_iterator.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/units/units.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/camera.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects/objectcontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/controls.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/players.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lua/script_manager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Direct3D/d3d9hook.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/cseries/random.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Dinput/dinput.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/engine_functions.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/CurrentEngine.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/forge.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/math/math.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions/exception_handler.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     	${CMAKE_CURRENT_SOURCE_DIR}/common/addlog.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/memory/data.cpp)

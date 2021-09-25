@@ -30,14 +30,5 @@ set(MAJOR_VER ${HALO_FULL}/ce PARENT_SCOPE)
 
 find_path(GAME_PATH FindHaloCE.cmake PATHS ./cmake REQUIRED)
 
-
-set(RUNTIME_DIR ${PROJECT_SOURCE_DIR}/runtime)
-
-set(RUNTIME_CXX
-	${RUNTIME_DIR}/ce/1_10/110EngineManager.cpp
-	${RUNTIME_DIR}/hek/sapien/sapienEngineManager.cpp
-	${RUNTIME_DIR}/ce/1_10/function_rewrite.cpp
-	PARENT_SCOPE)
-
 #what should be accessible - just memory_map.h and versions.h via <versions.h>, etc etc
 set(GAME_LIB_DIRS ${RUNTIME_DIR} PARENT_SCOPE)
