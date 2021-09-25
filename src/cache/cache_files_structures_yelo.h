@@ -29,7 +29,7 @@ namespace Yelo {
 		};
 
 		struct s_cache_file_resource_string_id_storage_header {
-			enum { k_signature = 'cssh' };
+			enum tag { k_signature = 'cssh' };
 
 			tag   signature;
 			short set_count;

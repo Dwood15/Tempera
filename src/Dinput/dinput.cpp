@@ -8,7 +8,7 @@
 #define __reserved
 #endif
 
-#include <xinput.h>
+#include <XInput.h>
 
 #ifdef __GNUC__
 #undef __in

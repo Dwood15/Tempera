@@ -48,7 +48,7 @@ namespace Yelo::TagGroups {
 #pragma pack(push, 1)
 
 	// Union hack to use a group tag as a string
-	union group_tag_to_string {
+	union u_group_tag_to_string {
 		struct {
 			tag group;
 			unsigned char : 8; // null terminator
@@ -56,12 +56,12 @@ namespace Yelo::TagGroups {
 
 		char str[sizeof(tag) + 1];
 
-		group_tag_to_string &Terminate() {
+		u_group_tag_to_string &Terminate() {
 			str[4] = '\0';
 			return *this;
 		}
 
-		group_tag_to_string &TagSwap() {
+		u_group_tag_to_string &TagSwap() {
 			TagGroups::TagSwap(group);
 			return *this;
 		}
@@ -70,13 +70,20 @@ namespace Yelo::TagGroups {
 			return Terminate().TagSwap().str;
 		}
 	};
+	STAT_ASSERT(u_group_tag_to_string, 0x5);
+	STAT_ASSERT(u_group_tag_to_string, sizeof(tag) + 0x1);
 
 #pragma pack(pop)
+
+	static const char* group_tag_to_string(tag rhs) {
+		u_group_tag_to_string gtts;
+		gtts.group = rhs;
+		return gtts.ToString();
+	}
 
 #ifdef __GNUC__
 #pragma GCC diagnostic warning "-Wpadded"
 #endif
-	STAT_ASSERT(group_tag_to_string, sizeof(tag) + 0x1);
 
 };
 

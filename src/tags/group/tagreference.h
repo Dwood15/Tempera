@@ -40,7 +40,7 @@ namespace Yelo {
 	static_assert(sizeof(TagReference<0>) == 0x10);
 
 	template <>
-	inline bool TagReference<static_cast<tag>(NONE)>::IsValid() const { return true; }
+	inline bool TagReference<static_cast<unsigned long>(NONE)>::IsValid() const { return true; }
 
 	typedef char *tag_reference_name_reference;
 

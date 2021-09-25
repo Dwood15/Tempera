@@ -32,7 +32,6 @@ namespace Yelo::TagGroups {
 		const tag_group *group = nullptr;
 		if (group != nullptr) {
 			strcpy(name, group->name);
-
 		} else if (group_tag == static_cast<uint>(NONE)) {
 			strcpy(name, "NONE");
 
@@ -40,9 +39,7 @@ namespace Yelo::TagGroups {
 			strcpy(name, "ZERO");
 
 		} else {
-			auto nm = group_tag_to_string{{group_tag}}.ToString();
-			strcpy(name, nm);
-
+			strcpy(name, group_tag_to_string(group_tag));
 		}
 
 		return name;

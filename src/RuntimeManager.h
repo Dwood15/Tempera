@@ -3,7 +3,10 @@
 
 //#pragma clang diagnostic push
 //#pragma clang diagnostic ignored "-Weverything"
+#include <InitGuid.h>
+#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#undef DIRECTINPUT_VERSION
 #include <optional>
 #include <addlog.h>
 //#pragma clang diagnostic pop

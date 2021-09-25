@@ -1,6 +1,6 @@
 #pragma once
 /**
- * <GPLv3 License>
+ * Code provided under GPLv3 or later GPL License
  */
 
 #include <macros_generic.h>

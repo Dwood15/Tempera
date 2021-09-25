@@ -1,4 +1,4 @@
-#lifted off adobe's webkit repo (lol)
+# Lifted off Aobe Webkit repo
 
 # - Find DirectX SDK installation
 # Find the DirectX includes and library
@@ -9,21 +9,26 @@
 #  DirectX_ROOT_DIR, directory where DirectX was installed.
 #message(STATUS "FINDING DIRECTX")
 
+message(STATUS "FindDirectX, CMAKE current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
+
 find_path(DirectX_INCLUDE_DIRS d3dx9.h PATHS
-		  "C:\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Include"
+		${CMAKE_CURRENT_SOURCE_DIR}/include/dxredist
+		"C:\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Include"
+		  $ENV{DXSDK_DIR}/Include
 		  ${DXSDK_DIR}/Include
 		  NO_DEFAULT_PATH)
 
-message(STATUS "Found DX include path.") #: ${DirectX_INCLUDE_DIRS}")
+message(STATUS "DX include path: ${DirectX_INCLUDE_DIRS}")
 
 find_path(DirectX_LIBRARY_PATHS d3dx9.lib PATHS
-		  "$ENV{DXSDK_DIR}/Lib/x86"
-		  "$ENV{DXSDK_DIR}/Lib/"
-		  "$ENV{PROGRAMFILES}/Microsoft DirectX SDK*/Lib/x86"
-		  "$ENV{PROGRAMFILES}/Microsoft DirectX SDK*/Lib"
-		  "$ENV{DXSDK_DIR}/Lib/x64"
-		  "$ENV{PROGRAMFILES}/Microsoft DirectX SDK*/Lib/x64"
-		  "C:\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Lib\\x86"
+		${CMAKE_CURRENT_SOURCE_DIR}/libs/
+		"C:\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Lib\\x86"
+		"$ENV{DXSDK_DIR}/Lib/x86"
+		"$ENV{DXSDK_DIR}/Lib/"
+		"$ENV{PROGRAMFILES}/Microsoft DirectX SDK*/Lib/x86"
+		"$ENV{PROGRAMFILES}/Microsoft DirectX SDK*/Lib"
+		"$ENV{DXSDK_DIR}/Lib/x64"
+		"$ENV{PROGRAMFILES}/Microsoft DirectX SDK*/Lib/x64"
 		  NO_DEFAULT_PATH)
 
 get_filename_component(DirectX_ROOT_DIR "${DirectX_INCLUDE_DIRS}/.." ABSOLUTE)

@@ -1,12 +1,11 @@
 #Project: Tempera
 #Copyright � 2021 Dason Woodhouse
-# - GNU GPLv3
+# - GNU GPLv3 Or Later
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 message(STATUS "cmake version ${CMAKE_VERSION}")
 
-#Apparently having this set to 20 causes CMAKE to set std:c++17
-#because GOD KNOWS WHY
+#Apparently having this set to 20 causes CMAKE to set std:c++17. GOD KNOWS WHY
 #set(CMAKE_CXX_STANDARD 20)
 
 set(CMAKE_CXX_EXTENSIONS TRUE)
@@ -49,20 +48,20 @@ find_package(DirectX REQUIRED)
 message(STATUS "Post-Find LUA debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
 
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${INCLUDE}/detours ${LUA_INCLUDE_DIR})
 
 add_definitions(-D_WINDOWS -D_USRDLL)
-#TODO: GCC/Clang compiler support
 
 if (MSVC)
-    set(CMAKE_VERBOSE_MAKEFILE ON)
+    add_compile_options("/std:c++latest")
+
     if (MSVC_VERSION GREATER_EQUAL "1900")
         include(CheckCXXCompilerFlag)
         CHECK_CXX_COMPILER_FLAG("/std:c++latest" _cpp_latest_flag_supported)
         if (_cpp_latest_flag_supported)
             message(STATUS "Add compiler options std cpp latest and experimental ${_cpp_latest_flag_supported}")
-            add_compile_options("/std:c++latest")
         endif ()
     endif ()
 
@@ -76,7 +75,7 @@ if (MSVC)
     #CLANGD HELPER
     set(CMAKE_CXX_COMPILER_TARGET i686-pc-win32-msvc)
 
-    set(COMPILER_MACROS "/D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /DDIRECTINPUT_VERSION=0x800\ /D_CRT_SECURE_NO_WARNINGS")
+    set(COMPILER_MACROS "/D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /D_CRT_SECURE_NO_WARNINGS")
 
     #/Zc flag tells C++ what version of cpp we're using/targeting.
     #/Qpar-report:2 - Tells us about the compiler's optimizations of our for loops.
@@ -177,14 +176,14 @@ add_library(dinput8 SHARED
 #The compiler is defaulting to the Windows 10 SDK, which requires external DLL's (xinput1_4.dll is not found error)
 #I manually force it to use my directx sdk xinput.
 #TODO: Use DX_LIBS or whatever the variable is, to specify the 2010 dx XInput.lib explicitly.
-set(XINPUTLIB "C:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
+#set(XINPUTLIB "C:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
 
 #D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
 #Version.Lib is required for looking up current EXE's runtime information.
 
-#message(WARNING "Target name: ${TARGET_NAME}")
+message(WARNING "DX Libs: ${DirectX_LIBRARIES}")
 
-target_link_libraries(dinput8 ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
+target_link_libraries(dinput8 ${LUA_GLOB} ${DirectX_LIBRARIES} Version.Lib ${DETOURS_GLOB})
 set_property(TARGET dinput8 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 #Take tempera.init.lua script and export it with the build files

@@ -1,5 +1,5 @@
 /**
- * GPLv3
+ * GPLv3 or Later
  */
 #pragma once
 
@@ -223,17 +223,16 @@ typedef char string256[256];
 typedef wchar_t       wstring64[64];
 // 256 character UNICODE string (512 bytes), with null terminator
 typedef wchar_t       wstring256[256];
-// a tag group id
-typedef unsigned long tag;
 
 // an enumerated value in a 1 byte range
 
 typedef signed long    long_enum;
 typedef unsigned short short_flags;
 typedef unsigned long  long_flags;
+typedef unsigned long  tag;
 
 typedef unsigned int  uintptr_t;
-typedef unsigned long tag;
+
 typedef char          tag_string[32];
 typedef const char    *cstring;
 typedef char          *tag_reference_name_reference;
