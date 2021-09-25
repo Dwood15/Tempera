@@ -93,8 +93,6 @@ namespace Yelo {
 
 		// non-standard overload of the above resolve()
 		extern bool tag_reference_resolve(_Inout_ tag_reference &reference, tag expected_group_tag);
-
-
 	}
 
 };
