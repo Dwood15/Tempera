@@ -43,14 +43,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH})
 find_package(HaloCE REQUIRED)
 find_package(Lua REQUIRED)
 find_package(DirectX REQUIRED)
-#find_package(YamlCpp REQUIRED)
 
 message(STATUS "Post-Find LUA debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
 
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${INCLUDE}/detours ${LUA_INCLUDE_DIR})
+include_directories(BEFORE ${DirectX_HEADER_DIRS} ${INCLUDE}/detours ${LUA_INCLUDE_DIR})
 
 add_definitions(-D_WINDOWS -D_USRDLL)
 

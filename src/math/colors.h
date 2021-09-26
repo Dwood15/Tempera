@@ -8,11 +8,8 @@
 #pragma GCC diagnostic ignored "-Wpadded"
 #endif
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <DirectXMath.h>
-#undef WIN32_LEAN_AND_MEAN
 
+#include <d3dx9math.h>
 #ifdef __GNUC__
 #pragma GCC diagnostic warning "-Wpadded"
 #endif
@@ -53,8 +50,8 @@ struct real_argb_color {
 STAT_ASSERT(real_argb_color, 0x10);
 
 //#define vect float
-struct vect2 : public DirectX::XMFLOAT2 {
-	using XMFLOAT2::XMFLOAT2;
+struct vect2 : public D3DXVECTOR2 {
+	using D3DXVECTOR2::D3DXVECTOR2;
 };
 STAT_ASSERT(vect2, 0x8);
 
@@ -73,7 +70,6 @@ const auto hGreen = HaloColor(1,0,1,0);
 const auto hBlue  = HaloColor(1,0,0,1);
 const auto hRed   = HaloColor(1,1,0,0);
 
-#include <d3dx9math.h>
 #include "real_math.h"
 
 struct vect3 : public D3DXVECTOR3 {
@@ -85,6 +81,7 @@ struct vect3 : public D3DXVECTOR3 {
 	inline operator real_point3d *() { return reinterpret_cast<real_point3d *>(this); }
 };
 
+STAT_ASSERT(vect3, 0xC);
 STAT_ASSERT(vect3, sizeof(D3DXVECTOR3));
 
 class CMath {
