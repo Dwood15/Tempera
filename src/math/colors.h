@@ -86,7 +86,6 @@ STAT_ASSERT(vect3, sizeof(D3DXVECTOR3));
 
 class CMath {
 public:
-
 	float Get2dDistance(float x, float y);
 
 	float GetAngleDistance(vect3 local, vect3 toTarget);

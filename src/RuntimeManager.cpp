@@ -37,19 +37,6 @@ namespace feature_management::engines {
 		return scenario_globals;
 	}
 
-	void RuntimeManager::InitializeLuaState() {
-		PrintLn("Attempting to initialize LuaScript manager");
-		mgr.InitializeLua(LUA_FILENAME);
-	}
-
-	[[nodiscard]] LuaScriptManager *RuntimeManager::GetLuaState() {
-		if (!mgr.IsLoaded()) {
-			InitializeLuaState();
-		}
-
-		return &mgr;
-	}
-
 	IDirectInput8A *RuntimeManager::GetDInput8Device() {
 		if (CurrentEngine->IsCustomEd()) {
 			return CE110::GetDInput8Device();
@@ -233,11 +220,6 @@ namespace feature_management::engines {
 		return CurrentEngine->SupportsFeature(feat);
 	}
 
-	void RuntimeManager::LuaFirstRun() {
-		mgr.DoFirstRun();
-		mgr.lua_run_sanityChecks();
-	}
-
 	template<typename T>
 	void RuntimeManager::ClampIndex(T &idx) {
 		if (idx > MAX_PLAYER_COUNT_LOCAL) {
@@ -287,14 +269,6 @@ namespace feature_management::engines {
 
 ////////////////////////////////////////
 // Player Methods
-
-	void registerLuaCallback(const char *cb_name, LuaCallbackId cb_type) {
-		PrintLn<false>("Should be registering callback: %s", cb_name);
-
-		mgr.registerLuaCallback(cb_name, cb_type);
-
-		PrintLn<false>("%s registered.", cb_name);
-	}
 
 	bool IsCoreInitialized() {
 		return CurrentRuntime != nullptr && CurrentRuntime->core_initialized;
@@ -564,22 +538,14 @@ namespace feature_management::engines {
 #define CALL_LUA_BY_EVENT(event) state->call_lua_event_by_type(LuaCallbackId::PRINTED(event))
 
 	void game_tick(int current_frame_tick) {
-		static LuaScriptManager *state = CurrentRuntime->GetLuaState();
-
-		state->call_lua_event_by_type(LuaCallbackId::before_game_tick);
-
-		state->lua_on_tick(current_frame_tick, CurrentRuntime->GetElapsedTime());
 		static ::std::optional<uintptr_t> funcFound = FUNC_GET(game_tick);
 
 		if (funcFound) {
 			calls::DoCall<Convention::m_cdecl, void, int>(*funcFound, current_frame_tick);
 		}
-
-		state->call_lua_event_by_type(LuaCallbackId::after_game_tick);
 	}
 
 	void main_setup_connection_init() {
-//If alreadyChecked is true, we shouldn't have to update 'funcFound' ever again.
 		static bool alreadyChecked = false;
 		static ::std::optional<uintptr_t> funcFound = FUNC_GET(main_setup_connection);
 
@@ -603,14 +569,7 @@ namespace feature_management::engines {
 			calls::DoCall<Convention::m_cdecl>(*funcFound);
 		}
 
-		static LuaScriptManager *state;
-
-		if (state == nullptr) {
-			state = CurrentRuntime->GetLuaState();
-		}
-
 		CurrentRuntime->RefreshCore();
-		state->call_lua_event_by_type(LuaCallbackId::post_initialize);
 	}
 
 #undef CALL_LUA_BY_EVENT

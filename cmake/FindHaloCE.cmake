@@ -20,10 +20,9 @@ get_filename_component(HaloCE_ROOT_DIR "[${HCE_REG_KEY};EXE\ Path]" ABSOLUTE CAC
 #get_property(HaloCE_VERSION CACHE "[${HCE_REG_KEY}]" PROPERTY "Version")
 
 message(STATUS "CE DIR: ${CE_DIR}")
-#Todo: figure out how to get a VER # from cmake.
-#message(STATUS "CE VER: ${HaloCE_VERSION}")
 
-#get_filename_component(EXE_DIR
+#Todo: figure out how to get a VER # on the DLL from cmake.
+#message(STATUS "CE VER: ${HaloCE_VERSION}")
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(HaloCE DEFAULT_MSG HaloCE_ROOT_DIR)

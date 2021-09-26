@@ -1,8 +1,8 @@
 #Project: Tempera
-#Copyright � 2021 Dason Woodhouse
+# Copyright � 2021 Dason Woodhouse
 # - GNU GPLv3 Or Later
 
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 message(STATUS "cmake version ${CMAKE_VERSION}")
 
 #Apparently having this set to 20 causes CMAKE to set std:c++17. GOD KNOWS WHY
@@ -11,9 +11,8 @@ message(STATUS "cmake version ${CMAKE_VERSION}")
 set(CMAKE_CXX_EXTENSIONS TRUE)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-#this forces cmake to set the name of the dll to dinput8 correctly.
+#force cmake to set the name of the dll to dinput8.
 unset(CMAKE_SHARED_LIBRARY_PREFIX)
-
 #Guarantee that we're targeting 32-bit.
 unset(CMAKE_CL_64)
 
@@ -49,20 +48,14 @@ message(STATUS "Post-Find LUA debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES:
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-include_directories(BEFORE ${DirectX_HEADER_DIRS} ${INCLUDE}/detours ${LUA_INCLUDE_DIR})
+include_directories(BEFORE ${DirectX_INCLUDE_DIRS}
+        ${LUA_INCLUDE_DIR}
+        ${INCLUDE}/detours)
 
 add_definitions(-D_WINDOWS -D_USRDLL)
 
 if (MSVC)
     add_compile_options("/std:c++latest")
-
-    if (MSVC_VERSION GREATER_EQUAL "1900")
-        include(CheckCXXCompilerFlag)
-        CHECK_CXX_COMPILER_FLAG("/std:c++latest" _cpp_latest_flag_supported)
-        if (_cpp_latest_flag_supported)
-            message(STATUS "Add compiler options std cpp latest and experimental ${_cpp_latest_flag_supported}")
-        endif ()
-    endif ()
 
     #vc++ 2017 toolset. Available from microsoft here: http://landinghub.visualstudio.com/visual-cpp-build-tools
     if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.17134.0")
@@ -71,9 +64,7 @@ if (MSVC)
         #TODO: CHECK FOR AVAILABLE SDK VERSIONS IF NONE SET
     endif ()
 
-    #CLANGD HELPER
     set(CMAKE_CXX_COMPILER_TARGET i686-pc-win32-msvc)
-
     set(COMPILER_MACROS "/D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /D_CRT_SECURE_NO_WARNINGS")
 
     #/Zc flag tells C++ what version of cpp we're using/targeting.
@@ -84,7 +75,6 @@ if (MSVC)
 	#Apparently MTd is going out of fashion?
     set(CMAKE_CXX_FLAGS_DEBUG "/TP\ /MP\ /MTd\ /Gy- /W3\ /Od\ /Zi\ /MP\ /EHsc\ ${NEW_FEATURES}\ /fp:fast\ /arch:SSE2\ ${COMPILER_MACROS}")
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
-
 
     # 4070 : Silences `OUT directive differs from filename ignoring directive` (warning)
     #		4099 :
@@ -159,7 +149,7 @@ add_library(dinput8 SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/controls.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/players.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/lua/script_manager.cpp
+
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Direct3D/d3d9hook.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/cseries/random.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Dinput/dinput.cpp

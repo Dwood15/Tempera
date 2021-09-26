@@ -18,11 +18,10 @@ find_library(DirectX_XINPUT_LIBRARY xinput ${DirectX_LIBRARY_PATHS} NO_DEFAULT_P
 find_library(DirectX_D3D9_LIBRARY d3d9 ${DirectX_LIBRARY_PATHS} NO_DEFAULT_PATH)
 find_library(DirectX_D3DX9_LIBRARY d3dx9 ${DirectX_LIBRARY_PATHS} NO_DEFAULT_PATH)
 
-find_path(DirectX_INCLUDE_DIRS d3dx9.h PATHS
+find_path(DirectX_INCLUDE_DIRS d3dx9.h d3dx9math.h PATHS
 		${CMAKE_CURRENT_SOURCE_DIR}/include/dxredist
 		"C:\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Include"
-		$ENV{DXSDK_DIR}/Include
-		NO_DEFAULT_PATH)
+		$ENV{DXSDK_DIR}/Include)
 
 get_filename_component(DirectX_ROOT_DIR "${DirectX_INCLUDE_DIRS}/.." ABSOLUTE)
 
