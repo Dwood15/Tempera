@@ -175,15 +175,6 @@ message(WARNING "DX Libs: ${DirectX_LIBRARIES}")
 target_link_libraries(dinput8 ${LUA_GLOB} ${DirectX_LIBRARIES} Version.Lib ${DETOURS_GLOB})
 set_property(TARGET dinput8 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-#Take tempera.init.lua script and export it with the build files
-add_custom_target(copy-files ALL
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/lua_scripts
-        ${HaloCE_ROOT_DIR}
-        )
-#without this, cmake doesn't know to export it on file changes.
-add_dependencies(dinput8 copy-files)
-
 #Files we don't actually give a shit about are getting exported to the build directory.
 #This will (at least) clean them out.
 set(ADDITIONAL_CLEAN_FILES  "${HaloCE_ROOT_DIR}/dinput8.dll ${HaloCE_ROOT_DIR}/dinput8.ilk " ${ADDITIONAL_CLEAN_FILES})
