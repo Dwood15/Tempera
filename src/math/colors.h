@@ -7,7 +7,12 @@
 #ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wpadded"
 #endif
-#include <d3dx9math.h>
+
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#include <DirectXMath.h>
+#undef WIN32_LEAN_AND_MEAN
+
 #ifdef __GNUC__
 #pragma GCC diagnostic warning "-Wpadded"
 #endif
@@ -48,11 +53,10 @@ struct real_argb_color {
 STAT_ASSERT(real_argb_color, 0x10);
 
 //#define vect float
-struct vect2 : public D3DXVECTOR2 {
-	using D3DXVECTOR2::D3DXVECTOR2;
+struct vect2 : public DirectX::XMFLOAT2 {
+	using XMFLOAT2::XMFLOAT2;
 };
-
-STAT_ASSERT(vect2, sizeof(D3DXVECTOR2));
+STAT_ASSERT(vect2, 0x8);
 
 //-------------------------
 struct HaloColor {
