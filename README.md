@@ -4,7 +4,7 @@ Tempera
 License Disclaimer
 =========
 
-All code within this repository is Licensed under the GNU General Public License, Version 3 or a compatible license and comes with no warranty, express or implied.
+All code within this repository is Licensed under the GNU General Public License, Version 3 or newer license and comes with no warranty, express or implied.
 
 MSFT Usage Guidelines
 =========
