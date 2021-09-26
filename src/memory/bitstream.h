@@ -1,4 +1,4 @@
-/* See GPLv3 for license information */
+/* See GPLv3 Or Later GPL licenses for license information */
 #pragma once
 
 namespace Yelo {

@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 #include <d3d9.h>
-#include <d3dx9.h>
+
 
 #ifdef __GNUC__
 #pragma GCC diagnostic warning "-Wpadded"
@@ -164,6 +164,8 @@ public:
 	DWORD CreateQuery;               //118
 };
 
+#include <d3dx9.h>
+
 class CD3D {
 public:
 	CD3D();
@@ -182,8 +184,7 @@ public:
 
 	void DrawMouse(IDirect3DDevice9 *pDevice, IDirect3DTexture9 *pCursorTexture, ID3DXSprite *pCursorSprite);
 
-	void myDrawText(IDirect3DDevice9 *pDevice, ID3DXFont *Font, bool shadow, long x, long y, long width, long height, D3DCOLOR color, D3DCOLOR shadowcolor, const char *cFmt, ...);
-
+	void myDrawText(IDirect3DDevice9 *pDevice, bool shadow, long x, long y, long width, long height, D3DCOLOR color, D3DCOLOR shadowcolor, const char *cFmt, ...);
 	void myDrawPlane(IDirect3DDevice9 *pDevice);
 
 	DWORD __stdcall hkD3DHook(void *lpVoid);

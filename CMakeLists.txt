@@ -1,20 +1,18 @@
 #Project: Tempera
-#Copyright � 2021 Dason Woodhouse
-# - GNU GPLv3
+# Copyright � 2021 Dason Woodhouse
+# - GNU GPLv3 Or Later
 
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 message(STATUS "cmake version ${CMAKE_VERSION}")
 
-#Apparently having this set to 20 causes CMAKE to set std:c++17
-#because GOD KNOWS WHY
+#Apparently having this set to 20 causes CMAKE to set std:c++17. GOD KNOWS WHY
 #set(CMAKE_CXX_STANDARD 20)
 
 set(CMAKE_CXX_EXTENSIONS TRUE)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-#this forces cmake to set the name of the dll to dinput8 correctly.
+#force cmake to set the name of the dll to dinput8.
 unset(CMAKE_SHARED_LIBRARY_PREFIX)
-
 #Guarantee that we're targeting 32-bit.
 unset(CMAKE_CL_64)
 
@@ -44,27 +42,20 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH})
 find_package(HaloCE REQUIRED)
 find_package(Lua REQUIRED)
 find_package(DirectX REQUIRED)
-#find_package(YamlCpp REQUIRED)
 
 message(STATUS "Post-Find LUA debug: LUA_LIBRARY: ${LUA_LIBRARY}\ LUA_LIBRARIES: ${LUA_LIBRARIES}\ LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
 
 set(INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
-include_directories(BEFORE ${DirectX_INCLUDE_DIRS} ${INCLUDE}/detours ${LUA_INCLUDE_DIR})
+include_directories(BEFORE ${DirectX_INCLUDE_DIRS}
+        ${LUA_INCLUDE_DIR}
+        ${INCLUDE}/detours)
 
 add_definitions(-D_WINDOWS -D_USRDLL)
-#TODO: GCC/Clang compiler support
 
 if (MSVC)
-    set(CMAKE_VERBOSE_MAKEFILE ON)
-    if (MSVC_VERSION GREATER_EQUAL "1900")
-        include(CheckCXXCompilerFlag)
-        CHECK_CXX_COMPILER_FLAG("/std:c++latest" _cpp_latest_flag_supported)
-        if (_cpp_latest_flag_supported)
-            message(STATUS "Add compiler options std cpp latest and experimental ${_cpp_latest_flag_supported}")
-            add_compile_options("/std:c++latest")
-        endif ()
-    endif ()
+    add_compile_options("/std:c++latest")
 
     #vc++ 2017 toolset. Available from microsoft here: http://landinghub.visualstudio.com/visual-cpp-build-tools
     if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION OR NOT "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}" STREQUAL "10.0.17134.0")
@@ -73,10 +64,8 @@ if (MSVC)
         #TODO: CHECK FOR AVAILABLE SDK VERSIONS IF NONE SET
     endif ()
 
-    #CLANGD HELPER
     set(CMAKE_CXX_COMPILER_TARGET i686-pc-win32-msvc)
-
-    set(COMPILER_MACROS "/D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /DDIRECTINPUT_VERSION=0x800\ /D_CRT_SECURE_NO_WARNINGS")
+    set(COMPILER_MACROS "/D\ \"WIN32\"\ /D\ \"_WINDOWS\"\ /D \"_USRDLL\"\ /D\ \"_WINDLL\"\ /D_CRT_SECURE_NO_WARNINGS")
 
     #/Zc flag tells C++ what version of cpp we're using/targeting.
     #/Qpar-report:2 - Tells us about the compiler's optimizations of our for loops.
@@ -86,7 +75,6 @@ if (MSVC)
 	#Apparently MTd is going out of fashion?
     set(CMAKE_CXX_FLAGS_DEBUG "/TP\ /MP\ /MTd\ /Gy- /W3\ /Od\ /Zi\ /MP\ /EHsc\ ${NEW_FEATURES}\ /fp:fast\ /arch:SSE2\ ${COMPILER_MACROS}")
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
-
 
     # 4070 : Silences `OUT directive differs from filename ignoring directive` (warning)
     #		4099 :
@@ -161,7 +149,7 @@ add_library(dinput8 SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/controls.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/players.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/lua/script_manager.cpp
+
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Direct3D/d3d9hook.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/cseries/random.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Dinput/dinput.cpp
@@ -177,24 +165,15 @@ add_library(dinput8 SHARED
 #The compiler is defaulting to the Windows 10 SDK, which requires external DLL's (xinput1_4.dll is not found error)
 #I manually force it to use my directx sdk xinput.
 #TODO: Use DX_LIBS or whatever the variable is, to specify the 2010 dx XInput.lib explicitly.
-set(XINPUTLIB "C:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
+#set(XINPUTLIB "C:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
 
 #D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
 #Version.Lib is required for looking up current EXE's runtime information.
 
-#message(WARNING "Target name: ${TARGET_NAME}")
+message(WARNING "DX Libs: ${DirectX_LIBRARIES}")
 
-target_link_libraries(dinput8 ${LUA_GLOB} ${DirectX_LIBRARIES} dxguid.lib ${XINPUTLIB} Version.Lib ${DETOURS_GLOB})
+target_link_libraries(dinput8 ${LUA_GLOB} ${DirectX_LIBRARIES} Version.Lib ${DETOURS_GLOB})
 set_property(TARGET dinput8 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
-#Take tempera.init.lua script and export it with the build files
-add_custom_target(copy-files ALL
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/lua_scripts
-        ${HaloCE_ROOT_DIR}
-        )
-#without this, cmake doesn't know to export it on file changes.
-add_dependencies(dinput8 copy-files)
 
 #Files we don't actually give a shit about are getting exported to the build directory.
 #This will (at least) clean them out.

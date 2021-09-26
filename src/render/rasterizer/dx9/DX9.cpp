@@ -1,7 +1,12 @@
 #include <d3d9.h>
 #include <stdio.h>
+
+#include <InitGuid.h>
+
+#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
-#include <assert.h>
+#undef DIRECTINPUT_VERSION
+
 #include "../../../memory/memory_interface_base.hpp"
 
 namespace Yelo::DX9 {

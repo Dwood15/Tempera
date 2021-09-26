@@ -3,13 +3,17 @@
 
 //#pragma clang diagnostic push
 //#pragma clang diagnostic ignored "-Weverything"
+#include <InitGuid.h> //InitGuid allows us to avoid importing Windows.h
+#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#undef DIRECTINPUT_VERSION
 #include <optional>
 #include <addlog.h>
+#include <engine_interface.h>
 //#pragma clang diagnostic pop
 
 #include "versions.h"
-#include "lua/script_manager.h"
+
 #include "core_types.h"
 #include "tags/map.h"
 #include "tags/tags.h"
@@ -19,8 +23,6 @@
 #include "gamestate/camera.h"
 #include "gamestate/objects/objectcontroller.h"
 #include "Direct3D/d3d9hook.h"
-
-class LuaScriptManager;
 
 struct s_player_action;
 struct s_unit_control_data;
@@ -129,8 +131,6 @@ namespace feature_management::engines {
 
 		static inline char *LUA_FILENAME   = const_cast<char *>("tempera.init.lua");
 
-		[[nodiscard]] static LuaScriptManager * GetLuaState();
-
 		bool AreWeInCutScene() {
 			return cinematic_globals->in_progress;
 		}
@@ -186,9 +186,6 @@ namespace feature_management::engines {
 		bool SupportsFeature(features feat);
 
 		bool SupportsFeature(uint feat);
-		static void InitializeLuaState();
-
-		static void LuaFirstRun();
 
 		void RefreshCore(bool force = false);
 
@@ -209,10 +206,6 @@ namespace feature_management::engines {
 	//Set up our stuff
 	RuntimeManager *GetRuntimeManager();
 
-	/***
- 	 * Called before VirtualProtect is run.
- 	 ***/
-	void registerLuaCallback(const char * cb_name, LuaCallbackId cb_type);
 	bool IsCoreInitialized();
 }
 

@@ -275,11 +275,11 @@ namespace Yelo {
 
 			bool operator !=(const s_group_tag_iterator &other) const {
 				if (other.IsEndHack()) {
-					return *m_group_tags != tag{static_cast<unsigned int>(NONE)};
+					return (*m_group_tags) != NONE;
 				}
 
 				if (this->IsEndHack()) {
-					return *other.m_group_tags != tag{static_cast<unsigned int>(NONE)};
+					return *other.m_group_tags != NONE;
 				}
 
 				return m_group_tags != other.m_group_tags;
@@ -331,10 +331,6 @@ namespace Yelo {
 		// tag_group* [] (ie, tag_group**) qsort procs
 		static int __cdecl CompareByNameProc(void *, const tag_group *const *lhs, const tag_group *const *rhs) {
 			return strcmp((*lhs)->name, (*rhs)->name);
-		}
-
-		static int __cdecl CompareByGroupTagProc(void *, const tag_group *const *lhs, const tag_group *const *rhs) {
-			return (*lhs)->group_tag - (*rhs)->group_tag;
 		}
 
 		static int __cdecl SearchByNameProc(void *, const char *key, const tag_group *const *group) {

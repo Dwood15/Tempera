@@ -7,6 +7,8 @@
 #ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wpadded"
 #endif
+
+
 #include <d3dx9math.h>
 #ifdef __GNUC__
 #pragma GCC diagnostic warning "-Wpadded"
@@ -51,8 +53,7 @@ STAT_ASSERT(real_argb_color, 0x10);
 struct vect2 : public D3DXVECTOR2 {
 	using D3DXVECTOR2::D3DXVECTOR2;
 };
-
-STAT_ASSERT(vect2, sizeof(D3DXVECTOR2));
+STAT_ASSERT(vect2, 0x8);
 
 //-------------------------
 struct HaloColor {
@@ -69,7 +70,6 @@ const auto hGreen = HaloColor(1,0,1,0);
 const auto hBlue  = HaloColor(1,0,0,1);
 const auto hRed   = HaloColor(1,1,0,0);
 
-#include <d3dx9math.h>
 #include "real_math.h"
 
 struct vect3 : public D3DXVECTOR3 {
@@ -81,11 +81,11 @@ struct vect3 : public D3DXVECTOR3 {
 	inline operator real_point3d *() { return reinterpret_cast<real_point3d *>(this); }
 };
 
+STAT_ASSERT(vect3, 0xC);
 STAT_ASSERT(vect3, sizeof(D3DXVECTOR3));
 
 class CMath {
 public:
-
 	float Get2dDistance(float x, float y);
 
 	float GetAngleDistance(vect3 local, vect3 toTarget);

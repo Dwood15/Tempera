@@ -41,11 +41,7 @@ struct tri_vert {
 	D3DCOLOR colour;
 };
 
-void CD3D::myDrawPlane(IDirect3DDevice9 *pDevice) {
-
-}
-
-void CD3D::myDrawText(IDirect3DDevice9 *pDevice, ID3DXFont *pFont, bool shadow, long x, long y, long width, long height, D3DCOLOR color, D3DCOLOR shadowcolor, const char *cFmt, ...) {
+void CD3D::myDrawText(IDirect3DDevice9 *pDevice, bool shadow, long x, long y, long width, long height, D3DCOLOR color, D3DCOLOR shadowcolor, const char *cFmt, ...) {
 	va_list mvalist;
 	char    cBuffer[256] = {0};
 
@@ -59,14 +55,15 @@ void CD3D::myDrawText(IDirect3DDevice9 *pDevice, ID3DXFont *pFont, bool shadow, 
 	_vsnprintf(cBuffer, sizeof(cBuffer), cFmt, mvalist);
 		va_end(mvalist);
 
+
 	if (shadow) {
-		pFont->DrawText(NULL, cBuffer, -1, &Rect1, 0, shadowcolor);
-		pFont->DrawText(NULL, cBuffer, -1, &Rect2, 0, shadowcolor);
-		pFont->DrawText(NULL, cBuffer, -1, &Rect3, 0, shadowcolor);
-		pFont->DrawText(NULL, cBuffer, -1, &Rect4, 0, shadowcolor);
+		Font->DrawText(NULL, cBuffer, -1, &Rect1, 0, shadowcolor);
+		Font->DrawText(NULL, cBuffer, -1, &Rect2, 0, shadowcolor);
+		Font->DrawText(NULL, cBuffer, -1, &Rect3, 0, shadowcolor);
+		Font->DrawText(NULL, cBuffer, -1, &Rect4, 0, shadowcolor);
 	}
 
-	pFont->DrawText(NULL, cBuffer, -1, &Rect5, 0, color);
+	Font->DrawText(NULL, cBuffer, -1, &Rect5, 0, color);
 }
 
 void CD3D::FillRGBA(ID3DXLine *pLine, float x, float y, float width, float height, D3DCOLOR color) {
@@ -176,7 +173,7 @@ void PrintObjectTags(IDirect3DDevice9 *pDevice) {
 			color = tBlue;
 		}
 
-		cd3d.myDrawText(pDevice, cd3d.Font, true, (int) screenpos.x, (int) screenpos.y, 1000, 1000, color, tBlack, ObjName);
+		cd3d.myDrawText(pDevice, true, (int) screenpos.x, (int) screenpos.y, 1000, 1000, color, tBlack, ObjName);
 	}
 
 	CurrentRuntime->ObjectControl->SetNearest(temp_nearest);

@@ -13,7 +13,7 @@ namespace Yelo::Memory {
 
 		//////////////////////////////////////////////////////////////////////////
 		// stl end() hacks
-		enum { k_end_hack_signature = 'hack' };
+		enum tag { k_end_hack_signature = 'hack' };
 
 		inline void SetEndHack() { signature = k_end_hack_signature; }
 

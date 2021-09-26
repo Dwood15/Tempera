@@ -74,11 +74,6 @@ static void *init(HMODULE *reason) {
 
 #define SUPPORTSFEAT(FEAT) CurrentRuntime->SupportsFeature(feats::FEAT)
 #define SUPPORTSFEATS(FEATA, FEATB) CurrentRuntime->SupportsFeature((uint)(feats::FEATA | feats::FEATB))
-	if (SUPPORTSFEAT(LUA_HOOKS)) {
-		feature_management::engines::RuntimeManager::InitializeLuaState();
-		feature_management::engines::RuntimeManager::LuaFirstRun();
-		PrintLn("\nLua state initialized and FirstRun called");
-	}
 
 	orig_DirectInput8Create = (void*)GetProcAddress(*reason, "DirectInput8Create");
 	PrintLn("\nDinput8Create");

@@ -1,4 +1,4 @@
-/* See GPLv3 for licensing information*/
+/* Licensed under the GPLv3 or later */
 #pragma once
 
 #include "actors/actor_structures.h"

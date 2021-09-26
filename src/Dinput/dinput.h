@@ -1,5 +1,10 @@
 #pragma once
+
+#include <InitGuid.h>
+#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#undef DIRECTINPUT_VERSION
+
 #include "../RuntimeManager.h"
 
 namespace Input::DInput {

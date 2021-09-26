@@ -24,7 +24,7 @@ endif()
 	set(CLANG_MS_WARNINGS " -Wmicrosoft-charize -Wextra-semi -Wmicrosoft-cpp-macro -Wmicrosoft-enum-value ")
 	set(CLANG_EXTRAS "-Wc++2a-extensions -Wc++2a-compat ${CLANG_MS_WARNINGS}")
 
-	set(CLANG_MACROS "-DDIRECTINPUT_VERSION=0x800 -DWIN32 -D_USRDLL -D_WINDLL -DCMAKE_LINK_WHAT_YOU_USE=TRUE")
+	set(CLANG_MACROS "-DWIN32 -D_USRDLL -D_WINDLL -DCMAKE_LINK_WHAT_YOU_USE=TRUE")
 	set(CLANG_EXTRA_SETTINGS "-fms-extensions ")
 	#-stdlib=libstdc++  -nostdlib -isystem C:/msys32/mingw64/include/c++/8.2.0  -Wno-microsoft-include
 

@@ -2,6 +2,12 @@
 bin/
 cache/
 build/
+
+libs/Catch2
+include/dxredist/
+include/libs/d3dx9.lib
+include/DirectXTK/
+
 cmake-build-debug/
 CMakeCache.txt
 CMakeFiles

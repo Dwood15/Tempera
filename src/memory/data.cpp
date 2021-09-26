@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
 #include <Windows.h>
 #include <enums/generic_enums.h>
 #include <cstring>
@@ -8,10 +12,11 @@
 #include "data_base.h"
 #include "data_array.h"
 #include "data_iterator.h"
+#include "../tags/group/tag_groups.h"
 namespace Yelo::blam {
 	using namespace Yelo::Memory;
 	static void data_iterator_new(s_data_iterator &iterator, Yelo::Memory::s_data_array *data) {
-
+		PrintLn("darat_iterator_new for: %s", TagGroups::group_tag_to_string(iterator.signature));
 		if (!data->is_valid) {
 			throw "invalid data array passed"; // __FUNCTION__);
 		}
