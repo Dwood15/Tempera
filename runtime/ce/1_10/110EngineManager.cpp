@@ -10,6 +10,7 @@
 #include "../../../src/RuntimeManager.h"
 #include "hs_function_table_references.h"
 #include "../../../src/gamestate/runtime_data.h"
+#include "../../../src/render/lights/lights.h"
 
 using namespace feature_management::engines;
 
@@ -300,6 +301,8 @@ namespace feature_management::engines {
 //			}
 		}
 
+
+
 		Memory::s_data_array *game_state_data_new(short object_size, const char * name, int allocated_mem) {
 			__int16 num_items; // bp
 			int new_cpu_allocation_size; // ecx
@@ -354,11 +357,70 @@ namespace feature_management::engines {
 			*(cached_object_render_states) = game_state_data_new(0x100, "cached object render states", 0x100);
 		}
 
+		void clusterPartitionNew(const char* typeName, int address) {
+			static auto funcFound = CurrentRuntime->getFunctionBegin("cluster_partition_new");
+			if (!funcFound) {
+				PrintLn("Cluster partition new func was not found. rip");
+			}
+
+			if (funcFound) {
+				calls::DoCall<Convention::m_cdecl, void, int, int, uint>
+					(*funcFound, (int)gsgCRC, (int)&allocdMem, (uint) 0x4u);
+			}
+		}
+
+		void lightsInitialize() {
+			uint gsgPtr = 0;
+			uint gsgcpuAllocSz = 0;
+			uint gsgCRC = 0;
+
+			CurrentEngine->GetMallocAddresses(gsgPtr, gsgcpuAllocSz, gsgCRC);
+			auto light_data = (Memory::s_data_array **)0x7FBE74;
+			*light_data = game_state_data_new(0x7C, "lights", sizeof(s_light_cluster_data));
+
+			uint lightGameGlobalsLocation = *(uintptr)gsgPtr + *(uintptr) gsgcpuAllocSz;
+			auto lightGameGlobalsPtrLoc = (s_lights_globals_data **)(0x6B8250);
+
+			*lightGameGlobalsPtrLoc = (s_lights_globals_data *)lightGameGlobalsLocation;
+
+			(* (uintptr)gsgcpuAllocSz) += 4;
+
+			static auto funcFound = CurrentRuntime->getFunctionBegin("malloc_crc_checksum_buffer");
+			if ((uint) gsgCRC != (uint) 0x67dd94) {
+				PrintLn("Game State Globals CRC does not look like the expected address");
+			}
+
+			int allocdMem = 4;
+			if (funcFound) {
+				calls::DoCall<Convention::m_cdecl, void, int, int, uint>
+				    (*funcFound, (int)gsgCRC, (int)&allocdMem, (uint) 0x4u);
+			}
+			(*lightGameGlobalsPtrLoc)->enabled = 1;
+			if (*light_data) {
+				clusterPartitionNew("lights", 0x7FBE80); //light_cluster_data_partition
+			}
+		}
+
+		void naked nakedLightsInitializeWrapper() {
+			__asm {
+			push ecx
+			push ebx
+			push edx
+			push ebp
+			call lightsInitialize
+			pop ebp
+			pop edx
+			pop ebx
+			pop ecx
+			}
+		}
+
 		void naked nakedScenarioInitializeWrapper() {
 #ifndef _MSC_VER
 			static_assert(false, "only msvc is supported, update asm for data_iterator_next_wrapper to match compiler differences");
 #endif
 			__asm {
+				push ecx
 				push ebx
 				push edx
 				push ebp
@@ -367,8 +429,23 @@ namespace feature_management::engines {
 				pop ebp
 				pop edx
 				pop ebx
+				pop ecx
 				retn
 			}
+		}
+
+		void naked gameGameStateDataNewToOverride () {
+			int objSize; //onto the stack
+			char* name; //onto the stack
+			int num; //0
+
+			__asm {
+			mov objSize, ebx
+			pop num
+			pop name
+			}
+
+			game_state_data_new((short)objSize, name, num);
 		}
 
 		void gameInitializePatches() {
@@ -399,7 +476,6 @@ namespace feature_management::engines {
 		PrintLn("\nPatching the hud messaging state size");
 
 		initializes::interfaceInitializePatches();
-
 
 		//0x488 og size.
 

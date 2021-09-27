@@ -125,7 +125,7 @@ add_library(dinput8 SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions/exception_handler.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     	${CMAKE_CURRENT_SOURCE_DIR}/common/addlog.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/memory/data.cpp)
+		${CMAKE_CURRENT_SOURCE_DIR}/src/memory/data.cpp src/render/lights/lights.h)
 
 #The compiler is defaulting to the Windows 10 SDK, which causes 'xinput1_4.dll is not found' error
 #I manually force it to use my directx sdk xinput.
