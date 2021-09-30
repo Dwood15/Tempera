@@ -358,15 +358,62 @@ namespace feature_management::engines {
 		}
 
 		void clusterPartitionNew(const char* typeName, int address) {
-			static auto funcFound = CurrentRuntime->getFunctionBegin("cluster_partition_new");
-			if (!funcFound) {
-				PrintLn("Cluster partition new func was not found. rip");
+			uintptr_t funcAddr = 0x555270; //improperoperand if we embed the correct type
+			__asm {
+				push edi
+				push esi
+				mov edi, typeName
+				mov esi, address
+				call funcAddr //cluster_partition_new
+				pop esi
+				pop edi
+			}
+		}
+
+		template<size_t objSize = 0xC, size_t num = 2048>
+		void customClusterPartitionNew(const char *name, int *clusterStorageLocation) {
+			uint gsgPtr = 0;
+			uint gsgcpuAllocSz = 0;
+			uint gsgCRC = 0;
+
+			CurrentEngine->GetMallocAddresses(gsgPtr, gsgcpuAllocSz, gsgCRC);
+			*clusterStorageLocation = *(uintptr)gsgPtr + *(uintptr) gsgcpuAllocSz;
+
+			if ((uint) gsgCRC != (uint) 0x67dd94) {
+				PrintLn("Game State Globals CRC does not look like the expected address");
 			}
 
+			(* (uintptr)gsgcpuAllocSz) += num;
+
+			static auto funcFound = CurrentRuntime->getFunctionBegin("malloc_crc_checksum_buffer");
+			int allocdMem = 4;
 			if (funcFound) {
 				calls::DoCall<Convention::m_cdecl, void, int, int, uint>
 					(*funcFound, (int)gsgCRC, (int)&allocdMem, (uint) 0x4u);
 			}
+
+			//Is it safe to combine these two arrays ?
+			char generated[32];
+			char genName[32];
+
+			//TODO: Replace these sprintf's with compile-time constexpr fuckery.
+			//This operation is only at startup so it's not a big deal
+			sprintf(generated, "cluster %s", name);
+			sprintf(genName, "%s reference", generated);
+
+			clusterStorageLocation[1] = (int)game_state_data_new(objSize, genName, num);
+			memset(&genName, 0, sizeof(genName));
+			memset(&generated, 0, sizeof(generated));
+
+			sprintf(generated, "%s cluster", name);
+			sprintf(genName, "reference %s", generated);
+
+			clusterStorageLocation[2] = (int)game_state_data_new(objSize, genName, num);
+		}
+
+		void objectsInitializePostFix() {
+			customClusterPartitionNew("collideable object", (int*)0x7FB730);
+			customClusterPartitionNew("noncollideable object", (int*)0x7FB720);
 		}
 
 		void lightsInitialize() {
@@ -385,11 +432,11 @@ namespace feature_management::engines {
 
 			(* (uintptr)gsgcpuAllocSz) += 4;
 
-			static auto funcFound = CurrentRuntime->getFunctionBegin("malloc_crc_checksum_buffer");
 			if ((uint) gsgCRC != (uint) 0x67dd94) {
 				PrintLn("Game State Globals CRC does not look like the expected address");
 			}
 
+			static auto funcFound = CurrentRuntime->getFunctionBegin("malloc_crc_checksum_buffer");
 			int allocdMem = 4;
 			if (funcFound) {
 				calls::DoCall<Convention::m_cdecl, void, int, int, uint>
@@ -397,7 +444,7 @@ namespace feature_management::engines {
 			}
 			(*lightGameGlobalsPtrLoc)->enabled = 1;
 			if (*light_data) {
-				clusterPartitionNew("lights", 0x7FBE80); //light_cluster_data_partition
+				clusterPartitionNew("light", 0x7FBE80); //light_cluster_data_partition
 			}
 		}
 
@@ -412,6 +459,7 @@ namespace feature_management::engines {
 			pop edx
 			pop ebx
 			pop ecx
+			retn
 			}
 		}
 
@@ -453,6 +501,16 @@ namespace feature_management::engines {
 			calls::patchValue<byte>(0x45B3A8, 0xE8);
 			calls::WriteSimpleHook(0x45B3A9, nakedScenarioInitializeWrapper);
 			calls::nopBytes(0x45B3AD, 0x45B42E-0x45B3AD);
+
+			//Objects Initialize fixes
+
+			//Lights overwrite
+			calls::WriteSimpleHook(0x4F83EE +1, nakedLightsInitializeWrapper);
+
+			//Force custome patches
+			calls::patchValue<byte>(0x4F8491,0xE8); //Call
+			calls::WriteSimpleHook(0x4F8491 +1, objectsInitializePostFix);
+			calls::nopBytes(0x4F8496, 0x4F84AF-0x4F8496);
 		}
 
 		void interfaceInitializePatches() {
