@@ -174,6 +174,13 @@ namespace feature_management::engines {
 		return;
 	}
 
+	struct structureDetailObjects {
+		char unkPad[0xA430];
+	};
+	void structureDetailObjectsInitOverride() {
+		CurrentRuntime->GameStateMalloc<structureDetailObjects>((void **)0x6BDA4C);
+	}
+
 	inline void patchOnPlayerUpdate() {
 		PrintLn("\nAdditional Player action hooks");
 		//Originally: C7 44 24 18 FF FF FF FF
@@ -301,8 +308,6 @@ namespace feature_management::engines {
 //			}
 		}
 
-
-
 		Memory::s_data_array *game_state_data_new(short object_size, const char * name, int allocated_mem) {
 			__int16 num_items; // bp
 			int new_cpu_allocation_size; // ecx
@@ -314,13 +319,15 @@ namespace feature_management::engines {
 			CurrentEngine->GetMallocAddresses(gsgPtr, gsgcpuAllocSz, gsgCRC);
 
 			num_items = allocated_mem;
-			uint location_allocate_to = *(uintptr) gsgPtr + *(uintptr) gsgcpuAllocSz;
+
+			auto tmpAllocSz = *(uintptr)gsgcpuAllocSz;
+			uint location_allocate_to = *(uintptr)gsgPtr + tmpAllocSz;
 
 			constexpr auto sDataArray = sizeof(Memory::s_data_array);
 
-			new_cpu_allocation_size = object_size * allocated_mem + sDataArray + gsgcpuAllocSz;
+			new_cpu_allocation_size = object_size * allocated_mem + sDataArray + tmpAllocSz;
 			allocated_mem = object_size * allocated_mem + sDataArray;
-			*(uintptr) gsgcpuAllocSz = new_cpu_allocation_size;
+			*(uintptr)gsgcpuAllocSz = new_cpu_allocation_size;
 
 			static ::std::optional<uintptr_t> funcFound = CurrentRuntime->getFunctionBegin("malloc_crc_checksum_buffer");
 			if ((uint) gsgCRC != (uint) 0x67dd94) {
@@ -386,29 +393,33 @@ namespace feature_management::engines {
 			(* (uintptr)gsgcpuAllocSz) += num;
 
 			static auto funcFound = CurrentRuntime->getFunctionBegin("malloc_crc_checksum_buffer");
-			int allocdMem = 4;
+			int allocdMem = num;
 			if (funcFound) {
 				calls::DoCall<Convention::m_cdecl, void, int, int, uint>
 					(*funcFound, (int)gsgCRC, (int)&allocdMem, (uint) 0x4u);
 			}
 
 			//Is it safe to combine these two arrays ?
-			char generated[32];
-			char genName[32];
+			char generated[64];
+			char genName[64];
 
 			//TODO: Replace these sprintf's with compile-time constexpr fuckery.
 			//This operation is only at startup so it's not a big deal
 			sprintf(generated, "cluster %s", name);
 			sprintf(genName, "%s reference", generated);
 
-			clusterStorageLocation[1] = (int)game_state_data_new(objSize, genName, num);
+			auto gsdNewRes = game_state_data_new(objSize, genName, num);
+			clusterStorageLocation[1] = (int)gsdNewRes;
+
 			memset(&genName, 0, sizeof(genName));
 			memset(&generated, 0, sizeof(generated));
 
 			sprintf(generated, "%s cluster", name);
-			sprintf(genName, "reference %s", generated);
+			sprintf(genName, "%s reference", generated);
 
-			clusterStorageLocation[2] = (int)game_state_data_new(objSize, genName, num);
+
+			gsdNewRes = game_state_data_new(objSize, genName, num);
+			clusterStorageLocation[1] = (int)gsdNewRes;
 		}
 
 		void objectsInitializePostFix() {
@@ -444,7 +455,7 @@ namespace feature_management::engines {
 			}
 			(*lightGameGlobalsPtrLoc)->enabled = 1;
 			if (*light_data) {
-				clusterPartitionNew("light", 0x7FBE80); //light_cluster_data_partition
+				customClusterPartitionNew("light", (int*) 0x7FBE80); //light_cluster_data_partition
 			}
 		}
 

@@ -37,8 +37,6 @@ void Control::UnitControl(ushort unit_idx, s_unit_control_data *from, int client
 
 	s_unit_control_data override = *from;
 
-//	PrintLn("HandleActionOverride Completed");
-
 	if (connType == 2) {
 		static bool printed;
 		if (!printed) {

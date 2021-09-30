@@ -159,7 +159,8 @@ namespace feature_management::engines {
 			auto newLocation = oldSize + (uintptr_t)game_state_globals_ptr;
 			auto currentSizeof = sizeof(T);
 
-			(* (uintptr *)game_state_cpu_allocation_size) += currentSizeof;
+			auto newSize = *(uintptr *)game_state_cpu_allocation_size + currentSizeof;
+			(* (uintptr *)game_state_cpu_allocation_size) = newSize;
 			(*targetGlobal) = (void*)newLocation;
 			//Call the game engine's malloc crc checksum buffer. Hoping for the best, lmao
 			static ::std::optional<uintptr_t> funcFound = getFunctionBegin("malloc_crc_checksum_buffer");
