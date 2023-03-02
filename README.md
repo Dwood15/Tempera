@@ -170,6 +170,11 @@ A: There's a number of things that I want to be done, which aren't reverse-engin
 
 Various files and items in this codebase can be attributed as follows:
 
+
+All code within this repository is Licensed under the GNU General Public License, Version 3 or newer license and comes with no warranty, express or implied.
+MSFT Usage Guidelines
+
+The Tempera project, being targeted at Halo Custom Edition and the HEK are not covered under the Microsoft Content Usage guidelines. Halo Custom Edition and the HEK licenses predate both.
  * Kornman00 (Sean Cooper) - [For Open Sauce](https://bitbucket.org/KornnerStudios/opensauce-release/wiki/Home)
  * Kavawuvi//Snowy for their endless knowledge, support, and the [Chimera project](https://github.com/Kavawuvi/Chimera)
   * Endless font of knowledge, support, and shitposts
@@ -177,6 +182,6 @@ Various files and items in this codebase can be attributed as follows:
    * AFAIK, haloforge's source is gone with the demise of Google Code and is largely lost to time. Even then, it was mostly kept private and only intended for halo PC v1.08 in 2008-2009
    * Because of this, Tempera may be the only remaining repository containing code from the original live_projekt.
  * ZBE - Helped me get the initial prototypes running and answering my Reverse-Engineering-related questions.
- * Dwood15 (Dason Woodhouse - Me) - Primary developer and maintainer of Tempera. 
+ * Dwood15 - Primary developer and maintainer of Tempera. 
 
 Attributions in individual files are being removed in favor of this readme notice. Tempera has grown and evolved to the point that maintaining attribution in every file is impractical and (quite frankly)silly.
