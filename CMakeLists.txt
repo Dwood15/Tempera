@@ -29,8 +29,6 @@ cmake_policy(SET CMP0091 NEW)
 
 project(${PROJECT_NAME} C CXX)
 
-set(TARGET_GAME_VER "HALO_CE_1_10")
-
 include_directories(AFTER ${CMAKE_CURRENT_SOURCE_DIR}/runtime ${CMAKE_CURRENT_SOURCE_DIR}/common/)
 
 find_path(DX_PATH FindDirectX.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
@@ -39,6 +37,7 @@ find_path(LUA_PATH FindLua.cmake PATHS ${PROJECT_SOURCE_DIR}/cmake REQUIRED)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LUA_PATH} ${DX_PATH} ${GAME_PATH})
 
+find_path(GAME_PATH FindHaloCE.cmake PATHS ./cmake REQUIRED)
 find_package(HaloCE REQUIRED)
 find_package(Lua REQUIRED)
 find_package(DirectX REQUIRED)
@@ -97,39 +96,6 @@ endif ()
 file(GLOB DETOURS_GLOB libs/detours.lib)
 file(GLOB LUA_GLOB libs/lua53.lib)
 
-#BEGIN RUNTIME Cmake
-
-#there was intention at one point to support statically loading modules for different versions of the game
-#it's mostly just been left alone.
-set(HALO_TRIAL runtime/halo1/windows/trial)
-set(HALO_FULL runtime/halo1/windows/full)
-
-if (NOT DEFINED TARGET_GAME_VER)
-    message(WARNING "TARGET_GAME_VER IS NOT DEFINED")
-    message(FATAL_ERROR "BUILDING TEMPERA REQUIRES A VERSION OF THE 2000-2005 ERA (ie halo 1) BLAM ENGINE TO BE SELECTED.")
-endif ()
-
-if (NOT TARGET_GAME_VER MATCHES "^(HALO)_(TRIAL|PC|CE)")
-    message(FATAL_ERROR "UNKNOWN VERSION ${TARGET_GAME_VER} SELECTED.")
-endif ()
-
-#This is deliberately _not_ an elseif.
-if (TARGET_GAME_VER MATCHES "^(HALO)_(TRIAL|PC|CE)")
-    set(GAME runtime/halo1)
-endif ()
-
-if (TARGET_GAME_VER MATCHES "^HALO_TRIAL$")
-    set(GAME ${HALO_TRIAL})
-    message(FATAL_ERROR "HALO TRIAL IS NOT AN IMPLEMENTED LIBRARY TARGET. SORRY.")
-endif ()
-
-if (NOT TARGET_GAME_VER MATCHES "^(HALO)_(PC|CE)_(1_[0-1][0-9])$")
-    message(FATAL_ERROR "UNKNOWN VERSION ${TARGET_GAME_VER} SELECTED.")
-endif ()
-
-find_path(GAME_PATH FindHaloCE.cmake PATHS ./cmake REQUIRED)
-#END RUNTIME location
-
 add_library(dinput8 SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/runtime/ce/1_10/110EngineManager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/runtime/hek/sapien/sapienEngineManager.cpp
@@ -138,7 +104,7 @@ add_library(dinput8 SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/common/engine_interface.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/src/tags/group/base.cpp
-        #	${CMAKE_CURRENT_SOURCE_DIR}/tags/group/groups_structures.cpp
+        #${CMAKE_CURRENT_SOURCE_DIR}/tags/group/groups_structures.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/tags/group/tag_groups.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/tags/group/c_tag_iterator.cpp
 
@@ -148,7 +114,6 @@ add_library(dinput8 SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/objects/objectcontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/controls.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/gamestate/players.cpp
-
 
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Direct3D/d3d9hook.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/cseries/random.cpp
@@ -160,15 +125,10 @@ add_library(dinput8 SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions/exception_handler.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     	${CMAKE_CURRENT_SOURCE_DIR}/common/addlog.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/memory/data.cpp)
+		${CMAKE_CURRENT_SOURCE_DIR}/src/memory/data.cpp src/render/lights/lights.h)
 
-#The compiler is defaulting to the Windows 10 SDK, which requires external DLL's (xinput1_4.dll is not found error)
+#The compiler is defaulting to the Windows 10 SDK, which causes 'xinput1_4.dll is not found' error
 #I manually force it to use my directx sdk xinput.
-#TODO: Use DX_LIBS or whatever the variable is, to specify the 2010 dx XInput.lib explicitly.
-#set(XINPUTLIB "C:/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK\ \(June\ 2010\)/Lib/x86/XInput.lib")
-
-#D:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x86\Version.Lib
-#Version.Lib is required for looking up current EXE's runtime information.
 
 message(WARNING "DX Libs: ${DirectX_LIBRARIES}")
 
